@@ -1,6 +1,33 @@
 class Solution {
     public int cherryPickup(int[][] grid) {
-        return try_bottomup_spaceopt(grid);
+        return try_bottomup_spaceopt2(grid);
+    }
+    
+    public int try_bottomup_spaceopt2(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        
+        int[][][] dp = new int[2][n + 1][n + 1];
+        
+        for (int r = m - 1; r >= 0; r--) {
+            for (int c1 = 0; c1 < n; c1 ++) {
+                for (int c2 = n - 1; c2 > c1; c2--) {
+                    int sum = 0;
+                    
+                    for (int i = -1; i <= 1; i++) {
+                        for (int j = -1; j <= 1; j++) {
+                            if (c1 + i >= 0 && c2 + j >= 0) {
+                                sum = Math.max(sum, dp[(r + 1) % 2][c1 + i][c2 + j]);
+                            }
+                        }
+                    }
+                    
+                    dp[r % 2][c1][c2] = sum + grid[r][c1] + grid[r][c2];
+                }
+            }
+        }
+        
+        return dp[0][0][n - 1];
     }
     
     public int try_bottomup_spaceopt(int[][] grid) {
