@@ -10,7 +10,7 @@ class Solution {
         int[][][] dp = new int[2][n + 1][n + 1];
         
         for (int r = m - 1; r >= 0; r--) {
-            for (int c1 = 0; c1 < n; c1 ++) {
+            for (int c1 = 0; c1 <= n / 2 + 1; c1 ++) {
                 for (int c2 = n - 1; c2 > c1; c2--) {
                     int sum = 0;
                     
