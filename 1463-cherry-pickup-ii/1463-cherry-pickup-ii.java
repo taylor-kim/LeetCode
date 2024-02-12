@@ -7,7 +7,7 @@ class Solution {
         int m = grid.length;
         int n = grid[0].length;
         
-        int[][][] dp = new int[2][n + 1][n + 1];
+        int[][][] dp = new int[2][n / 2 + 3][n + 1];
         
         for (int r = m - 1; r >= 0; r--) {
             for (int c1 = 0; c1 <= n / 2 + 1; c1 ++) {
@@ -17,7 +17,6 @@ class Solution {
                     for (int i = -1; i <= 1; i++) {
                         for (int j = -1; j <= 1; j++) {
                             if (c1 + i >= 0 && c2 + j >= 0 && c1 + i != c2 + j) {
-                                int relIndex = c2 + j - (n / 2 + 2);
                                 sum = Math.max(sum, dp[(r + 1) % 2][c1 + i][c2 + j]);
                             }
                         }
