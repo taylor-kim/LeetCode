@@ -11,7 +11,8 @@ class Solution {
         
         for (int r = m - 1; r >= 0; r--) {
             for (int c1 = 0; c1 < n; c1 ++) {
-                for (int c2 = n - 1; c2 >= 0; c2--) {
+                // for (int c2 = n - 1; c2 >= 0; c2--) {
+                for (int c2 = n - 1; c2 > c1; c2--) {
                     int sum = 0;
                     
                     for (int i = -1; i <= 1; i++) {
@@ -22,7 +23,8 @@ class Solution {
                         }
                     }
                     
-                    dp[r][c1][c2] = sum + (c1 == c2 ? grid[r][c1] : grid[r][c1] + grid[r][c2]);
+                    // dp[r][c1][c2] = sum + (c1 == c2 ? grid[r][c1] : grid[r][c1] + grid[r][c2]);
+                    dp[r][c1][c2] = sum + grid[r][c1] + grid[r][c2];
                 }
             }
         }
