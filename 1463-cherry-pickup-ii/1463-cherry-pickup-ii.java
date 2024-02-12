@@ -16,7 +16,7 @@ class Solution {
                     
                     for (int i = -1; i <= 1; i++) {
                         for (int j = -1; j <= 1; j++) {
-                            if (c1 + i >= 0 && c2 + j >= 0) {
+                            if (c1 + i >= 0 && c2 + j >= 0 && c1 + i != c2 + j) {
                                 int relIndex = c2 + j - (n / 2 + 2);
                                 sum = Math.max(sum, dp[(r + 1) % 2][c1 + i][c2 + j]);
                             }
