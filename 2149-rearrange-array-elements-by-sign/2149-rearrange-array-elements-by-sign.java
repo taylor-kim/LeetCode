@@ -1,10 +1,30 @@
 class Solution {
     public int[] rearrangeArray(int[] nums) {
-        return mySimple2(nums);
+        return official(nums);
     }
     
     public int[] try_spaceopt(int[] nums) {
         return nums;
+    }
+    
+    public int[] official(int[] nums) {
+        int n = nums.length;
+        int[] ret = new int[n];
+        
+        int pos = 0;
+        int neg = 1;
+        
+        for (int num : nums) {
+            if (num > 0) {
+                ret[pos] = num;
+                pos += 2;
+            } else {
+                ret[neg] = num;
+                neg += 2;
+            }
+        }
+        
+        return ret;
     }
     
     public int[] mySimple2(int[] nums) {
