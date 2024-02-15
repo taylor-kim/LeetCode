@@ -8,20 +8,14 @@ class Solution {
         
         int n = nums.length;
         
-        long[] pSum = new long[n + 1];
+        long ans = -1;
+        long sum = 0;
         
         for (int i = 0; i < n; i++) {
-            pSum[i + 1] = pSum[i] + nums[i];
-        }
-        
-        long ans = -1;
-        
-        for (int i = 2; i < n; i++) {
-            long others = pSum[i];
-            
-            if (others > nums[i]) {
-                ans = others + nums[i];
+            if (sum > nums[i]) {
+                ans = sum + nums[i];
             }
+            sum += nums[i];
         }
         
         return ans;
