@@ -1,6 +1,6 @@
 class Solution {
     public long largestPerimeter(int[] nums) {
-        return others_fast_terminate(nums);
+        return mySol(nums);
     }
     
     public long others_fast_terminate(int[] nums) {
