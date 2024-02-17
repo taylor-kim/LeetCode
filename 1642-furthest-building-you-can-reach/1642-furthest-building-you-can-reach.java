@@ -8,13 +8,14 @@ class Solution {
         int left = 0;
         int right = n;
         
+        int ans = 0;
+        
         while (left < right) {
-            if (left + 1 == right) break;
-            
             int mid = left + (right - left) / 2;
             
             if (checkRange(h, mid, b, l)) {
-                left = mid;
+                ans = mid;
+                left = mid + 1;
             } else {
                 right = mid;
             }
@@ -33,7 +34,7 @@ class Solution {
 //             }
         }
         
-        return left;
+        return ans;
     }
     
     private boolean checkRange(int[] h, int limit, int b, int l) {            
