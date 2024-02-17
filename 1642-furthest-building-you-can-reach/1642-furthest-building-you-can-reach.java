@@ -30,6 +30,7 @@ class Solution {
     
     private boolean checkRange(int[] h, int limit, int b, int l) {    
         if (limit >= h.length) return false;
+        
         List<Integer> list = new ArrayList();
         
         for (int i = 0; i < limit; i++) {
