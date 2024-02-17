@@ -11,7 +11,7 @@ class Solution {
         while (left <= right) {
             int mid = left + (right - left) / 2;
             
-            if (mid == n - 1) return mid;
+            // if (mid == n - 1) return mid;
             
             boolean canMid = checkRange(h, mid, b, l);
             boolean canNextMid = checkRange(h, mid + 1, b, l);
@@ -28,7 +28,8 @@ class Solution {
         return left;
     }
     
-    private boolean checkRange(int[] h, int limit, int b, int l) {        
+    private boolean checkRange(int[] h, int limit, int b, int l) {    
+        if (limit >= h.length) return false;
         List<Integer> list = new ArrayList();
         
         for (int i = 0; i < limit; i++) {
