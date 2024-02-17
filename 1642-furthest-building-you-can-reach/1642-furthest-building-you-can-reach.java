@@ -8,33 +8,19 @@ class Solution {
         int left = 0;
         int right = n;
         
-        int ans = 0;
-        
-        while (left < right) {
+        while (true) {
+            if (left + 1 == right) break;
+            
             int mid = left + (right - left) / 2;
             
             if (checkRange(h, mid, b, l)) {
-                ans = mid;
-                left = mid + 1;
+                left = mid;
             } else {
                 right = mid;
             }
-            
-//             if (mid == n - 1) return mid;
-            
-//             boolean canMid = checkRange(h, mid, b, l);
-//             boolean canNextMid = checkRange(h, mid + 1, b, l);
-            
-//             if (canMid && !canNextMid) {
-//                 return mid;
-//             } else if (canNextMid) {
-//                 left = mid + 1;
-//             } else {
-//                 right = mid - 1;
-//             }
         }
         
-        return ans;
+        return left;
     }
     
     private boolean checkRange(int[] h, int limit, int b, int l) {            
@@ -58,7 +44,7 @@ class Solution {
             if (b < 0) return false;
         }
         
-        return b >= 0;
+        return true;
     }
     
     public int hint_from_thunder_simplified(int[] h, int b, int l) {
