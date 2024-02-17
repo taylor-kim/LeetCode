@@ -1,6 +1,30 @@
 class Solution {
     public int furthestBuilding(int[] heights, int bricks, int ladders) {
-        return hint_from_thunder(heights, bricks, ladders);
+        return hint_from_thunder_simplified(heights, bricks, ladders);
+    }
+    
+    public int hint_from_thunder_simplified(int[] h, int b, int l) {
+        int n = h.length;
+        
+        Queue<Integer> pq = new PriorityQueue();
+        
+        for (int i = 1; i < n; i++) {
+            int need = h[i] - h[i - 1];
+            
+            if (need <= 0) continue;
+            
+            pq.add(need);
+            
+            if (pq.size() > l) {
+                b -= pq.poll();
+            }
+            
+            if (b < 0) {
+                return i - 1;
+            }
+        }
+        
+        return n - 1;
     }
     
     public int hint_from_thunder(int[] h, int b, int l) {
