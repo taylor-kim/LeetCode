@@ -1,6 +1,54 @@
 class Solution {
     public int mostBooked(int n, int[][] meetings) {
-        return official_pq(n, meetings);
+        return official_sort_and_loop(n, meetings);
+    }
+    
+    public int official_sort_and_loop(int n, int[][] meetings) {
+        int[] meetingCount = new int[n];
+        long[] nextTime = new long[n];
+        
+        Arrays.sort(meetings, (a, b) -> Integer.compare(a[0], b[0]));
+        
+        for (int[] meeting : meetings) {
+            int start = meeting[0];
+            int end = meeting[1];
+            
+            long minNextTime = Long.MAX_VALUE;
+            int nextRoom = 0;
+            
+            boolean found = false;
+            
+            for (int i = 0; i < n; i++) {
+                if (nextTime[i] <= start) {
+                    nextTime[i] = end;
+                    meetingCount[i]++;
+                    found = true;
+                    break;
+                }
+                
+                if (minNextTime > nextTime[i]) {
+                    minNextTime = nextTime[i];
+                    nextRoom = i;
+                }
+            }
+            
+            if (!found) {
+                nextTime[nextRoom] += end - start;
+                meetingCount[nextRoom]++;
+            }
+        }
+        
+        int max = 0;
+        int room = 0;
+        
+        for (int i = 0; i < n; i++) {
+            if (max < meetingCount[i]) {
+                max = meetingCount[i];
+                room = i;
+            }
+        }
+        
+        return room;
     }
     
     public int official_pq(int n, int[][] meetings) {
