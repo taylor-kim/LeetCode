@@ -1,6 +1,6 @@
 class Solution {
     public int mostBooked(int n, int[][] meetings) {
-        return official_sort_and_loop(n, meetings);
+        return official_pq(n, meetings);
     }
     
     public int official_sort_and_loop(int n, int[][] meetings) {
