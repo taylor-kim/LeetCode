@@ -8,11 +8,13 @@ class Solution {
         
         Queue<int[]> used = new PriorityQueue<>((a, b) -> {
             return a[0] != b[0] ? a[0] - b[0] : a[1] - b[1];
+            // return a[0] - b[0];
         });
         
         Queue<Integer> rooms = new PriorityQueue();
         
-        Arrays.sort(meetings, (a, b) -> a[0] != b[0] ? Integer.compare(a[0], b[0]) : Integer.compare(a[1], b[1]));
+        // Arrays.sort(meetings, (a, b) -> a[0] != b[0] ? Integer.compare(a[0], b[0]) : Integer.compare(a[1], b[1]));
+        Arrays.sort(meetings, (a, b) -> Integer.compare(a[0], b[0]));
         
         for (int i = 0; i < n; i++) rooms.add(i);
         
