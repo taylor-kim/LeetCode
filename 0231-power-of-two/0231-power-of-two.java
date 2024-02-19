@@ -1,6 +1,10 @@
 class Solution {
     public boolean isPowerOfTwo(int n) {
-        return rec(n);
+        return others_bit(n);
+    }
+    
+    public boolean others_bit(int n) {
+        return n > 0 && (n & (n - 1)) == 0;
     }
     
     public boolean rec(int n) {
