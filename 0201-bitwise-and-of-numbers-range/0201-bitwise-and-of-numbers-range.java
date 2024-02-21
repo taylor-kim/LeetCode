@@ -21,11 +21,11 @@ class Solution {
         // 15 00001111
         // 16 00010000
         
-        if (left == 0) return 0;
+//         if (left == 0) return 0;
         
-        if (left == right) {
-            return left;
-        }
+//         if (left == right) {
+//             return left;
+//         }
         
         int ans = 0;
         
