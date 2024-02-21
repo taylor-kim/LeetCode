@@ -1,6 +1,18 @@
 class Solution {
     public int rangeBitwiseAnd(int left, int right) {
-        return mySol(left, right);
+        return others(left, right);
+    }
+    
+    public int others(int left, int right) {
+        int count = 0;
+        
+        while (left != right) {
+            left >>= 1;
+            right >>= 1;
+            count++;
+        }
+        
+        return left << count;
     }
     
     public int mySol(int left, int right) {
