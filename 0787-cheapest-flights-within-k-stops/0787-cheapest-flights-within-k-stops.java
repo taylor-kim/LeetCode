@@ -1,9 +1,49 @@
 class Solution {
     public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
-        return mySol(n, flights, src, dst, k);
+        return mySol_bfs(n, flights, src, dst, k);
     }
     
-    public int mySol(int n, int[][] flights, int src, int dst, int k) {
+    public int mySol_dfs_fail(int n, int[][] flights, int src, int dst, int k) {
+        Map<Integer, List<int[]>> edges = new HashMap();
+        
+        for (int[] f : flights) {
+            edges.computeIfAbsent(f[0], key -> new ArrayList());
+            edges.get(f[0]).add(new int[] {f[1], f[2]});
+        }
+        
+        int[] costs = new int[n];
+        Arrays.fill(costs, Integer.MAX_VALUE);
+        
+        dfs(k + 1, edges, src, dst, 0, costs);
+        
+        System.out.println(Arrays.toString(costs));
+        
+        int ans = costs[dst];
+        
+        return ans == Integer.MAX_VALUE ? -1 : ans;
+    }
+    
+    public void dfs(int k, Map<Integer, List<int[]>> edges, int current, int dst, int sum, int[] costs) {
+        if (k < 0) return;
+        
+        if (costs[current] <= sum) return;
+        
+        costs[current] = sum;
+        
+        if (current == dst) {
+            return;
+        }
+        
+        int ans = Integer.MAX_VALUE;
+        
+        if (edges.get(current) == null) return;
+        
+        for (int[] next : edges.get(current)) {
+            dfs(k - 1, edges, next[0], dst, sum + next[1], costs);
+        }
+    }
+    
+    public int mySol_bfs(int n, int[][] flights, int src, int dst, int k) {
         Map<Integer, List<int[]>> edges = new HashMap();
         
         for (int[] f : flights) {
