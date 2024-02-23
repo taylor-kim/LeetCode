@@ -101,7 +101,7 @@ class Solution {
         int[] costs = new int[n];
         Arrays.fill(costs, Integer.MAX_VALUE);
         
-        k += 2;
+        k += 1;
         
         while (!queue.isEmpty() && k-- > 0) {
             int size = queue.size();
@@ -112,7 +112,7 @@ class Solution {
                 int cost = queue.poll()[1];
                 
                 // System.out.println(String.format("city:%d, cost:%d, k:%d", city, cost, k + 1));
-                costs[city] = Math.min(costs[city], cost);
+                // costs[city] = Math.min(costs[city], cost);
                 
                 if (edges.get(city) == null) continue;
                 
@@ -122,6 +122,7 @@ class Solution {
                     
                     if (costs[nextNode] > nextCost) {
                         queue.add(new int[] {nextNode, nextCost});
+                        costs[nextNode] = nextCost;
                     }
                 }
             }
