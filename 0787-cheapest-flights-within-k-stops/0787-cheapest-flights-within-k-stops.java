@@ -13,12 +13,9 @@ class Solution {
         
         Queue<int[]> queue = new LinkedList();
         queue.add(new int[] {src, 0});
-        boolean[] visit = new boolean[n];
-        visit[src] = true;
+        
         int[] costs = new int[n];
         Arrays.fill(costs, Integer.MAX_VALUE);
-        
-        int ans = 0;
         
         k += 2;
         
