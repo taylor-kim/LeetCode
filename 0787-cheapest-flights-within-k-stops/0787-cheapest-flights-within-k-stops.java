@@ -1,6 +1,6 @@
 class Solution {
     public int findCheapestPrice(int n, int[][] flights, int src, int dst, int k) {
-        return mySol_bfs(n, flights, src, dst, k);
+        return mySol_bfs_improved(n, flights, src, dst, k);
     }
     
     public int mySol_dfs_fail(int n, int[][] flights, int src, int dst, int k) {
@@ -101,7 +101,7 @@ class Solution {
         int[] costs = new int[n];
         Arrays.fill(costs, Integer.MAX_VALUE);
         
-        k += 2;
+        k++;
         
         while (!queue.isEmpty() && k-- > 0) {
             int size = queue.size();
@@ -113,8 +113,6 @@ class Solution {
                 
                 // System.out.println(String.format("city:%d, cost:%d, k:%d", city, cost, k + 1));
                 
-                costs[city] = cost;
-                
                 if (edges.get(city) == null) continue;
                 
                 for (int[] next : edges.get(city)) {
@@ -122,7 +120,8 @@ class Solution {
                     int nextCost = cost + next[1];
                     
                     if (costs[nextNode] > nextCost) {
-                        queue.add(new int[] {next[0], cost + next[1]});
+                        queue.add(new int[] {nextNode, nextCost});
+                        costs[nextNode] = nextCost;
                     }
                 }
             }
