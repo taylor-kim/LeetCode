@@ -1,6 +1,60 @@
 class Solution {
     public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
-        return try_official_dfs_rec(n, meetings, firstPerson);
+        return try_official_bfs_pq(n, meetings, firstPerson);
+    }
+    
+    public List<Integer> try_official_bfs_pq(int n, int[][] meetings, int first) {
+        Map<Integer, List<int[]>> edges = new HashMap();
+        
+        for (int[] m : meetings) {
+            edges.computeIfAbsent(m[0], k -> new ArrayList()).add(new int[] {m[1], m[2]});
+            edges.computeIfAbsent(m[1], k -> new ArrayList()).add(new int[] {m[0], m[2]});
+        }
+        
+        int[] secrets = new int[n];
+        Arrays.fill(secrets, Integer.MAX_VALUE);
+        secrets[0] = 0;
+        secrets[first] = 0;
+        
+        Queue<int[]> pq = new PriorityQueue<>((a, b) -> {
+            return a[1] - b[1];
+        });
+        
+        pq.add(new int[] {0, 0});
+        pq.add(new int[] {first, 0});
+        
+        boolean[] visited = new boolean[n];
+        
+        while (!pq.isEmpty()) {
+            int a = pq.peek()[0];
+            int t = pq.poll()[1];
+            
+            if (visited[a]) {
+                continue;
+            }
+            
+            visited[a] = true;
+            
+            for (int[] next : edges.getOrDefault(a, Collections.emptyList())) {
+                int b = next[0];
+                int currentT = next[1];
+                
+                if (currentT >= t && secrets[b] > currentT) {
+                    secrets[b] = currentT;
+                    pq.add(new int[] {b, currentT});
+                }
+            }
+        }
+        
+        List<Integer> ans = new ArrayList();
+        
+        for (int i = 0; i < n; i++) {
+            if (secrets[i] != Integer.MAX_VALUE) {
+                ans.add(i);
+            }
+        }
+        
+        return ans;
     }
     
     public List<Integer> try_official_dfs_rec(int n, int[][] meetings, int first) {
