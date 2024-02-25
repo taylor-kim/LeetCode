@@ -332,7 +332,7 @@ class Solution {
     }
     
     public List<Integer> mySol3_fail_retry(int n, int[][] meetings, int first) {
-        Arrays.sort(meetings, (a, b) -> a[2] - b[2]);
+        // Arrays.sort(meetings, (a, b) -> a[2] - b[2]);
         
         Map<Integer, List<int[]>> map = new TreeMap();
         
