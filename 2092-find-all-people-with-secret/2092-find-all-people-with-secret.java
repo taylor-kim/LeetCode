@@ -13,8 +13,7 @@ class Solution {
         }
         
         OfficialUF uf = new OfficialUF(n);
-        // uf.merge(0, first);
-        uf.merge(first, 0);
+        uf.merge(0, first);
         
         for (int t : sameTimeMeetings.keySet()) {
             for (int[] m : sameTimeMeetings.get(t)) {
@@ -84,6 +83,10 @@ class Solution {
         public void reset(int a) {
             parents[a] = a;
             rank[a] = 0;
+        }
+        
+        public void print() {
+            System.out.println(Arrays.toString(parents));
         }
     }
     
