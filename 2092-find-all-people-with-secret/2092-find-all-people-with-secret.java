@@ -250,12 +250,9 @@ class Solution {
         UnionFind uf = new UnionFind(n);
         uf.merge(0, first);
         
-        // uf.print();
-        
         for (int[] m : meetings) {
             map.computeIfAbsent(m[2], k -> new HashSet());
             map.get(m[2]).add(new int[] {m[0], m[1]});
-            // uf.merge(m[0], m[1]);
         }
         
         Set<Integer> knows = new HashSet();
@@ -277,8 +274,6 @@ class Solution {
                 }
             }
         }
-        
-        uf.print();
         
         return new ArrayList(knows);
         
