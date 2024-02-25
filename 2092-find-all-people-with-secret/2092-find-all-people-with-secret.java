@@ -1,6 +1,49 @@
 class Solution {
     public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
-        return try_official_bfs(n, meetings, firstPerson);
+        return try_official_dfs(n, meetings, firstPerson);
+    }
+    
+    public List<Integer> try_official_dfs(int n, int[][] meetings, int first) {
+        Map<Integer, List<int[]>> edges = new HashMap();
+        
+        for (int[] m : meetings) {
+            edges.computeIfAbsent(m[0], k -> new ArrayList()).add(new int[] {m[1], m[2]});
+            edges.computeIfAbsent(m[1], k -> new ArrayList()).add(new int[] {m[0], m[2]});
+        }
+        
+        int[] secrets = new int[n];
+        Arrays.fill(secrets, Integer.MAX_VALUE);
+        secrets[0] = 0;
+        secrets[first] = 0;
+        
+        Stack<int[]> stack = new Stack();
+        stack.push(new int[] {0, 0});
+        stack.push(new int[] {first, 0});
+        
+        while (!stack.isEmpty()) {
+            int a = stack.peek()[0];
+            int secretT = stack.pop()[1];
+            
+            for (int[] next : edges.getOrDefault(a, Collections.emptyList())) {
+                int b = next[0];
+                int currentT = next[1];
+                
+                if (currentT >= secretT && secrets[b] > currentT) {
+                    secrets[b] = currentT;
+                    stack.push(new int[] {b, currentT});
+                }
+            }
+        }
+        
+        List<Integer> ans = new ArrayList();
+        
+        for (int i = 0; i < n; i++) {
+            if (secrets[i] != Integer.MAX_VALUE) {
+                ans.add(i);
+            }
+        }
+        
+        return ans;
     }
     
     public List<Integer> try_official_bfs(int n, int[][] meetings, int first) {
