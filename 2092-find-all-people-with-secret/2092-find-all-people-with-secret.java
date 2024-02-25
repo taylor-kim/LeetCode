@@ -12,7 +12,7 @@ class Solution {
             sameTimeMeetings.computeIfAbsent(m[2], k -> new ArrayList()).add(new int[] {m[0], m[1]});
         }
         
-        OfficialUF uf = new OfficialUF(n);
+        UnionFind uf = new UnionFind(n);
         uf.merge(0, first);
         
         for (int t : sameTimeMeetings.keySet()) {
@@ -458,6 +458,10 @@ class Solution {
         
         public void reset(int a) {
             parents[a] = a;
+        }
+        
+        public boolean connected(int a, int b) {
+            return find(a) == find(b);
         }
         
         public void print() {
