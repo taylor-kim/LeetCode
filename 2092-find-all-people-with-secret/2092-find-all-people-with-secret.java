@@ -13,7 +13,8 @@ class Solution {
         }
         
         OfficialUF uf = new OfficialUF(n);
-        uf.merge(0, first);
+        // uf.merge(0, first);
+        uf.merge(first, 0);
         
         for (int t : sameTimeMeetings.keySet()) {
             for (int[] m : sameTimeMeetings.get(t)) {
