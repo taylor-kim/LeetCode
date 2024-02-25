@@ -1,9 +1,48 @@
 class Solution {
     public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
-        return try_official_dfs(n, meetings, firstPerson);
+        return try_official_dfs_rec(n, meetings, firstPerson);
     }
     
-    public List<Integer> try_official_dfs(int n, int[][] meetings, int first) {
+    public List<Integer> try_official_dfs_rec(int n, int[][] meetings, int first) {
+        Map<Integer, List<int[]>> edges = new HashMap();
+        
+        for (int[] m : meetings) {
+            edges.computeIfAbsent(m[0], k -> new ArrayList()).add(new int[] {m[1], m[2]});
+            edges.computeIfAbsent(m[1], k -> new ArrayList()).add(new int[] {m[0], m[2]});
+        }
+        
+        int[] secrets = new int[n];
+        Arrays.fill(secrets, Integer.MAX_VALUE);
+        secrets[0] = 0;
+        secrets[first] = 0;
+        
+        dfs(0, 0, edges, secrets);
+        dfs(first, 0, edges, secrets);
+        
+        List<Integer> ans = new ArrayList();
+        
+        for (int i = 0; i < n; i++) {
+            if (secrets[i] != Integer.MAX_VALUE) {
+                ans.add(i);
+            }
+        }
+        
+        return ans;
+    }
+    
+    private void dfs(int a, int t, Map<Integer, List<int[]>> edges, int[] secrets) {
+        for (int[] next : edges.getOrDefault(a, Collections.emptyList())) {
+            int b = next[0];
+            int currentT = next[1];
+            
+            if (currentT >= t && secrets[b] > currentT) {
+                secrets[b] = currentT;
+                dfs(b, currentT, edges, secrets);
+            }
+        }
+    }
+    
+    public List<Integer> try_official_dfs_stack(int n, int[][] meetings, int first) {
         Map<Integer, List<int[]>> edges = new HashMap();
         
         for (int[] m : meetings) {
