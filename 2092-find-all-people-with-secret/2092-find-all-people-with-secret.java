@@ -18,27 +18,22 @@ class Solution {
         
         for (int t : sameTimeMeetings.keySet()) {
             Map<Integer, List<Integer>> meet = new HashMap();
+            Set<Integer> start = new HashSet();
             
             for (int[] meeting : sameTimeMeetings.get(t)) {
                 int x = meeting[0];
                 int y = meeting[1];
                 
+                if (knowsSecret[x]) {
+                    start.add(x);
+                }
+                
+                if (knowsSecret[y]) {
+                    start.add(y);
+                }
+                
                 meet.computeIfAbsent(x, k -> new ArrayList()).add(y);
                 meet.computeIfAbsent(y, k -> new ArrayList()).add(x);
-            }
-            
-            Set<Integer> start = new HashSet();
-            for (int[] meeting : sameTimeMeetings.get(t)) {
-                int a = meeting[0];
-                int b = meeting[1];
-                
-                if (knowsSecret[a]) {
-                    start.add(a);
-                }
-                
-                if (knowsSecret[b]) {
-                    start.add(b);
-                }
             }
             
             Queue<Integer> q = new LinkedList(start);
