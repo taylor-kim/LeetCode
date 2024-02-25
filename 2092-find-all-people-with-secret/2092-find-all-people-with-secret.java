@@ -14,9 +14,9 @@ class Solution {
         int[] secrets = new int[n];
         Arrays.fill(secrets, Integer.MAX_VALUE);
         secrets[0] = 0;
-        secrets[first] = 0;
-        
         dfs(0, 0, edges, secrets);
+        secrets[first] = 0;
+
         dfs(first, 0, edges, secrets);
         
         List<Integer> ans = new ArrayList();
