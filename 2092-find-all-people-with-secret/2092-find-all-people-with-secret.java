@@ -15,24 +15,24 @@ class Solution {
         queue.add(new int[] {0, 0});
         queue.add(new int[] {first, 0});
         
-        int[] earliest = new int[n];
-        Arrays.fill(earliest, Integer.MAX_VALUE);
-        earliest[0] = 0;
-        earliest[first] = 0;
+        int[] secrets = new int[n];
+        Arrays.fill(secrets, Integer.MAX_VALUE);
+        secrets[0] = 0;
+        secrets[first] = 0;
         
         while (!queue.isEmpty()) {
             int size = queue.size();
             
             while (size-- > 0) {
                 int a = queue.peek()[0];
-                int t = queue.poll()[1];
+                int secretT = queue.poll()[1];
                 
                 for (int[] next : edges.getOrDefault(a, Collections.emptyList())) {
                     int b = next[0];
-                    int nextT = next[1];
+                    int currentT = next[1];
                     
-                    if (nextT >= t && earliest[b] > nextT) {
-                        earliest[next[0]] = next[1];
+                    if (currentT >= secretT && secrets[b] > currentT) {
+                        secrets[b] = currentT;
                         queue.add(next);
                     }
                 }
@@ -42,7 +42,7 @@ class Solution {
         List<Integer> ans = new ArrayList();
         
         for (int i = 0; i < n; i++) {
-            if (earliest[i] != Integer.MAX_VALUE) {
+            if (secrets[i] != Integer.MAX_VALUE) {
                 ans.add(i);
             }
         }
