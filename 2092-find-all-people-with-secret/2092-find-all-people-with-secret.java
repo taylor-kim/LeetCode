@@ -1,6 +1,6 @@
 class Solution {
     public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
-        return official_uf(n, meetings, firstPerson);
+        return mySol3_fail_retry(n, meetings, firstPerson);
     }
     
     public List<Integer> official_uf(int n, int[][] meetings, int first) {
