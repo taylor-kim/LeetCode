@@ -1,6 +1,69 @@
 class Solution {
     public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
-        return try_official_bfs_pq(n, meetings, firstPerson);
+        return try_official_bfs_on_time_scale(n, meetings, firstPerson);
+    }
+    
+    public List<Integer> try_official_bfs_on_time_scale(int n, int[][] meetings, int first) {
+        Arrays.sort(meetings, (a, b) -> a[2] - b[2]);
+        
+        Map<Integer, List<int[]>> sameTimeMeetings = new TreeMap();
+        
+        for (int[] meeting : meetings) {
+            sameTimeMeetings.computeIfAbsent(meeting[2], k -> new ArrayList()).add(new int[] {meeting[0], meeting[1]});
+        }
+        
+        boolean[] knowsSecret = new boolean[n];
+        knowsSecret[0] = true;
+        knowsSecret[first] = true;
+        
+        for (int t : sameTimeMeetings.keySet()) {
+            Map<Integer, List<Integer>> meet = new HashMap();
+            
+            for (int[] meeting : sameTimeMeetings.get(t)) {
+                int x = meeting[0];
+                int y = meeting[1];
+                
+                meet.computeIfAbsent(x, k -> new ArrayList()).add(y);
+                meet.computeIfAbsent(y, k -> new ArrayList()).add(x);
+            }
+            
+            Set<Integer> start = new HashSet();
+            for (int[] meeting : sameTimeMeetings.get(t)) {
+                int a = meeting[0];
+                int b = meeting[1];
+                
+                if (knowsSecret[a]) {
+                    start.add(a);
+                }
+                
+                if (knowsSecret[b]) {
+                    start.add(b);
+                }
+            }
+            
+            Queue<Integer> q = new LinkedList(start);
+            
+            while (!q.isEmpty()) {
+                int a = q.poll();
+                
+                for (int next : meet.getOrDefault(a, Collections.emptyList())) {
+                    if (!knowsSecret[next]) {
+                        knowsSecret[next] = true;
+                        q.add(next);
+                    }
+                }
+            }
+        }
+        
+        List<Integer> ans = new ArrayList();
+        
+        for (int i = 0; i < n; i++) {
+            if (knowsSecret[i]) {
+                ans.add(i);
+            }
+        }
+        
+        return ans;
     }
     
     public List<Integer> try_official_bfs_pq(int n, int[][] meetings, int first) {
