@@ -15,10 +15,6 @@ class Solution {
         queue.add(new int[] {0, 0});
         queue.add(new int[] {first, 0});
         
-        Set<Integer> set = new HashSet();
-        // set.add(0);
-        // set.add(first);
-        
         int[] earliest = new int[n];
         Arrays.fill(earliest, Integer.MAX_VALUE);
         earliest[0] = 0;
@@ -31,20 +27,17 @@ class Solution {
                 int a = queue.peek()[0];
                 int t = queue.poll()[1];
                 
-                // if (!set.add(a)) {
-                //     continue;
-                // }
-                
                 for (int[] next : edges.getOrDefault(a, Collections.emptyList())) {
-                    if (next[1] >= t && earliest[next[0]] > next[1]) {
+                    int b = next[0];
+                    int nextT = next[1];
+                    
+                    if (nextT >= t && earliest[b] > nextT) {
                         earliest[next[0]] = next[1];
                         queue.add(next);
                     }
                 }
             }
         }
-        
-        // return new ArrayList(set);
         
         List<Integer> ans = new ArrayList();
         
