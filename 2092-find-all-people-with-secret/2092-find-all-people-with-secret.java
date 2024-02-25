@@ -255,10 +255,6 @@ class Solution {
             map.get(m[2]).add(new int[] {m[0], m[1]});
         }
         
-        Set<Integer> knows = new HashSet();
-        knows.add(0);
-        knows.add(first);
-        
         for (Set<int[]> parts : map.values()) {
             for (int[] each : parts) {
                 uf.merge(each[0], each[1]);
@@ -268,24 +264,19 @@ class Solution {
                 if (uf.find(each[0]) != 0) {
                     uf.reset(each[0]);
                     uf.reset(each[1]);
-                } else {
-                    knows.add(each[0]);
-                    knows.add(each[1]);
                 }
             }
         }
         
-        return new ArrayList(knows);
+        List<Integer> ans = new ArrayList();
         
-//         List<Integer> ans = new ArrayList();
+        for (int i = 0; i < n; i++) {
+            if (uf.find(i) == 0) {
+                ans.add(i);
+            }
+        }
         
-//         for (int i = 0; i < n; i++) {
-//             if (uf.find(i) == 0) {
-//                 ans.add(i);
-//             }
-//         }
-        
-//         return ans;
+        return ans;
     }
     
     public List<Integer> mySol2_fail(int n, int[][] meetings, int first) {
