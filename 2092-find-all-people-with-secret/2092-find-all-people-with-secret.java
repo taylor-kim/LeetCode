@@ -334,16 +334,16 @@ class Solution {
     public List<Integer> mySol3_fail_retry(int n, int[][] meetings, int first) {
         Arrays.sort(meetings, (a, b) -> a[2] - b[2]);
         
-        Map<Integer, Set<int[]>> map = new TreeMap();
+        Map<Integer, List<int[]>> map = new TreeMap();
         
         UnionFind uf = new UnionFind(n);
         uf.merge(0, first);
         
         for (int[] m : meetings) {
-            map.computeIfAbsent(m[2], k -> new HashSet()).add(new int[] {m[0], m[1]});
+            map.computeIfAbsent(m[2], k -> new ArrayList()).add(new int[] {m[0], m[1]});
         }
         
-        for (Set<int[]> parts : map.values()) {
+        for (List<int[]> parts : map.values()) {
             for (int[] each : parts) {
                 uf.merge(each[0], each[1]);
             }
