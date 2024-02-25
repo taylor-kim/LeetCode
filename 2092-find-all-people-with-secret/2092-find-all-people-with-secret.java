@@ -1,6 +1,89 @@
 class Solution {
     public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
-        return mySol3_fail_retry(n, meetings, firstPerson);
+        return official_uf(n, meetings, firstPerson);
+    }
+    
+    public List<Integer> official_uf(int n, int[][] meetings, int first) {
+        Arrays.sort(meetings, (a, b) -> a[2] - b[2]);
+        
+        Map<Integer, List<int[]>> sameTimeMeetings = new TreeMap();
+        
+        for (int[] m : meetings) {
+            sameTimeMeetings.computeIfAbsent(m[2], k -> new ArrayList()).add(new int[] {m[0], m[1]});
+        }
+        
+        OfficialUF uf = new OfficialUF(n);
+        uf.merge(0, first);
+        
+        for (int t : sameTimeMeetings.keySet()) {
+            for (int[] m : sameTimeMeetings.get(t)) {
+                uf.merge(m[0], m[1]);
+            }
+            
+            for (int[] m : sameTimeMeetings.get(t)) {
+                if (!uf.connected(m[0], 0)) {
+                    uf.reset(m[0]);
+                    uf.reset(m[1]);
+                }
+            }
+        }
+        
+        List<Integer> ans = new ArrayList();
+        
+        for (int i = 0; i < n; i++) {
+            if (uf.connected(i, 0)) {
+                ans.add(i);
+            }
+        }
+        
+        return ans;
+    }
+    
+    class OfficialUF {
+        private int[] parents;
+        private int[] rank;
+        
+        public OfficialUF(int n) {
+            parents = new int[n];
+            rank = new int[n];
+            
+            for (int i = 0; i < n; i++) {
+                parents[i] = i;
+            }
+        }
+        
+        public void merge(int a, int b) {
+            a = find(a);
+            b = find(b);
+            
+            if (a != b) {
+                if (rank[a] > rank[b]) {
+                    parents[b] = a;
+                } else if (rank[a] < rank[b]) {
+                    parents[a] = b;
+                } else {
+                    parents[b] = a;
+                    rank[a]++;
+                }
+            }
+        }
+        
+        public int find(int a) {
+            if (parents[a] != a) {
+                parents[a] = find(parents[a]);
+            }
+            
+            return parents[a];
+        }
+        
+        public boolean connected(int a, int b) {           
+            return find(a) == find(b);
+        }
+        
+        public void reset(int a) {
+            parents[a] = a;
+            rank[a] = 0;
+        }
     }
     
     public List<Integer> try_official_bfs_on_time_scale(int n, int[][] meetings, int first) {
