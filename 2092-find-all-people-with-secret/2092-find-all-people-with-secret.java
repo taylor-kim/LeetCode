@@ -1,6 +1,6 @@
 class Solution {
     public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
-        return try_official_bfs_on_time_scale(n, meetings, firstPerson);
+        return mySol3_fail_retry(n, meetings, firstPerson);
     }
     
     public List<Integer> try_official_bfs_on_time_scale(int n, int[][] meetings, int first) {
@@ -244,7 +244,7 @@ class Solution {
         return ans;
     }
     
-    public List<Integer> mySol3_fail(int n, int[][] meetings, int first) {
+    public List<Integer> mySol3_fail_retry(int n, int[][] meetings, int first) {
         Map<Integer, Set<int[]>> map = new TreeMap();
         
         UnionFind uf = new UnionFind(n);
@@ -255,28 +255,42 @@ class Solution {
         for (int[] m : meetings) {
             map.computeIfAbsent(m[2], k -> new HashSet());
             map.get(m[2]).add(new int[] {m[0], m[1]});
-            uf.merge(m[0], m[1]);
+            // uf.merge(m[0], m[1]);
         }
+        
+        Set<Integer> knows = new HashSet();
+        knows.add(0);
+        knows.add(first);
         
         for (Set<int[]> parts : map.values()) {
             for (int[] each : parts) {
-                if (uf.find(each[0]) == 0) {
-                    uf.merge(0, each[1]);
-                } else if (uf.find(each[1]) == 0) {
-                    uf.merge(0, each[0]);
+                uf.merge(each[0], each[1]);
+            }
+            
+            for (int[] each : parts) {
+                if (uf.find(each[0]) != 0) {
+                    uf.reset(each[0]);
+                    uf.reset(each[1]);
+                } else {
+                    knows.add(each[0]);
+                    knows.add(each[1]);
                 }
             }
         }
         
-        List<Integer> ans = new ArrayList();
+        uf.print();
         
-        for (int i = 0; i < n; i++) {
-            if (uf.find(i) == 0) {
-                ans.add(i);
-            }
-        }
+        return new ArrayList(knows);
         
-        return ans;
+//         List<Integer> ans = new ArrayList();
+        
+//         for (int i = 0; i < n; i++) {
+//             if (uf.find(i) == 0) {
+//                 ans.add(i);
+//             }
+//         }
+        
+//         return ans;
     }
     
     public List<Integer> mySol2_fail(int n, int[][] meetings, int first) {
@@ -366,6 +380,10 @@ class Solution {
             }
             
             return parents[a];
+        }
+        
+        public void reset(int a) {
+            parents[a] = a;
         }
         
         public void print() {
