@@ -80,7 +80,7 @@ class Solution {
             
             removed += actualRemove;
             
-            if (k <= i) {
+            if (k < i) {
                 return counter.size() - removed;
             }
         }
