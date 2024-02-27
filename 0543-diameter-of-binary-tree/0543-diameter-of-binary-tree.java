@@ -23,10 +23,10 @@ class Solution {
     int ans = 0;
     
     public int mySol(TreeNode root) {
-        if (root == null) return -1;
+        if (root == null) return 0;
         
-        int left = mySol(root.left) + 1;
-        int right = mySol(root.right) + 1;
+        int left = mySol(root.left);
+        int right = mySol(root.right);
         
         int sum = left + right;
         
@@ -34,7 +34,7 @@ class Solution {
         
         ans = Math.max(ans, sum);
         
-        return Math.max(left, right);
+        return Math.max(left, right) + 1;
     }
     
     private int checkDiameter(TreeNode node) {
