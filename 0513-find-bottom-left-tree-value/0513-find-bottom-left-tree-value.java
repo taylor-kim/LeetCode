@@ -30,10 +30,10 @@ class Solution {
                 TreeNode node = pair.getKey();
                 int depth = pair.getValue();
                 
-                if (depth > lastRow) {
-                    ans = node.val;
-                    lastRow = depth;
-                }
+                // if (depth > lastRow) {
+                //     ans = node.val;
+                //     lastRow = depth;
+                // }
                 
                 stack.push(pair);
                 
@@ -45,6 +45,11 @@ class Solution {
             }
             
             pair = stack.pop();
+            
+            if (pair.getValue() > lastRow) {
+                ans = pair.getKey().val;
+                lastRow = pair.getValue();
+            }
             
             if (pair.getKey().right != null) {
                 pair = new Pair(pair.getKey().right, pair.getValue() + 1);
