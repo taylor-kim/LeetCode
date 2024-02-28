@@ -15,11 +15,45 @@
  */
 class Solution {
     public int findBottomLeftValue(TreeNode root) {
-        return mySol_dfs(root);
+        return mySol_inorder_stack(root);
     }
     
     public int mySol_inorder_stack(TreeNode root) {
-        return -1;
+        int ans = 0;
+        int lastRow = -1;
+        
+        Stack<Pair<TreeNode, Integer>> stack = new Stack();
+        Pair<TreeNode, Integer> pair = new Pair(root, 0);
+        
+        while (pair != null || !stack.isEmpty()) {
+            while (pair != null && pair.getKey() != null) {
+                TreeNode node = pair.getKey();
+                int depth = pair.getValue();
+                
+                if (depth > lastRow) {
+                    ans = node.val;
+                    lastRow = depth;
+                }
+                
+                stack.push(pair);
+                
+                if (node.left != null) {
+                    pair = new Pair(node.left, depth + 1);
+                } else {
+                    pair = null;
+                }
+            }
+            
+            pair = stack.pop();
+            
+            if (pair.getKey().right != null) {
+                pair = new Pair(pair.getKey().right, pair.getValue() + 1);
+            } else {
+                pair = null;
+            }
+        }
+        
+        return ans;
     }
     
     int ans = 0;
@@ -34,13 +68,13 @@ class Solution {
     public void mySol_dfs(TreeNode root, int depth) {
         if (root == null) return;
         
-        mySol_dfs(root.left, depth + 1);
-        mySol_dfs(root.right, depth + 1);
-        
         if (depth > lastRow) {
             ans = root.val;
             lastRow = depth;
         }
+        
+        mySol_dfs(root.left, depth + 1);
+        mySol_dfs(root.right, depth + 1);
     }
     
     public int mySol_bfs(TreeNode root) {
