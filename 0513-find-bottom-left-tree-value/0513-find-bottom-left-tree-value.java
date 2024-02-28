@@ -18,6 +18,10 @@ class Solution {
         return mySol_dfs(root);
     }
     
+    public int mySol_inorder_stack(TreeNode root) {
+        return -1;
+    }
+    
     int ans = 0;
     int lastRow = -1;
     
@@ -30,13 +34,13 @@ class Solution {
     public void mySol_dfs(TreeNode root, int depth) {
         if (root == null) return;
         
+        mySol_dfs(root.left, depth + 1);
+        mySol_dfs(root.right, depth + 1);
+        
         if (depth > lastRow) {
             ans = root.val;
             lastRow = depth;
         }
-        
-        mySol_dfs(root.left, depth + 1);
-        mySol_dfs(root.right, depth + 1);
     }
     
     public int mySol_bfs(TreeNode root) {
