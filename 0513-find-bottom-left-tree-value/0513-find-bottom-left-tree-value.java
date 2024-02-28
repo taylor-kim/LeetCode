@@ -15,7 +15,29 @@
  */
 class Solution {
     public int findBottomLeftValue(TreeNode root) {
-        return mySol_inorder_stack(root);
+        return official_bfs(root);
+    }
+    
+    public int official_bfs(TreeNode root) {
+        int ans = 0;
+        
+        Queue<TreeNode> queue = new LinkedList();
+        queue.add(root);
+        TreeNode node = null;
+        
+        while (!queue.isEmpty()) {            
+            node = queue.poll();
+            
+            if (node.right != null) {
+                queue.add(node.right);
+            }
+                
+            if (node.left != null) {
+                queue.add(node.left);
+            }
+        }
+        
+        return node.val;
     }
     
     public int mySol_inorder_stack(TreeNode root) {
