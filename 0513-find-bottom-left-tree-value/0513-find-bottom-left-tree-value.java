@@ -15,7 +15,28 @@
  */
 class Solution {
     public int findBottomLeftValue(TreeNode root) {
-        return mySol_bfs(root);
+        return mySol_dfs(root);
+    }
+    
+    int ans = 0;
+    int lastRow = -1;
+    
+    public int mySol_dfs(TreeNode root) {
+        mySol_dfs(root, 0);
+        
+        return ans;
+    }
+    
+    public void mySol_dfs(TreeNode root, int depth) {
+        if (root == null) return;
+        
+        if (depth > lastRow) {
+            ans = root.val;
+            lastRow = depth;
+        }
+        
+        mySol_dfs(root.left, depth + 1);
+        mySol_dfs(root.right, depth + 1);
     }
     
     public int mySol_bfs(TreeNode root) {
