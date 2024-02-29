@@ -15,7 +15,29 @@
  */
 class Solution {
     public boolean isEvenOddTree(TreeNode root) {
-        return mySol_bfs(root);
+        return mySol_dfs(root);
+    }
+    
+    public boolean mySol_dfs(TreeNode root) {
+        return dfs(root, 0, new HashMap());
+    }
+    
+    public boolean dfs(TreeNode node, int level, Map<Integer, Integer> prevMap) {
+        if (node == null) return true;
+        
+        int prev = prevMap.computeIfAbsent(level, k -> level % 2 == 0 ? 0 : Integer.MIN_VALUE);
+        
+        int sign = level % 2 == 0 ? 1 : -1;
+        
+        int signValue = node.val * sign;
+        
+        if (node.val % 2 == level % 2) return false;
+        
+        if (signValue <= prev) return false;
+        
+        prevMap.put(level, signValue);
+        
+        return dfs(node.left, level + 1, prevMap) && dfs(node.right, level + 1, prevMap);
     }
     
     public boolean mySol_bfs(TreeNode root) {
