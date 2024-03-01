@@ -15,7 +15,6 @@ class Solution {
         
         StringBuilder sb = new StringBuilder();
         
-        sb.append("");
         sb.append("1".repeat(numberOfOne - 1));
         sb.append("0".repeat(n - numberOfOne));
         sb.append("1");
