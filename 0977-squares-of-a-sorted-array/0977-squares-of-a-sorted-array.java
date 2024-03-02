@@ -1,6 +1,50 @@
 class Solution {
     public int[] sortedSquares(int[] nums) {
-        return simple_bucket_sort(nums);
+        return others_radix_sort(nums);
+    }
+    
+    public int[] others_radix_sort(int[] nums) {
+        for (int i = 0; i < nums.length; i++) {
+            nums[i] *= nums[i];
+        }
+        
+        radixSort(nums);
+        
+        return nums;
+    }
+    
+    private void radixSort(int[] nums) {
+        int max = 0;
+        
+        for (int num : nums) {
+            max = Math.max(max, num);
+        }
+        
+        for (int exp = 1; max / exp > 0; exp *= 10) {
+            countSort(nums, exp);
+        }
+    }
+    
+    private void countSort(int[] nums, int exp) {
+        int[] ans = new int[nums.length];
+        int[] count = new int[10];
+        
+        for (int num : nums) {
+            count[(num / exp) % 10]++;
+        }
+        
+        for (int i = 1; i < 10; i++) {
+            count[i] += count[i - 1];
+        }
+        
+        for (int i = nums.length - 1; i >= 0; i--) {
+            ans[count[(nums[i] / exp) % 10] - 1] = nums[i];
+            count[(nums[i] / exp) % 10]--;
+        }
+        
+        for (int i = 0; i < nums.length; i++) {
+            nums[i] = ans[i];
+        }
     }
     
     public int[] simple_bucket_sort(int[] nums) {
