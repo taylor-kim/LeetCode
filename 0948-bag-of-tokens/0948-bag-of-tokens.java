@@ -11,23 +11,20 @@ class Solution {
         int left = 0;
         int right = n - 1;
         int score = 0;
-        int ans = 0;
         
         while (left <= right) {
             if (tokens[left] <= power) {
                 score++;
                 power -= tokens[left++];
-            } else if (score > 0) {
+            } else if (left < right && score > 0) {
                 score--;
                 power += tokens[right--];
             } else {
-                left++;
+                return score;
             }
-            
-            ans = Math.max(ans, score);
         }
         
-        return ans;
+        return score;
     }
     
     public int mySol_bottomup(int[] tokens, int power) {
