@@ -1,6 +1,32 @@
 class Solution {
     public int bagOfTokensScore(int[] tokens, int power) {
-        return mySol_third(tokens, power);
+        return official_deque(tokens, power);
+    }
+    
+    public int official_deque(int[] tokens, int power) {
+        Arrays.sort(tokens);
+        
+        int score = 0;
+        
+        Deque<Integer> deque = new LinkedList();
+        
+        for (int t : tokens) {
+            deque.add(t);
+        }
+        
+        while (!deque.isEmpty()) {
+            if (power >= deque.peekFirst()) {
+                power -= deque.pollFirst();
+                score++;
+            } else if (deque.size() > 1 && score > 0) {
+                power += deque.pollLast();
+                score--;
+            } else {
+                return score;
+            }
+        }
+        
+        return score;
     }
     
     public int mySol_third(int[] tokens, int power) {
