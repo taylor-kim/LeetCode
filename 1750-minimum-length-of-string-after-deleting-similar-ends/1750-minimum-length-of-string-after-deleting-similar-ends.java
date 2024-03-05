@@ -1,6 +1,28 @@
 class Solution {
     public int minimumLength(String s) {
-        return official_two_pointer(s);
+        return official_rec(s);
+    }
+    
+    public int official_rec(String s) {
+        return official_rec(s, 0, s.length() - 1);
+    }
+    
+    public int official_rec(String s, int left, int right) {
+        if (left >= right || s.charAt(left) != s.charAt(right)) {
+            return right - left + 1;
+        }
+        
+        char c = s.charAt(left);
+        
+        while (left <= right && s.charAt(left) == c) {
+            left++;
+        }
+        
+        while (left < right && s.charAt(right) == c) {
+            right--;
+        }
+        
+        return official_rec(s, left, right);
     }
     
     public int official_two_pointer(String s) {
