@@ -1,6 +1,28 @@
 class Solution {
     public int maxFrequencyElements(int[] nums) {
-        return mySol(nums);
+        return official_sort(nums);
+    }
+    
+    public int official_sort(int[] nums) {
+        int[] freq = new int[101];
+        
+        int maxFreq = 0;
+        
+        for (int num : nums) {
+            freq[num]++;
+        }
+        
+        Arrays.sort(freq);
+        
+        int maxFreqIndex = freq.length - 1;
+        int ans = freq[maxFreqIndex];
+        
+        while (maxFreqIndex > 0 && freq[maxFreqIndex] == freq[maxFreqIndex - 1]) {
+            ans += freq[maxFreqIndex];
+            maxFreqIndex--;
+        }
+        
+        return ans;
     }
     
     public int mySol(int[] nums) {
