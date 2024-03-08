@@ -1,6 +1,30 @@
 class Solution {
     public int maxFrequencyElements(int[] nums) {
-        return official_sort(nums);
+        return official_one_pass(nums);
+    }
+    
+    public int official_one_pass(int[] nums) {
+        Map<Integer, Integer> freq = new HashMap();
+        
+        int maxFreq = 0;
+        int ans = 0;
+        
+        for (int num : nums) {
+            freq.computeIfAbsent(num, k -> 0);
+            
+            int nextFreq = freq.get(num) + 1;
+            
+            freq.put(num, nextFreq);
+            
+            if (maxFreq < nextFreq) {
+                maxFreq = nextFreq;
+                ans = maxFreq;
+            } else if (maxFreq == nextFreq) {
+                ans += maxFreq;
+            }
+        }
+        
+        return ans;
     }
     
     public int official_sort(int[] nums) {
