@@ -22,7 +22,7 @@ class Solution {
 
             for (int p : primes) {
                 if (seen.containsKey(p)) {
-                    g.addEdge(seen.get(p), i);
+                    g.addEdge(i, seen.get(p));
                 } else {
                     seen.put(p, i);
                 }
