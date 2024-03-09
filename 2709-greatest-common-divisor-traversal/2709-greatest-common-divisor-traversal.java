@@ -8,7 +8,9 @@ class Solution {
 
         if (n == 1) return true;
 
-        Graph g = new UnionFind(n);
+        Graph g = new BFS(n);
+        // Graph g = new DFS(n);
+        // Graph g = new UnionFind(n);
         Map<Integer, Integer> seen = new HashMap();
 
         for (int i = 0; i < n; i++) {
