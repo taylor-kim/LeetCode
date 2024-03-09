@@ -1,5 +1,9 @@
 class Solution {
     public boolean canTraverseAllPairs(int[] nums) {
+        return test_leethub3(nums);
+    }
+
+    public boolean test_leethub3(int[] nums) {
         int MAX = 100000;
         int N = nums.length;
         boolean[] has = new boolean[MAX + 1];
