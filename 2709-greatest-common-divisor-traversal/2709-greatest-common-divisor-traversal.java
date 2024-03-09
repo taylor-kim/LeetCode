@@ -8,9 +8,9 @@ class Solution {
 
         if (n == 1) return true;
 
-        // Graph g = new BFS(n);
+        Graph g = new BFS(n);
         // Graph g = new DFS(n);
-        Graph g = new UnionFind(n);
+        // Graph g = new UnionFind(n);
         Map<Integer, Integer> seen = new HashMap();
 
         for (int i = 0; i < n; i++) {
@@ -103,10 +103,10 @@ class Solution {
         void traverse(int index) {
             Queue<Integer> queue = new LinkedList();
             queue.add(index);
+            visited[index] = true;
 
             while (!queue.isEmpty()) {
                 int node = queue.poll();
-                // visited[node] = true;
 
                 if (!edges.containsKey(node)) {
                     continue;
