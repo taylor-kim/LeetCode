@@ -9,8 +9,8 @@ class Solution {
         if (n == 1) return true;
 
         // Graph g = new BFS(n);
-        Graph g = new DFS(n);
-        // Graph g = new UnionFind(n);
+        // Graph g = new DFS(n);
+        Graph g = new UnionFind(n);
         Map<Integer, Integer> seen = new HashMap();
 
         for (int i = 0; i < n; i++) {
@@ -184,7 +184,7 @@ class Solution {
         }
 
         public boolean isConnected() {
-            return ranks[find(0)] == n;
+            return ranks[find(n - 1)] == n;
         }
     }
 }
