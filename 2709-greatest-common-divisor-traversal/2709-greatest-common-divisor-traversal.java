@@ -184,7 +184,7 @@ class Solution {
         }
 
         public boolean isConnected() {
-            return ranks[find(n - 1)] == n;
+            return ranks[find(0)] == n;
         }
     }
 }
