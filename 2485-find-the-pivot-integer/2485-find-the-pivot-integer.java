@@ -1,6 +1,6 @@
 class Solution {
     public int pivotInteger(int n) {
-        return official_math(n);
+        return official_binarysearch(n);
     }
 
     public int official_math(int n) {
@@ -10,7 +10,30 @@ class Solution {
         return pivot * pivot == sum ? pivot : -1;
     }
 
-    public int official_dp(int n) {
+    public int official_binarysearch(int n) {
+        int left = 1;
+        int right = n;
+
+        int totalSum = n * (1 + n) / 2;
+
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+
+            if (mid * mid < totalSum) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+
+        if (left * left == totalSum) {
+            return left;
+        } else {
+            return -1;
+        }
+    }
+
+    public int official_precomputation_and_lookup_table(int n) {
         int[] dp = new int[n + 1];
 
         if (dp[1] == 0) {
