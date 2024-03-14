@@ -1,6 +1,34 @@
 class Solution {
     public int numSubarraysWithSum(int[] nums, int goal) {
-        return official_slidingwindow(nums, goal);
+        return official_slidingwindow_onepass(nums, goal);
+    }
+
+    public int official_slidingwindow_onepass(int[] nums, int goal) {
+        int n = nums.length;
+        int left = 0;
+        int totalCount = 0;
+        int sum = 0;
+        int prefixZeros = 0;
+
+        for (int right = 0; right < n; right++) {
+            sum += nums[right];
+
+            while (left < right && (nums[left] == 0 || sum > goal)) {
+                if (nums[left] == 1) {
+                    prefixZeros = 0;
+                } else {
+                    prefixZeros++;
+                }
+
+                sum -= nums[left++];
+            }
+
+            if (sum == goal) {
+                totalCount += 1 + prefixZeros;
+            }
+        }
+
+        return totalCount;
     }
 
     public int official_slidingwindow(int[] nums, int goal) {
