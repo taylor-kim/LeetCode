@@ -1,13 +1,24 @@
 class Solution {
     public int numSubarraysWithSum(int[] nums, int goal) {
-        return mySol_psum(nums, goal);
+        return official_prefix_sum(nums, goal);
     }
 
-    public int try_better_than_square_n(int[] nums, int goal) {
-        int n = nums.length;
+    public int official_prefix_sum(int[] nums, int goal) {
+        Map<Integer, Integer> freq = new HashMap();
         int ans = 0;
+        int currentSum = 0;
 
+        for (int num : nums) {
+            currentSum += num;
 
+            if (currentSum == goal) ans++;
+
+            if (freq.containsKey(currentSum - goal)) {
+                ans += freq.get(currentSum - goal);
+            }
+
+            freq.put(currentSum, freq.getOrDefault(currentSum, 0) + 1);
+        }
 
         return ans;
     }
