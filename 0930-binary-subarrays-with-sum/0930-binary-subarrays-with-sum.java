@@ -1,6 +1,29 @@
 class Solution {
     public int numSubarraysWithSum(int[] nums, int goal) {
-        return official_prefix_sum(nums, goal);
+        return official_slidingwindow(nums, goal);
+    }
+
+    public int official_slidingwindow(int[] nums, int goal) {
+        return slidingwindowAtMost(nums, goal) - slidingwindowAtMost(nums, goal - 1);
+    }
+
+    private int slidingwindowAtMost(int[] nums, int goal) {
+        int n = nums.length;
+        int left = 0;
+        int totalCount = 0;
+        int sum = 0;
+
+        for (int right = 0; right < n; right++) {
+            sum += nums[right];
+
+            while (sum > goal && left <= right) {
+                sum -= nums[left++];
+            }
+
+            totalCount += right - left + 1;
+        }
+
+        return totalCount;
     }
 
     public int official_prefix_sum(int[] nums, int goal) {
@@ -41,7 +64,10 @@ class Solution {
                 sum -= nums[left++];
             }
 
-            if (sum == goal) ans++;
+            while (left < n && sum == goal) {
+                ans++;
+                sum -= nums[left++];
+            }
 
             right++;
         }
