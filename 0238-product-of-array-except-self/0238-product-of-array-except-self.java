@@ -1,6 +1,6 @@
 class Solution {
     public int[] productExceptSelf(int[] nums) {
-        return others2(nums);
+        return others(nums);
     }
 
     public int[] others2(int[] nums) {
