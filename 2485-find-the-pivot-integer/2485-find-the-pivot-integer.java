@@ -1,6 +1,6 @@
 class Solution {
     public int pivotInteger(int n) {
-        return official_binarysearch(n);
+        return official_onepass(n);
     }
 
     public int official_math(int n) {
@@ -61,7 +61,7 @@ class Solution {
         int rightSum = right;
 
         while (left < right) {
-            if (leftSum < rightSum) {
+            if (leftSum <= rightSum) {
                 leftSum += ++left;
             } else {
                 rightSum += --right;
