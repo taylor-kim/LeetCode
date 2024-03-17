@@ -8,17 +8,17 @@ class Solution {
 
         if (n == 0) return new int[][] {newInterval};
 
-        if (n == 1) {
-            if (hasIntersect(intervals[0], newInterval)) {
-                return new int[][] {merge(intervals[0], newInterval)};
-            } else {
-                if (intervals[0][0] < newInterval[0]) {
-                    return new int[][] {intervals[0], newInterval};
-                } else {
-                    return new int[][] {newInterval, intervals[0]};
-                }
-            }
-        }
+        // if (n == 1) {
+        //     if (hasIntersect(intervals[0], newInterval)) {
+        //         return new int[][] {merge(intervals[0], newInterval)};
+        //     } else {
+        //         if (intervals[0][0] < newInterval[0]) {
+        //             return new int[][] {intervals[0], newInterval};
+        //         } else {
+        //             return new int[][] {newInterval, intervals[0]};
+        //         }
+        //     }
+        // }
 
         List<int[]> list = new ArrayList();
         list.add(intervals[0]);
