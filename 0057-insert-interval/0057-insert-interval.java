@@ -1,24 +1,83 @@
 class Solution {
     public int[][] insert(int[][] intervals, int[] newInterval) {
-        return mySol(intervals, newInterval);
+        return official_binarysearch(intervals, newInterval);
+    }
+
+    public int[][] official_binarysearch(int[][] intervals, int[] newInterval) {
+        int n = intervals.length;
+        if (n == 0) return new int[][] {newInterval};
+
+        int left = 0;
+        int right = n - 1;
+
+        while (left <= right) {
+            int mid = left + (right - left) / 2;
+
+            int[] midItem = intervals[mid];
+
+            if (midItem[0] < newInterval[0]) {
+                left = mid + 1;
+            } else {
+                right = mid - 1;
+            }
+        }
+
+        List<int[]> list = new ArrayList();
+
+        for (int i = 0; i < left; i++) {
+            list.add(intervals[i]);
+        }
+
+        list.add(newInterval);
+
+        for (int i = left; i < n; i++) {
+            list.add(intervals[i]);
+        }
+
+        List<int[]> merged = new ArrayList();
+
+        for (int[] item : list) {
+            if (merged.size() == 0 || merged.get(merged.size() - 1)[1] < item[0]) {
+                merged.add(item);
+            } else {
+                merged.get(merged.size() - 1)[1] = Math.max(merged.get(merged.size() - 1)[1], item[1]);
+            }
+        }
+
+        return merged.toArray(new int[merged.size()][]);
+    }
+
+    public int[][] official_linear(int[][] intervals, int[] newInterval) {
+        int n = intervals.length;
+        if (n == 0) return new int[][] {newInterval};
+
+        int i = 0;
+        List<int[]> ans = new ArrayList();
+
+        while (i < n && intervals[i][1] < newInterval[0]) {
+            ans.add(intervals[i++]);
+        }
+
+        while (i < n && newInterval[1] >= intervals[i][0]) {
+            newInterval[0] = Math.min(newInterval[0], intervals[i][0]);
+            newInterval[1] = Math.max(newInterval[1], intervals[i][1]);
+            i++;
+        }
+
+        ans.add(newInterval);
+
+        while (i < n) {
+            ans.add(intervals[i]);
+            i++;
+        }
+
+        return ans.toArray(new int[ans.size()][]);
     }
 
     public int[][] mySol(int[][] intervals, int[] newInterval) {
         int n = intervals.length;
 
         if (n == 0) return new int[][] {newInterval};
-
-        // if (n == 1) {
-        //     if (hasIntersect(intervals[0], newInterval)) {
-        //         return new int[][] {merge(intervals[0], newInterval)};
-        //     } else {
-        //         if (intervals[0][0] < newInterval[0]) {
-        //             return new int[][] {intervals[0], newInterval};
-        //         } else {
-        //             return new int[][] {newInterval, intervals[0]};
-        //         }
-        //     }
-        // }
 
         List<int[]> list = new ArrayList();
         list.add(intervals[0]);
