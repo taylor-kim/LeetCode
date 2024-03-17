@@ -1,6 +1,27 @@
 class Solution {
     public int findMaxLength(int[] nums) {
-        return othersMap(nums);
+        return official_array(nums);
+    }
+
+    public int official_array(int[] nums) {
+        int n = nums.length;
+        int[] arr = new int[2 * n + 1];
+        Arrays.fill(arr, -2);
+        arr[n] = -1;
+        int max = 0;
+        int count = 0;
+
+        for (int i = 0; i < n; i++) {
+            count += nums[i] == 0 ? -1 : 1;
+
+            if (arr[count + n] >= -1) {
+                max = Math.max(max, i - arr[count + n]);
+            } else {
+                arr[count + n] = i;
+            }
+        }
+
+        return max;
     }
 
     public int othersMap(int[] nums) {
