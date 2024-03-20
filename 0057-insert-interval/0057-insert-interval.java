@@ -1,6 +1,6 @@
 class Solution {
     public int[][] insert(int[][] intervals, int[] newInterval) {
-        return official_binarysearch(intervals, newInterval);
+        return mySol(intervals, newInterval);
     }
 
     public int[][] official_binarysearch(int[][] intervals, int[] newInterval) {
@@ -82,7 +82,7 @@ class Solution {
         List<int[]> list = new ArrayList();
         list.add(intervals[0]);
 
-        int processed = 0;
+        int processed = 1;
 
         boolean added = false;
 
