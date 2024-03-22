@@ -10,7 +10,47 @@
  */
 class Solution {
     public boolean isPalindrome(ListNode head) {
-        return mySol(head);
+        return others_good(head);
+    }
+
+    public boolean others_good(ListNode head) {
+        if (head == null) return false;
+        if (head.next == null) return true;
+
+        ListNode slow = head;
+        ListNode fast = head.next;
+        ListNode reverse = null;
+
+        while (fast != null && fast.next != null) {
+            ListNode temp = slow;
+
+            slow = slow.next;
+            fast = fast.next.next;
+
+            temp.next = reverse;
+            reverse = temp;
+        }
+
+        if (fast == null) {
+            //odd, slow is mid
+            slow = slow.next;
+        } else {
+            //even, slow id mid - 1
+            ListNode temp = slow;
+            slow = slow.next;
+
+            temp.next = reverse;
+            reverse = temp;
+
+        }
+
+        while (reverse != null && slow != null) {
+            if (reverse.val != slow.val) return false;
+            reverse = reverse.next;
+            slow = slow.next;
+        }
+
+        return true;
     }
 
     public boolean mySol(ListNode head) {
