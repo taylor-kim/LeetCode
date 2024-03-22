@@ -22,17 +22,17 @@ class Solution {
 
         while (min > 0) {
             for (int count : freq.values()) {
-                if (min <= count && count <= limit) {
-                    ans++;
-                    continue;
-                }
+                // if (min <= count && count <= limit) {
+                //     ans++;
+                //     continue;
+                // }
 
                 int box = count / limit;
                 int odd = count % limit;
 
                 if (odd == 0) {
                     ans += box;
-                } else if (box >= min - odd) {
+                } else if (min >= odd && box >= min - odd) {
                     ans += box + 1;
                 } else {
                     ans = 0;
