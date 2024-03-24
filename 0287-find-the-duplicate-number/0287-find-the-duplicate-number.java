@@ -4,23 +4,27 @@ class Solution {
     }
 
     public int mySol(int[] nums) {
-        int ans = -1;
+        int n = nums.length;
+        int slow = nums[0];
+        int fast = slow;
 
-        for (int i = 0; i < nums.length; i++) {
-            int index = Math.abs(nums[i]);
+        // 1 -> 3 -> 2 -> 4 -> 2
+        // 1 -> 3 -> 2 <-> 4
 
-            nums[index - 1] *= -1;
+        while (true) {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
 
-            if (nums[index - 1] > 0) {
-                ans = index;
-                break;
-            }
+            if (slow == fast) break;
         }
 
-        // for (int i = 0; i < nums.length; i++) {
-        //     nums[i] = Math.abs(nums[i]);
-        // }
+        slow = nums[0];
 
-        return ans;
+        while (slow != fast) {
+            slow = nums[slow];
+            fast = nums[fast];
+        }
+
+        return slow;
     }
 }
