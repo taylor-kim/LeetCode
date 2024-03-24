@@ -15,21 +15,12 @@ class Solution {
 
     public void retry_20240324(ListNode head) {
         ListNode slow = head;
-        ListNode fast = head.next;
-
-        int mid = 0;
+        ListNode fast = head;
 
         while (fast != null && fast.next != null) {
             slow = slow.next;
             fast = fast.next.next;
-            mid++;
         }
-
-        if (fast != null) {
-            slow = slow.next;
-        }
-
-        ListNode end = slow;
 
         ListNode prev = null;
 
@@ -43,12 +34,11 @@ class Solution {
 
         ListNode back = prev;
 
-        while (mid-- > 0) {
+        while (head.next != back && head != back) {
             prev = back.next;
 
             back.next = head.next;
             head.next = back;
-
             head = head.next.next;
             back = prev;
         }
