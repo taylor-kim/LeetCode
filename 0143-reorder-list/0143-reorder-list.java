@@ -10,7 +10,48 @@
  */
 class Solution {
     public void reorderList(ListNode head) {
-        mySol(head);
+        retry_20240324(head);
+    }
+
+    public void retry_20240324(ListNode head) {
+        ListNode slow = head;
+        ListNode fast = head.next;
+
+        int mid = 0;
+
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            mid++;
+        }
+
+        if (fast != null) {
+            slow = slow.next;
+        }
+
+        ListNode end = slow;
+
+        ListNode prev = null;
+
+        while (slow != null) {
+            ListNode next = slow.next;
+            
+            slow.next = prev;
+            prev = slow;
+            slow = next;
+        }
+
+        ListNode back = prev;
+
+        while (mid-- > 0) {
+            prev = back.next;
+
+            back.next = head.next;
+            head.next = back;
+
+            head = head.next.next;
+            back = prev;
+        }
     }
 
     public void mySol(ListNode head) {
@@ -18,12 +59,10 @@ class Solution {
 
         ListNode slow = head;
         ListNode fast = head.next;
-        ListNode last = fast;
         
         int mid = 0;
 
         while (fast != null && fast.next != null) {
-            last = fast;
             slow = slow.next;
             fast = fast.next.next;
             mid++;
@@ -37,7 +76,6 @@ class Solution {
         }
 
         ListNode back = null;
-        ListNode end = slow;
 
         while (slow != null) {
             ListNode temp = slow;
