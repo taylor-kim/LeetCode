@@ -1,6 +1,27 @@
 class Solution {
     public int maxSubarrayLength(int[] nums, int k) {
-        return mySol(nums, k);
+        return official_sw(nums, k);
+    }
+
+    public int official_sw(int[] nums, int k) {
+        Map<Integer, Integer> freq = new HashMap();
+
+        int left = 0;
+        int ans = 0;
+
+        for (int right = 0; right < nums.length; right++) {
+            int rv = nums[right];
+            freq.put(rv, freq.getOrDefault(rv, 0) + 1);
+
+            while (freq.get(rv) > k) {
+                int lv = nums[left++];
+                freq.put(lv, freq.get(lv) - 1);
+            }
+
+            ans = Math.max(ans, right - left + 1);
+        }
+
+        return ans;
     }
 
     public int mySol(int[] nums, int k) {
