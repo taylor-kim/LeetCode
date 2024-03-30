@@ -1,9 +1,29 @@
 class Solution {
     public long countSubarrays(int[] nums, int k) {
-        return try_again(nums, k);
+        return official_sw2(nums, k);
     }
 
-    public long try_again(int[] nums, int k) {
+    public long official_sw2(int[] nums, int k) {
+        long ans = 0;
+
+        int max = 0;
+
+        for (int num : nums) max = Math.max(max, num);
+
+        List<Integer> list = new ArrayList();
+
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == max) list.add(i);
+
+            if (list.size() >= k) {
+                ans += list.get(list.size() - k) + 1;
+            }
+        }
+
+        return ans;
+    }
+
+    public long official_sw(int[] nums, int k) {
         int n = nums.length;
         int max = 0;
 
