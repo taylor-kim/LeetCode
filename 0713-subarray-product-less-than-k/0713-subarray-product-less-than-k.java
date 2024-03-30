@@ -3,6 +3,10 @@ class Solution {
         return mySol_without_extspace(nums, k);
     }
 
+    public int try_binarysearch(int[] nums, int k) {
+        return -1;
+    }
+
     public int mySol_with_prefixprod_fail(int[] nums, int k) {
         int n = nums.length;
 
@@ -29,6 +33,8 @@ class Solution {
     }
 
     public int mySol_without_extspace(int[] nums, int k) {
+        if (k <= 1) return 0;
+
         int n = nums.length;
 
         int ans = 0;
@@ -40,7 +46,7 @@ class Solution {
         for (int right = 0; right < n; right++) {
             product *= nums[right];
 
-            while (left <= right && product >= k) {
+            while (product >= k) {
                 product /= nums[left++];
             }
 
