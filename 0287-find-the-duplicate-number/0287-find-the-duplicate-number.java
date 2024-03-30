@@ -1,48 +1,73 @@
 class Solution {
     public int findDuplicate(int[] nums) {
-        return study_bit(nums);
+        return studyAgain_slow_fast(nums);
     }
 
-    public int study_bit(int[] nums) {
-        int bitLimit = 0;
-        int ans = 0;
-        int max = 0;
+    // https://www.youtube.com/watch?v=wjYnzkAhcNk
+    public int studyAgain_slow_fast(int[] nums) {
+        int slow = nums[0];
+        int fast = nums[0];
 
-        for (int num : nums) max = Math.max(max, num);
+        do {
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+        } while (slow != fast);
 
-        while (max > 0) {
-            max >>= 1;
-            bitLimit++;
+        slow = nums[0];
+
+        while (slow != fast) {
+            slow = nums[slow];
+            fast = nums[fast];
         }
 
-        for (int bit = 0; bit < bitLimit; bit++) {
-            int mask = 1 << bit;
-            int countWithoutDup = 0;
-            int countNum = 0;
+        return slow;
+    }
 
-            for (int i = 0; i < nums.length; i++) {
-                if ((i & mask) != 0) {
-                    countWithoutDup++;
-                }
+    public int mySol(int[] nums) {
+        int ans = -1;
 
-                if ((nums[i] & mask) != 0) {
-                    countNum++;
-                }
+        for (int i = 0; i < nums.length; i++) {
+            int num = Math.abs(nums[i]);
+
+            if (nums[num] < 0) {
+                ans = num;
+                break;
+            } else {
+                nums[num] *= -1;
             }
+        }
 
-            if (countNum > countWithoutDup) {
-                ans |= mask;
-            }
+        for (int i = 0; i < nums.length; i++) {
+            nums[i] = Math.abs(nums[i]);
         }
 
         return ans;
     }
 
-    public int try_binarysearch(int[] nums) {
-        int lo = 1;
-        int hi = nums.length;
+    public int officialTortoiseAndHare(int[] nums) {
+        int tor = nums[0];
+        int hare = nums[0];
 
-        while (lo < hi) {
+        do {
+            tor = nums[tor];
+            hare = nums[nums[hare]];
+        } while (tor != hare);
+
+        tor = nums[0];
+
+        while (tor != hare) {
+            tor = nums[tor];
+            hare = nums[hare];
+        }
+
+        return tor;
+    }
+
+    public int officialBinarySearch(int[] nums) {
+        int lo = 1;
+        int hi = nums.length - 1;
+
+        while (lo <= hi) {
             int cand = lo + (hi - lo) / 2;
 
             int count = 0;
@@ -53,40 +78,13 @@ class Solution {
                 }
             }
 
-            if (count == cand) {
-                lo = cand + 1;
-            } else if (count > cand) {
-                hi = cand;
-            } else if (count < cand) {
+            if (count > cand) {
+                hi = cand - 1;
+            } else {
                 lo = cand + 1;
             }
         }
 
         return lo;
-    }
-
-    public int mySol(int[] nums) {
-        int n = nums.length;
-        int slow = nums[0];
-        int fast = slow;
-
-        // 1 -> 3 -> 2 -> 4 -> 2
-        // 1 -> 3 -> 2 <-> 4
-
-        while (true) {
-            slow = nums[slow];
-            fast = nums[nums[fast]];
-
-            if (slow == fast) break;
-        }
-
-        slow = nums[0];
-
-        while (slow != fast) {
-            slow = nums[slow];
-            fast = nums[fast];
-        }
-
-        return slow;
     }
 }
