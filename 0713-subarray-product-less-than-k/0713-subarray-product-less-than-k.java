@@ -1,29 +1,27 @@
 class Solution {
     public int numSubarrayProductLessThanK(int[] nums, int k) {
-        if (k == 0) return 0;
-        double logK = Math.log(k);
-        int m = nums.length + 1;
-        double[] logsPrefixSum = new double[m];
+        return mySol(nums, k);
+    }
+
+    public int mySol(int[] nums, int k) {
+        int n = nums.length;
+
+        int[] dp = new int[n + 1];
+
+        int left = 0;
+
+        int product = 1;
         
-        // Calculate prefix sum of logarithms of elements
-        for (int i = 0; i < nums.length; i++) {
-            logsPrefixSum[i + 1] = logsPrefixSum[i] + Math.log(nums[i]);
+        for (int right = 0; right < n; right++) {
+            product *= nums[right];
+
+            while (left <= right && product >= k) {
+                product /= nums[left++];
+            }
+
+            dp[right + 1] += dp[right] + right - left + 1;
         }
 
-        int totalCount = 0;
-        // Calculate subarray count with product less than k
-        for (int currIdx = 0; currIdx < m; currIdx++) {
-            int low = currIdx + 1, high = m;
-            while (low < high) {
-                int mid = low + (high - low) / 2;
-                if (logsPrefixSum[mid] < logsPrefixSum[currIdx] + logK - 1e-9) {
-                    low = mid + 1;
-                } else {
-                    high = mid;
-                }
-            }
-            totalCount += low - currIdx - 1;
-        }
-        return totalCount;
+        return dp[n];
     }
 }
