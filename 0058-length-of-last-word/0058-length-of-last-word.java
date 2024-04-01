@@ -1,24 +1,21 @@
 class Solution {
     public int lengthOfLastWord(String s) {
-        return mySol(s);
-    }
+		int length = 0;
+		int result = 0;
 
-    public int mySol(String s) {
-        int n = s.length();
-        int start = 0;
+		for (int i = s.length() - 1; i >= 0; i--) {
+			if (s.charAt(i) != ' ') {
+				length++;
+				result = length;
+			} else {
+				length = 0;
 
-        for (int end = n - 1; end >= 0; end--) {
-            if (s.charAt(end) == ' ') continue;
+                if (result > 0) {
+                    return result;
+                }
+			}
+		}
 
-            start = end;
-
-            while (start >= 0 && s.charAt(start) != ' ') {
-                start--;
-            }
-
-            return end - start;
-        }
-
-        return 0;
-    }
+		return result;
+	}
 }
