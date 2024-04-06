@@ -4,22 +4,31 @@ class Solution {
     }
 
     public String mySol(String s) {
-        return others(s);
-    }
-
-    public String others(String s) {
         Stack<Character> stack = new Stack();
-        for(int i=0;i<s.length();i++){
-            if(!stack.isEmpty() && Math.abs(stack.peek()-s.charAt(i)) == 32)
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+
+            boolean removed = false;
+
+            int diff = 'a' - 'A';
+
+            if (!stack.isEmpty() && (stack.peek() + diff == (int)c || stack.peek() - diff == (int)c)) {
                 stack.pop();
-            else
-                stack.push(s.charAt(i));
+                removed = true;
+            }
+
+            if (!removed) {
+                stack.push(c);
+            }
         }
-        char res[] = new char[stack.size()];
-        int index = stack.size()-1;
-        while(!stack.isEmpty()){
-            res[index--] = stack.pop();
+
+        StringBuilder sb = new StringBuilder();
+
+        while (!stack.isEmpty()) {
+            sb.append(stack.pop());
         }
-        return new String(res);
+
+        return sb.reverse().toString();
     }
 }
