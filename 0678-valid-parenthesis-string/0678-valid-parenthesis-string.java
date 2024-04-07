@@ -1,6 +1,34 @@
 class Solution {
     public boolean checkValidString(String s) {
-        return officialTwoStack(s);
+        return officialTwoPointer(s);
+    }
+
+    public boolean officialTwoPointer(String s) {
+        int open = 0;
+        int close = 0;
+        int n = s.length() - 1;
+
+        for (int i = 0; i <= n; i++) {
+            char c = s.charAt(i);
+
+            if (c == '(' || c == '*') {
+                open++;
+            } else {
+                open--;
+            }
+
+            char c2 = s.charAt(n - i);
+
+            if (c2 == ')' || c2 == '*') {
+                close++;
+            } else {
+                close--;
+            }
+
+            if (open < 0 || close < 0) return false;
+        }
+
+        return true;
     }
 
     public boolean officialTwoStack(String s) {
