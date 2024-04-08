@@ -25,7 +25,7 @@ class Solution {
             else countOne--;
         }
 
-        return countOne + countZero;
+        return 0;
     }
 
     public int official_queue(int[] students, int[] sandwiches) {
