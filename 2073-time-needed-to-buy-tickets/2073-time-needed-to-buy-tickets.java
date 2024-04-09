@@ -13,20 +13,16 @@ class Solution {
         int ans = 0;
 
         while (!queue.isEmpty()) {
-            int size = queue.size();
+            int index = queue.peek()[0];
+            int count = queue.poll()[1] - 1;
+            ans++;
 
-            while (size-- > 0) {
-                int index = queue.peek()[0];
-                int count = queue.poll()[1] - 1;
-                ans++;
+            if (count == 0 && index == k) {
+                return ans;
+            }
 
-                if (count == 0 && index == k) {
-                    return ans;
-                }
-
-                if (count > 0) {
-                    queue.add(new int[] {index, count});
-                }
+            if (count > 0) {
+                queue.add(new int[] {index, count});
             }
         }
 
