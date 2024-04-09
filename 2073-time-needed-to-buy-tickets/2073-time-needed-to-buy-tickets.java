@@ -1,6 +1,21 @@
 class Solution {
     public int timeRequiredToBuy(int[] tickets, int k) {
-        return mySol(tickets, k);
+        return try_greedy(tickets, k);
+    }
+
+    public int try_greedy(int[] tickets, int k) {
+        int ans = 0;
+        int max = tickets[k];
+
+        for (int i = 0; i < tickets.length; i++) {
+            if (i <= k) {
+                ans += Math.min(tickets[i], max);
+            } else {
+                ans += Math.min(tickets[i], max - 1);
+            }
+        }
+
+        return ans;
     }
 
     public int mySol(int[] tickets, int k) {
