@@ -1,6 +1,32 @@
 class Solution {
     public int[] deckRevealedIncreasing(int[] deck) {
-        return official_queue_twopass(deck);
+        return official_two_pointers(deck);
+    }
+
+    public int[] official_two_pointers(int[] deck) {
+        int n = deck.length;
+
+        int[] ans = new int[n];
+
+        int di = 0;
+        int ai = 0;
+        boolean skip = false;
+
+        Arrays.sort(deck);
+
+        while (di < n) {
+            if (ans[ai] == 0) {
+                if (!skip) {
+                    ans[ai] = deck[di++];
+                }
+
+                skip = !skip;
+            }
+
+            ai = (ai + 1) % n;
+        }
+
+        return ans;
     }
 
     public int[] official_queue_twopass(int[] deck) {
