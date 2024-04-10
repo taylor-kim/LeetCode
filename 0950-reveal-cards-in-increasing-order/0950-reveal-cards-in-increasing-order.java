@@ -1,6 +1,25 @@
 class Solution {
     public int[] deckRevealedIncreasing(int[] deck) {
-        return mySol(deck);
+        return official_queue_twopass(deck);
+    }
+
+    public int[] official_queue_twopass(int[] deck) {
+        int n = deck.length;
+
+        Queue<Integer> queue = new LinkedList();
+
+        for (int i = 0; i < n; i++) queue.add(i);
+
+        int[] ans = new int[n];
+
+        Arrays.sort(deck);
+
+        for (int i = 0; i < n; i++) {
+            ans[queue.poll()] = deck[i];
+            queue.add(queue.poll());
+        }
+
+        return ans;
     }
 
     public int[] mySol(int[] deck) {
