@@ -15,7 +15,41 @@
  */
 class Solution {
     public int sumOfLeftLeaves(TreeNode root) {
-        return mySol(root);
+        return mySol2(root);
+    }
+
+    public int mySol2(TreeNode root) {
+        Stack<Pair<TreeNode, Boolean>> stack = new Stack();
+
+        int ans = 0;
+
+        TreeNode node = root;
+        boolean isLeft = false;
+
+        while (node != null || !stack.isEmpty()) {
+            while (node != null) {
+                stack.push(new Pair(node, isLeft));
+
+                node = node.left;
+                isLeft = true;
+            }
+
+            Pair<TreeNode, Boolean> pair = stack.pop();
+            node = pair.getKey();
+            
+            if (node.left == null && node.right == null && pair.getValue()) {
+                ans += node.val;
+            }
+
+            if (node.right != null) {
+                isLeft = false;
+                node = node.right;
+            } else {
+                node = null;
+            }
+        }
+
+        return ans;
     }
 
     public int mySol(TreeNode root) {
