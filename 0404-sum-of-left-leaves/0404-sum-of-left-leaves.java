@@ -15,7 +15,20 @@
  */
 class Solution {
     public int sumOfLeftLeaves(TreeNode root) {
-        return mySol2(root);
+        return others_rec(root);
+    }
+
+    public int others_rec(TreeNode root) {
+        if (root == null) return 0;
+
+        int ans = 0;
+
+        if (root.left != null) {
+            if (root.left.left == null && root.left.right == null) ans = root.left.val;
+            else ans = others_rec(root.left);
+        }
+
+        return ans + others_rec(root.right);
     }
 
     public int mySol2(TreeNode root) {
