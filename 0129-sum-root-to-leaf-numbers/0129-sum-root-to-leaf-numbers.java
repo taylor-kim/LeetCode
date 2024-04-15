@@ -15,24 +15,41 @@
  */
 class Solution {
     public int sumNumbers(TreeNode root) {
-        return mySol_rec(root);
+        return moreSimple(root);
     }
 
-    public int mySol_rec(TreeNode root) {
-        return mySol_rec(root, 0);
+    public int moreSimple(TreeNode root) {
+        return moreSimple(root, 0);
     }
 
-    public int mySol_rec(TreeNode root, int val) {
-        int sum = val * 10 + root.val;
+    public int moreSimple(TreeNode root, int num) {
+        if (root == null) return 0;
+
+        int next = num * 10 + root.val;
+
+        if (root.left == null && root.right == null) return next;
+
+        return moreSimple(root.left, next) + moreSimple(root.right, next);
+    }
+
+    public int mySol(TreeNode root) {
+        int[] sum = new int[1];
+        
+        mySol(root, sum, 0);
+
+        return sum[0];
+    }
+
+    public void mySol(TreeNode root, int[] sum, int num) {
+        if (root == null) return;
+
+        int next = num * 10 + root.val;
 
         if (root.left == null && root.right == null) {
-            return sum;
-        } else if (root.left == null) {
-            return mySol_rec(root.right, sum);
-        } else if (root.right == null) {
-            return mySol_rec(root.left, sum);
+            sum[0] += next;
         } else {
-            return mySol_rec(root.left, sum) + mySol_rec(root.right, sum);
+            mySol(root.left, sum, next);
+            mySol(root.right, sum, next);
         }
     }
 }
