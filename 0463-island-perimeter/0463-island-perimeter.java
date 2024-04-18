@@ -1,18 +1,18 @@
 class Solution {
     public int islandPerimeter(int[][] grid) {
-        return betterThanMe(grid);
+        return others_nice(grid);
     }
 
-    public int betterThanMe(int[][] grid) {
+    public int others_nice(int[][] grid) {
         int ans = 0;
 
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[i].length; j++) {
-                if (grid[i][j] == 1) {
+        for (int r = 0; r < grid.length; r++) {
+            for (int c = 0; c < grid[0].length; c++) {
+                if (grid[r][c] == 1) {
                     ans += 4;
 
-                    if (i > 0 && grid[i - 1][j] == 1) ans -= 2;
-                    if (j > 0 && grid[i][j - 1] == 1) ans -= 2;
+                    if (r > 0 && grid[r - 1][c] == 1) ans -= 2;
+                    if (c > 0 && grid[r][c - 1] == 1) ans -= 2;
                 }
             }
         }
@@ -20,31 +20,29 @@ class Solution {
         return ans;
     }
 
-    public int mySol(int[][] grid) {
+    public int myPast_sol2(int[][] grid) {
         int ans = 0;
 
-        int[][] directions = new int[][] {
-            new int[] {-1, 0}
-            , new int[] {1, 0}
-            , new int[] {0, -1}
-            , new int[] {0, 1}
+        int[][] directions = {
+            {-1, 0}
+            , {1, 0}
+            , {0, -1}
+            , {0, 1}
         };
 
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[i].length; j++) {
-                if (grid[i][j] == 1) {
-                    for (int k = 0; k < directions.length; k++) {
-                        int ny = i + directions[k][0];
-                        int nx = j + directions[k][1];
+        for (int r = 0; r < grid.length; r++) {
+            for (int c = 0; c < grid[0].length; c++) {
+                if (grid[r][c] == 1) {
+                    for (int[] d : directions) {
+                        int nr = r + d[0];
+                        int nc = c + d[1];
 
-                        if (!isIn(grid, ny, nx)) {
+                        if (!isIn(grid, nr, nc)) {
                             ans++;
-                        } else if (grid[ny][nx] == 0) {
+                        } else if (grid[nr][nc] == 0) {
                             ans++;
                         }
                     }
-
-                    grid[i][j]++;
                 }
             }
         }
@@ -52,12 +50,57 @@ class Solution {
         return ans;
     }
 
-    private boolean isIn(int[][] grid, int y, int x) {
-        return !(
-            y < 0
-            || y >= grid.length
-            || x < 0
-            || x >= grid[y].length
-        );
+    private boolean isIn(int[][] grid, int r, int c) {
+        return 0 <= r && r < grid.length && 0 <= c && c < grid[0].length;
+    }
+
+    public int myPast_sol(int[][] grid) {
+        int ans = 0;
+
+        for (int r = 0; r < grid.length; r++) {
+            for (int c = 0; c < grid[0].length; c++) {
+                if (grid[r][c] == 1) {
+                    if (r == 0 || grid[r - 1][c] == 0) ans++;
+                    if (r == grid.length - 1 || grid[r + 1][c] == 0) ans++;
+
+                    if (c == 0 || grid[r][c - 1] == 0) ans++;
+                    if (c == grid[0].length - 1 || grid[r][c + 1] == 0) ans++;
+                }
+            }
+        }
+
+        return ans;
+    }
+
+    public int mySol_dfs(int[][] grid) {
+        int[] ans = {0};
+
+        mySol_dfs(grid, 0, 0, ans, new boolean[grid.length][grid[0].length]);
+
+        return ans[0];
+    }
+
+    public void mySol_dfs(int[][] grid, int r, int c, int[] ans, boolean[][] visit) {
+        if (r >= grid.length || r < 0 || c >= grid[0].length || c < 0) return;
+
+        if (visit[r][c]) return;
+
+        visit[r][c] = true;
+
+        if (grid[r][c] == 1) {
+            if (r == 0 || grid[r - 1][c] == 0) ans[0]++;
+            if (r == grid.length - 1 || grid[r + 1][c] == 0) ans[0]++;
+
+            if (c == 0 || grid[r][c - 1] == 0) ans[0]++;
+            if (c == grid[0].length - 1 || grid[r][c + 1] == 0) ans[0]++;
+        }
+
+        for (int i = -1; i <= 1; i += 2) {
+            mySol_dfs(grid, r + i, c, ans, visit);
+        }
+
+        for (int i = -1; i <= 1; i += 2) {
+            mySol_dfs(grid, r, c + i, ans, visit);
+        }
     }
 }
