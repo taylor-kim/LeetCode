@@ -7,14 +7,12 @@ class Solution {
         int m = grid.length;
         int n = grid[0].length;
 
-        boolean[][] visit = new boolean[m][n];
-
         int ans = 0;
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (grid[i][j] == '1' && !visit[i][j]) {
-                    mySol_dfs(i, j, grid, visit);
+                if (grid[i][j] == '1') {
+                    mySol_dfs(i, j, grid);
                     ans++;
                 }
             }
@@ -23,16 +21,16 @@ class Solution {
         return ans;
     }
 
-    public void mySol_dfs(int r, int c, char[][] grid, boolean[][] visit) {
+    public void mySol_dfs(int r, int c, char[][] grid) {
         if (r < 0 || r >= grid.length || c < 0 || c >= grid[0].length) return;
 
-        if (visit[r][c] || grid[r][c] == '0') return;
+        if (grid[r][c] != '1') return;
 
-        visit[r][c] = true;
+        grid[r][c] = '2';
 
-        mySol_dfs(r - 1, c, grid, visit);
-        mySol_dfs(r + 1, c, grid, visit);
-        mySol_dfs(r, c - 1, grid, visit);
-        mySol_dfs(r, c + 1, grid, visit);
+        mySol_dfs(r - 1, c, grid);
+        mySol_dfs(r + 1, c, grid);
+        mySol_dfs(r, c - 1, grid);
+        mySol_dfs(r, c + 1, grid);
     }
 }
