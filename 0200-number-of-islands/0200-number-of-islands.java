@@ -1,36 +1,121 @@
 class Solution {
     public int numIslands(char[][] grid) {
-        return mySol_dfs(grid);
+        return tryAgain_20230529(grid);
     }
 
-    public int mySol_dfs(char[][] grid) {
+    public int tryAgain_20230529(char[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
-
-        int ans = 0;
+        int count = 0;
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (grid[i][j] == '1') {
-                    mySol_dfs(i, j, grid);
-                    ans++;
+                    dfs_20230529(grid, i, j);
+                    count++;
                 }
             }
         }
 
-        return ans;
+        return count;
     }
 
-    public void mySol_dfs(int r, int c, char[][] grid) {
-        if (r < 0 || r >= grid.length || c < 0 || c >= grid[0].length) return;
+    public void dfs_20230529(char[][] grid, int i, int j) {
+        if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length) return;
 
-        if (grid[r][c] != '1') return;
+        if (grid[i][j] != '1') return;
 
-        grid[r][c] = '2';
+        grid[i][j] = '2';
 
-        mySol_dfs(r - 1, c, grid);
-        mySol_dfs(r + 1, c, grid);
-        mySol_dfs(r, c - 1, grid);
-        mySol_dfs(r, c + 1, grid);
+        dfs_20230529(grid, i + 1, j);
+        dfs_20230529(grid, i - 1, j);
+        dfs_20230529(grid, i, j + 1);
+        dfs_20230529(grid, i, j - 1);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public int tryAgain(char[][] grid) {
+        int count = 0;
+
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                if (grid[i][j] == '1') {
+                    dfs(grid, i, j);
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    private void dfs(char[][] grid, int y, int x) {
+        if (y < 0 || x < 0 || y >= grid.length || x >= grid[y].length) {
+            return;
+        }
+
+        if (grid[y][x] == '1') {
+            grid[y][x] = '2';
+
+            dfs(grid, y - 1, x);
+            dfs(grid, y + 1, x);
+            dfs(grid, y, x - 1);
+            dfs(grid, y, x + 1);
+        }
+    }
+
+    public int mySol(char[][] grid) {
+        int groupNumber = 0;
+
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == '1') {
+                    doWithRecursion(grid, i, j);
+
+                    groupNumber++;
+                }
+            }
+        }
+
+        return groupNumber;
+    }
+
+    private void doWithRecursion(char[][] grid, int y, int x) {
+        if (y < 0 || x < 0 || y >= grid.length || x >= grid[0].length) {
+            return;
+        }
+
+        if (grid[y][x] == '1') {
+            grid[y][x] = '2';
+            doWithRecursion(grid, y - 1, x);
+            doWithRecursion(grid, y + 1, x);
+            doWithRecursion(grid, y, x - 1);
+            doWithRecursion(grid, y, x + 1);
+        }        
     }
 }
