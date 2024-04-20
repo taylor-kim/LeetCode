@@ -16,9 +16,9 @@ class Solution {
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (land[i][j] == 1) {
-                    int r2, c2 = 0;
-                    for (r2 = i; r2 < m && land[r2][j] == 1; r2++) {
-                        for (c2 = j; c2 < n && land[r2][c2] == 1; c2++) {
+                    int r2 = 0, c2 = 0;
+                    for (c2 = j; c2 < n && land[i][c2] == 1; c2++) {
+                        for (r2 = i; r2 < m && land[r2][c2] == 1; r2++) {
                             land[r2][c2] = 2;
                         }
                     }
