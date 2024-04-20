@@ -36,8 +36,8 @@ class Solution {
 
         int[] pos = list.get(list.size() - 1);
 
-        pos[0] = Math.min(pos[0], r);
-        pos[1] = Math.min(pos[1], c);
+        // pos[0] = Math.min(pos[0], r);
+        // pos[1] = Math.min(pos[1], c);
 
         pos[2] = Math.max(pos[2], r);
         pos[3] = Math.max(pos[3], c);
