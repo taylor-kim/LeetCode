@@ -1,48 +1,121 @@
 class Solution {
-    // The four directions in which traversal will be done.
-    int[][] dirs = {{-1, 0}, {0, -1}, {0, 1}, {1, 0}};
-    // Global variables with 0 value initially.
-    int row2, col2;
-    
-    // Returns true if the coordinate is within the boundary of the matrix.
-    private boolean isWithinFarm(int x, int y, int N, int M) {
-        return x >= 0 && x < N && y >= 0 && y < M;
-    }
-    
-    private void DFS(int[][] land, boolean[][] visited, int x, int y) {
-        visited[x][y] = true;
-        // Maximum x and y for the bottom right cell.
-        row2 = Math.max(row2, x); col2 = Math.max(col2, y);
-        
-        for (int[] dir : dirs) {
-            // Neighbor cell coordinates.
-            int newX = x + dir[0], newY = y + dir[1];
-
-            // If the neighbor is within the matrix and is a farmland cell and is not visited yet.
-            if (isWithinFarm(newX, newY, land.length, land[0].length) && !visited[newX][newY]
-                    && land[newX][newY] == 1) {
-                DFS(land, visited, newX, newY);
-            }
-        }
-    }
-    
     public int[][] findFarmland(int[][] land) {
-        boolean[][] visited = new boolean[land.length][land[0].length];
-        List<int[]> ans = new ArrayList<>();
+        return official_greedy(land);
+    }
 
-        for (int row1 = 0; row1 < land.length; row1++) {
-            for (int col1 = 0; col1 < land[0].length; col1++) {
-                if (land[row1][col1] == 1 && !visited[row1][col1]) {
-                     row2 = 0; col2 = 0;
+    int[][] dir = {
+        {-1, 0}, {0, -1}, {0, 1}, {1, 0}
+    };
 
-                    DFS(land, visited, row1, col1);
-                    
-                    int[] arr = new int[] {row1, col1, row2, col2};
-                    ans.add(arr);
+    public int[][] official_greedy(int[][] land) {
+        int m = land.length;
+        int n = land[0].length;
+
+        List<int[]> list = new ArrayList();
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (land[i][j] == 1) {
+                    int r2, c2 = 0;
+                    for (r2 = i; r2 < m && land[r2][j] == 1; r2++) {
+                        for (c2 = j; c2 < n && land[r2][c2] == 1; c2++) {
+                            land[r2][c2] = 2;
+                        }
+                    }
+
+                    list.add(new int[] {i, j, r2 - 1, c2 - 1});
                 }
             }
         }
+
+        return list.stream().toArray(int[][]::new);
+    }
+
+    public int[][] official_bfs(int[][] land) {
+        List<int[]> list = new ArrayList();
+
+        Queue<int[]> queue = new LinkedList();
         
-        return ans.stream().toArray(int[][] :: new);
+        int m = land.length;
+        int n = land[0].length;
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (land[i][j] == 1) {
+                    queue.add(new int[] {i, j});
+                    land[i][j] = 0;
+                    int[] last = null;
+                    
+                    while (!queue.isEmpty()) {
+                        last = queue.poll();
+                        int y = last[0];
+                        int x = last[1];
+
+                        for (int[] d : dir) {
+                            int ny = y + d[0];
+                            int nx = x + d[1];
+
+                            if (ny >= 0 && ny < land.length && nx >= 0 && nx < land[0].length && land[ny][nx] == 1) {
+                                queue.add(new int[] {ny, nx});
+                                land[ny][nx] = 0;
+                            }
+                        }
+                    }
+
+                    list.add(new int[] {i, j, last[0], last[1]});
+                }
+            }
+        }
+
+        return list.stream().toArray(int[][]::new);
+    }
+
+    public int[][] mySol_dfs(int[][] land) {
+        List<int[]> list = new ArrayList();
+
+        int m = land.length;
+        int n = land[0].length;
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (land[i][j] == 1) {
+                    list.add(new int[] {i, j, i, j});
+                    dfs(land, i, j, list);
+                }
+            }
+        }
+
+        int[][] ans = new int[list.size()][];
+
+        for (int i = 0; i < ans.length; i++) {
+            ans[i] = list.get(i);
+        }
+
+        return ans;
+    }
+
+    private void dfs(int[][ ]land, int r, int c, List<int[]> list) {
+        if (r < 0 || r >= land.length || c < 0 || c >= land[0].length) return;
+
+        if (land[r][c] != 1) return;
+
+        land[r][c] = 2;
+
+        int[] pos = list.get(list.size() - 1);
+
+        // pos[0] = Math.min(pos[0], r);
+        // pos[1] = Math.min(pos[1], c);
+
+        pos[2] = Math.max(pos[2], r);
+        pos[3] = Math.max(pos[3], c);
+
+        dfs(land, r - 1, c, list);
+        dfs(land, r + 1, c, list);
+        dfs(land, r, c - 1, list);
+        dfs(land, r, c + 1, list);
+    }
+
+    private boolean isIn(int[][] grid, int y, int x) {
+        return y >= 0 && y < grid.length && x >= 0 && x < grid[0].length;
     }
 }
