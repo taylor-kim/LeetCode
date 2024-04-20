@@ -1,6 +1,49 @@
 class Solution {
     public int[][] findFarmland(int[][] land) {
-        return mySol_dfs(land);
+        return official_bfs(land);
+    }
+
+    public int[][] official_bfs(int[][] land) {
+        int[][] dir = {
+            {-1, 0}, {0, -1}, {0, 1}, {1, 0}
+        };
+
+        List<int[]> list = new ArrayList();
+
+        Queue<int[]> queue = new LinkedList();
+        
+        int m = land.length;
+        int n = land[0].length;
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (land[i][j] == 1) {
+                    queue.add(new int[] {i, j});
+                    land[i][j] = 0;
+                    int[] last = null;
+                    
+                    while (!queue.isEmpty()) {
+                        last = queue.poll();
+                        int y = last[0];
+                        int x = last[1];
+
+                        for (int[] d : dir) {
+                            int ny = y + d[0];
+                            int nx = x + d[1];
+
+                            if (ny >= 0 && ny < land.length && nx >= 0 && nx < land[0].length && land[ny][nx] == 1) {
+                                queue.add(new int[] {ny, nx});
+                                land[ny][nx] = 0;
+                            }
+                        }
+                    }
+
+                    list.add(new int[] {i, j, last[0], last[1]});
+                }
+            }
+        }
+
+        return list.stream().toArray(int[][]::new);
     }
 
     public int[][] mySol_dfs(int[][] land) {
