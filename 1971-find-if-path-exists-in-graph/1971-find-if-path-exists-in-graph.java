@@ -1,9 +1,9 @@
 class Solution {
     public boolean validPath(int n, int[][] edges, int source, int destination) {
-        return mySol(n, edges, source, destination);
+        return mySol_disjoint(n, edges, source, destination);
     }
 
-    public boolean mySol(int n, int[][] edges, int source, int dest) {
+    public boolean mySol_graph(int n, int[][] edges, int source, int dest) {
         Map<Integer, List<Integer>> graph = new HashMap();
 
         for (int [] edge : edges) {
@@ -49,5 +49,48 @@ class Solution {
         }
 
         return false;
+    }
+
+    public boolean mySol_disjoint(int n, int[][] edges, int source, int dest) {
+        UnionFind uf = new UnionFind(n);
+
+        for (int [] edge : edges) {
+            uf.merge(edge[0], edge[1]);
+        }
+
+        return uf.find(source) == uf.find(dest);
+    }
+
+    private class UnionFind {
+        int[] parents;
+
+        UnionFind(int n) {
+            parents = new int[n];
+
+            for (int i = 0; i < n; i++) {
+                parents[i] = i;
+            }
+        }
+
+        int find(int i) {
+            if (parents[i] != i) {
+                parents[i] = find(parents[i]);
+            }
+
+            return parents[i];
+        }
+
+        void merge(int a, int b) {
+            a = find(a);
+            b = find(b);
+
+            if (a > b) {
+                a = a + b;
+                b = a - b;
+                a = a - b;
+            }
+
+            parents[b] = a;
+        }
     }
 }
