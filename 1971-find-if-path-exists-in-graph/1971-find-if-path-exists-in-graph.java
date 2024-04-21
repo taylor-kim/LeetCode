@@ -11,7 +11,7 @@ class Solution {
             graph.computeIfAbsent(edge[1], k -> new ArrayList()).add(edge[0]);
         }
 
-        return bfs(source, dest, graph, new boolean[n]);
+        return dfs(source, dest, graph, new boolean[n]);
     }
 
     private boolean bfs(int source, int dest, Map<Integer, List<Integer>> graph, boolean[] visit) {
@@ -45,7 +45,7 @@ class Solution {
         visit[node] = true;
 
         for (int next : graph.get(node)) {
-            if (dfs(next, dest, graph, visit)) return true;
+            if (!visit[next] && dfs(next, dest, graph, visit)) return true;
         }
 
         return false;
