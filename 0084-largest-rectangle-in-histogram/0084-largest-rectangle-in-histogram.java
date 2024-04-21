@@ -10,7 +10,7 @@ class Solution {
         int ans = 0;
 
         for (int i = 0; i <= n; i++) {
-            while (!stack.isEmpty() && (i == n || heights[stack.peek()] > heights[i])) {
+            while (!stack.isEmpty() && (i == n || heights[stack.peek()] >= heights[i])) {
                 int h = heights[stack.pop()];
                 int w = stack.isEmpty() ? i : i - stack.peek() - 1;
 
