@@ -1,6 +1,51 @@
 class Solution {
     public int minFallingPathSum(int[][] grid) {
-        return try_bottomup_spaceopt(grid);
+        return official_nn(grid);
+    }
+
+    public int official_nn(int[][] grid) {
+        int n = grid.length;
+
+        int nextMinC1 = -1;
+        int nextMinC2 = -1;
+
+        int[][] dp = new int[n][n];
+
+        for (int col = 0; col < n; col++) {
+            dp[n - 1][col] = grid[n - 1][col];
+
+            if (nextMinC1 == -1 || dp[n - 1][col] < dp[n - 1][nextMinC1]) {
+                nextMinC2 = nextMinC1;
+                nextMinC1 = col;
+            } else if (nextMinC2 == -1 || dp[n - 1][col] < dp[n - 1][nextMinC2]) {
+                nextMinC2 = col;
+            }
+        }
+
+        for (int row = n - 2; row >= 0; row--) {
+            int minC1 = -1;
+            int minC2 = -1;
+
+            for (int col = 0; col < n; col++) {
+                if (col != nextMinC1) {
+                    dp[row][col] = dp[row + 1][nextMinC1] + grid[row][col];
+                } else {
+                    dp[row][col] = dp[row + 1][nextMinC2] + grid[row][col];
+                }
+
+                if (minC1 == -1 || dp[row][col] < dp[row][minC1]) {
+                    minC2 = minC1;
+                    minC1 = col;
+                } else if (minC2 == -1 || dp[row][col] < dp[row][minC2]) {
+                    minC2 = col;
+                }
+            }
+
+            nextMinC1 = minC1;
+            nextMinC2 = minC2;
+        }
+
+        return dp[0][nextMinC1];
     }
 
     public int try_bottomup_spaceopt(int[][] grid) {
