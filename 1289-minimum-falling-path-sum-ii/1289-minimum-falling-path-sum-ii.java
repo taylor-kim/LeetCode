@@ -1,6 +1,65 @@
 class Solution {
     public int minFallingPathSum(int[][] grid) {
-        return official_nn(grid);
+        return official_nn_spaceopt(grid);
+    }
+
+    public int official_nn_spaceopt(int[][] grid) {
+        int n = grid.length;
+
+        int nextMinC1 = -1;
+        int nextMinC2 = -1;
+
+        int nextMinV1 = -1;
+        int nextMinV2 = -1;
+
+        for (int col = 0; col < n; col++) {
+            int val = grid[n - 1][col];
+
+            if (nextMinC1 == -1 || val < nextMinV1) {
+                nextMinC2 = nextMinC1;
+                nextMinC1 = col;
+                nextMinV2 = nextMinV1;
+                nextMinV1 = val;
+            } else if (nextMinC2 == -1 || val < nextMinV2) {
+                nextMinC2 = col;
+                nextMinV2 = val;
+            }
+        }
+
+        for (int row = n - 2; row >= 0; row--) {
+            int minC1 = -1;
+            int minC2 = -1;
+
+            int minV1 = -1;
+            int minV2 = -1;
+
+            for (int col = 0; col < n; col++) {
+                int currentMin = 0;
+
+                if (col != nextMinC1) {
+                    currentMin = nextMinV1 + grid[row][col];
+                } else {
+                    currentMin = nextMinV2 + grid[row][col];
+                }
+
+                if (minC1 == -1 || currentMin < minV1) {
+                    minC2 = minC1;
+                    minC1 = col;
+                    minV2 = minV1;
+                    minV1 = currentMin;
+                } else if (minC2 == -1 || currentMin < minV2) {
+                    minC2 = col;
+                    minV2 = currentMin;
+                }
+            }
+
+            nextMinC1 = minC1;
+            nextMinC2 = minC2;
+            nextMinV1 = minV1;
+            nextMinV2 = minV2;
+        }
+
+        return nextMinV1;
     }
 
     public int official_nn(int[][] grid) {
