@@ -1,43 +1,55 @@
 class Solution {
-    // Initialize a hash map to cache the result of each sub-problem
-    Map<Pair<Integer, Integer>, Integer> memo = new HashMap<>();
-
     public int minFallingPathSum(int[][] grid) {
-        // We can select any element from the first row. We will select
-        // the element which leads to minimum sum.
-        int answer = Integer.MAX_VALUE;
-        for (int col = 0; col < grid.length; col++) {
-            answer = Math.min(answer, optimal(0, col, grid));
-        }
-
-        // Return the minimum sum
-        return answer;
+        return mySol_dfs_tle(grid);
     }
 
-    // The optimal(row, col) function returns the minimum sum of a
-    // falling path with non-zero shifts, starting from grid[row][col]
-    int optimal(int row, int col, int[][] grid) {
-        // If the last row, then return the value of the cell itself
-        if (row == grid.length - 1) {
-            return grid[row][col];
-        }
+    public int mySol_sort(int[][] grid) {
+        int n = grid.length;
+        int[][][] mat = new int[n][n][2];
 
-        // If the result of this sub-problem is already cached
-        if (memo.containsKey(new Pair<>(row, col))) {
-            return memo.get(new Pair<>(row, col));
-        }
-
-        // Select grid[row][col], and move on to next row. For next
-        // row, choose the cell that leads to the minimum sum
-        int nextMinimum = Integer.MAX_VALUE;
-        for (int nextRowCol = 0; nextRowCol < grid.length; nextRowCol++) {
-            if (nextRowCol != col) {
-                nextMinimum = Math.min(nextMinimum, optimal(row + 1, nextRowCol, grid));
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                mat[i][j] = new int[] {grid[i][j], j};
             }
+
+            Arrays.sort(mat[i], (a, b) -> {
+                return a[0] - b[0];
+            });
         }
 
-        // Minimum cost from this cell
-        memo.put(new Pair<>(row, col), grid[row][col] + nextMinimum);
-        return memo.get(new Pair<>(row, col));
+        return -1;
+    }
+
+    public int mySol_dfs_tle(int[][] grid) {
+        int n = grid.length;
+        int ans = Integer.MAX_VALUE;
+
+        Integer[][] memo = new Integer[n][n];
+
+        for (int col = 0; col < n; col++) {
+            ans = Math.min(ans, dfs(grid, 0, col, memo));
+        }
+
+        return ans;
+    }
+
+    public int dfs(int[][] grid, int row, int col, Integer[][] memo) {
+        if (row >= grid.length) return 0;
+
+        if (memo[row][col] != null) {
+            return memo[row][col];
+        }
+
+        int ans = Integer.MAX_VALUE;
+
+        for (int i = 0; i < grid[row].length; i++) {
+            if (i == col) continue;
+
+            int sub = grid[row][col] + dfs(grid, row + 1, i, memo);
+
+            ans = Math.min(ans, sub);
+        }
+
+        return memo[row][col] = ans == Integer.MAX_VALUE ? grid[row][col] : ans;
     }
 }
