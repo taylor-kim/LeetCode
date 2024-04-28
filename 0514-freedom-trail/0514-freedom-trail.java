@@ -1,6 +1,29 @@
 class Solution {
     public int findRotateSteps(String ring, String key) {
-        return try_bottomup(ring, key);
+        return try_bottomup_spaceopt(ring, key);
+    }
+
+    public int try_bottomup_spaceopt(String ring, String key) {
+        int n = ring.length();
+
+        int[][] dp = new int[2][n];
+
+        for (int k = key.length() - 1; k >= 0; k--) {
+            for (int start = 0; start < n; start++) {
+                int min = Integer.MAX_VALUE;
+                for (int next = 0; next < n; next++) {
+                    if (ring.charAt(next) == key.charAt(k)) {
+                        int sub = countSteps(start, next, n) + 1 + dp[1][next];
+                        min = Math.min(min, sub);
+                    }
+                }
+                // dp[start][k] = min == Integer.MAX_VALUE ? 0 : min;
+                dp[0][start] = min;
+            }
+            dp[1] = dp[0].clone();
+        }
+
+        return dp[0][0];
     }
 
     public int try_bottomup(String ring, String key) {
@@ -17,7 +40,8 @@ class Solution {
                         min = Math.min(min, sub);
                     }
                 }
-                dp[start][k] = min == Integer.MAX_VALUE ? 0 : min;
+                // dp[start][k] = min == Integer.MAX_VALUE ? 0 : min;
+                dp[start][k] = min;
             }
         }
 
