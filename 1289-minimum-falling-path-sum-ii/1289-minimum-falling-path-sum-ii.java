@@ -1,6 +1,6 @@
 class Solution {
     public int minFallingPathSum(int[][] grid) {
-        return official_nn_spaceopt(grid);
+        return try_my_bottomup(grid);
     }
 
     public int official_nn_spaceopt(int[][] grid) {
@@ -160,6 +160,33 @@ class Solution {
                 }
 
                 dp[row][col] = grid[row][col] + min;
+            }
+        }
+
+        int ans = Integer.MAX_VALUE;
+
+        for (int cand : dp[0]) {
+            ans = Math.min(ans, cand);
+        }
+
+        return ans;
+    }
+
+    public int try_my_bottomup(int[][] grid) {
+        int n = grid.length;
+        int[][] dp = new int[n + 1][n];
+
+        for (int row = n - 1; row >= 0; row--) {
+            for (int col = 0; col < n; col++) {
+                int min = Integer.MAX_VALUE;
+
+                for (int nextCol = 0; nextCol < n; nextCol++) {
+                    if (col != nextCol) {
+                        min = Math.min(min, dp[row + 1][nextCol]);
+                    }
+                }
+
+                dp[row][col] = grid[row][col] + (min == Integer.MAX_VALUE ? 0 : min);
             }
         }
 
