@@ -1,6 +1,6 @@
 class Solution {
     public int minFallingPathSum(int[][] grid) {
-        return try_my_bottomup(grid);
+        return mySol_dfs(grid);
     }
 
     public int official_nn_spaceopt(int[][] grid) {
@@ -199,7 +199,7 @@ class Solution {
         return ans;
     }
 
-    public int mySol_dfs_tle(int[][] grid) {
+    public int mySol_dfs(int[][] grid) {
         int n = grid.length;
         int ans = Integer.MAX_VALUE;
 
