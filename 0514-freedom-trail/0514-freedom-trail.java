@@ -1,6 +1,53 @@
 class Solution {
     public int findRotateSteps(String ring, String key) {
-        return try_bottomup_spaceopt(ring, key);
+        return official_dijkstra(ring, key);
+    }
+
+    public int official_dijkstra(String ring, String key) {        
+        Map<Character, List<Integer>> graph = new HashMap();
+
+        for (int i = 0; i < ring.length(); i++) {
+            char c = ring.charAt(i);
+
+            graph.computeIfAbsent(c, k -> new ArrayList()).add(i);
+        }
+
+        Queue<int[]> queue = new PriorityQueue<>((a, b) -> {
+            return a[0] - b[0];
+        });
+
+        queue.add(new int[] {0, 0, 0});
+
+        boolean[][] visit = new boolean[ring.length()][key.length()];
+
+        int steps = 0;
+
+        while (!queue.isEmpty()) {
+            int[] data = queue.poll();
+            steps = data[0];
+            int current = data[1];
+            int k = data[2];
+
+            if (k == key.length()) {
+                break;
+            }
+
+            if (visit[current][k]) {
+                continue;
+            }
+
+            visit[current][k] = true;
+
+            for (int next : graph.get(key.charAt(k))) {
+                queue.add(new int[] {
+                    steps + countSteps(current, next, ring.length())
+                    , next
+                    , k + 1
+                });
+            }
+        }
+
+        return steps + key.length();
     }
 
     public int try_bottomup_spaceopt(String ring, String key) {
