@@ -18,7 +18,7 @@ class Solution {
 
         queue.add(new int[] {0, 0, 0});
 
-        boolean[][] visit = new boolean[ring.length()][key.length()];
+        boolean[][] visit = new boolean[ring.length()][key.length() + 1];
 
         int steps = 0;
 
@@ -39,6 +39,11 @@ class Solution {
             visit[current][k] = true;
 
             for (int next : graph.get(key.charAt(k))) {
+                // if (!visit[next][k + 1]) {
+                    
+
+                //     visit[next][k + 1] = true;
+                // }
                 queue.add(new int[] {
                     steps + countSteps(current, next, ring.length())
                     , next
