@@ -1,4 +1,4 @@
-<h2><a href="https://leetcode.com/problems/longest-ideal-subsequence">2370. Longest Ideal Subsequence</a></h2><h3>Medium</h3><hr><p>You are given a string <code>s</code> consisting of lowercase letters and an integer <code>k</code>. We call a string <code>t</code> <strong>ideal</strong> if the following conditions are satisfied:</p>
+<h2><a href="https://leetcode.com/problems/longest-ideal-subsequence/?envType=daily-question&envId=2024-04-25">2370. Longest Ideal Subsequence</a></h2><h3>Medium</h3><hr><p>You are given a string <code>s</code> consisting of lowercase letters and an integer <code>k</code>. We call a string <code>t</code> <strong>ideal</strong> if the following conditions are satisfied:</p>
 
 <ul>
 	<li><code>t</code> is a <strong>subsequence</strong> of the string <code>s</code>.</li>
