@@ -1,38 +1,127 @@
 class Solution {
-    private static final int MAX = Integer.MAX_VALUE;
-
     public int findRotateSteps(String ring, String key) {
-        Map<Pair<Integer, Integer>, Integer> bestSteps = new HashMap<>();
-        return tryLock(0, 0, ring, key, MAX, bestSteps);
+        return official_topdown(ring, key);
     }
 
-    // Find the minimum steps between two indexes of ring
-    private int countSteps(int curr, int next, int ringLength) {
-        int stepsBetween = Math.abs(curr - next);
-        int stepsAround = ringLength - stepsBetween;
-        return Math.min(stepsBetween, stepsAround);
+    public int official_topdown(String ring, String key) {
+        return official_topdown(ring, key, 0, 0, new Integer[ring.length()][key.length()]);
     }
 
-    public int tryLock(int ringIndex, int keyIndex, String ring, String key, int minSteps,
-            Map<Pair<Integer, Integer>, Integer> bestSteps) {
-        // If we have already calculated this sub-problem, return the result
-        if (bestSteps.containsKey(new Pair<>(ringIndex, keyIndex))) {
-            return bestSteps.get(new Pair<>(ringIndex, keyIndex));
-        }
-        // If we reach the end of the key, it has been spelled
-        if (keyIndex == key.length()) {
-            return 0;
-        }
-        // For each occurrence of the character at keyIndex of key in ring
-        // Calculate and save the minimum steps to that character from the ringIndex of ring
-        for (int charIndex = 0; charIndex < ring.length(); charIndex++) {
-            if (ring.charAt(charIndex) == key.charAt(keyIndex)) {
-                int totalSteps = countSteps(ringIndex, charIndex, ring.length()) + 1
-                                            + tryLock(charIndex, keyIndex + 1, ring, key, MAX, bestSteps);
-                minSteps = Math.min(minSteps, totalSteps);
-                bestSteps.put(new Pair<>(ringIndex, keyIndex), minSteps);
+    public int official_topdown(String ring, String key, int index, int k, Integer[][] memo) {
+        if (k == key.length()) return 0;
+
+        int ans = Integer.MAX_VALUE;
+
+        for (int i = 0; i < ring.length(); i++) {
+            if (ring.charAt(i) == key.charAt(k)) {
+                int sub = countSteps(index, i, ring.length()) + 1 + official_topdown(ring, key, i, k + 1, memo);
+
+                ans = Math.min(ans, sub);
             }
         }
-        return minSteps;
+
+        return ans;
+    }
+
+    private int countSteps(int i, int j, int length) {
+        int between = Math.abs(i - j);
+        int around = length - between;
+
+        return Math.min(between, around);
+    }
+
+    public int try_topdown(String ring, String key) {
+        return try_topdown(ring, key, 0, 0, new Integer[ring.length()][key.length()]);
+    }
+
+    public int try_topdown(String ring, String key, int i, int k, Integer[][] memo) {
+        if (k == key.length()) return 0;
+
+        if (memo[i][k] != null) {
+            return memo[i][k];
+        }
+
+        char c = ring.charAt(i);
+        char m = key.charAt(k);
+
+        if (c == m) {
+            return memo[i][k] = 1 + try_topdown(ring, key, i, k + 1, memo);
+        } else {
+
+            int[] next = findNext(ring, i, m);
+
+            return memo[i][k] = next[1] + try_topdown(ring, key, next[0], k, memo);
+        }
+    }
+
+    private int[] findNext(String s, int start, char target) {
+        int left = start;
+        int right = start;
+        int move = 0;
+
+        do {
+            if (s.charAt(left) == target) {
+                return new int[] {left, move};
+            } else if (s.charAt(right) == target) {
+                return new int[] {right, move};
+            }
+
+            left--;
+            right++;
+            move++;
+
+            if (left < 0) {
+                left = s.length() - 1;
+            }
+
+            if (right >= s.length()) {
+                right = 0;
+            }
+        } while (left != start && right != start);
+
+        return null;
+    }
+
+    public int tryAgain_fail(String ring, String key) {
+        int n = ring.length();
+        int k = key.length();
+
+        Queue<Integer> queue = new LinkedList();
+        queue.add(0);
+
+        int ans = 0;
+        int matched = 0;
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+
+            while (size-- > 0) {
+                int i = queue.poll();
+                char c = ring.charAt(i);
+                char m = key.charAt(matched);
+
+                if (c == m) {
+                    ans++;
+                    matched++;
+
+                    if (matched == k) {
+                        return ans;
+                    }
+
+                    queue.clear();
+                    queue.add(i);
+                } else {
+                    int prev = i - 1 >= 0 ? i - 1 : n - 1;
+                    int next = i + 1 < n ? i + 1 : 0;
+                    
+                    queue.add(prev);
+                    queue.add(next);
+                }
+            }
+
+            ans++;
+        }
+
+        return -1;
     }
 }
