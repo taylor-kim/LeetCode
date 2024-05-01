@@ -1,6 +1,6 @@
 class Solution {
     public String reversePrefix(String word, char ch) {
-        return mySol_stack(word, ch);
+        return do_simple(word, ch);
     }
 
     public String do_simple(String word, char ch) {
@@ -21,15 +21,16 @@ class Solution {
         return sb.length() == 0 ? word : sb.toString();
     }
 
-    public String mySol_stack(String word, char ch) {
+    public String mySol_stack_fail(String word, char ch) {
         Stack<Character> stack = new Stack();
 
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < word.length(); i++) {
-            stack.push(word.charAt(i));
+            char c = word.charAt(i);
 
-            if (sb.length() == 0 && stack.peek() == ch) {
+            if (sb.length() == 0 && !stack.isEmpty() && c == ch) {
+                sb.append(c);
                 while (!stack.isEmpty()) {
                     sb.append(stack.pop());
                 }
@@ -38,6 +39,8 @@ class Solution {
 
                 return sb.toString();
             }
+
+            stack.push(c);
         }
 
         return word;
