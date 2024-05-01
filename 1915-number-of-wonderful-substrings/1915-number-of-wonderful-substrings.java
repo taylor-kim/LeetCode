@@ -1,34 +1,65 @@
 class Solution {
     public long wonderfulSubstrings(String word) {
-        int N = word.length();
+        return official_bit(word);
+    }
 
-        // Create the frequency map
-        // Key = bitmask, Value = frequency of bitmask key
-        Map<Integer, Integer> freq = new HashMap<>();
-
-        // The empty prefix can be the smaller prefix, which is handled like this
+    public long official_bit(String word) {
+        int n = word.length();
+        Map<Integer, Integer> freq = new HashMap();
         freq.put(0, 1);
 
         int mask = 0;
-        long res = 0L;
-        for (int i = 0; i < N; i++) {
+
+        long ans = 0l;
+
+        for (int i = 0; i < n; i++) {
             char c = word.charAt(i);
             int bit = c - 'a';
 
-            // Flip the parity of the c-th bit in the running prefix mask
             mask ^= (1 << bit);
-            
-            // Count smaller prefixes that create substrings with no odd occurring letters
-            res += freq.getOrDefault(mask, 0);
 
-            // Increment value associated with mask by 1
-            freq.put(mask, freq.getOrDefault(mask, 0) + 1);
+            int count = freq.getOrDefault(mask, 0);
 
-            // Loop through every possible letter that can appear an odd number of times in a substring
-            for (int odd_c=0; odd_c < 10; odd_c++) {
-                res += freq.getOrDefault(mask ^ (1 << odd_c),0);
+            ans += count;
+
+            freq.put(mask, count + 1);
+
+            for (int odd = 0; odd < 10; odd++) {
+                ans += freq.getOrDefault(mask ^ (1 << odd), 0);
             }
         }
-        return res;
+
+        return ans;
+    }
+
+    public long mySol_sliding_window_fail(String word) {
+        int left = 0;
+        int[] dp = new int[10];
+
+        long ans = 0;
+
+        for (int right = 0; right < word.length(); right++) {
+            char c = word.charAt(right);
+
+            dp[c - 'a']++;
+
+            while (left < right && !isBeautiful(dp)) {
+                dp[word.charAt(left++) - 'a']--;
+            }
+
+            ans++;
+        }
+
+        return ans;
+    }
+
+    private boolean isBeautiful(int[] dp) {
+        int oddCount = 0;
+
+        for (int count : dp) {
+            if (count % 2 == 1) oddCount++;
+        }
+
+        return oddCount <= 1;
     }
 }
