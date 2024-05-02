@@ -9,8 +9,10 @@ class Solution {
         int ans = -1;
 
         for (int num : nums) {
-            if (set.contains(-num)) {
-                ans = Math.max(ans, Math.abs(num));
+            int abs = Math.abs(num);
+
+            if (abs > ans && set.contains(-num)) {
+                ans = Math.max(ans, abs);
             }
             set.add(num);
         }
