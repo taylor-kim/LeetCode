@@ -1,6 +1,25 @@
 class Solution {
     public int numRescueBoats(int[] people, int limit) {
-        return mySol(people, limit);
+        return others_greedy(people, limit);
+    }
+
+    public int others_greedy(int[] people, int limit) {
+        int n = people.length;
+        int ans = 0;
+        int lo = 0;
+        int hi = n - 1;
+
+        Arrays.sort(people);
+
+        while (lo <= hi) {
+            if (people[hi] + people[lo] <= limit) {
+                lo++;
+            }
+            hi--;
+            ans++;
+        }
+
+        return ans;
     }
 
     public int mySol2(int[] people, int limit) {
