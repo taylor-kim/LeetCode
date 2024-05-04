@@ -1,6 +1,6 @@
 class Solution {
     public int numRescueBoats(int[] people, int limit) {
-        return mySol2(people, limit);
+        return mySol(people, limit);
     }
 
     public int mySol2(int[] people, int limit) {
@@ -67,7 +67,7 @@ class Solution {
             } else {
                 reduce(map, w);
 
-                int complement = limit - w;
+                int complement = Math.min(limit - w, w);
 
                 while (complement > 0 && !map.containsKey(complement)) {
                     complement--;
