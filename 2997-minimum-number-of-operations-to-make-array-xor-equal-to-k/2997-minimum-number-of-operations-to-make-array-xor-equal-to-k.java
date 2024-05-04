@@ -1,26 +1,27 @@
 class Solution {
     public int minOperations(int[] nums, int k) {
-        int finalXor = 0;
-        // XOR of all integers in the array.
-        for (int n : nums) {
-            finalXor = finalXor ^ n;
+        return mySol(nums, k);
+    }
+
+    public int mySol(int[] nums, int k) {
+        int ans = 0;
+
+        int xor = 0;
+
+        for (int num : nums) {
+            xor ^= num;
         }
-        
-        int count = 0;
-        // Keep iterating until any of k or finalXor becomes zero.
-        while (k > 0 || finalXor > 0) {
-            // k % 2 returns the rightmost bit in k,
-            // finalXor % 2 returns the rightmost bit in finalXor.
-            // Increment counter, if the bits don't match.
-            if ((k % 2) != (finalXor % 2)) {
-                count++;
+
+        xor ^= k;
+
+        for (int i = 0; i < 32; i++) {
+            int mask = (1 << i);
+
+            if ((xor & mask) != 0) {
+                ans++;
             }
-            
-            // Remove the last bit from both integers.
-            k /= 2;
-            finalXor /= 2;
         }
-        
-        return count;
+
+        return ans;
     }
 }
