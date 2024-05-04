@@ -26,9 +26,9 @@ class Solution {
             if (bucket[w] > 0) {
                 bucket[w]--;
                 carry++;
-                int complement = limit - w;
+                int complement = Math.min(limit - w, w);
 
-                while (complement > max || complement > 0 && bucket[complement] == 0) {
+                while (complement > 0 && bucket[complement] == 0) {
                     complement--;
                 }
 
