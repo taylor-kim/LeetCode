@@ -1,6 +1,24 @@
 class Solution {
     public int findMaxK(int[] nums) {
-        return mySol_set(nums);
+        return official_two_pointers(nums);
+    }
+
+    public int official_two_pointers(int[] nums) {
+        Arrays.sort(nums);
+        int lo = 0;
+        int hi = nums.length - 1;
+
+        while (lo <= hi) {
+            if (-nums[lo] == nums[hi]) {
+                return nums[hi];
+            } else if (-nums[lo] > nums[hi]) {
+                lo++;
+            } else {
+                hi--;
+            }
+        }
+
+        return -1;
     }
 
     public int mySol_set(int[] nums) {
