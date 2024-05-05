@@ -1,6 +1,6 @@
 class Solution {
     public int numSubarrayProductLessThanK(int[] nums, int k) {
-        return mySol_without_extspace(nums, k);
+        return try_prefixsum_with_log(nums, k);
     }
 
     public int official_binarysearch_with_log(int[] nums, int k) {
@@ -73,7 +73,7 @@ class Solution {
         int ans = 0;
 
         for (int right = 0; right < n; right++) {
-            while (left <= right && pSum[right + 1] - pSum[left] >= logK) {
+            while (left <= right && pSum[right + 1] - pSum[left] >= logK - 1e-9) {
                 left++;
             }
 
