@@ -1,6 +1,6 @@
 class Solution {
     public int numSubarrayProductLessThanK(int[] nums, int k) {
-        return try_prefixsum_with_log(nums, k);
+        return official_binarysearch_with_log(nums, k);
     }
 
     public int official_binarysearch_with_log(int[] nums, int k) {
@@ -48,7 +48,7 @@ class Solution {
         for (int right = 0; right < n; right++) {
             sum += Math.log(nums[right]);
 
-            while (left <= right && sum >= logK) {
+            while (left <= right && sum >= logK - 1e-9) {
                 sum -= Math.log(nums[left++]);
             }
 
