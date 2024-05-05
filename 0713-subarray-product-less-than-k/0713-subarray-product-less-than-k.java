@@ -1,6 +1,6 @@
 class Solution {
     public int numSubarrayProductLessThanK(int[] nums, int k) {
-        return official_binarysearch_with_log(nums, k);
+        return mySol_without_extspace(nums, k);
     }
 
     public int official_binarysearch_with_log(int[] nums, int k) {
