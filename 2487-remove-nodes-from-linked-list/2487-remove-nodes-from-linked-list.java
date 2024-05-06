@@ -10,7 +10,33 @@
  */
 class Solution {
     public ListNode removeNodes(ListNode head) {
-        return official_recursion(head);
+        return official_stack(head);
+    }
+
+    public ListNode official_stack(ListNode head) {
+        Stack<ListNode> stack = new Stack();
+        ListNode current = head;
+
+        while (current != null) {
+            stack.push(current);
+            current = current.next;
+        }
+
+        current = stack.pop();
+        int max = current.val;
+        ListNode result = current;
+
+        while (!stack.isEmpty()) {
+            current = stack.pop();
+
+            if (current.val >= max) {
+                max = current.val;
+                current.next = result;
+                result = current;
+            }
+        }
+        
+        return result;
     }
 
     public ListNode official_recursion(ListNode head) {
