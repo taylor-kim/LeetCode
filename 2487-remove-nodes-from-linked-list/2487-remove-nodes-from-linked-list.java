@@ -10,7 +10,42 @@
  */
 class Solution {
     public ListNode removeNodes(ListNode head) {
-        return official_stack(head);
+        return official_reverse_twice(head);
+    }
+
+    public ListNode official_reverse_twice(ListNode head) {
+        head = reverse(head);
+
+        ListNode prev = null;
+        ListNode node = head;
+        int max = 0;
+
+        while (node != null) {
+            max = Math.max(max, node.val);
+
+            if (node.val < max) {
+                prev.next = node.next;
+                node = node.next;
+            } else {
+                prev = node;
+                node = node.next;
+            }
+        }
+
+        return reverse(head);
+    }
+
+    private ListNode reverse(ListNode head) {
+        ListNode prev = null;
+
+        while (head != null) {
+            ListNode next = head.next;
+            head.next = prev;
+            prev = head;
+            head = next;
+        }
+
+        return prev;
     }
 
     public ListNode official_stack(ListNode head) {
