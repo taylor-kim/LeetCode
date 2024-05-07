@@ -14,21 +14,17 @@ class Solution {
     }
 
     public ListNode official_single_pointer(ListNode head) {
+        if (head.val > 4) {
+            head = new ListNode(0, head);
+        }
+
         ListNode node = head;
 
         while (node != null) {
-            int dv = node.val * 2;
+            node.val = (node.val * 2) % 10;
 
-            if (node.next != null && node.next.val >= 5) {
-                dv++;
-            }
-
-            node.val = dv % 10;
-
-            if (dv > 9) {
-                if (node == head) {
-                    head = new ListNode(1, node);
-                }
+            if (node.next != null && node.next.val > 4) {
+                node.val++;
             }
 
             node = node.next;
