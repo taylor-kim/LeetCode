@@ -10,11 +10,26 @@
  */
 class Solution {
     public ListNode doubleIt(ListNode head) {
-        return mySol_stack(head);
+        return mySol_reverse(head);
     }
 
     public ListNode mySol_reverse(ListNode head) {
-        return null;
+        head = reverse(head);
+
+        ListNode node = head;
+
+        int carry = 0;
+
+        while (node != null) {
+            int dv = node.val * 2 + carry;
+            node.val = dv % 10;
+            carry = dv / 10;
+            node = node.next;
+        }
+
+        head = reverse(head);
+
+        return carry == 0 ? head : new ListNode(carry, head);
     }
 
     public ListNode mySol_stack(ListNode head) {
@@ -40,6 +55,15 @@ class Solution {
     }
 
     private ListNode reverse(ListNode head) {
-        return null;
+        ListNode prev = null;
+
+        while (head != null) {
+            ListNode next = head.next;
+            head.next = prev;
+            prev = head;
+            head = next;
+        }
+
+        return prev;
     }
 }
