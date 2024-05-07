@@ -10,7 +10,33 @@
  */
 class Solution {
     public ListNode doubleIt(ListNode head) {
-        return mySol_reverse(head);
+        return try_recursion(head);
+    }
+
+    public ListNode try_recursion(ListNode head) {
+        head = recursion(head);
+
+        if (head.val > 9) {
+            head.val %= 10;
+            head = new ListNode(1, head);
+        }
+
+        return head;
+    }
+
+    public ListNode recursion(ListNode head) {
+        if (head == null) return null;
+
+        ListNode next = recursion(head.next);
+
+        head.val *= 2;
+
+        if (next != null && next.val > 9) {
+            head.val++;
+            next.val %= 10;
+        }
+
+        return head;
     }
 
     public ListNode mySol_reverse(ListNode head) {
