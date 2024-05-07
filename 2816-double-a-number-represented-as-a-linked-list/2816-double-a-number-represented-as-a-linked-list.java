@@ -10,7 +10,31 @@
  */
 class Solution {
     public ListNode doubleIt(ListNode head) {
-        return official_two_pointer(head);
+        return official_single_pointer(head);
+    }
+
+    public ListNode official_single_pointer(ListNode head) {
+        ListNode node = head;
+
+        while (node != null) {
+            int dv = node.val * 2;
+
+            if (node.next != null && node.next.val >= 5) {
+                dv++;
+            }
+
+            node.val = dv % 10;
+
+            if (dv > 9) {
+                if (node == head) {
+                    head = new ListNode(1, node);
+                }
+            }
+
+            node = node.next;
+        }
+
+        return head;
     }
 
     public ListNode official_two_pointer(ListNode head) {
