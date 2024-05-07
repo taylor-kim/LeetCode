@@ -10,7 +10,51 @@
  */
 class Solution {
     public ListNode doubleIt(ListNode head) {
-        return try_recursion(head);
+        return official_two_pointer(head);
+    }
+
+    public ListNode official_two_pointer(ListNode head) {
+        ListNode prev = null;
+        ListNode current = head;
+
+        while (current != null) {
+            int dv = current.val * 2;
+            current.val = dv % 10;
+            if (dv / 10 > 0) {
+                if (prev == null) {
+                    head = new ListNode(1, current);
+                } else {
+                    prev.val++;
+                }
+            }
+
+            prev = current;
+            current = current.next;
+        }
+
+        return head;
+    }
+
+    public ListNode official_rec(ListNode head) {
+        int carry = off_rec(head);
+
+        if (carry == 1) {
+            head = new ListNode(1, head);
+        }
+
+        return head;
+    }
+
+    public int off_rec(ListNode head) {
+        if (head == null) return 0;
+
+        int carry = off_rec(head.next);
+
+        int dv = head.val * 2 + carry;
+
+        head.val = dv % 10;
+
+        return dv / 10;
     }
 
     public ListNode try_recursion(ListNode head) {
