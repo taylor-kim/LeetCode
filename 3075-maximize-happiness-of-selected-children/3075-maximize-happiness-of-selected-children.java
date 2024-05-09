@@ -1,6 +1,6 @@
 class Solution {
     public long maximumHappinessSum(int[] happiness, int k) {
-        return official_heap(happiness, k);
+        return official_sort(happiness, k);
     }
 
     public long official_heap(int[] happiness, int k) {
@@ -19,6 +19,30 @@ class Solution {
             turn++;
         }
 
+        return ans;
+    }
+
+    public long official_sort(int[] happiness, int k) {
+        int n = happiness.length;
+
+        Integer[] happinessArray = new Integer[n];
+        for(int i = 0; i < n; i++) {
+            happinessArray[i] = happiness[i];
+        }
+        
+        Arrays.sort(happinessArray, Collections.reverseOrder());
+
+        long ans = 0;
+        int turns = 0;
+
+        for(int i = 0; i < k; i++) {
+            // Adjust happiness and ensure it's not negative
+            ans += Math.max(happinessArray[i] - turns, 0);  
+
+             // Increment turns for the next iteration
+            turns++; 
+        }
+        
         return ans;
     }
 
