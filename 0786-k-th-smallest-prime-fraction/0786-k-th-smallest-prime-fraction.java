@@ -18,7 +18,11 @@ class Solution {
             int j = 1;
 
             for (int i = 0; i < n - 1; i++) {
-                while (j < n && arr[i] > mid * arr[j]) {
+                // while (j < n && arr[i] >= mid * arr[j]) {
+                //     j++;
+                // }
+                j = i + 1;
+                while (j < n && arr[i] >= mid * arr[j]) {
                     j++;
                 }
 
