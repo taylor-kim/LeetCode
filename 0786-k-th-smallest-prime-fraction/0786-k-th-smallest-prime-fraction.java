@@ -1,6 +1,39 @@
 class Solution {
     public int[] kthSmallestPrimeFraction(int[] arr, int k) {
-        return official_bs(arr, k);
+        return official_pq(arr, k);
+    }
+
+    public int[] official_pq(int[] arr, int k) {
+        Queue<double[]> pq = new PriorityQueue<>((a, b) -> {
+            return Double.compare(b[0], a[0]);
+        });
+
+        for (int i = 0; i < arr.length; i++) {
+            pq.add(new double[] {
+                -1.0 * arr[i] / arr[arr.length - 1]
+                , i
+                , arr.length - 1
+            });
+        }
+
+        while (--k > 0) {
+            double[] data = pq.poll();
+
+            int numeratorIdx = (int) data[1];
+            int denominatorIdx = (int) data[2] - 1;
+
+            if (denominatorIdx > numeratorIdx) {
+                pq.add(new double[] {
+                    -1.0 * arr[numeratorIdx] / arr[denominatorIdx]
+                    , numeratorIdx
+                    , denominatorIdx
+                });
+            }
+        }
+
+        double[] result = pq.poll();
+
+        return new int[] {arr[(int)result[1]], arr[(int)result[2]]};
     }
 
     public int[] official_bs(int[] arr, int k) {
