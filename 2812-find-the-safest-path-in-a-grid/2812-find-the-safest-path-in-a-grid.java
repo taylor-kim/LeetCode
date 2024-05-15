@@ -31,7 +31,7 @@ class Solution {
         while (!queue.isEmpty()) {
             int size = queue.size();
 
-            while (!queue.isEmpty()) {
+            while (size-- > 0) {
                 int[] pos = queue.poll();
                 int r = pos[0];
                 int c = pos[1];
