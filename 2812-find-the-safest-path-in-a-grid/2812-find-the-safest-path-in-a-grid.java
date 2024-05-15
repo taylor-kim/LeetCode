@@ -1,6 +1,6 @@
 class Solution {
     public int maximumSafenessFactor(List<List<Integer>> grid) {
-        return official_bfs_bs(grid);
+        return official_greedy_dijkstra(grid);
     }
 
     private int[][] dirs = {
@@ -9,6 +9,81 @@ class Solution {
         , {1, 0}
         , {-1, 0}
     };
+
+    public int official_greedy_dijkstra(List<List<Integer>> grid) {
+        int n = grid.size();
+
+        Queue<int[]> queue = new LinkedList();
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid.get(i).get(j) == 1) {
+                    grid.get(i).set(j, 0);
+                    queue.add(new int[] {i, j});
+                } else {
+                    grid.get(i).set(j, -1);
+                }
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+
+            while (size-- > 0) {
+                int[] pos = queue.poll();
+                int r = pos[0];
+                int c = pos[1];
+                int safeness = grid.get(r).get(c);
+
+                for (int[] d : dirs) {
+                    int nr = r + d[0];
+                    int nc = c + d[1];
+
+                    if (isValidCell(n, nr, nc) && grid.get(nr).get(nc) == -1) {
+                        queue.add(new int[] {nr, nc});
+                        grid.get(nr).set(nc, safeness + 1);
+                    }
+                }
+            }
+        }
+
+        if (grid.get(0).get(0) == 0 || grid.get(n - 1).get(n - 1) == 0) {
+            return 0;
+        }
+
+        int ans = Integer.MAX_VALUE;
+
+        Queue<int[]> pq = new PriorityQueue<>((a, b) -> {
+            return grid.get(b[0]).get(b[1]) - grid.get(a[0]).get(a[1]);
+        });
+
+        pq.add(new int[] {0, 0});
+        boolean[][] visit = new boolean[n][n];
+        visit[0][0] = true;
+
+        while (!pq.isEmpty()) {
+            int r = pq.peek()[0];
+            int c = pq.poll()[1];
+
+            ans = Math.min(ans, grid.get(r).get(c));
+
+            if (r == n - 1 && c == n - 1) {
+                return ans;
+            }
+
+            for (int[] d : dirs) {
+                int nr = r + d[0];
+                int nc = c + d[1];
+
+                if (isValidCell(n, nr, nc) && !visit[nr][nc]) {
+                    visit[nr][nc] = true;
+                    pq.add(new int[] {nr, nc});
+                }
+            }
+        }
+
+        return ans;
+    }
 
     public int official_bfs_bs(List<List<Integer>> grid) {
         int n = grid.size();
