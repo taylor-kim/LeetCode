@@ -21,17 +21,13 @@ class Solution {
     public TreeNode mySol(TreeNode root, int target) {
         if (root == null) return null;
 
+        root.left = mySol(root.left, target);
+        root.right = mySol(root.right, target);
+
         if (root.left == null && root.right == null && root.val == target) {
             return null;
         } else {
-            root.left = mySol(root.left, target);
-            root.right = mySol(root.right, target);
-
-            if (root.left == null && root.right == null && root.val == target) {
-                return null;
-            } else {
-                return root;
-            }
+            return root;
         }
     }
 }
