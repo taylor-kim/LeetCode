@@ -40,16 +40,18 @@ class Solution {
 
         for (int num : nums) {
             int xor = num ^ k;
+
             ans += Math.max(num, xor);
 
-            if (num < xor) {
-                odd ^= 1;
-                
-            }
+            odd ^= num < xor ? 1 : 0;
 
-            min = Math.min(min, Math.abs(xor - num));
+            // if (num < xor) {
+            //     odd ^= 1;
+            // }
+
+            min = Math.min(min, Math.abs(num - xor));
         }
 
-        return ans - (min * odd);
+        return ans - odd * min;
     }
 }
