@@ -1,6 +1,30 @@
 class Solution {
     public int matrixScore(int[][] grid) {
-        return official_greedy(grid);
+        return official_greedy_without_modifying(grid);
+    }
+
+    public int official_greedy_without_modifying(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+
+        int score = (1 << (n - 1)) * m;
+
+        for (int j = 1; j < n; j++) {
+            int countSameBits = 0;
+            for (int i = 0; i < m; i++) {
+                if (grid[i][j] == grid[i][0]) {
+                    countSameBits++;
+                }
+            }
+
+            countSameBits = Math.max(countSameBits, m - countSameBits);
+
+            int colScore = (1 << (n - j - 1)) * countSameBits;
+
+            score += colScore;
+        }
+
+        return score;
     }
 
     public int official_greedy(int[][] grid) {
