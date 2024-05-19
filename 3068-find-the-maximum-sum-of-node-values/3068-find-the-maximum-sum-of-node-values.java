@@ -1,6 +1,6 @@
 class Solution {
     public long maximumValueSum(int[] nums, int k, int[][] edges) {
-        return official_topdown(nums, k, edges);
+        return mySol_tryagain(nums, k, edges);
     }
 
     public long official_topdown(int[] nums, int k, int[][] edges) {
@@ -31,5 +31,27 @@ class Solution {
         }
 
         return ans;
+    }
+
+    public long mySol_tryagain(int[] nums, int k, int[][] edges) {
+        long ans = 0;
+        int odd = 0;
+        int min = Integer.MAX_VALUE;
+
+        for (int num : nums) {
+            int xor = num ^ k;
+            ans += Math.max(num, xor);
+
+            if (num < xor) {
+                odd ^= 1;
+                
+            } else {
+                odd ^= 0;
+            }
+
+            min = Math.min(min, Math.abs(xor - num));
+        }
+
+        return ans - (min * odd);
     }
 }
