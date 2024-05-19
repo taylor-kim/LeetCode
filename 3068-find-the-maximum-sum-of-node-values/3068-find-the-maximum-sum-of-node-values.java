@@ -1,6 +1,23 @@
 class Solution {
     public long maximumValueSum(int[] nums, int k, int[][] edges) {
-        return mySol_tryagain(nums, k, edges);
+        return official_bottomup(nums, k, edges);
+    }
+
+    public long official_bottomup(int[] nums, int k, int[][] edges) {
+        long[][] dp = new long[nums.length + 1][2];
+        dp[nums.length][0] = Integer.MIN_VALUE;
+        dp[nums.length][1] = 0;
+
+        for (int i = nums.length - 1; i >= 0; i--) {
+            for (int isEven = 0; isEven <= 1; isEven++) {
+                long xor = (nums[i] ^ k) + dp[i + 1][isEven ^ 1];
+                long noXor = nums[i] + dp[i + 1][isEven];
+
+                dp[i][isEven] = Math.max(xor, noXor);
+            }
+        }
+
+        return dp[0][1];
     }
 
     public long official_topdown(int[] nums, int k, int[][] edges) {
