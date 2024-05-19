@@ -1,47 +1,90 @@
 class Solution {
     public int matrixScore(int[][] grid) {
+        return official_greedy(grid);
+    }
+
+    public int official_greedy(int[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
 
-        // Set first column
         for (int i = 0; i < m; i++) {
             if (grid[i][0] == 0) {
-                // Flip row
                 for (int j = 0; j < n; j++) {
                     grid[i][j] = 1 - grid[i][j];
                 }
             }
         }
 
-        // Optimize columns except first column
-        for (int j = 1; j < n; j++) {
-            int countZero = 0;
-            // Count zeros
-            for(int i = 0; i < m; i++) {
-                if(grid[i][j] == 0) {
-                    countZero++;
-                }
+        for (int c = 1; c < n; c++) {
+            int countOfZero = 0;
+
+            for (int r = 0; r < m; r++) {
+                if (grid[r][c] == 0) countOfZero++;
             }
-            // Flip the column if there are more zeros for better score
-            if(countZero > m-countZero) {
-                for(int i = 0; i < m; i++) {
-                    grid[i][j] = 1 - grid[i][j];
+
+            if (countOfZero > m / 2) {
+                for (int r = 0; r < m; r++) {
+                    grid[r][c] = 1 - grid[r][c];
                 }
             }
         }
 
-        // Calculate the final score considering bit positions
-        int score = 0;
+        int ans = 0;
+
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                // Left shift bit by place value of column to find column contribution
-                int columnScore = grid[i][j] << (n - j - 1);
-                // Add contribution to score
-                score += columnScore;
+                int value = grid[i][j] << (n - j - 1);
+
+                ans += value;
             }
         }
 
-        // return final result
-        return score;
+        return ans;
+    }
+
+    public int mySol_fail(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+
+        int[] rows = new int[m];
+        int[] cols = new int[n];
+
+        for (int r = 0; r < m; r++) {
+            for (int c = 0; c < n; c++) {
+                int value = grid[r][c];
+
+                int rowMask = value << (n - c - 1);
+                int colMask = value << (m - r - 1);
+
+                rows[r] |= rowMask;
+                cols[c] |= colMask;
+            }
+        }
+
+        int ans = 0;
+
+        for (int r = 0; r < m; r++) {
+            ans = Math.max(ans, rows[r]);
+
+            for (int c = 0; c < n; c++) {
+                
+            }
+        }
+
+        // for (int row : rows) {
+        //     System.out.println(Integer.toBinaryString(row));
+        // }
+
+        return 0;
+    }
+
+    private int getSum(int[] rows) {
+        int sum = 0;
+
+        for (int row : rows) {
+            sum += row;
+        }
+
+        return sum;
     }
 }
