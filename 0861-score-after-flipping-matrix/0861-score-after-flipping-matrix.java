@@ -22,7 +22,8 @@ class Solution {
                 if (grid[r][c] == 0) countOfZero++;
             }
 
-            if (countOfZero > m / 2) {
+            // if (countOfZero > m / 2) {
+            if (countOfZero > m - countOfZero) {
                 for (int r = 0; r < m; r++) {
                     grid[r][c] = 1 - grid[r][c];
                 }
