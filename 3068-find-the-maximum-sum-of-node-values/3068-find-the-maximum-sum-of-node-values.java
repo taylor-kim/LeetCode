@@ -45,8 +45,6 @@ class Solution {
             if (num < xor) {
                 odd ^= 1;
                 
-            } else {
-                odd ^= 0;
             }
 
             min = Math.min(min, Math.abs(xor - num));
