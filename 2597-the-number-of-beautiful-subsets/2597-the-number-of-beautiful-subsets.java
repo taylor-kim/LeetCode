@@ -1,6 +1,28 @@
 class Solution {
     public int beautifulSubsets(int[] nums, int k) {
-        return mySol(nums, k);
+        return official_bitset(nums, k);
+    }
+
+    public int official_bitset(int[] nums, int k) {
+        return official_bitset(nums, k, 0, 0);
+    }
+
+    public int official_bitset(int[] nums, int k, int index, int set) {
+        if (index >= nums.length) return set == 0 ? 0 : 1;
+
+        int total = official_bitset(nums, k, index + 1, set);
+
+        boolean isBeautiful = true;
+
+        for (int j = 0; j < index && isBeautiful; j++) {
+            isBeautiful = (set & (1 << j)) == 0 || Math.abs(nums[index] - nums[j]) != k;
+        }
+
+        if (isBeautiful) {
+            total += official_bitset(nums, k, index + 1, set | (1 << index));
+        }
+
+        return total;
     }
 
     public int mySol(int[] nums, int k) {
