@@ -1,10 +1,51 @@
 class Solution {
     public int checkRecord(int n) {
-        return official_topdown(n);
+        return official_bottomup(n);
+    }
+
+    public int try_spaceopt_official_bottomup(int n) {
+        int[][][] dp = new int[n + 1][2][3];
+        int mod = (int)1e9 + 7;
+
+        for (int i = 0; i < n; i++) {
+            for (int a = 0; a <= 1; a++) {
+                for (int l = 0; l <= 2; l++) {
+                    dp[i + 1][a][0] = (
+                        dp[i + 1][a][0] +
+                        dp[i][a][l]
+                    ) % mod;
+
+                    if (a < 1) {
+                        dp[i + 1][a + 1][0] = (
+                            dp[i + 1][a + 1][0] +
+                            dp[i][a][l]
+                        ) % mod;
+                    }
+
+                    if (l < 2) {
+                        dp[i + 1][a][l + 1] = (
+                            dp[i + 1][a][l + 1] +
+                            dp[i][a][l]
+                        ) % mod;
+                    }
+                }
+            }
+        }
+
+        int ans = 0;
+
+        for (int a = 0; a < 2; a++) {
+            for (int l = 0; l < 3; l++) {
+                ans = (ans + dp[n][a][l]) % mod;
+            }
+        }
+
+        return ans;
     }
 
     public int official_bottomup(int n) {
         int[][][] dp = new int[n + 1][2][3];
+        dp[0][0][0] = 1;
         int mod = (int)1e9 + 7;
 
         for (int i = 0; i < n; i++) {
