@@ -4,18 +4,15 @@ class Solution {
     }
 
     public int mySol(int n) {
-        Integer[][][] memo = new Integer[n][2][3];
-        return mySol(n, 0, 0, 0, new StringBuilder(), memo);
+        return mySol(n, 0, 0, 0, new Integer[n][2][3]);
     }
 
-    public int mySol(int n, int index, int a, int l, StringBuilder sb, Integer[][][] memo) {
-        // System.out.println(String.format("n:%d, index:%d, a:%d, l:%d", n, index, a, l));
+    public int mySol(int n, int index, int a, int l, Integer[][][] memo) {
         if (a >= 2) return 0;
 
         if (l >= 3) return 0;
 
         if (index >= n) {
-            // System.out.println(sb.toString());
             return 1;
         }
 
@@ -25,17 +22,11 @@ class Solution {
 
         int mod = (int)1e9 + 7;
 
-        sb.append('a');
-        long ans = mySol(n, index + 1, a + 1, 0, sb, memo) % mod;
-        sb.setLength(sb.length() - 1);
+        long ans = mySol(n, index + 1, a + 1, 0, memo) % mod;
 
-        sb.append('l');
-        ans += mySol(n, index + 1, a, l + 1, sb, memo) % mod;
-        sb.setLength(sb.length() - 1);
+        ans = (mySol(n, index + 1, a, l + 1, memo) + ans) % mod;
 
-        sb.append('p');
-        ans += mySol(n, index + 1, a, 0, sb, memo) % mod;
-        sb.setLength(sb.length() - 1);
+        ans = (mySol(n, index + 1, a, 0, memo) + ans) % mod;
 
         return memo[index][a][l] = (int)ans;
     }
