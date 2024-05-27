@@ -17,13 +17,15 @@ class Solution {
             int posX = leftmost(nums, x);
             int count = 0;
 
-            if (posX < 0) {
-                count = nums.length;
-            } else if (posX == nums.length) {
-                count = 0;
-            } else {
-                count = nums.length - posX;
-            }
+            // if (posX < 0) {
+            //     count = nums.length;
+            // } else if (posX == nums.length) {
+            //     count = 0;
+            // } else {
+            //     count = nums.length - posX;
+            // }
+
+            count = nums.length - posX;
 
             if (count == x) {
                 return x;
@@ -51,7 +53,7 @@ class Solution {
             }
         }
 
-        if (left == 0 && nums[left] != target) return -1;
+        // if (left == 0 && nums[left] != target) return -1;
 
         return left;
     }
