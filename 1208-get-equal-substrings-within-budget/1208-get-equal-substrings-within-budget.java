@@ -5,20 +5,20 @@ class Solution {
 
     public int mySol(String s, String t, int maxCost) {
         int n = s.length();
+
         int[] dp = new int[n + 1];
 
-        int cost = 0;
         int left = 0;
+        int cost = 0;
 
-        for (int i = 0; i < n; i++) {
-            cost += Math.abs(s.charAt(i) - t.charAt(i));
+        for (int right = 0; right < n; right++) {
+            cost += Math.abs(s.charAt(right) - t.charAt(right));
 
-            while (left <= i && cost > maxCost) {
-                cost -= Math.abs(s.charAt(left) - t.charAt(left));
-                left++;
+            while (left <= right && cost > maxCost) {
+                cost -= Math.abs(s.charAt(left) - t.charAt(left++));
             }
 
-            dp[i + 1] = Math.max(dp[i], i - left + 1);
+            dp[right + 1] = Math.max(dp[right], right - left + 1);
         }
 
         return dp[n];
