@@ -1,6 +1,26 @@
 class Solution {
     public int specialArray(int[] nums) {
-        return mySol(nums);
+        return official_bucketsort(nums);
+    }
+
+    public int official_bucketsort(int[] nums) {
+        int n = nums.length;
+
+        int[] bucket = new int[n + 1];
+
+        for (int num : nums) {
+            bucket[Math.min(n, num)]++;
+        }
+
+        int count = 0;
+
+        for (int x = n; x >= 1; x--) {
+            count += bucket[x];
+
+            if (count == x) return x;
+        }
+
+        return -1;
     }
 
     public int mySol(int[] nums) {
