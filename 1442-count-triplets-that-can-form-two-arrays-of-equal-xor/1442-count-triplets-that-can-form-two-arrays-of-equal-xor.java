@@ -19,14 +19,8 @@ class Solution {
                 int a = pSum[j] ^ pSum[i];
                 for (int k = j; k < n; k++) {
                     int b = pSum[k + 1] ^ pSum[j];
-                    // System.out.print(String.format("i:%d, j:%d, k:%d", i, j, k));
 
-                    if (a == b) {
-                        // System.out.println(" hit!!");
-                        ans++;
-                    } else {
-                        // System.out.println("");
-                    }
+                    if (a == b) ans++;
                 }
             }
         }
