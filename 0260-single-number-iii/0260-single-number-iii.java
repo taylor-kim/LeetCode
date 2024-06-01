@@ -1,45 +1,20 @@
 class Solution {
     public int[] singleNumber(int[] nums) {
-        return others2(nums);
+        return try_20240601(nums);
     }
 
-    public int[] mySol(int[] nums) {
-        return null;
-    }
-
-    public int[] others2(int[] nums) {
+    public int[] try_20240601(int[] nums) {
         int xor = 0;
 
-        for (int i = 0; i < nums.length; i++) {
-            xor ^= nums[i];
-        }
+        for (int num : nums) xor ^= num;
 
-        // int bit = xor & (~(xor) + 1);
-        int bit = getRightMost(xor);
+        xor = findLeftmost(xor);
+        // xor = xor & (-xor);
 
-        int a = 0;
-
-        for (int num : nums) {
-            if ((num & bit) != 0) {
-                a ^= num;
-            }
-        }
-
-        return new int[] {a, a ^ xor};
-    }
-
-    public int[] others(int[] nums) {
         int[] ans = new int[2];
-        int xor = 0;
-
-        for (int i = 0; i < nums.length; i++) {
-            xor ^= nums[i];
-        }
-
-        int bit = xor & -xor;
 
         for (int num : nums) {
-            if ((num & bit) != 0) {
+            if ((xor & num) == 0) {
                 ans[0] ^= num;
             } else {
                 ans[1] ^= num;
@@ -49,24 +24,35 @@ class Solution {
         return ans;
     }
 
-    private int getLeftMost(int num) {
+    private int findLeftmost(int num) {
         int pos = 0;
 
-        while (num > 0) {
-            num >>= 1;
+        while (pos < 32) {
+            int mask = 1 << pos;
+
+            if ((mask & num) != 0) {
+                return mask;
+            }
+
             pos++;
         }
 
-        return pos;
+        return -1;
     }
 
-    private int getRightMost(int num) {
-        int bit = 1;
+    private int findRightmost(int num) {
+        int pos = 31;
 
-        while ((num & bit) == 0) {
-            bit <<= 1;
+        while (pos >= 0) {
+            int mask = 1 << pos;
+
+            if ((mask & num) != 0) {
+                return mask;
+            }
+
+            pos--;
         }
 
-        return bit;
+        return -1;
     }
 }
