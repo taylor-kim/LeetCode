@@ -1,6 +1,24 @@
 class Solution {
     public int numSteps(String s) {
-        return official_simulation(s);
+        return official_greedy(s);
+    }
+
+    public int official_greedy(String s) {
+        int ans = 0;
+        int carry = 0;
+
+        for (int i = s.length() - 1; i > 0; i--) {
+            int digit = (int)(s.charAt(i) - '0') + carry;
+
+            if (digit % 2 == 1) {
+                ans += 2;
+                carry = 1;
+            } else {
+                ans++;
+            }
+        }
+
+        return ans + carry;
     }
 
     public int official_simulation(String s) {
