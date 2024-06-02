@@ -1,21 +1,33 @@
-public class Solution {
-
+class Solution {
     public int numSteps(String s) {
-        int N = s.length();
+        return mySol(s);
+    }
 
-        int operations = 0;
-        int carry = 0;
-        for (int i = N - 1; i > 0; i--) {
-            int digit = Character.getNumericValue(s.charAt(i)) + carry;
+    public int mySol(String s) {
+        int ans = 0;
 
-            if (digit % 2 == 1) {
-                operations += 2;
-                carry = 1;
+        while (!s.equals("1")) {
+            // System.out.print(s + " => ");
+
+            if (s.charAt(s.length() - 1) == '0') {
+                s = s.substring(0, s.length() - 1);
             } else {
-                operations++;
+                int length = s.length();
+                int index = length - 2;
+
+                while (index >= 0 && s.charAt(index) == '1') {
+                    index--;
+                }
+
+                s = index >= 0 ? (s.substring(0, index) + "1") : "1";
+                s += "0".repeat(length - index - 1);
             }
+
+            ans++;
+
+            // System.out.println(s + ", " + ans);
         }
 
-        return operations + carry;
+        return ans;
     }
 }
