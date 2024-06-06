@@ -1,6 +1,6 @@
 class Solution {
     public boolean isNStraightHand(int[] hand, int groupSize) {
-        return mySol_map_freq(hand, groupSize);
+        return mySol_treemap_freq(hand, groupSize);
     }
 
     public boolean mySol_map_freq(int[] hand, int groupSize) {
@@ -56,27 +56,32 @@ class Solution {
             int start = freq.firstKey();
 
             if (freq.get(start) == 0) {
-                freq.remove(start);
-                continue;
+                // freq.remove(start);
+                // continue;
+                return false;
             }
 
             int end = start;
 
             while (end < start + groupSize) {
-                if (freq.getOrDefault(end, 0) == 0) break;
+                if (freq.getOrDefault(end, 0) == 0) return false;
 
                 freq.put(end, freq.get(end) - 1);
+
+                if (freq.get(end) == 0) freq.remove(end);
+
                 end++;
             }
 
-            if (end == start + groupSize) {
-                made++;
-            } else {
-                return false;
-            }
+            // if (end == start + groupSize) {
+            //     made++;
+            // } else {
+            //     return false;
+            // }
         }
 
-        return hand.length == groupSize * made;
+        // return hand.length == groupSize * made;
+        return true;
     }
 
     public boolean mySol_bucket_MLE(int[] hand, int groupSize) {
