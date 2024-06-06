@@ -1,6 +1,35 @@
 class Solution {
     public boolean isNStraightHand(int[] hand, int groupSize) {
-        return mySol_treemap_freq(hand, groupSize);
+        return official_greedy_n(hand, groupSize);
+    }
+
+    public boolean official_greedy_n(int[] hand, int groupSize) {
+        Map<Integer, Integer> freq = new HashMap();
+
+        for (int num : hand) {
+            freq.put(num, freq.getOrDefault(num, 0) + 1);
+        }
+
+        for (int num : hand) {
+            int start = num;
+
+            while (freq.getOrDefault(start - 1, 0) > 0) {
+                start--;
+            }
+
+            while (start <= num) {
+                while (freq.getOrDefault(start, 0) > 0) {
+                    for (int end = start; end < groupSize + start; end++) {
+                        if (freq.getOrDefault(end, 0) == 0) return false;
+
+                        freq.put(end, freq.get(end) - 1);
+                    }
+                }
+                start++;
+            }
+        }
+
+        return true;
     }
 
     public boolean mySol_map_freq(int[] hand, int groupSize) {
