@@ -1,9 +1,49 @@
 class Solution {
     public boolean isNStraightHand(int[] hand, int groupSize) {
-        return mySol_freq(hand, groupSize);
+        return mySol_map_freq(hand, groupSize);
     }
 
-    public boolean mySol_freq(int[] hand, int groupSize) {
+    public boolean mySol_map_freq(int[] hand, int groupSize) {
+        Map<Integer, Integer> freq = new HashMap();
+
+        Arrays.sort(hand);
+
+        for (int num : hand) {
+            freq.put(num, freq.getOrDefault(num, 0) + 1);
+        }
+
+        int index = 0;
+        int made = 0;
+
+        while (freq.size() > 0) {
+            while (index < hand.length && freq.getOrDefault(hand[index], 0) == 0) {
+                freq.remove(hand[index++]);
+            }
+
+            if (index >= hand.length) break;
+
+            int start = hand[index];
+
+            int end = start;
+
+            while (end < start + groupSize) {
+                if (freq.getOrDefault(end, 0) == 0) break;
+
+                freq.put(end, freq.get(end) - 1);
+                end++;
+            }
+
+            if (end == start + groupSize) {
+                made++;
+            } else {
+                return false;
+            }
+        }
+
+        return hand.length == groupSize * made;
+    }
+
+    public boolean mySol_treemap_freq(int[] hand, int groupSize) {
         TreeMap<Integer, Integer> freq = new TreeMap();
 
         for (int num : hand) {
