@@ -1,9 +1,9 @@
 class Solution {
     public boolean checkSubarraySum(int[] nums, int k) {
-        return mySol(nums, k);
+        return official(nums, k);
     }
 
-    public boolean mySol(int[] nums, int k) {
+    public boolean official(int[] nums, int k) {
         Map<Integer, Integer> map = new HashMap();
         map.put(0, -1);
 
@@ -13,7 +13,7 @@ class Solution {
             sum = (sum + nums[i]) % k;
 
             if (map.containsKey(sum)) {
-                int before = map.getOrDefault(sum, -1);
+                int before = map.get(sum);
 
                 if (i - before > 1) {
                     return true;
