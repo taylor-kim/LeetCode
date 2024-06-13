@@ -4,7 +4,9 @@ class Solution {
     }
 
     public int official_counting(int[] seats, int[] students) {
-        int[] freq = new int[1001];
+        int maxPosition = Math.max(findMax(seats), findMax(students));
+
+        int[] freq = new int[maxPosition];
 
         int n = seats.length;
 
@@ -23,6 +25,16 @@ class Solution {
         }
 
         return ans;
+    }
+
+    private int findMax(int[] array) {
+        int maximum = 0;
+        for (int num : array) {
+            if (num > maximum) {
+                maximum = num;
+            }
+        }
+        return maximum + 1;
     }
 
     public int mySol(int[] seats, int[] students) {
