@@ -18,7 +18,8 @@ class Solution {
         int ans = 0;
         int unmatched = 0;
 
-        for (int f : freq) {
+        for (int i = 1; i < maxPosition; i++) {
+            int f = freq[i];
             ans += Math.abs(unmatched);
             unmatched += f;
         }
