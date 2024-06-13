@@ -19,9 +19,8 @@ class Solution {
         int unmatched = 0;
 
         for (int f : freq) {
-            unmatched += f;
             ans += Math.abs(unmatched);
-            
+            unmatched += f;
         }
 
         return ans;
