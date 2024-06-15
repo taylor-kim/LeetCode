@@ -1,6 +1,41 @@
 class Solution {
     public int minIncrementForUnique(int[] nums) {
-        return mySol_sort(nums);
+        return retry_counting_sort(nums);
+    }
+
+    public int retry_counting_sort(int[] nums) {
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+
+        for (int num : nums) {
+            min = Math.min(min, num);
+            max = Math.max(max, num);
+        }
+
+        int[] freq = new int[(int)1e5 + 1];
+
+        for (int num : nums) {
+            freq[num]++;
+        }
+
+        int num = min;
+
+        int ans = 0;
+
+        // System.out.println(Arrays.toString(freq));
+
+        while (num < freq.length) {
+            while (freq[num] > 1) {
+                int dup = freq[num] - 1;
+                freq[num] = 1;
+                freq[num + 1] += dup;
+                ans += dup;
+            }
+
+            num++;
+        }
+
+        return ans;
     }
 
     public int mySol_sort(int[] nums) {
@@ -44,7 +79,7 @@ class Solution {
 
         while (num <= max - min + 1) {
             while (freq[num] > 1) {
-                ans++;
+                ans ++;
                 freq[num]--;
                 freq[emptySlot]++;
 
