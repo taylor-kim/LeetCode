@@ -4,35 +4,29 @@ class Solution {
     }
 
     public int retry_counting_sort(int[] nums) {
-        int min = Integer.MAX_VALUE;
         int max = Integer.MIN_VALUE;
 
+        int n = nums.length;
+
         for (int num : nums) {
-            min = Math.min(min, num);
             max = Math.max(max, num);
         }
 
-        int[] freq = new int[(int)1e5 + 1];
+        int[] freq = new int[n + max];
 
         for (int num : nums) {
             freq[num]++;
         }
 
-        int num = min;
-
         int ans = 0;
 
-        // System.out.println(Arrays.toString(freq));
+        for (int num = 0; num < freq.length; num++) {
+            if (freq[num] <= 1) continue;
 
-        while (num < freq.length) {
-            while (freq[num] > 1) {
-                int dup = freq[num] - 1;
-                freq[num] = 1;
-                freq[num + 1] += dup;
-                ans += dup;
-            }
-
-            num++;
+            int dup = freq[num] - 1;
+            ans += dup;
+            freq[num + 1] += dup;
+            freq[num] = 1;
         }
 
         return ans;
