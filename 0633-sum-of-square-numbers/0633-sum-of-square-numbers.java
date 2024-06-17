@@ -1,6 +1,6 @@
 class Solution {
     public boolean judgeSquareSum(int c) {
-        return official_sqrt(c);
+        return mySol_fail(c);
     }
 
     public boolean official_bs(int c) {
@@ -23,8 +23,8 @@ class Solution {
     }
 
     public boolean mySol_fail(int c) {
-        for (int a = 0; a * a <= c; a++) {
-            int aa = a * a;
+        for (long a = 0; a * a <= c; a++) {
+            int aa = (int)(a * a);
             int bb = c - aa;
 
             double sqrt = Math.sqrt(bb);
