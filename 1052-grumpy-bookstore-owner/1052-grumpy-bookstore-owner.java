@@ -34,8 +34,6 @@ class Solution {
 
         int ans = 0;
 
-        System.out.println(Arrays.toString(pos));
-
         for (int i = 0; i < n; i++) {
             if (grumpy[i] == 0 || (pos[0] <= i && i <= pos[1])) {
                 ans += customers[i];
