@@ -1,6 +1,32 @@
 class Solution {
     public int maxSatisfied(int[] customers, int[] grumpy, int minutes) {
-        return mySol(customers, grumpy, minutes);
+        return official_better_than_me(customers, grumpy, minutes);
+    }
+
+    public int official_better_than_me(int[] customers, int[] grumpy, int minutes) {
+        int n = customers.length;
+        int unsatisfied = 0;
+
+        for (int i = 0; i < minutes; i++) {
+            unsatisfied += customers[i] * grumpy[i];
+        }
+
+        int max = unsatisfied;
+
+        for (int i = minutes; i < n; i++) {
+            unsatisfied += customers[i] * grumpy[i];
+            unsatisfied -= customers[i - minutes] * grumpy[i - minutes];
+
+            max = Math.max(max, unsatisfied);
+        }
+
+        int ans = max;
+
+        for (int i = 0; i < n; i++) {
+            ans += customers[i] * (1 - grumpy[i]);
+        }
+
+        return ans;
     }
 
     public int mySol(int[] customers, int[] grumpy, int minutes) {
