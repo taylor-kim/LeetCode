@@ -1,6 +1,57 @@
 class Solution {
     public int maxProfitAssignment(int[] difficulty, int[] profit, int[] worker) {
-        return profit_base_bs(difficulty, profit, worker);
+        return others_pq(difficulty, profit, worker);
+    }
+
+    public int others_pq(int[] difficulty, int[] profit, int[] worker) {
+        Queue<int[]> dpq = new PriorityQueue<>((a, b) -> {
+            return a[0] - b[0];
+        });
+
+        Queue<Integer> wq = new PriorityQueue();
+
+        for (int i = 0; i < profit.length; i++) {
+            dpq.add(new int[] { difficulty[i], profit[i]});
+        }
+
+        for (int w : worker) wq.add(w);
+
+        int ans = 0;
+        int max = 0;
+
+        while (!wq.isEmpty()) {
+            if (dpq.isEmpty() || wq.peek() < dpq.peek()[0]) {
+                wq.poll();
+                ans += max;
+            } else {
+                max = Math.max(max, dpq.poll()[1]);
+            }
+        }
+
+        return ans;
+    }
+
+    public int official_counting_sort(int[] difficulty, int[] profit, int[] worker) {
+        int maxAbility = Arrays.stream(worker).max().getAsInt();
+        int[] jobs = new int[maxAbility + 1];
+
+        for (int i = 0; i < difficulty.length; i++) {
+            if (difficulty[i] <= maxAbility) {
+                jobs[difficulty[i]] = Math.max(jobs[difficulty[i]], profit[i]);
+            }
+        }
+
+        for (int i = 0; i < jobs.length - 1; i++) {
+            jobs[i + 1] = Math.max(jobs[i + 1], jobs[i]);
+        }
+
+        int ans = 0;
+
+        for (int ability : worker) {
+            ans += jobs[ability];
+        }
+
+        return ans;
     }
 
     public int official_two_pointer(int[] difficulty, int[] profit, int[] worker) {
