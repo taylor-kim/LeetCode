@@ -3,6 +3,38 @@ class Solution {
         return profit_base_bs(difficulty, profit, worker);
     }
 
+    public int official_two_pointer(int[] difficulty, int[] profit, int[] worker) {
+        int n = profit.length;
+
+        Arrays.sort(worker);
+
+        int[][] datas = new int[n][2];
+
+        for (int i = 0; i < n; i++) {
+            datas[i][0] = difficulty[i];
+            datas[i][1] = profit[i];
+        }
+
+        Arrays.sort(datas, (a, b) -> {
+            return a[0] - b[0];
+        });
+
+        int index = 0;
+        int ans = 0;
+        int maxProfit = 0;
+
+        for (int i = 0; i < n; i++) {
+            while (index < datas.length && datas[index][0] <= worker[i]) {
+                maxProfit = Math.max(maxProfit, datas[index][1]);
+                index++;
+            }
+
+            ans += maxProfit;
+        }
+
+        return ans;
+    }
+
     public int profit_base_bs(int[] difficulty, int[] profit, int[] worker) {
         int n = profit.length;
         int[][] datas = new int[n][2];
