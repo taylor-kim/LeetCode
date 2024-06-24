@@ -1,44 +1,83 @@
 class Solution {
+    public int maxProfitAssignment(int[] difficulty, int[] profit, int[] worker) {
+        return mySol_bs(difficulty, profit, worker);
+    }
 
-    public int maxProfitAssignment(
-        int[] difficulty,
-        int[] profit,
-        int[] worker
-    ) {
-        List<int[]> jobProfile = new ArrayList<>();
-        jobProfile.add(new int[] { 0, 0 });
-        for (int i = 0; i < difficulty.length; i++) {
-            jobProfile.add(new int[] { difficulty[i], profit[i] });
+    public int mySol_bs(int[] difficulty, int[] profit, int[] worker) {
+        int n = profit.length;
+        int[][] datas = new int[n][2];
+
+        for (int i = 0; i < n; i++) {
+            datas[i][0] = difficulty[i];
+            datas[i][1] = profit[i];
         }
 
-        // Sort by difficulty values in increasing order.
-        Collections.sort(jobProfile, (a, b) -> Integer.compare(a[0], b[0]));
-        for (int i = 0; i < jobProfile.size() - 1; i++) {
-            jobProfile.get(i + 1)[1] = Math.max(
-                jobProfile.get(i)[1],
-                jobProfile.get(i + 1)[1]
-            );
+        Arrays.sort(datas, (a, b) -> {
+            return a[0] != b[0] ? a[0] - b[0] : b[1] - a[1];
+        });
+
+        for (int i = 0; i < n - 1; i ++) {
+            datas[i + 1][1] = Math.max(datas[i][1], datas[i + 1][1]);
         }
 
-        int netProfit = 0;
+        int ans = 0;
+
         for (int i = 0; i < worker.length; i++) {
-            int ability = worker[i];
+            int lo = 0;
+            int hi = n - 1;
 
-            // Find the job with just smaller or equal difficulty than ability.
-            int l = 0, r = jobProfile.size() - 1, jobProfit = 0;
-            while (l <= r) {
-                int mid = (l + r) / 2;
-                if (jobProfile.get(mid)[0] <= ability) {
-                    jobProfit = Math.max(jobProfit, jobProfile.get(mid)[1]);
-                    l = mid + 1;
+            int max = 0;
+
+            while (lo <= hi) {
+                int mid = lo + (hi - lo) / 2;
+
+                int diff = datas[mid][0];
+                int p = datas[mid][1];
+
+                if (worker[i] >= diff) {
+                    max = Math.max(max, p);
+                    lo = mid + 1;
                 } else {
-                    r = mid - 1;
+                    hi = mid - 1;
                 }
             }
 
-            // Increment profit of current worker to total profit.
-            netProfit += jobProfit;
+            ans += max;
         }
-        return netProfit;
+
+        return ans;
+    }
+
+    public int mySol_pq_fail(int[] difficulty, int[] profit, int[] worker) {
+        Queue<int[]> pq = new PriorityQueue<>((a, b) -> {
+            return a[1] != b[1] ? b[1] - a[1] : a[0] - b[0];
+        });
+
+        for (int i = 0; i < difficulty.length; i++) {
+            pq.add(new int[] {
+                difficulty[i]
+                , profit[i]
+            });
+        }
+
+        Arrays.sort(worker);
+
+        int ans = 0;
+
+        for (int i = worker.length - 1; i >= 0; i--) {
+            while (pq.size() > 0) {
+                int[] data = pq.poll();
+                int diff = data[0];
+                int p = data[1];
+
+                if (worker[i] >= diff) {
+                    System.out.println(p);
+                    ans += p;
+                    break;
+                }
+            }
+        }
+
+        return ans;
     }
 }
