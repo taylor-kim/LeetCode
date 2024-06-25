@@ -15,21 +15,21 @@
  */
 class Solution {
     public TreeNode bstToGst(TreeNode root) {
-        return mySol(root);
+        mySol(root);
+
+        return root;
     }
 
     int sum = 0;
 
-    public TreeNode mySol(TreeNode root) {
-        if (root == null) return null;
+    public void mySol(TreeNode root) {
+        if (root == null) return;
 
-        TreeNode right = mySol(root.right);
+        mySol(root.right);
 
         sum += root.val;
         root.val = sum;
 
         mySol(root.left);
-
-        return root;
     }
 }
