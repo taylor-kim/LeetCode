@@ -3,6 +3,28 @@ class Solution {
         return official_sw_with_spaceopt(nums, k);
     }
 
+    public int official_sw_with_diff(int[] nums, int k) {
+        return sw(nums, k) - sw(nums, k - 1);
+    }
+
+    private int sw(int[] nums , int k) {
+        int left = 0;
+        int count = 0;
+        int ans = 0;
+
+        for (int right = 0; right < nums.length; right++) {
+            count += nums[right] % 2;
+
+            while (count > k) {
+                count -= nums[left++] % 2;
+            }
+
+            ans += right - left + 1;
+        }
+
+        return ans;
+    }
+
     public int official_sw_with_spaceopt(int[] nums, int k) {
         int ans = 0;
         int left = 0;
