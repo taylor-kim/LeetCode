@@ -1,6 +1,30 @@
 class Solution {
     public int numberOfSubarrays(int[] nums, int k) {
-        return official_sw_with_q(nums, k);
+        return official_sw_with_spaceopt(nums, k);
+    }
+
+    public int official_sw_with_spaceopt(int[] nums, int k) {
+        int ans = 0;
+        int left = 0;
+        int gap = 0;
+        int count = 0;
+        
+        for (int right = 0; right < nums.length; right++) {
+            if (nums[right] % 2 == 1) count++;
+
+            if (count == k) {
+                gap = 0;
+
+                while (count == k) {
+                    count -= nums[left++] % 2;
+                    gap++;
+                }
+            }
+
+            ans += gap;
+        }
+
+        return ans;
     }
 
     public int official_sw_with_q(int[] nums, int k) {
