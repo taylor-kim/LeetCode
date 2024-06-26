@@ -1,6 +1,28 @@
 class Solution {
     public int numberOfSubarrays(int[] nums, int k) {
-        return mySol(nums, k);
+        return official_prefixsum(nums, k);
+    }
+
+    public int official_prefixsum(int[] nums, int k) {
+        int n = nums.length;
+
+        Map<Integer, Integer> map = new HashMap();
+        map.put(0, 1);
+
+        int ans = 0;
+        int count = 0;
+
+        for (int i = 0; i < n; i++) {
+            int num = nums[i];
+
+            count += num % 2;
+
+            ans += map.getOrDefault(count - k, 0);
+
+            map.put(count, map.getOrDefault(count, 0) + 1);
+        }
+
+        return ans;
     }
 
     public int mySol(int[] nums, int k) {
