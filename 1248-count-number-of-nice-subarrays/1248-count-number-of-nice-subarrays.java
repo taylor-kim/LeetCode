@@ -1,6 +1,28 @@
 class Solution {
     public int numberOfSubarrays(int[] nums, int k) {
-        return official_prefixsum(nums, k);
+        return official_sw_with_q(nums, k);
+    }
+
+    public int official_sw_with_q(int[] nums, int k) {
+        Queue<Integer> queue = new LinkedList();
+        int ans = 0;
+        int lastPopped = -1;
+        int initialGap = -1;
+
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] % 2 == 1) queue.add(i);
+
+            if (queue.size() > k) {
+                lastPopped = queue.poll();
+            }
+
+            if (queue.size() == k) {
+                initialGap = queue.peek() - lastPopped;
+                ans += initialGap;
+            }
+        }
+
+        return ans;
     }
 
     public int official_prefixsum(int[] nums, int k) {
