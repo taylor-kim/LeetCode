@@ -1,6 +1,27 @@
 class Solution {
     public long maximumImportance(int n, int[][] roads) {
-        return mySol(n, roads);
+        return official(n, roads);
+    }
+
+    public long official(int n, int[][] roads) {
+        int[] freq = new int[n];
+        long ans = 0;
+
+        for (int i = 0; i < roads.length; i++) {
+            freq[roads[i][0]]++;
+            freq[roads[i][1]]++;
+        }
+
+        Arrays.sort(freq);
+
+        for (int i = 0; i < n; i++) {
+            long count = freq[i];
+            int node = i + 1;
+
+            ans += count * node;
+        }
+
+        return ans;
     }
 
     public long mySol(int n, int[][] roads) {
