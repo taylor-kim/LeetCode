@@ -1,51 +1,63 @@
 class Solution {
-
     public List<List<Integer>> getAncestors(int n, int[][] edges) {
-        // Initialize adjacency list for the graph
-        List<Integer>[] adjacencyList = new ArrayList[n];
-        for (int i = 0; i < n; i++) {
-            adjacencyList[i] = new ArrayList<>();
-        }
+        return mySol(n, edges);
+    }
 
-        // Populate the adjacency list with reversed edges
+    public List<List<Integer>> mySol(int n, int[][] edges) {
+        Map<Integer, List<Integer>> graph = new HashMap();
+        int[] dep = new int[n];
+
         for (int[] edge : edges) {
-            int from = edge[0];
-            int to = edge[1];
-            adjacencyList[to].add(from);
+            graph.computeIfAbsent(edge[0], k -> new ArrayList()).add(edge[1]);
+            dep[edge[1]]++;
         }
 
-        List<List<Integer>> ancestorsList = new ArrayList<>();
+        Queue<Integer> queue = new LinkedList();
 
-        // For each node, find all its ancestors (children in reversed graph)
+        List<List<Integer>> result = new ArrayList();
+        List<Set<Integer>> allParents = new ArrayList();
+
         for (int i = 0; i < n; i++) {
-            List<Integer> ancestors = new ArrayList<>();
-            Set<Integer> visited = new HashSet<>();
-            findChildren(i, adjacencyList, visited);
-            // Add visited nodes to the current nodes' ancestor list
-            for (int node = 0; node < n; node++) {
-                if (node == i) continue;
-                if (visited.contains(node)) ancestors.add(node);
-            }
-            ancestorsList.add(ancestors);
+            if (dep[i] == 0) queue.add(i);
+
+            result.add(new ArrayList());
+            allParents.add(new HashSet());
         }
 
-        return ancestorsList;
-    }
+        while (!queue.isEmpty()) {
+            int size = queue.size();
 
-    // Helper method to perform DFS and find all children of a given node
-    private void findChildren(
-        int currentNode,
-        List<Integer>[] adjacencyList,
-        Set<Integer> visitedNodes
-    ) {
-        // Mark current node as visited
-        visitedNodes.add(currentNode);
+            while (size-- > 0) {
+                int node = queue.poll();
 
-        // Recursively traverse all neighbors
-        for (int neighbour : adjacencyList[currentNode]) {
-            if (!visitedNodes.contains(neighbour)) {
-                findChildren(neighbour, adjacencyList, visitedNodes);
+                if (!graph.containsKey(node)) {
+                    continue;
+                }
+
+                for (int next : graph.get(node)) {
+                    allParents.get(next).addAll(allParents.get(node));
+                    allParents.get(next).add(node);
+
+                    if (--dep[next] == 0) {
+                        queue.add(next);
+                    }
+                }
             }
         }
+
+        for (int i = 0; i < n; i++) {
+            result.get(i).addAll(allParents.get(i));
+            Collections.sort(result.get(i));
+        }
+
+        return result;
     }
+
+    // private void dfs(int node, Map<Integer, List<Integer>> reverse, List<List<Integer>> result, List<Integer> list) {
+    //     if (reverse.containsKey(node)) {
+    //         for (int before : reverse.get(node)) {
+    //             list.add(before);
+    //         }
+    //     }
+    // }
 }
