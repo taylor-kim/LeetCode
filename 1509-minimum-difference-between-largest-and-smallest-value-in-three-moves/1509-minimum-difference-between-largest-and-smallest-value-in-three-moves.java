@@ -1,6 +1,22 @@
 class Solution {
     public int minDifference(int[] nums) {
-        return try_bottomup(nums);
+        return official_sort_and_greedy(nums);
+    }
+
+    public int official_sort_and_greedy(int[] nums) {
+        int n = nums.length;
+
+        if (n < 5) return 0;
+
+        int ans = Integer.MAX_VALUE;
+
+        Arrays.sort(nums);
+
+        for (int i = 0; i < 4; i++) {
+            ans = Math.min(ans, nums[n - 4 + i] - nums[i]);
+        }
+
+        return ans;
     }
 
     public int try_bottomup(int[] nums) {
