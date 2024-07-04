@@ -20,12 +20,16 @@ class Solution {
 
         ListNode node = head;
 
-        while (node.next.val != 0) {
-            head.val += node.next.val;
+        int sum = 0;
+
+        while (node.val != 0) {
+            sum += node.val;
             node = node.next;
         }
 
-        head.next = official_recur(node.next);
+        head.val = sum;
+
+        head.next = official_recur(node);
 
         return head;
     }
