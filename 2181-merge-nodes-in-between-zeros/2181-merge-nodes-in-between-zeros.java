@@ -10,7 +10,24 @@
  */
 class Solution {
     public ListNode mergeNodes(ListNode head) {
-        return mySol(head);
+        return official_recur(head);
+    }
+
+    public ListNode official_recur(ListNode head) {
+        head = head.next;
+
+        if (head == null) return head;
+
+        ListNode node = head;
+
+        while (node.next.val != 0) {
+            head.val += node.next.val;
+            node = node.next;
+        }
+
+        head.next = official_recur(node.next);
+
+        return head;
     }
 
     public ListNode mySol(ListNode head) {
