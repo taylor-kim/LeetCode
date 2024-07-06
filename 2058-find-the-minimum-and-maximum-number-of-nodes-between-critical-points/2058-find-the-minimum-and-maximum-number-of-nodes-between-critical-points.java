@@ -1,52 +1,54 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
 class Solution {
-
     public int[] nodesBetweenCriticalPoints(ListNode head) {
-        int[] result = { -1, -1 };
+        return mySol(head);
+    }
 
-        // Initialize minimum distance to the maximum possible value
-        int minDistance = Integer.MAX_VALUE;
+    public int[] mySol(ListNode head) {
+        ListNode dummy = new ListNode(0, head);
+        
+        int firstIndex = 0;
+        int critical = -1;
 
-        // Pointers to track the previous node, current node, and indices
-        ListNode previousNode = head;
-        ListNode currentNode = head.next;
-        int currentIndex = 1;
-        int previousCriticalIndex = 0;
-        int firstCriticalIndex = 0;
+        int[] ans = {Integer.MAX_VALUE, -1};
 
-        while (currentNode.next != null) {
-            // Check if the current node is a local maxima or minima
-            if (
-                (currentNode.val < previousNode.val &&
-                    currentNode.val < currentNode.next.val) ||
-                (currentNode.val > previousNode.val &&
-                    currentNode.val > currentNode.next.val)
-            ) {
-                // If this is the first critical point found
-                if (previousCriticalIndex == 0) {
-                    previousCriticalIndex = currentIndex;
-                    firstCriticalIndex = currentIndex;
+        ListNode prev = head;
+        ListNode node = head.next;
+
+        int index = 1;
+
+        while (node.next != null) {
+            if ((prev.val < node.val && node.val > node.next.val) || (prev.val > node.val && node.val < node.next.val)) {
+                // System.out.println(String.format("critical!! value:%d, inde:%d", node.val, index));
+                if (firstIndex == 0) {
+                    firstIndex = index;
                 } else {
-                    // Calculate the minimum distance between critical points
-                    minDistance = Math.min(
-                        minDistance,
-                        currentIndex - previousCriticalIndex
-                    );
-                    previousCriticalIndex = currentIndex;
+                    ans[0] = Math.min(ans[0], index - critical);
                 }
+
+                critical = index;
             }
 
-            // Move to the next node and update indices
-            currentIndex++;
-            previousNode = currentNode;
-            currentNode = currentNode.next;
+            index++;
+            prev = node;
+            node = node.next;
         }
 
-        // If at least two critical points were found
-        if (minDistance != Integer.MAX_VALUE) {
-            int maxDistance = previousCriticalIndex - firstCriticalIndex;
-            result = new int[] { minDistance, maxDistance };
+        ans[1] = critical - firstIndex;
+
+        if (ans[0] == Integer.MAX_VALUE || ans[1] == -1) {
+            return new int[] {-1, -1};
         }
 
-        return result;
+        return ans;
     }
 }
