@@ -1,6 +1,26 @@
 class Solution {
     public int findTheWinner(int n, int k) {
-        return official_list(n, k);
+        return official_queue(n, k);
+    }
+
+    public int official_queue(int n, int k) {
+        Queue<Integer> queue = new LinkedList();
+
+        for (int i = 1; i <= n; i++) {
+            queue.add(i);
+        }
+
+        while (queue.size() > 1) {
+            int size = k - 1;
+
+            while (size-- > 0) {
+                queue.add(queue.poll());
+            }
+
+            queue.poll();
+        }
+
+        return queue.peek();
     }
 
     public int official_list(int n, int k) {
