@@ -1,6 +1,24 @@
 class Solution {
     public int findTheWinner(int n, int k) {
-        return mySol(n, k);
+        return official_list(n, k);
+    }
+
+    public int official_list(int n, int k) {
+        List<Integer> list = new ArrayList();
+
+        for (int i = 1; i <= n; i++) {
+            list.add(i);
+        }
+
+        int start = 0;
+
+        while (list.size() > 1) {
+            start = (start + k - 1) % list.size();
+
+            list.remove(start);
+        }
+
+        return list.get(0);
     }
 
     public int mySol(int n, int k) {
