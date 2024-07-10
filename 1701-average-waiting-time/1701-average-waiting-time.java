@@ -9,7 +9,7 @@ class Solution {
 
         for (int[] cus : customers) {
             time = Math.max(time, cus[0]);
-            int wait = Math.max(time - cus[0], 0);
+            int wait = time - cus[0];
             waitingTime += wait + cus[1];
             time += cus[1];
         }
