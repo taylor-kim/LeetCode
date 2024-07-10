@@ -1,22 +1,33 @@
 class Solution {
-
     public double averageWaitingTime(int[][] customers) {
-        int nextIdleTime = 0;
-        long netWaitTime = 0;
+        return mySol(customers);
+    }
 
-        for (int i = 0; i < customers.length; i++) {
-            // The next idle time for the chef is given by the time of delivery
-            // of current customer's order.
-            nextIdleTime = Math.max(customers[i][0], nextIdleTime) +
-            customers[i][1];
+    public double mySol(int[][] customers) {
+        // Queue<int[]> pq = new PriorityQueue<>((a, b) -> {
+        //     return a[0] != b[0] ? a[0] - b[0] : a[1] - b[1];
+        // });
 
-            // The wait time for the current customer is the difference between
-            // his delivery time and arrival time.
-            netWaitTime += nextIdleTime - customers[i][0];
+        Queue<int[]> pq = new LinkedList();
+
+        for (int[] cus : customers) {
+            pq.add(cus);
         }
 
-        // Divide by total customers to get average.
-        double averageWaitTime = (double) netWaitTime / customers.length;
-        return averageWaitTime;
+        int time = 0;
+        double waitingTime = 0.0;
+
+        while (!pq.isEmpty()) {
+            int[] cus = pq.poll();
+
+            time = Math.max(time, cus[0]);
+            int wait = Math.max(time - cus[0], 0);
+            waitingTime += wait + cus[1];
+            time += cus[1];
+
+            // System.out.println(String.format("time:%d, wait:%d, totalWaitng:%f", time, wait + cus[1], waitingTime));
+        }
+
+        return waitingTime / customers.length;
     }
 }
