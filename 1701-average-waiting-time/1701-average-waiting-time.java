@@ -1,6 +1,18 @@
 class Solution {
     public double averageWaitingTime(int[][] customers) {
-        return mySol_second(customers);
+        return official(customers);
+    }
+
+    public double official(int[][] customers) {
+        long totalWait = 0;
+        int nextIdleTime = 0;
+
+        for (int[] cus : customers) {
+            nextIdleTime = Math.max(nextIdleTime, cus[0]) + cus[1];
+            totalWait += nextIdleTime - cus[0];
+        }
+
+        return (double) totalWait / customers.length;
     }
 
     public double mySol_second(int[][] customers) {
