@@ -1,31 +1,32 @@
 class Solution {
-
     public String reverseParentheses(String s) {
-        Stack<Integer> openParenthesesIndices = new Stack<>();
-        StringBuilder result = new StringBuilder();
+        return try_third(s);
+    }
 
-        for (char currentChar : s.toCharArray()) {
-            if (currentChar == '(') {
-                // Store the current length as the start index for future reversal
-                openParenthesesIndices.push(result.length());
-            } else if (currentChar == ')') {
-                int start = openParenthesesIndices.pop();
-                // Reverse the substring between the matching parentheses
-                reverse(result, start, result.length() - 1);
+    public String try_third(String s) {
+        StringBuilder ans = new StringBuilder();
+        Stack<StringBuilder> stack = new Stack();
+
+        for (char c : s.toCharArray()) {
+            if (c == '(') {
+                stack.push(new StringBuilder());
+            } else if (c == ')') {
+                String reverse = stack.pop().reverse().toString();
+
+                if (stack.size() == 0) {
+                    ans.append(reverse);
+                } else {
+                    stack.peek().append(reverse);
+                }
             } else {
-                // Append non-parenthesis characters to the processed string
-                result.append(currentChar);
+                if (stack.size() > 0) {
+                    stack.peek().append(c);
+                } else {
+                    ans.append(c);
+                }
             }
         }
 
-        return result.toString();
-    }
-
-    private void reverse(StringBuilder sb, int start, int end) {
-        while (start < end) {
-            char temp = sb.charAt(start);
-            sb.setCharAt(start++, sb.charAt(end));
-            sb.setCharAt(end--, temp);
-        }
+        return ans.toString();
     }
 }
