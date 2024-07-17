@@ -15,7 +15,42 @@
  */
 class Solution {
     public List<TreeNode> delNodes(TreeNode root, int[] to_delete) {
-        return mySol(root, to_delete);
+        return official_dfs(root, to_delete);
+    }
+
+    public List<TreeNode> official_dfs(TreeNode root, int[] to_delete) {
+        Set<Integer> delete = new HashSet();
+
+        for (int val : to_delete) delete.add(val);
+
+        List<TreeNode> result = new ArrayList();
+
+        root = official_dfs(root, delete, result);
+
+        if (root != null) result.add(root);
+
+        return result;
+    }
+
+    public TreeNode official_dfs(TreeNode node, Set<Integer> delete, List<TreeNode> result) {
+        if(node == null) return null;
+
+        node.left = official_dfs(node.left, delete, result);
+        node.right = official_dfs(node.right, delete, result);
+
+        if (delete.contains(node.val)) {
+            if (node.left != null) {
+                result.add(node.left);
+            }
+
+            if (node.right != null) {
+                result.add(node.right);
+            }
+
+            return null;
+        } else {
+            return node;
+        }
     }
 
     public List<TreeNode> mySol(TreeNode root, int[] to_delete) {
