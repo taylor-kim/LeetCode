@@ -1,6 +1,38 @@
 class Solution {
     public List<Integer> luckyNumbers (int[][] matrix) {
-        return mySol(matrix);
+        return official_greedy(matrix);
+    }
+
+    public List<Integer> official_greedy(int[][] matrix) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+
+        int rowMinMax = Integer.MIN_VALUE;
+        int colMaxMin = Integer.MAX_VALUE;
+
+        for (int i = 0; i < m; i++) {
+            int rowMin = Integer.MAX_VALUE;
+            for (int j = 0; j < n; j++) {
+                rowMin = Math.min(rowMin, matrix[i][j]);
+            }
+
+            rowMinMax = Math.max(rowMinMax, rowMin);
+        }
+
+        for (int i = 0; i < n; i++) {
+            int colMax = Integer.MIN_VALUE;
+            for (int j = 0; j < m; j++) {
+                colMax = Math.max(colMax, matrix[j][i]);
+            }
+
+            colMaxMin = Math.min(colMaxMin, colMax);
+        }
+
+        if (rowMinMax == colMaxMin) {
+            return Arrays.asList(rowMinMax);
+        }
+
+        return new ArrayList();
     }
 
     public List<Integer> mySol(int[][] matrix) {
