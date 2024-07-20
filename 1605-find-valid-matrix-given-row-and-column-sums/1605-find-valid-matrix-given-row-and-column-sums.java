@@ -1,6 +1,30 @@
 class Solution {
     public int[][] restoreMatrix(int[] rowSum, int[] colSum) {
-        return try_spaceopt_greedy(rowSum, colSum);
+        return official_time_and_space_opt(rowSum, colSum);
+    }
+
+    public int[][] official_time_and_space_opt(int[] rowSum, int[] colSum) {
+        int m = rowSum.length;
+        int n = colSum.length;
+
+        int[][] ret = new int[m][n];
+
+        int i = 0, j = 0;
+
+        while (i < m && j < n) {
+            ret[i][j] = Math.min(rowSum[i], colSum[j]);
+
+            rowSum[i] -= ret[i][j];
+            colSum[j] -= ret[i][j];
+
+            if (rowSum[i] == 0) {
+                i++;
+            } else {
+                j++;
+            }
+        }
+
+        return ret;
     }
 
     public int[][] try_spaceopt_greedy(int[] rowSum, int[] colSum) {
