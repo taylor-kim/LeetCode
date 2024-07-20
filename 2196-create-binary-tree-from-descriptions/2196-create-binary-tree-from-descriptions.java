@@ -1,49 +1,54 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
 class Solution {
-
     public TreeNode createBinaryTree(int[][] descriptions) {
-        // Sets to track unique children and parents
-        Set<Integer> children = new HashSet<>(), parents = new HashSet<>();
-        // Map to store parent to children relationships
-        Map<Integer, List<int[]>> parentToChildren = new HashMap<>();
+        return mySol(descriptions);
+    }
 
-        // Build graph from parent to child, and add nodes to HashSets
-        for (int[] d : descriptions) {
-            int parent = d[0], child = d[1], isLeft = d[2];
-            parents.add(parent);
-            parents.add(child);
-            children.add(child);
-            parentToChildren
-                .computeIfAbsent(parent, l -> new ArrayList<>())
-                .add(new int[] { child, isLeft });
+    public TreeNode mySol(int[][] descriptions) {
+        Map<Integer, int[]> graph = new HashMap();
+        Map<Integer, Integer> indegree = new HashMap();
+
+        for (int[] desc : descriptions) {
+            graph.computeIfAbsent(desc[0], k -> new int[2]);
+
+            graph.get(desc[0])[1 - desc[2]] = desc[1];
+            graph.computeIfAbsent(desc[1], k -> new int[2]);
+
+            indegree.computeIfAbsent(desc[0], k -> 0);
+            indegree.put(desc[1], indegree.getOrDefault(desc[1], 0) + 1);
         }
 
-        // Find the root node by checking which node is in parents but not in children
-        parents.removeAll(children);
-        TreeNode root = new TreeNode(parents.iterator().next());
-
-        // Starting from root, use BFS to construct binary tree
-        Queue<TreeNode> queue = new LinkedList<>();
-        queue.offer(root);
-
-        while (!queue.isEmpty()) {
-            TreeNode parent = queue.poll();
-            // Iterate over children of current parent
-            for (int[] childInfo : parentToChildren.getOrDefault(
-                parent.val,
-                Collections.emptyList()
-            )) {
-                int childValue = childInfo[0], isLeft = childInfo[1];
-                TreeNode child = new TreeNode(childValue);
-                queue.offer(child);
-                // Attach child node to its parent based on isLeft flag
-                if (isLeft == 1) {
-                    parent.left = child;
-                } else {
-                    parent.right = child;
-                }
+        for (int key : indegree.keySet()) {
+            if (indegree.get(key) == 0) {
+                return build(graph, key);
             }
         }
 
-        return root;
+        return null;
+    }
+
+    private TreeNode build(Map<Integer, int[]> graph, int value) {
+        if (value == 0) return null;
+
+        TreeNode node = new TreeNode(value);
+
+        node.left = build(graph, graph.get(value)[0]);
+        node.right = build(graph, graph.get(value)[1]);
+
+        return node;
     }
 }
