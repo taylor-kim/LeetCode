@@ -15,13 +15,12 @@
  */
 class Solution {
     public TreeNode createBinaryTree(int[][] descriptions) {
-        return mySol2(descriptions);
+        return mySol(descriptions);
     }
 
     public TreeNode mySol2(int[][] descriptions) {
         Map<Integer, TreeNode> map = new HashMap();
-
-        TreeNode root = null;
+        Map<TreeNode, Integer> indegree = new HashMap();
 
         for (int[] desc : descriptions) {
             TreeNode parent = map.computeIfAbsent(desc[0], k -> new TreeNode(desc[0]));
@@ -33,14 +32,15 @@ class Solution {
                 parent.right = child;
             }
 
-            if (root == null) {
-                root = parent;
-            } else if (root == child) {
-                root = parent;
-            }
+            indegree.putIfAbsent(parent, 0);
+            indegree.put(child, indegree.getOrDefault(child, 0) + 1);
         }
 
-        return root;
+        for (TreeNode node : indegree.keySet()) {
+            if (indegree.get(node) == 0) return node;
+        }
+
+        return null;
     }
 
     public TreeNode mySol(int[][] descriptions) {
@@ -59,21 +59,45 @@ class Solution {
 
         for (int key : indegree.keySet()) {
             if (indegree.get(key) == 0) {
-                return build(graph, key);
+                return buildBFS(graph, key);
             }
         }
 
         return null;
     }
 
-    private TreeNode build(Map<Integer, int[]> graph, int value) {
+    private TreeNode buildDFS(Map<Integer, int[]> graph, int value) {
         if (value == 0) return null;
 
         TreeNode node = new TreeNode(value);
 
-        node.left = build(graph, graph.get(value)[0]);
-        node.right = build(graph, graph.get(value)[1]);
+        node.left = buildDFS(graph, graph.get(value)[0]);
+        node.right = buildDFS(graph, graph.get(value)[1]);
 
         return node;
+    }
+
+    private TreeNode buildBFS(Map<Integer, int[]> graph, int value) {
+        TreeNode root = new TreeNode(value);
+        Queue<TreeNode> queue = new LinkedList();
+        queue.add(root);
+
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+
+            if (graph.get(node.val)[0] > 0) {
+                node.left = new TreeNode(graph.get(node.val)[0]);
+
+                queue.add(node.left);
+            }
+
+            if (graph.get(node.val)[1] > 0) {
+                node.right = new TreeNode(graph.get(node.val)[1]);
+
+                queue.add(node.right);
+            }
+        }
+
+        return root;
     }
 }
