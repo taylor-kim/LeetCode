@@ -25,7 +25,6 @@ class Solution {
 
         collectLeaves(root, leaves);
 
-        Map<TreeNode, TreeNode> pairs = new HashMap();
         int ans = 0;
 
         for (TreeNode start : leaves) {
@@ -43,8 +42,6 @@ class Solution {
                     TreeNode node = queue.poll();
 
                     if (node != start && node.left == null && node.right == null && level <= distance) {
-                        pairs.put(start, node);
-                        pairs.put(node, start);
                         ans++;
                     }
 
@@ -56,6 +53,8 @@ class Solution {
                 }
 
                 level++;
+
+                if (level > distance) break;
             }
         }
 
