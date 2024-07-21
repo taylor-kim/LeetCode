@@ -8,8 +8,8 @@ class Solution {
         int[] rows = buildTopo(k, rc);
         int[] cols = buildTopo(k, cc);
 
-        System.out.println(Arrays.toString(rows));
-        System.out.println(Arrays.toString(cols));
+        // System.out.println(Arrays.toString(rows));
+        // System.out.println(Arrays.toString(cols));
 
         if (rows == null || cols == null) return new int[0][0];
 
