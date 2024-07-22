@@ -1,6 +1,24 @@
 class Solution {
     public String[] sortPeople(String[] names, int[] heights) {
-        return official_map(names, heights);
+        return official_tree_map(names, heights);
+    }
+
+    public String[] official_tree_map(String[] names, int[] heights) {
+        Map<Integer, String> map = new TreeMap();
+
+        for (int i = 0; i < names.length; i++) {
+            map.put(heights[i], names[i]);
+        }
+
+        String[] ans = new String[names.length];
+
+        int index = names.length - 1;
+
+        for (int h : map.keySet()) {
+            ans[index--] = map.get(h);
+        }
+
+        return ans;
     }
 
     public String[] official_map(String[] names, int[] heights) {
