@@ -5,8 +5,8 @@ class Solution {
 
     public int[][] official_topoSort(int k, int[][] rc, int[][] cc) {
 
-        int[] rows = buildTopo(k, rc);
-        int[] cols = buildTopo(k, cc);
+        int[] rows = buildTopo_dfs(k, rc);
+        int[] cols = buildTopo_dfs(k, cc);
 
         // System.out.println(Arrays.toString(rows));
         // System.out.println(Arrays.toString(cols));
@@ -24,6 +24,54 @@ class Solution {
         }
 
         return ans;
+    }
+
+    private int[] buildTopo_dfs(int k, int[][] cond) {
+        Map<Integer, List<Integer>> graph = new HashMap();
+
+        for (int[] edge : cond) {
+            graph.computeIfAbsent(edge[0], key -> new ArrayList()).add(edge[1]);
+        }
+
+        int[] visit = new int[k + 1];
+
+        List<Integer> order = new ArrayList();
+        
+        for (int i = 1; i <= k; i++) {
+            if (visit[i] == 0) {
+                if (!dfs(i, graph, visit, order)) {
+                    return null;
+                }
+            }
+        }
+
+        int[] result = new int[order.size()];
+
+        for (int i = 0; i < result.length; i++) {
+            result[i] = order.get(result.length - i - 1);
+        }
+
+        return result;
+    }
+
+    private boolean dfs(int node, Map<Integer, List<Integer>> graph, int[] visit, List<Integer> order) {
+        visit[node] = 1;
+
+        for (int next : graph.getOrDefault(node, new ArrayList<>())) {
+            if (visit[next] == 0) {
+                if (!dfs(next, graph, visit, order)) {
+                    return false;
+                }
+            } else if (visit[next] == 1) {
+                return false;
+            }
+        }
+
+        visit[node] = 2;
+
+        order.add(node);
+
+        return true;
     }
 
     private int[] buildTopo(int k, int[][] cond) {
@@ -81,6 +129,7 @@ class Solution {
         Map<Integer, Integer> graph = new HashMap();
         Map<Integer, Integer> reverse = new HashMap();
         Map<Integer, Integer> indegree = new HashMap();
+        int[] deg = new int[k + 1];
 
         Map<Integer, Integer> result = new HashMap();
 
@@ -101,28 +150,51 @@ class Solution {
             indegree.computeIfAbsent(from, key -> 0);
             indegree.put(to, indegree.getOrDefault(to, 0) + 1);
 
+            deg[to]++;
+
             // if (graph.getOrDefault(to, 0) == from) return null;
         }
 
         int index = 0;
 
-        for (int key : indegree.keySet()) {
-            if (indegree.get(key) == 0) {
-                result.put(key, index++);
-                set.remove(key);
+        Queue<Integer> queue = new LinkedList();
+        for (int i = 1; i <= k; i++) {
+            if (deg[i] == 0) queue.add(i);
+        }
 
-                while (graph.containsKey(key)) {
-                    int next = graph.get(key);
-                    result.put(next, index++);
-                    set.remove(next);
-                    key = next;
+        System.out.println(Arrays.toString(deg));
+
+        while (!queue.isEmpty()) {
+            int key = queue.poll();
+            result.put(key, index++);
+
+            if (graph.containsKey(key)) {
+                int next = graph.get(key);
+                if (--deg[next] == 0) {
+                    queue.add(next);
                 }
             }
         }
 
-        for (int remain : set) {
-            result.put(remain, index++);
-        }
+        if (result.size() != k) return null;
+
+        // for (int key : indegree.keySet()) {
+        //     if (indegree.get(key) == 0) {
+        //         result.put(key, index++);
+        //         set.remove(key);
+
+        //         while (graph.containsKey(key)) {
+        //             int next = graph.get(key);
+        //             result.put(next, index++);
+        //             set.remove(next);
+        //             key = next;
+        //         }
+        //     }
+        // }
+
+        // for (int remain : set) {
+        //     result.put(remain, index++);
+        // }
 
         return result;
     }
