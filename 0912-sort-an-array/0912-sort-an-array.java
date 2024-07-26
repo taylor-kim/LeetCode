@@ -1,6 +1,32 @@
 class Solution {
     public int[] sortArray(int[] nums) {
-        return quickSort(nums);
+        return bucketSort(nums);
+    }
+
+    public int[] bucketSort(int[] nums) {
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+
+        for (int num : nums) {
+            min = Math.min(min, num);
+            max = Math.max(max, num);
+        }
+
+        int[] bucket = new int[max - min + 1];
+
+        for (int num : nums) {
+            bucket[num - min]++;
+        }
+
+        int index = 0;
+
+        for (int num = min; num <= max; num++) {
+            while (bucket[num - min]-- > 0) {
+                nums[index++] = num;
+            }
+        }
+
+        return nums;
     }
 
     public int[] quickSort(int[] nums) {
