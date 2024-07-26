@@ -1,6 +1,42 @@
 class Solution {
     public int[] sortArray(int[] nums) {
-        return mergeSort(nums);
+        return quickSort(nums);
+    }
+
+    public int[] quickSort(int[] nums) {
+        quickSort(nums, 0, nums.length - 1);
+
+        return nums;
+    }
+
+    public void quickSort(int[] nums, int lo, int hi) {
+        if (lo >= hi) return;
+
+        int pivot = new Random().nextInt(hi - lo + 1) + lo;
+
+        int pivotValue = nums[pivot];
+
+        int last = nums[hi];
+        nums[hi] = nums[pivot];
+        nums[pivot] = last;
+
+        pivot = lo;
+
+        for (int i = lo; i <= hi; i++) {
+            if (nums[i] < pivotValue) {
+                int temp = nums[pivot];
+                nums[pivot++] = nums[i];
+                nums[i] = temp;
+            }
+        }
+
+        if (pivot <= hi) {
+            nums[hi] = nums[pivot];
+            nums[pivot] = pivotValue;
+        }
+
+        quickSort(nums, lo, pivot - 1);
+        quickSort(nums, pivot + 1, hi);
     }
 
     public int[] mergeSort(int[] nums) {
