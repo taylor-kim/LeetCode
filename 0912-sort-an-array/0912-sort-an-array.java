@@ -16,32 +16,33 @@ class Solution {
 
         mergeSort(nums, lo, mid);
         mergeSort(nums, mid + 1, hi);
+        merge(nums, lo, mid, hi);
+    }
 
-        int i = lo;
-        int j = mid + 1;
-        int index = 0;
+    private void merge(int[] nums, int lo, int mid, int hi) {
+        int[] left = new int[mid - lo + 1];
+        int[] right = new int[hi - mid];
 
-        int[] sorted = new int[hi - lo + 1];
+        for (int i = 0; i < left.length; i++) {
+            left[i] = nums[lo + i];
+        }
 
-        while (i <= mid && j <= hi) {
-            if (nums[i] < nums[j]) {
-                sorted[index] = nums[i++];
+        for (int i = 0; i < right.length; i++) {
+            right[i] = nums[mid + 1 + i];
+        }
+
+        int i = 0;
+        int j = 0;
+        int index = lo;
+
+        while (i < left.length || j < right.length) {
+            if (j == right.length || i < left.length && left[i] < right[j]) {
+                nums[index] = left[i++];
             } else {
-                sorted[index] = nums[j++];
+                nums[index] = right[j++];
             }
+
             index++;
-        }
-
-        while (i <= mid) {
-            sorted[index++] = nums[i++];
-        }
-
-        while (j <= hi) {
-            sorted[index++] = nums[j++];
-        }
-
-        for (int k = lo; k <= hi; k++) {
-            nums[k] = sorted[k - lo];
         }
     }
 }
