@@ -101,7 +101,7 @@ class Solution {
             }
 
             for (int next : graph.get(node)) {
-                // if (freq[next] == 2) continue;
+                if (freq[next] == 2) continue;
 
                 if (dist1[next] > currentTime) {
                     dist2[next] = dist1[next];
