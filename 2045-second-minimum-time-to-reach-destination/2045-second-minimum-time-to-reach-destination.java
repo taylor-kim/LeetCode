@@ -1,6 +1,6 @@
 class Solution {
     public int secondMinimum(int n, int[][] edges, int time, int change) {
-        return tune_mySol_with_editorial(n, edges, time, change);
+        return official_bfs(n, edges, time, change);
     }
 
     public int official_bfs(int n, int[][] edges, int time, int change) {
