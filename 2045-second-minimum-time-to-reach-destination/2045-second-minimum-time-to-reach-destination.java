@@ -1,6 +1,6 @@
 class Solution {
     public int secondMinimum(int n, int[][] edges, int time, int change) {
-        return official_bfs(n, edges, time, change);
+        return tune_mySol_with_editorial(n, edges, time, change);
     }
 
     public int official_bfs(int n, int[][] edges, int time, int change) {
@@ -76,6 +76,9 @@ class Solution {
         queue.add(new int[] {1, 0});
         dist1[1] = 0;
 
+        int prev = 0;
+        int now = 0;
+
         while (!queue.isEmpty()) {
             int[] data = queue.poll();
             int node = data[0];
@@ -98,7 +101,7 @@ class Solution {
             }
 
             for (int next : graph.get(node)) {
-                if (freq[next] == 2) continue;
+                // if (freq[next] == 2) continue;
 
                 if (dist1[next] > currentTime) {
                     dist2[next] = dist1[next];
