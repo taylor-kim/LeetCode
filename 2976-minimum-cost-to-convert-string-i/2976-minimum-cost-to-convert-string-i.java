@@ -1,14 +1,65 @@
 class Solution {
     public long minimumCost(String source, String target, char[] original, char[] changed, int[] cost) {
-        return mySol(source, target, original, changed, cost);
+        return try_dijkstra(source, target, original, changed, cost);
     }
 
     public long try_dijkstra(String source, String target, char[] original, char[] changed, int[] cost) {
-        long MAX = (long)1e6 * source.length();
-
         long[][] min = new long[26][26];
 
-        for (long[] arr : min) Arrays.fill(arr, MAX);
+        long MAX = (long)1e6 * source.length();
+
+        for (long[] a : min) {
+            Arrays.fill(a, MAX);
+        }
+
+        Map<Integer, List<int[]>> graph = new HashMap();
+
+        for (int i = 0; i < original.length; i++) {
+            int from = original[i] - 'a';
+            int to = changed[i] - 'a';
+
+            graph.computeIfAbsent(from, k -> new ArrayList()).add(new int[] {to, cost[i]});
+        }
+
+        Queue<Pair<Integer, Long>> queue = new PriorityQueue<>((a, b) -> {
+            return Long.compare(a.getValue(), b.getValue());
+        });
+
+        Set<Integer> visit = new HashSet();
+
+        for (int i = 0; i < source.length(); i++) {
+            int start = source.charAt(i) - 'a';
+
+            min[start][start] = 0;
+
+            queue.clear();
+            queue.add(new Pair(start, 0L));
+
+            while (!queue.isEmpty()) {
+                Pair<Integer, Long> data = queue.poll();
+
+                int node = data.getKey();
+                long totalCost = data.getValue();
+
+                // if (min[start][node] < totalCost) continue;
+
+                // min[start][node] = Math.min(min[start][node], totalCost);
+
+                if (!graph.containsKey(node)) {
+                    continue;
+                }
+
+                for (int[] next : graph.get(node)) {
+                    int nextNode = next[0];
+                    long nextCost = next[1] + totalCost;
+
+                    if (min[start][nextNode] > nextCost) {
+                        min[start][nextNode] = nextCost;
+                        queue.add(new Pair<>(nextNode, nextCost));
+                    }
+                }
+            }
+        }
 
         long ans = 0;
 
