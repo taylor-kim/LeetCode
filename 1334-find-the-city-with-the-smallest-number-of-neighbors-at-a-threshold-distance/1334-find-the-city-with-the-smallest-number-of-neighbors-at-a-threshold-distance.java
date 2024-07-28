@@ -1,111 +1,87 @@
 class Solution {
-
     public int findTheCity(int n, int[][] edges, int distanceThreshold) {
-        // Adjacency list to store the graph
-        List<int[]>[] adjacencyList = new List[n];
-        // Matrix to store shortest path distances from each city
-        int[][] shortestPathMatrix = new int[n][n];
+        return mySol_pq(n, edges, distanceThreshold);
+    }
 
-        // Initialize adjacency list and shortest path matrix
-        for (int i = 0; i < n; i++) {
-            Arrays.fill(shortestPathMatrix[i], Integer.MAX_VALUE); // Set all distances to infinity
-            shortestPathMatrix[i][i] = 0; // Distance to itself is zero
-            adjacencyList[i] = new ArrayList<>();
-        }
+    public int mySol_pq(int n, int[][] edges, int distanceThreshold) {
+        Map<Integer, List<int[]>> graph = new HashMap();
 
-        // Populate the adjacency list with edges
         for (int[] edge : edges) {
-            int start = edge[0];
-            int end = edge[1];
-            int weight = edge[2];
-            adjacencyList[start].add(new int[] { end, weight });
-            adjacencyList[end].add(new int[] { start, weight }); // For undirected graph
+            graph.computeIfAbsent(edge[0], k -> new ArrayList()).add(new int[] {edge[1], edge[2]});
+            graph.computeIfAbsent(edge[1], k -> new ArrayList()).add(new int[] {edge[0], edge[2]});
         }
 
-        // Compute shortest paths from each city using Dijkstra's algorithm
-        for (int i = 0; i < n; i++) {
-            dijkstra(n, adjacencyList, shortestPathMatrix[i], i);
-        }
+        int minCount = Integer.MAX_VALUE;
+        int ans = -1;
 
-        // Find the city with the fewest number of reachable cities within the distance threshold
-        return getCityWithFewestReachable(
-            n,
-            shortestPathMatrix,
-            distanceThreshold
-        );
-    }
-
-    // Dijkstra's algorithm to find shortest paths from a source city
-    void dijkstra(
-        int n,
-        List<int[]>[] adjacencyList,
-        int[] shortestPathDistances,
-        int source
-    ) {
-        // Priority queue to process nodes with the smallest distance first
-        PriorityQueue<int[]> priorityQueue = new PriorityQueue<>((a, b) ->
-            (a[1] - b[1])
-        );
-        priorityQueue.add(new int[] { source, 0 });
-        Arrays.fill(shortestPathDistances, Integer.MAX_VALUE); // Set all distances to infinity
-        shortestPathDistances[source] = 0; // Distance to source itself is zero
-
-        // Process nodes in priority order
-        while (!priorityQueue.isEmpty()) {
-            int[] current = priorityQueue.remove();
-            int currentCity = current[0];
-            int currentDistance = current[1];
-            if (currentDistance > shortestPathDistances[currentCity]) {
-                continue;
+        for (int node = 0; node < n; node++) {
+            if (!graph.containsKey(node)) {
+                minCount = 0;
+                ans = node;
             }
 
-            // Update distances to neighboring cities
-            for (int[] neighbor : adjacencyList[currentCity]) {
-                int neighborCity = neighbor[0];
-                int edgeWeight = neighbor[1];
-                if (
-                    shortestPathDistances[neighborCity] >
-                    currentDistance + edgeWeight
-                ) {
-                    shortestPathDistances[neighborCity] = currentDistance +
-                    edgeWeight;
-                    priorityQueue.add(
-                        new int[] {
-                            neighborCity,
-                            shortestPathDistances[neighborCity],
-                        }
-                    );
+            int count = countOfNeighbors(node, graph, distanceThreshold, n);
+
+            // System.out.println(String.format("city:%d, count:%d", node, count));
+
+            if (minCount >= count) {
+                minCount = count;
+                ans = node;
+            }
+        }
+
+        return ans;
+    }
+
+    private int countOfNeighbors(int start, Map<Integer, List<int[]>> graph, int limit, int n) {
+        Queue<int[]> queue = new PriorityQueue<>((a, b) -> {
+            return a[1] - b[1];
+        });
+
+        int[] shortestDist = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            shortestDist[i] = Integer.MAX_VALUE;
+        }
+
+        // if (graph.containsKey(start)) {
+        //     for (int[] next : graph.get(start)) {
+        //         queue.add(new int[] {next[0], next[1]});
+        //     }
+        // }
+        shortestDist[start] = 0;
+
+        queue.add(new int[] {start, 0});
+
+        Set<Integer> counter = new HashSet();
+
+        int minDistance = Integer.MAX_VALUE;
+
+        while (!queue.isEmpty()) {
+            int node = queue.peek()[0];
+            int dist = queue.poll()[1];
+
+            // if (shortestDist[node] < dist) continue;
+
+            // shortestDist[node] = dist;
+
+            // System.out.println(String.format("start:%d, current:%d, dist:%d", start, node, dist));
+
+            if (graph.containsKey(node)) {
+                for (int[] next : graph.get(node)) {
+                    int nextNode = next[0];
+                    int nextDist = next[1] + dist;
+
+                    if (shortestDist[nextNode] > nextDist && nextDist <= limit) {
+                        shortestDist[nextNode] = nextDist;
+                        queue.add(new int[] {nextNode, nextDist});
+
+                        counter.add(nextNode);
+                    }
                 }
             }
         }
-    }
 
-    // Determine the city with the fewest number of reachable cities within the distance threshold
-    int getCityWithFewestReachable(
-        int n,
-        int[][] shortestPathMatrix,
-        int distanceThreshold
-    ) {
-        int cityWithFewestReachable = -1;
-        int fewestReachableCount = n;
-
-        // Count number of cities reachable within the distance threshold for each city
-        for (int i = 0; i < n; i++) {
-            int reachableCount = 0;
-            for (int j = 0; j < n; j++) {
-                if (i == j) {
-                    continue;
-                } // Skip self
-                if (shortestPathMatrix[i][j] <= distanceThreshold) {
-                    reachableCount++;
-                }
-            }
-            // Update the city with the fewest reachable cities
-            if (reachableCount <= fewestReachableCount) {
-                fewestReachableCount = reachableCount;
-                cityWithFewestReachable = i;
-            }
-        }
-        return cityWithFewestReachable;
+        return counter.size();
     }
 }
