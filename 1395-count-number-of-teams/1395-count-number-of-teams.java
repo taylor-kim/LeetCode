@@ -1,14 +1,55 @@
 class Solution {
     public int numTeams(int[] rating) {
-        return mySol_nnn(rating);
+        return official_topdown(rating);
     }
 
-    public int mySol_topdown2(int[] rating) {
-        return mySol_topdown2(rating, 0, 1, 2);
+    public int official_topdown(int[] rating) {
+        int n = rating.length;
+        Integer[][] incDp = new Integer[n][4];
+        Integer[][] decDp = new Integer[n][4];
+
+        int ans = 0;
+
+        for (int i = 0; i < n; i++) {
+            ans += offi_topdown(rating, i, 1, incDp, true) + offi_topdown(rating, i, 1, decDp, false);
+        }
+
+        return ans;
     }
 
-    public int mySol_topdown2(int[] rating, int i, int j, int k) {
+    private int offi_topdown(int[] rating, int index, int size, Integer[][] dp, boolean inc) {
+        if (index >= rating.length) return 0;
+
+        if (size == 3) return 1;
+
+        if (dp[index][size] != null) {
+            return dp[index][size];
+        }
+
+        int ans = 0;
+
+        for (int next = index + 1; next < rating.length; next++) {
+            if (inc && rating[index] < rating[next]) {
+                ans += offi_topdown(rating, next, size + 1, dp, inc);
+            } else if (!inc && rating[index] > rating[next]) {
+                ans += offi_topdown(rating, next, size + 1, dp, inc);
+            }
+        }
+
+        return ans;
+    }
+
+    public int mySol_topdown2_MLE(int[] rating) {
+        int n = rating.length;
+        return mySol_topdown2(rating, 0, 1, 2, new boolean[n][n][n]);
+    }
+
+    public int mySol_topdown2(int[] rating, int i, int j, int k, boolean[][][] visit) {
         if (k >= rating.length) return 0;
+
+        if (visit[i][j][k]) return 0;
+
+        visit[i][j][k] = true;
 
         int ans = 0;
 
@@ -17,9 +58,11 @@ class Solution {
 
         int delta = inc + dec;
 
-        ans += mySol_topdown2(rating, i, j, k + 1);
-        ans += mySol_topdown2(rating, i, k, k + 1);
-        ans += mySol_topdown2(rating, j, k, k + 1);
+        ans += mySol_topdown2(rating, i, j, k + 1, visit);
+        ans += mySol_topdown2(rating, i, k, k + 1, visit);
+        ans += mySol_topdown2(rating, j, k, k + 1, visit);
+
+        // System.out.println(String.format("i:%d, j:%d, k:%d, delta:%d", i, j, k, delta));
 
         return delta + ans;
     }
