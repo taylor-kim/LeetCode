@@ -4,33 +4,29 @@ class Solution {
     }
 
     public int mySol_topdown(int[][] books, int shelfWidth) {
-        return mySol_topdown(books, shelfWidth, 0, shelfWidth, 0, new Integer[books.length][shelfWidth + 1]);
+        return mySol_topdown(books, shelfWidth, 0, new Integer[books.length]);
     }
 
-    public int mySol_topdown(int[][] books, int shelfWidth
-            , int index, int width, int maxH, Integer[][] memo) {
-            if (index == books.length - 1) {
-                if (width >= books[index][0]) return Math.max(maxH, books[index][1]);
-                return maxH + books[index][1];
-            }
+    public int mySol_topdown(int[][] books, int shelfWidth, int index, Integer[] memo) {
+        if (index >= books.length) return 0;
 
-            if (memo[index][width] != null) return memo[index][width];
+        if (memo[index] != null) return memo[index];
 
-            int curW = books[index][0];
-            int curH = books[index][1];
+        int sumWidth = 0;
+        int maxH = 0;
 
-            int only = maxH + mySol_topdown(books, shelfWidth, index + 1, shelfWidth - curW, curH, memo);
+        int ans = Integer.MAX_VALUE;
 
-            int newWidth = width - curW;
-            
-            if (newWidth >= 0) {
-                int newMaxH = Math.max(maxH, curH);
+        for (int i = index; i < books.length; i++) {
+            sumWidth += books[i][0];
 
-                int include = mySol_topdown(books, shelfWidth, index + 1, newWidth, newMaxH, memo);
+            if (sumWidth > shelfWidth) break;
 
-                return memo[index][width] = Math.min(only, include);
-            }
+            maxH = Math.max(maxH, books[i][1]);
 
-            return memo[index][width] = only;
+            ans = Math.min(ans, maxH + mySol_topdown(books, shelfWidth, i + 1, memo));
+        }
+
+        return memo[index] = ans;
     }
 }
