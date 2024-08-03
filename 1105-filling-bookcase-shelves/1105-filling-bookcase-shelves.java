@@ -4,33 +4,33 @@ class Solution {
     }
 
     public int mySol_topdown(int[][] books, int shelfWidth) {
-        return mySol_topdown(books, shelfWidth, 0, new Integer[books.length]);
+        return mySol_topdown(books, shelfWidth, 0, shelfWidth, 0, new Integer[books.length][shelfWidth + 1]);
     }
 
-    public int mySol_topdown(int[][] books, int shelfWidth, int index, Integer[] memo) {
-            if (index >= books.length) return 0;
-
-            if (memo[index] != null) {
-                return memo[index];
+    public int mySol_topdown(int[][] books, int shelfWidth
+            , int index, int width, int maxH, Integer[][] memo) {
+            if (index == books.length - 1) {
+                if (width >= books[index][0]) return Math.max(maxH, books[index][1]);
+                return maxH + books[index][1];
             }
 
-            int ans = Integer.MAX_VALUE;
+            if (memo[index][width] != null) return memo[index][width];
 
-            int curW = 0;
-            int curH = 0;
+            int curW = books[index][0];
+            int curH = books[index][1];
 
-            for (int i = index; i < books.length; i++) {
-                curW += books[i][0];
+            int only = maxH + mySol_topdown(books, shelfWidth, index + 1, shelfWidth - curW, curH, memo);
 
-                if (curW > shelfWidth) {
-                    break;
-                }
+            int newWidth = width - curW;
+            
+            if (newWidth >= 0) {
+                int newMaxH = Math.max(maxH, curH);
 
-                curH = Math.max(curH, books[i][1]);
+                int include = mySol_topdown(books, shelfWidth, index + 1, newWidth, newMaxH, memo);
 
-                ans = Math.min(ans, curH + mySol_topdown(books, shelfWidth, i + 1, memo));
+                return memo[index][width] = Math.min(only, include);
             }
 
-            return memo[index] = ans;
+            return memo[index][width] = only;
     }
 }
