@@ -1,6 +1,35 @@
 class Solution {
     public int minSwaps(int[] nums) {
-        return mySol_by_hint2(nums);
+        return mySol_by_hint2_opt(nums);
+    }
+
+    public int mySol_by_hint2_opt(int[] nums) {
+        int n = nums.length;
+        int k = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 1) k++;
+        }
+
+        int countZero = 0;
+
+        for (int i = 0; i < k; i++) if (nums[i] == 0) countZero++;
+
+        int ans = countZero;
+
+        int left = 0;
+
+        for (int right = k; right < nums.length + k - 1; right++) {
+            if (nums[right % n] == 0) countZero++;
+
+            while (right - left + 1 > k) {
+                if (nums[left++] == 0) countZero--;
+            }
+
+            ans = Math.min(ans, countZero);
+        }
+
+        return ans;
     }
 
     public int mySol_by_hint2(int[] nums) {
