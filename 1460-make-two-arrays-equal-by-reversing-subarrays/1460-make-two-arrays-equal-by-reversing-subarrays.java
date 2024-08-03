@@ -1,6 +1,26 @@
 class Solution {
     public boolean canBeEqual(int[] target, int[] arr) {
-        return mySol_freq2(target, arr);
+        return official_map(target, arr);
+    }
+
+    public boolean official_map(int[] target, int[] arr) {
+        Map<Integer, Integer> freq = new HashMap();
+
+        for (int t : target) {
+            freq.put(t, freq.getOrDefault(t, 0) + 1);
+        }
+
+        for (int n : arr) {
+            if (!freq.containsKey(n)) return false;
+
+            freq.put(n, freq.getOrDefault(n, 0) - 1);
+
+            if (freq.containsKey(n) && freq.get(n) == 0) {
+                freq.remove(n);
+            }
+        }
+
+        return freq.size() == 0;
     }
 
     public boolean mySol_freq2(int[] target, int[] arr) {
