@@ -1,38 +1,79 @@
 class Solution {
-
     public int minSwaps(int[] nums) {
-        // Calculate the minimum swaps needed to group all 1s or all 0s together
-        int op1 = minSwapsHelper(nums, 0); // Grouping all 0s together
-        int op2 = minSwapsHelper(nums, 1); // Grouping all 1s together
-        return Math.min(op1, op2);
+        return mySol_by_hint2(nums);
     }
 
-    // Helper function to calculate the minimum swaps required to group all `val` together
-    public int minSwapsHelper(int[] data, int val) {
-        int length = data.length;
-        int[] rightSuffixSum = new int[length + 1];
+    public int mySol_by_hint2(int[] nums) {
+        int n = nums.length;
+        int[] circle = new int[n * 2];
+        int k = 0;
 
-        // Construct the suffix sum array for counting opposite values (val ^ 1)
-        for (int i = length - 1; i >= 0; i--) {
-            rightSuffixSum[i] = rightSuffixSum[i + 1];
-            if (data[i] == (val ^ 1)) rightSuffixSum[i]++;
+        for (int i = 0; i < circle.length; i++) {
+            circle[i] = nums[i % n];
+            if (i < n && nums[i] == 1) k++;
         }
-        // Total zeros in the array if `val` is 1 (or vice versa)
-        int totalSwapsNeeded = rightSuffixSum[0];
-        // Track current number of required swaps in the current segment
-        int currentSwapCount = 0;
-        int minimumSwaps =
-            totalSwapsNeeded - rightSuffixSum[length - totalSwapsNeeded];
 
-        // Iterate to find the minimum swaps by sliding the potential block of grouped `val`
-        for (int i = 0; i < totalSwapsNeeded; i++) {
-            if (data[i] == (val ^ 1)) currentSwapCount++;
-            int remaining = (totalSwapsNeeded - i - 1);
-            int requiredSwaps =
-                ((i + 1) - currentSwapCount) +
-                (remaining - rightSuffixSum[length - remaining]);
-            minimumSwaps = Math.min(minimumSwaps, requiredSwaps);
+        int countZero = 0;
+
+        for (int i = 0; i < k; i++) if (circle[i] == 0) countZero++;
+
+        int ans = countZero;
+
+        int left = 0;
+
+        for (int right = k; right < circle.length; right++) {
+            if (circle[right] == 0) countZero++;
+
+            while (right - left + 1 > k) {
+                if (circle[left++] == 0) countZero--;
+            }
+
+            ans = Math.min(ans, countZero);
         }
-        return minimumSwaps;
+
+        return ans;
+    }
+
+    public int mySol_by_topics_fail(int[] nums) {
+        int n = nums.length;
+        int[] circle = new int[n * 2];
+        int k = 0;
+
+        for (int i = 0; i < circle.length; i++) {
+            circle[i] = nums[i % n];
+            if (circle[i] == 1) k++;
+        }
+
+        int left = 0;
+        
+        for (int right = 0; right < circle.length; right++) {
+            while (left <= right && circle[left] == 0) {
+                left++;
+            }
+        }
+
+        return 0;
+    }
+
+    public int mySol_fail(int[] nums) {
+        int n = nums.length;
+        int count = 0;
+        int left = -1;
+        int right = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (nums[i] == 1) {
+                count++;
+                if (left == -1) left = i;
+                right = i;
+            }
+        }
+
+        int length = right - left + 1;
+        int length2 = (n - right - 1) + left;
+
+        System.out.println(String.format("count:%d, length:%d, length2:%d", count, length, length2));
+
+        return Math.min(length - count, length2);
     }
 }
