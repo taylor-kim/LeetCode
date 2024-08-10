@@ -15,17 +15,10 @@ class Solution {
                 char c = line.charAt(j);
 
                 if (c == '/') {
-                    // expanded[i * 3][j * 3 + 2] = 1;
-                    // expanded[i * 3 + 1][j * 3 + 1] = 1;
-                    // expanded[i * 3 + 2][j * 3] = 1;
                     for (int k = 0; k < multi; k++) {
                         expanded[i * multi + k][j * multi + (multi - k - 1)] = 1;
                     }
                 } else if (c == '\\') {
-                    // expanded[i * 3][j * 3] = 1;
-                    // expanded[i * 3 + 1][j * 3 + 1] = 1;
-                    // expanded[i * 3 + 2][j * 3 + 2] = 1;
-
                     for (int k = 0; k < multi; k++) {
                         expanded[i * multi + k][j * multi + k] = 1;
                     }
