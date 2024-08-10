@@ -5,7 +5,8 @@ class Solution {
 
     public int official_expanded_grid(String[] grid) {
         int n = grid.length;
-        int[][] expanded = new int[n * 3][n * 3];
+        int multi = 3;
+        int[][] expanded = new int[n * multi][n * multi];
 
         for (int i = 0; i < n; i++) {
             String line = grid[i];
@@ -14,13 +15,20 @@ class Solution {
                 char c = line.charAt(j);
 
                 if (c == '/') {
-                    expanded[i * 3][j * 3 + 2] = 1;
-                    expanded[i * 3 + 1][j * 3 + 1] = 1;
-                    expanded[i * 3 + 2][j * 3] = 1;
+                    // expanded[i * 3][j * 3 + 2] = 1;
+                    // expanded[i * 3 + 1][j * 3 + 1] = 1;
+                    // expanded[i * 3 + 2][j * 3] = 1;
+                    for (int k = 0; k < multi; k++) {
+                        expanded[i * multi + k][j * multi + (multi - k - 1)] = 1;
+                    }
                 } else if (c == '\\') {
-                    expanded[i * 3][j * 3] = 1;
-                    expanded[i * 3 + 1][j * 3 + 1] = 1;
-                    expanded[i * 3 + 2][j * 3 + 2] = 1;
+                    // expanded[i * 3][j * 3] = 1;
+                    // expanded[i * 3 + 1][j * 3 + 1] = 1;
+                    // expanded[i * 3 + 2][j * 3 + 2] = 1;
+
+                    for (int k = 0; k < multi; k++) {
+                        expanded[i * multi + k][j * multi + k] = 1;
+                    }
                 }
             }
         }
