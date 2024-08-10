@@ -1,9 +1,31 @@
 class Solution {
     public int[][] spiralMatrixIII(int rows, int cols, int rStart, int cStart) {
-        return mySol(rows, cols, rStart, cStart);
+        return official(rows, cols, rStart, cStart);
     }
 
     private int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+    public int[][] official(int rows, int cols, int rStart, int cStart) {
+        int[][] ans = new int[rows * cols][2];
+        int index = 0;
+
+        for (int step = 1, direction = 0; index < ans.length; step++) {
+            for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < step; j++) {
+                    if (isIn(rStart, cStart, rows, cols)) {
+                        ans[index][0] = rStart;
+                        ans[index++][1] = cStart;
+                    }
+                    rStart += dirs[direction][0];
+                    cStart += dirs[direction][1];
+                }
+
+                direction = (direction + 1) % 4;
+            }
+        }
+
+        return ans;
+    }
 
     public int[][] mySol(int rows, int cols, int rStart, int cStart) {
         int[][] ans = new int[rows * cols][];
