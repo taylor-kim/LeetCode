@@ -21,6 +21,8 @@ class Solution {
 
         int[][] ans2 = new int[rows * cols][2];
 
+        int changeDir = 0;
+
         while (number <= rows * cols) {
             if (ans[y][x] == 0) {
                 ans[y][x] = number++;
@@ -37,11 +39,17 @@ class Solution {
                 y = ny;
                 x = nx;
 
-                if (diff == dist && ans[ny][nx] != 0) {
-                    dist++;
-                }
+                // if (diff == dist && ans[ny][nx] != 0) {
+                //     dist++;
+                // }
             } else {
                 direction = (direction + 1) % 4;
+                changeDir++;
+            }
+
+            if (changeDir == 4) {
+                dist++;
+                changeDir = 0;
             }
         }
 
