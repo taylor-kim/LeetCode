@@ -1,121 +1,80 @@
 class Solution {
     public int numIslands(char[][] grid) {
-        return tryAgain_20230529(grid);
+        return mySol_bfs(grid);
     }
 
-    public int tryAgain_20230529(char[][] grid) {
+    public int mySol_bfs(char[][] grid) {
+        Queue<int[]> queue = new LinkedList();
+
         int m = grid.length;
         int n = grid[0].length;
-        int count = 0;
+
+        int ans = 0;
+
+        int[][] directions = {
+            {-1, 0}
+            , {1, 0}
+            , {0, -1}
+            , {0, 1}
+        };
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (grid[i][j] == '1') {
-                    dfs_20230529(grid, i, j);
-                    count++;
+                    queue.add(new int[] {i, j});
+                    grid[i][j] = '2';
+
+                    while (!queue.isEmpty()) {
+                        int r = queue.peek()[0];
+                        int c = queue.poll()[1];
+
+                        for (int[] d : directions) {
+                            int nr = r + d[0];
+                            int nc = c + d[1];
+
+                            if (nr >= 0 && nr < m && nc >= 0 && nc < n && grid[nr][nc] == '1') {
+                                grid[nr][nc] = '2';
+                                queue.add(new int[] {nr, nc});
+                            }
+                        }
+                    }
+
+                    ans++;
                 }
             }
         }
 
-        return count;
+        return ans;
     }
 
-    public void dfs_20230529(char[][] grid, int i, int j) {
-        if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length) return;
+    public int mySol_dfs(char[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
 
-        if (grid[i][j] != '1') return;
+        int ans = 0;
 
-        grid[i][j] = '2';
-
-        dfs_20230529(grid, i + 1, j);
-        dfs_20230529(grid, i - 1, j);
-        dfs_20230529(grid, i, j + 1);
-        dfs_20230529(grid, i, j - 1);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public int tryAgain(char[][] grid) {
-        int count = 0;
-
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[i].length; j++) {
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
                 if (grid[i][j] == '1') {
-                    dfs(grid, i, j);
-                    count++;
+                    mySol_dfs(i, j, grid);
+                    ans++;
                 }
             }
         }
 
-        return count;
+        return ans;
     }
 
-    private void dfs(char[][] grid, int y, int x) {
-        if (y < 0 || x < 0 || y >= grid.length || x >= grid[y].length) {
-            return;
-        }
+    public void mySol_dfs(int r, int c, char[][] grid) {
+        if (r < 0 || r >= grid.length || c < 0 || c >= grid[0].length) return;
 
-        if (grid[y][x] == '1') {
-            grid[y][x] = '2';
+        if (grid[r][c] != '1') return;
 
-            dfs(grid, y - 1, x);
-            dfs(grid, y + 1, x);
-            dfs(grid, y, x - 1);
-            dfs(grid, y, x + 1);
-        }
-    }
+        grid[r][c] = '2';
 
-    public int mySol(char[][] grid) {
-        int groupNumber = 0;
-
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[0].length; j++) {
-                if (grid[i][j] == '1') {
-                    doWithRecursion(grid, i, j);
-
-                    groupNumber++;
-                }
-            }
-        }
-
-        return groupNumber;
-    }
-
-    private void doWithRecursion(char[][] grid, int y, int x) {
-        if (y < 0 || x < 0 || y >= grid.length || x >= grid[0].length) {
-            return;
-        }
-
-        if (grid[y][x] == '1') {
-            grid[y][x] = '2';
-            doWithRecursion(grid, y - 1, x);
-            doWithRecursion(grid, y + 1, x);
-            doWithRecursion(grid, y, x - 1);
-            doWithRecursion(grid, y, x + 1);
-        }        
+        mySol_dfs(r - 1, c, grid);
+        mySol_dfs(r + 1, c, grid);
+        mySol_dfs(r, c - 1, grid);
+        mySol_dfs(r, c + 1, grid);
     }
 }
