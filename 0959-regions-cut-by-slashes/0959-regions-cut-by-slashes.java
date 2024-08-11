@@ -1,6 +1,79 @@
 class Solution {
     public int regionsBySlashes(String[] grid) {
-        return official_disjoinset_triangle(grid);
+        return official_disjoinset_graph(grid);
+    }
+
+    public int official_disjoinset_graph(String[] grid) {
+        int n = grid.length;
+        int n2 = n + 1;
+        
+        UnionFindGraph ufg = new UnionFindGraph(n2 * n2);
+
+        for (int i = 0; i < n2; i++) {
+            // for (int j = 0; j < n2; j++) {
+            //     if (i == 0 || j == 0 || i == n2 - 1 || j == n2 - 1) {
+            //         ufg.parents[i * n2 + j] = 0;
+            //     }
+            // }
+            int top = i;
+            int bot = (n2 - 1) * n2 + i;
+            int left = i * n2;
+            int right = i * n2 + n2 - 1;
+
+            ufg.parents[top] = 0;
+            ufg.parents[bot] = 0;
+            ufg.parents[left] = 0;
+            ufg.parents[right] = 0;
+        }
+
+        ufg.parents[0] = -1;
+        int regionCount = 1;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i].charAt(j) == '/') {
+                    int topRight = i * n2 + j + 1;
+                    int bottomLeft = (i + 1) * n2 + j;
+                    regionCount += ufg.union(topRight, bottomLeft);
+                } else if (grid[i].charAt(j) == '\\') {
+                    int topLeft = i * n2 + j;
+                    int bottomRight = (i + 1) * n2 + j + 1;
+                    regionCount += ufg.union(topLeft, bottomRight);
+                }
+            }
+        }
+
+        return regionCount;
+    }
+
+    public class UnionFindGraph {
+        int[] parents;
+
+        UnionFindGraph(int n) {
+            parents = new int[n];
+            Arrays.fill(parents, -1);
+        }
+
+        int union(int a, int b) {
+            a = find(a);
+            b = find(b);
+
+            if (a == b) {
+                return 1;
+            } else {
+                parents[a] = b;
+
+                return 0;
+            }
+        }
+
+        int find(int a) {
+            if (parents[a] == -1) {
+                return a;
+            }
+
+            return parents[a] = find(parents[a]);
+        }
     }
 
     public int official_disjoinset_triangle(String[] grid) {
