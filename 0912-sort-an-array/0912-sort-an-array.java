@@ -1,6 +1,6 @@
 class Solution {
     public int[] sortArray(int[] nums) {
-        return bucketSort(nums);
+        return quickSort(nums);
     }
 
     public int[] bucketSort(int[] nums) {
