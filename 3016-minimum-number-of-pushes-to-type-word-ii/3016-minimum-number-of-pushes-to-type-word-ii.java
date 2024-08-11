@@ -1,36 +1,38 @@
-public class Solution {
-
+class Solution {
     public int minimumPushes(String word) {
-        // Frequency array to store count of each letter
-        int[] frequency = new int[26];
+        return mySol(word);
+    }
 
-        // Count occurrences of each letter
+    public int mySol(String word) {
+        int[] freq = new int[26];
+
+        int max = 0;
+
         for (char c : word.toCharArray()) {
-            frequency[c - 'a']++;
+            max = Math.max(max, ++freq[c - 'a']);
         }
 
-        // Sort frequencies in descending order
-        Arrays.sort(frequency);
-        int[] sortedFrequency = new int[26];
-        for (int i = 0; i < 26; i++) {
-            sortedFrequency[i] = frequency[25 - i];
+        int[] bucket = new int[max + 1];
+
+        for (int f : freq) {
+            if (f > 0) {
+                bucket[f]++;
+            }
         }
 
-        /*
-        // Or do like this 
-        // Sort frequencies in descending order
-        Integer[] sortedFrequency = Arrays.stream(frequency).boxed().toArray(Integer[]::new);
-        Arrays.sort(sortedFrequency, (a, b) -> b - a);
-        */
+        int index = max;
+        int countOfChar = 0;
 
-        int totalPushes = 0;
+        int ans = 0;
 
-        // Calculate total number of presses
-        for (int i = 0; i < 26; i++) {
-            if (sortedFrequency[i] == 0) break;
-            totalPushes += (i / 8 + 1) * sortedFrequency[i];
+        while (index > 0) {
+            while (bucket[index]-- > 0) {
+                ans += (countOfChar++ / 8 + 1) * index;
+            }
+
+            index--;
         }
 
-        return totalPushes;
+        return ans;
     }
 }
