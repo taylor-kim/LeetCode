@@ -56,7 +56,7 @@ class Solution {
             }
         }
 
-        if (pivot <= hi) {
+        if (pivot < hi) {
             nums[hi] = nums[pivot];
             nums[pivot] = pivotValue;
         }
