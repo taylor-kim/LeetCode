@@ -1,6 +1,46 @@
 class Solution {
     public int numMagicSquaresInside(int[][] grid) {
-        return mySol_bruteForce(grid);
+        return official_abracadabra(grid);
+    }
+
+    public int official_abracadabra(int[][] grid) {
+        int rows = grid.length;
+        int cols = grid[0].length;
+        
+        int count = 0;
+
+        for (int i = 0; i + 2 < rows; i++) {
+            for (int j = 0; j + 2 < cols; j++) {
+                if (abracadabra(grid, i, j)) {
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    private boolean abracadabra(int[][] grid, int row, int col) {
+        String seq = "2943816729438167";
+        String seqReversed = "7618349276183492";
+
+        StringBuilder sb = new StringBuilder();
+        int[] borderIndices = {0,1,2,5,8,7,6,3};
+
+        for (int i : borderIndices) {
+            int num = grid[row + i / 3][col + (i % 3)];
+
+            sb.append(num);
+        }
+
+        String border = sb.toString();
+
+        return grid[row][col] % 2 == 0
+                && grid[row + 1][col + 1] == 5
+                && (
+                    seq.contains(border)
+                    || seqReversed.contains(border)
+                );
     }
 
     public int mySol_bruteForce(int[][] grid) {
@@ -17,9 +57,9 @@ class Solution {
             }
         }
 
-        for (int[] row : grid) {
-            System.out.println(Arrays.toString(row));
-        }
+        // for (int[] row : grid) {
+        //     System.out.println(Arrays.toString(row));
+        // }
 
         return count;
     }
