@@ -1,67 +1,78 @@
 class Solution {
-
     public int numMagicSquaresInside(int[][] grid) {
-        int ans = 0;
-        int m = grid.length;
-        int n = grid[0].length;
-        for (int row = 0; row + 2 < m; row++) {
-            for (int col = 0; col + 2 < n; col++) {
-                if (isMagicSquare(grid, row, col)) {
-                    ans++;
+        return mySol_bruteForce(grid);
+    }
+
+    public int mySol_bruteForce(int[][] grid) {
+        int rows = grid.length;
+        int cols = grid[0].length;
+        
+        int count = 0;
+
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (isMagic(grid, i, j)) {
+                    count++;
                 }
             }
         }
-        return ans;
+
+        for (int[] row : grid) {
+            System.out.println(Arrays.toString(row));
+        }
+
+        return count;
     }
 
-    private boolean isMagicSquare(int[][] grid, int row, int col) {
-        boolean[] seen = new boolean[10];
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                int num = grid[row + i][col + j];
-                if (num < 1 || num > 9) return false;
-                if (seen[num]) return false;
-                seen[num] = true;
+    private boolean isMagic(int[][] grid, int y, int x) {
+        int rows = grid.length;
+        int cols = grid[0].length;
+
+        if (y + 2 >= rows || x + 2 >= cols) {
+            return false;
+        }
+
+        int[] freq = new int[16];
+
+        for (int i = y; i < y + 3; i++) {
+            for (int j = x; j < x + 3; j++) {
+                int num = grid[i][j];
+
+                if (freq[num]++ > 0) {
+                    return false;
+                }
             }
         }
 
-        // check if diagonal sums are same value
-        int diagonal1 =
-            grid[row][col] + grid[row + 1][col + 1] + grid[row + 2][col + 2];
-        int diagonal2 =
-            grid[row + 2][col] + grid[row + 1][col + 1] + grid[row][col + 2];
-
-        if (diagonal1 != diagonal2) return false;
-
-        // check if all row sums share the same value as the diagonal sums
-        int row1 = grid[row][col] + grid[row][col + 1] + grid[row][col + 2];
-        int row2 =
-            grid[row + 1][col] +
-            grid[row + 1][col + 1] +
-            grid[row + 1][col + 2];
-        int row3 =
-            grid[row + 2][col] +
-            grid[row + 2][col + 1] +
-            grid[row + 2][col + 2];
-
-        if (!(row1 == diagonal1 && row2 == diagonal1 && row3 == diagonal1)) {
-            return false;
+        for (int i = 1; i <= 9; i++) {
+            if (freq[i] != 1) {
+                return false;
+            }
         }
 
-        // check if all column sums share same value as the diagonal sums
-        int col1 = grid[row][col] + grid[row + 1][col] + grid[row + 2][col];
-        int col2 =
-            grid[row][col + 1] +
-            grid[row + 1][col + 1] +
-            grid[row + 2][col + 1];
-        int col3 =
-            grid[row][col + 2] +
-            grid[row + 1][col + 2] +
-            grid[row + 2][col + 2];
+        int targetSum = grid[y][x] + grid[y][x + 1] + grid[y][x + 2];
 
-        if (!(col1 == diagonal1 && col2 == diagonal1 && col3 == diagonal2)) {
-            return false;
+        for (int i = 0; i < 3; i++) {
+            int rowSum = grid[y + i][x] + grid[y + i][x + 1] + grid[y + i][x + 2];
+
+            if (rowSum != targetSum) {
+                return false;
+            }
+
+            int colSum = grid[y][x + i] + grid[y + 1][x + i] + grid[y + 2][x + i];
+
+            if (colSum != targetSum) {
+                return false;
+            }
         }
+
+        int d1 = grid[y][x] + grid[y + 1][x + 1] + grid[y + 2][x + 2];
+
+        if (d1 != targetSum) return false;
+
+        int d2 = grid[y][x + 2] + grid[y + 1][x + 1] + grid[y + 2][x];
+
+        if (d2 != targetSum) return false;
 
         return true;
     }
