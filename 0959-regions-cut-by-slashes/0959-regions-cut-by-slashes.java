@@ -1,6 +1,62 @@
 class Solution {
     public int regionsBySlashes(String[] grid) {
-        return official_expanded_grid(grid);
+        return official_disjoinset(grid);
+    }
+
+    public int official_disjoinset(String[] grid) {
+        int n = grid.length;
+        int totalTriangles = n * n * 4;
+        int[] parents = new int[totalTriangles];
+
+        for (int i = 0; i < parents.length; i++) parents[i] = i;
+
+        int regionCount = totalTriangles;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i > 0) {
+                    regionCount -= union(parents, getIndex(n, i - 1, j, 2), getIndex(n, i, j, 0));
+                }
+                if (j > 0) {
+                    regionCount -= union(parents, getIndex(n, i, j - 1, 1), getIndex(n, i, j, 3));
+                }
+                if (grid[i].charAt(j) != '/') {
+                    regionCount -= union(parents, getIndex(n, i, j, 0), getIndex(n, i, j, 1));
+                    regionCount -= union(parents, getIndex(n, i, j, 2), getIndex(n, i, j, 3));
+                }
+                if (grid[i].charAt(j) != '\\') {
+                    regionCount -= union(parents, getIndex(n, i, j, 0), getIndex(n, i, j, 3));
+                    regionCount -= union(parents, getIndex(n, i, j, 1), getIndex(n, i, j, 2));
+                }
+            }
+        }
+
+        return regionCount;
+    }
+
+    private int getIndex(int n, int row, int col, int triNum) {
+        return (row * n * 4) + (col * 4) + triNum;
+    }
+
+    private int union(int[] parents, int a, int b) {
+        a = find(parents, a);
+        b = find(parents, b);
+
+        if (a != b) {
+            parents[b] = a;
+
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    private int find(int[] parents, int a) {
+        if (parents[a] == a) {
+            return a;
+        }
+
+        return parents[a] = find(parents, parents[a]);
     }
 
     public int official_expanded_grid(String[] grid) {
