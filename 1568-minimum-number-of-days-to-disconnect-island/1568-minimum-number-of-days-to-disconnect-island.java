@@ -1,120 +1,100 @@
 class Solution {
+
+    // Directions for adjacent cells: right, left, down, up
+    private static final int[][] DIRECTIONS = {
+        { 0, 1 },
+        { 0, -1 },
+        { 1, 0 },
+        { -1, 0 },
+    };
+
     public int minDays(int[][] grid) {
-        return mySol(grid);
-    }
-
-    private int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
-
-    public int mySol(int[][] grid) {
-        if (count(grid) != 1) return 0;
-
         int rows = grid.length;
         int cols = grid[0].length;
 
-        int[][] deg = new int[rows][cols];
+        // Count initial islands
+        int initialIslandCount = countIslands(grid);
 
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (grid[i][j] == 1) {
-                    deg[i][j]++;
-                    for (int[] d : dirs) {
-                        int ny = i + d[0];
-                        int nx = j + d[1];
+        // Already disconnected or no land
+        if (initialIslandCount != 1) {
+            return 0;
+        }
 
-                        if (isIn(grid, ny, nx) && grid[ny][nx] == 1) {
-                            deg[ny][nx]++;
-                        }
-                    }
+        // Try removing each land cell
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                if (grid[row][col] == 0) continue; // Skip water
+
+                // Temporarily change to water
+                grid[row][col] = 0;
+                int newIslandCount = countIslands(grid);
+
+                // Check if disconnected
+                if (newIslandCount != 1) return 1;
+
+                // Revert change
+                grid[row][col] = 1;
+            }
+        }
+
+        return 2;
+    }
+
+    private int countIslands(int[][] grid) {
+        int rows = grid.length;
+        int cols = grid[0].length;
+        boolean[][] visited = new boolean[rows][cols];
+        int islandCount = 0;
+
+        // Iterate through all cells
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < cols; col++) {
+                // Found new island
+                if (!visited[row][col] && grid[row][col] == 1) {
+                    exploreIsland(grid, row, col, visited);
+                    islandCount++;
                 }
             }
         }
-
-        int ans = 0;
-
-        int[] target = null;
-
-        // for (int[] row : deg) {
-        //     System.out.println(Arrays.toString(row));
-        // }
-
-        while ((target = maxDeg(deg)) != null) {
-            int y = target[0];
-            int x = target[1];
-            deg[y][x] = 0;
-            
-            for (int[] d : dirs) {
-                int ny = y + d[0];
-                int nx = x + d[1];
-                if (isIn(grid, ny, nx) && grid[ny][nx] == 1) {
-                    deg[ny][nx]--;
-                }
-            }
-
-            ans++;
-            grid[y][x] = 0;
-
-            if (count(grid) != 1) return ans;
-        }
-
-        return ans;
+        return islandCount;
     }
 
-    private int[] maxDeg(int[][] deg) {
-        int max = 0;
+    // Helper method to explore all cells of an island
+    private void exploreIsland(
+        int[][] grid,
+        int row,
+        int col,
+        boolean[][] visited
+    ) {
+        visited[row][col] = true;
 
-        int y = -1;
-        int x = -1;
-
-        for (int i = 0; i < deg.length; i++) {
-            for (int j = 0; j < deg[0].length; j++) {
-                if (max < deg[i][j]) {
-                    max = deg[i][j];
-                    y = i;
-                    x = j;
-                }
+        // Check all adjacent cells
+        for (int[] direction : DIRECTIONS) {
+            int newRow = row + direction[0];
+            int newCol = col + direction[1];
+            // Explore if valid land cell
+            if (isValidLandCell(grid, newRow, newCol, visited)) {
+                exploreIsland(grid, newRow, newCol, visited);
             }
-        }
-
-        if (y == -1) return null;
-
-        return new int[] {y, x};
-    }
-
-    private int count(int[][] grid) {
-        int result = 0;
-
-        int[][] copy = new int[grid.length][grid[0].length];
-        for (int i = 0; i < grid.length; i++) {
-            for (int j = 0; j < grid[0].length; j++) {
-                copy[i][j] = grid[i][j];
-            }
-        }
-
-        for (int i = 0; i < copy.length; i++) {
-            for (int j = 0; j < copy[0].length; j++) {
-                if (copy[i][j] == 1) {
-                    dfs(copy, i, j);
-                    result++;
-                }
-            }
-        }
-
-        return result;
-    }
-
-    private void dfs(int[][] grid, int i, int j) {
-        if (!isIn(grid, i, j) || grid[i][j] != 1) {
-            return;
-        }
-
-        grid[i][j] = 0;
-
-        for (int[] d : dirs) {
-            dfs(grid, i + d[0], j + d[1]);
         }
     }
 
-    private boolean isIn(int[][] grid, int ny, int nx) {
-        return ny >= 0 && nx >= 0 && ny < grid.length && nx < grid[0].length;
+    private boolean isValidLandCell(
+        int[][] grid,
+        int row,
+        int col,
+        boolean[][] visited
+    ) {
+        int rows = grid.length;
+        int cols = grid[0].length;
+        // Check bounds, land, and not visited
+        return (
+            row >= 0 &&
+            col >= 0 &&
+            row < rows &&
+            col < cols &&
+            grid[row][col] == 1 &&
+            !visited[row][col]
+        );
     }
 }
