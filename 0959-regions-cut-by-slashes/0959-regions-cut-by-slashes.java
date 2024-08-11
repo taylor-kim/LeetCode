@@ -1,9 +1,9 @@
 class Solution {
     public int regionsBySlashes(String[] grid) {
-        return official_disjoinset(grid);
+        return official_disjoinset_triangle(grid);
     }
 
-    public int official_disjoinset(String[] grid) {
+    public int official_disjoinset_triangle(String[] grid) {
         int n = grid.length;
         int totalTriangles = n * n * 4;
         int[] parents = new int[totalTriangles];
