@@ -1,90 +1,57 @@
 class Solution {
     public int maximumGain(String s, int x, int y) {
-        return official_stack(s, x, y);
+        return tryAgain_20240812(s, x, y);
     }
 
-    public int official_stack(String s, int x, int y) {
+    public int tryAgain_20240812(String s, int x, int y) {
         int ans = 0;
-        String high = x > y ? "ab" : "ba";
-        String low = x > y ? "ba" : "ab";
 
-        String afterHigh = removeString(s, high);
+        String first = "ab";
+        String second = "ba";
 
-        ans += (s.length() - afterHigh.length()) / 2 * Math.max(x, y);
+        if (x < y) {
+            int temp = x;
+            x = y;
+            y = temp;
 
-        String afterLow = removeString(afterHigh, low);
+            first = "ba";
+            second = "ab";
+        }
 
-        ans += (afterHigh.length() - afterLow.length()) / 2 * Math.min(x, y);
+        Stack<Character> stack = new Stack();
+
+        ans += getMaximumScore(s, first, x, stack);
+
+        StringBuilder remain = new StringBuilder();
+
+        while (!stack.isEmpty()) {
+            remain.append(stack.pop());
+        }
+
+        s = remain.reverse().toString();
+
+        // System.out.println(String.format("ans:%d, s:%s", ans, s));
+
+        ans += getMaximumScore(s, second, y, stack);
 
         return ans;
     }
 
-    private String removeString(String s, String match) {
-        Stack<Character> stack = new Stack();
-
-        for (char c : s.toCharArray()) {
-            if (match.charAt(1) == c && !stack.isEmpty() && stack.peek() == match.charAt(0)) {
-                stack.pop();
-            } else {
-                stack.push(c);
-            }
-        }
-
-        StringBuilder sb = new StringBuilder();
-
-        while (!stack.isEmpty()) {
-            sb.append(stack.pop());
-        }
-
-        return sb.reverse().toString();
-    }
-
-    public int try_stack_fail(String s, int x, int y) {
-        Stack<Character> stack = new Stack();
-
-        Map<Character, Character> greedy = new HashMap();
-        Map<Character, Character> second = new HashMap();
-
-        if (x > y) {
-            greedy.put('a', 'b');
-            second.put('b', 'a');
-        } else {
-            greedy.put('b', 'a');
-            second.put('a', 'b');
-        }
+    public int getMaximumScore(String s, String target, int score, Stack<Character> stack) {
+        char a = target.charAt(0);
+        char b = target.charAt(1);
 
         int ans = 0;
 
         for (char c : s.toCharArray()) {
-            if (c == 'a' || c == 'b') {
-                if (!stack.isEmpty() && greedy.getOrDefault(stack.peek(), '0') == c) {
-                    ans += x > y ? x : y;
-                    // System.out.println(String.format("greed : %c%c, %d", stack.peek(), c, ans));
-                    stack.pop();
-                } else {
-                    stack.push(c);
-                }
-            } else if (!stack.isEmpty()) {
-                while (stack.size() > 0) {
-                    char pop = stack.pop();
-                    if (!stack.isEmpty() && second.getOrDefault(stack.peek(), '0') == pop) {
-                        ans += x > y ? y : x;
-                        // System.out.println(String.format("second : %c%c, %d", stack.peek(), pop, ans));
-                        stack.pop();
-                    }
-                }
-            }
-        }
-
-        while (stack.size() > 0) {
-            char pop = stack.pop();
-            if (!stack.isEmpty() && second.getOrDefault(stack.peek(), '0') == pop) {
-                ans += x > y ? y : x;
-                // System.out.println(String.format("second : %c%c, %d", stack.peek(), pop, ans));
+            if (!stack.isEmpty() && c == b && stack.peek() == a) {
                 stack.pop();
+                ans += score;
+            } else {
+                stack.push(c);
             }
         }
-
+        
         return ans;
     }
 
