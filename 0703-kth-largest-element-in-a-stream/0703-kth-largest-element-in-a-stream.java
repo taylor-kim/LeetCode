@@ -1,32 +1,35 @@
 class KthLargest {
-    List<Integer> list = new ArrayList();
+    int base = 10000;
+    int max = base * 2;
+    int[] bucket = new int[max + 1];
     int k;
 
     public KthLargest(int k, int[] nums) {
         for (int num : nums) {
-            list.add(num);
+            bucket[base + num]++;
         }
-
-        Collections.sort(list);
 
         this.k = k;
     }
     
     public int add(int val) {
-        int index = Collections.binarySearch(list, val);
+        bucket[base + val]++;
 
-        if (index < 0) {
-            index = -(index + 1);
+        int pos = k;
+        int index = max;
+
+        while (index >= 0) {
+            while (bucket[index] == 0) {
+                index--;
+            }
+
+            pos -= bucket[index];
+
+            if (pos <= 0) return index - base;
+
+            index--;
         }
 
-        list.add(index, val);
-
-        return list.get(list.size() - k);
+        return 0;
     }
 }
-
-/**
- * Your KthLargest object will be instantiated and called as such:
- * KthLargest obj = new KthLargest(k, nums);
- * int param_1 = obj.add(val);
- */
