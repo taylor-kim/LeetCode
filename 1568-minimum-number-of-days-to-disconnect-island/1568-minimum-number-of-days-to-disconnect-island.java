@@ -1,100 +1,62 @@
 class Solution {
-
-    // Directions for adjacent cells: right, left, down, up
-    private static final int[][] DIRECTIONS = {
-        { 0, 1 },
-        { 0, -1 },
-        { 1, 0 },
-        { -1, 0 },
-    };
-
     public int minDays(int[][] grid) {
+        return official_bruteforce(grid);
+    }
+
+    private int[][] dirs = {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+
+    public int official_bruteforce(int[][] grid) {
+        if (count(grid) != 1) return 0;
+
         int rows = grid.length;
         int cols = grid[0].length;
 
-        // Count initial islands
-        int initialIslandCount = countIslands(grid);
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                if (grid[i][j] == 1) {
+                    grid[i][j] = 0;
 
-        // Already disconnected or no land
-        if (initialIslandCount != 1) {
-            return 0;
-        }
+                    if (count(grid) != 1) {
+                        return 1;
+                    }
 
-        // Try removing each land cell
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
-                if (grid[row][col] == 0) continue; // Skip water
-
-                // Temporarily change to water
-                grid[row][col] = 0;
-                int newIslandCount = countIslands(grid);
-
-                // Check if disconnected
-                if (newIslandCount != 1) return 1;
-
-                // Revert change
-                grid[row][col] = 1;
+                    grid[i][j] = 1;
+                }
             }
         }
 
         return 2;
     }
 
-    private int countIslands(int[][] grid) {
-        int rows = grid.length;
-        int cols = grid[0].length;
-        boolean[][] visited = new boolean[rows][cols];
-        int islandCount = 0;
+    private int count(int[][] grid) {
+        int result = 0;
+        boolean[][] visit = new boolean[grid.length][grid[0].length];
 
-        // Iterate through all cells
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < cols; col++) {
-                // Found new island
-                if (!visited[row][col] && grid[row][col] == 1) {
-                    exploreIsland(grid, row, col, visited);
-                    islandCount++;
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (!visit[i][j] && grid[i][j] == 1) {
+                    dfs(grid, i, j, visit);
+                    result++;
                 }
             }
         }
-        return islandCount;
+
+        return result;
     }
 
-    // Helper method to explore all cells of an island
-    private void exploreIsland(
-        int[][] grid,
-        int row,
-        int col,
-        boolean[][] visited
-    ) {
-        visited[row][col] = true;
+    private void dfs(int[][] grid, int i, int j, boolean[][] visit) {
+        if (!isIn(grid, i, j) || grid[i][j] != 1 || visit[i][j]) {
+            return;
+        }
 
-        // Check all adjacent cells
-        for (int[] direction : DIRECTIONS) {
-            int newRow = row + direction[0];
-            int newCol = col + direction[1];
-            // Explore if valid land cell
-            if (isValidLandCell(grid, newRow, newCol, visited)) {
-                exploreIsland(grid, newRow, newCol, visited);
-            }
+        visit[i][j] = true;
+
+        for (int[] d : dirs) {
+            dfs(grid, i + d[0], j + d[1], visit);
         }
     }
 
-    private boolean isValidLandCell(
-        int[][] grid,
-        int row,
-        int col,
-        boolean[][] visited
-    ) {
-        int rows = grid.length;
-        int cols = grid[0].length;
-        // Check bounds, land, and not visited
-        return (
-            row >= 0 &&
-            col >= 0 &&
-            row < rows &&
-            col < cols &&
-            grid[row][col] == 1 &&
-            !visited[row][col]
-        );
+    private boolean isIn(int[][] grid, int ny, int nx) {
+        return ny >= 0 && nx >= 0 && ny < grid.length && nx < grid[0].length;
     }
 }
