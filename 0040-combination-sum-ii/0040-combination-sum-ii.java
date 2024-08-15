@@ -22,7 +22,7 @@ class Solution {
         if (target < 0 || index >= arr.length || visit[index]) return;
 
         for (int i = index; i < arr.length; i++) {
-            if (i == 0 || arr[i - 1] < arr[i] || visit[i - 1]) {
+            if (i == index || arr[i - 1] < arr[i] || visit[i - 1]) {
                 visit[i] = true;
                 list.add(arr[i]);
 
