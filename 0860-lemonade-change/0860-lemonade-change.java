@@ -4,10 +4,11 @@ class Solution {
     }
 
     public boolean mySol(int[] bills) {
-        int[] changes = new int[21];
+        int[] changes = new int[5];
 
         for (int bill : bills) {
-            int need = bill - 5;
+            bill /= 5;
+            int need = bill - 1;
 
             if (need != 0) {
                 int unit = need;
