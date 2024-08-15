@@ -1,36 +1,40 @@
 class Solution {
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
-        return mySol2(candidates, target);
+        return mySol(candidates, target);
     }
 
-    public List<List<Integer>> mySol2(int[] arr, int target) {
-        Arrays.sort(arr);
-
+    public List<List<Integer>> mySol(int[] candidates, int target) {
         List<List<Integer>> result = new ArrayList();
 
-        mySol2(arr, target, 0, new boolean[arr.length], result, new ArrayList());
+        Arrays.sort(candidates);
+
+        backtrack(candidates, 0, target, result, new ArrayList(), new boolean[candidates.length]);
 
         return result;
     }
 
-    public void mySol2(int[] arr, int target, int index, boolean[] visit, List<List<Integer>> result, List<Integer> list) {
+    public void backtrack(int[] candidates, int index, int target, List<List<Integer>> result, List<Integer> list, boolean[] visit) {
         if (target == 0) {
             result.add(new ArrayList(list));
             return;
         }
 
-        if (target < 0 || index >= arr.length || visit[index]) return;
-
-        for (int i = index; i < arr.length; i++) {
-            if (i == index || arr[i - 1] < arr[i] || visit[i - 1]) {
-                visit[i] = true;
-                list.add(arr[i]);
-
-                mySol2(arr, target - arr[i], i + 1, visit, result, list);
-
-                list.remove(list.size() - 1);
-                visit[i] = false;
-            }
+        if (index >= candidates.length || target < 0) {
+            return;
         }
+
+        if (index == 0 || candidates[index - 1] != candidates[index] || visit[index - 1]) {
+            int num = candidates[index];
+
+            visit[index] = true;
+
+            list.add(num);
+            backtrack(candidates, index + 1, target - num, result, list, visit);
+            list.remove(list.size() - 1);
+
+            visit[index] = false;
+        }
+
+        backtrack(candidates, index + 1, target, result, list, visit);
     }
 }
