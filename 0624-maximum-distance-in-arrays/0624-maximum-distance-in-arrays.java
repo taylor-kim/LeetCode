@@ -3,6 +3,7 @@ class Solution {
         return mySol(arrays);
     }
     
+    
     public int mySol(List<List<Integer>> arrays) {
         int min = Integer.MAX_VALUE;
         int max = Integer.MIN_VALUE;
