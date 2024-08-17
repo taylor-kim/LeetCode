@@ -1,6 +1,35 @@
 class Solution {
     public long maxPoints(int[][] points) {
-        return hint_bottomup(points);
+        return hint_bottomup_opt(points);
+    }
+
+    public long hint_bottomup_opt(int[][] points) {
+        int m = points.length;
+        int n = points[0].length;
+
+        long[] dp = new long[n];
+
+        for (int r = m - 1; r >= 0; r--) {
+            for (int c = 0; c < n; c++) {
+                dp[c] = dp[c] + points[r][c];
+            }
+
+            for (int c = 1; c < n; c++) {
+                dp[c] = Math.max(dp[c], dp[c - 1] - 1);
+            }
+
+            for (int c = n - 2; c >= 0; c--) {
+                dp[c] = Math.max(dp[c], dp[c + 1] - 1);
+            }
+        }
+
+        long ans = 0;
+
+        for (long cand : dp) {
+            ans = Math.max(ans, cand);
+        }
+
+        return ans;
     }
 
     public long hint_bottomup(int[][] points) {
