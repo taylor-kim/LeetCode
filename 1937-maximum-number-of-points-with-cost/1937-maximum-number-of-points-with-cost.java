@@ -14,12 +14,22 @@ class Solution {
                 dp[c] = dp[c] + points[r][c];
             }
 
-            for (int c = 1; c < n; c++) {
-                dp[c] = Math.max(dp[c], dp[c - 1] - 1);
-            }
+            // for (int c = 1; c < n; c++) {
+            //     dp[c] = Math.max(dp[c], dp[c - 1] - 1);
+            // }
 
-            for (int c = n - 2; c >= 0; c--) {
-                dp[c] = Math.max(dp[c], dp[c + 1] - 1);
+            // for (int c = n - 2; c >= 0; c--) {
+            //     dp[c] = Math.max(dp[c], dp[c + 1] - 1);
+            // }
+
+            for (int c = 0; c < n; c++) {
+                if (c > 0) {
+                    dp[c] = Math.max(dp[c], dp[c - 1] - 1);
+                }
+
+                if (n - c < n) {
+                    dp[n - c - 1] = Math.max(dp[n - c - 1], dp[n - c] - 1);
+                }
             }
         }
 
