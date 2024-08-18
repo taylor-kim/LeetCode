@@ -1,21 +1,24 @@
 class Solution {
-
     public int nthUglyNumber(int n) {
-        TreeSet<Long> uglyNumbersSet = new TreeSet<>(); // TreeSet to store potential ugly numbers
-        uglyNumbersSet.add(1L); // Start with 1, the first ugly number
-        // TreeSet automatically sorts elements in ascending order and does not
-        // allow duplicate entries, just like a HashSet in python
+        return others(n);
+    }
 
-        Long currentUgly = 1L;
-        for (int i = 0; i < n; i++) {
-            currentUgly = uglyNumbersSet.pollFirst(); // Get the smallest number from the set and remove it
+    public int others(int n) {
+        int[] arr = new int[n];
+        arr[0] = 1;
 
-            // Insert the next potential ugly numbers into the set
-            uglyNumbersSet.add(currentUgly * 2);
-            uglyNumbersSet.add(currentUgly * 3);
-            uglyNumbersSet.add(currentUgly * 5);
+        int t2 = 0;
+        int t3 = 0;
+        int t5 = 0;
+
+        for (int i = 1; i < n; i++) {
+            arr[i] = Math.min(arr[t2] * 2, Math.min(arr[t3] * 3, arr[t5] * 5));
+
+            if (arr[i] == arr[t2] * 2) t2++;
+            if (arr[i] == arr[t3] * 3) t3++;
+            if (arr[i] == arr[t5] * 5) t5++;
         }
 
-        return currentUgly.intValue(); // Return the nth ugly number
+        return arr[n - 1];
     }
 }
