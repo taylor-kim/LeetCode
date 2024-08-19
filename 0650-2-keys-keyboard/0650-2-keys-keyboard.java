@@ -1,6 +1,23 @@
 class Solution {
     public int minSteps(int n) {
-        return mySol(n);
+        return official_bottomup(n);
+    }
+
+    public int official_bottomup(int n) {
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp, 1000);
+
+        dp[1] = 0;
+
+        for (int num = 2; num <= n; num++) {
+            for (int paste = 1; paste <= num / 2; paste++) {
+                if (num % paste == 0) {
+                    dp[num] = Math.min(dp[num], dp[paste] + num / paste);
+                }
+            }
+        }
+
+        return dp[n];
     }
 
     public int mySol(int n) {
