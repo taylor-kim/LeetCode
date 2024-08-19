@@ -1,6 +1,24 @@
 class Solution {
     public int minSteps(int n) {
-        return official_bottomup(n);
+        return official_prime_factorizaion(n);
+    }
+
+    public int official_prime_factorizaion(int n) {
+        int ans = 0;
+
+        int d = 2;
+
+        while (n > 1) {
+            // if d is prime factor, keep dividing
+            // n by d until is no longer divisible.
+            while (n % d == 0) {
+                ans += d;
+                n /= d;
+            }
+            d++;
+        }
+
+        return ans;
     }
 
     public int official_bottomup(int n) {
