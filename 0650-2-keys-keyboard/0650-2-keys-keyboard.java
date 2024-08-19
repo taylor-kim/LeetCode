@@ -12,26 +12,16 @@ class Solution {
             return 0;
         }
 
-        if (n < count) return -1;
+        if (n < count) return 1000;
 
         // System.out.println(String.format("count:%d, paste:%d", count, paste));
 
-        int min = Integer.MAX_VALUE;
+        int ans = 2 + mySol(n, count * 2, count);
 
         if (paste > 0) {
-            int justPaste = mySol(n, count + paste, paste);
-
-            if (justPaste >= 0) {
-                min = Math.min(min, justPaste + 1);
-            }
+            ans = Math.min(ans, 1 + mySol(n, count + paste, paste));
         }
 
-        int cAndP = mySol(n, count * 2, count);
-
-        if (cAndP >= 0) {
-            min = Math.min(min, cAndP + 2);
-        }
-
-        return min == Integer.MAX_VALUE ? -1 : min;
+        return ans;
     }
 }
