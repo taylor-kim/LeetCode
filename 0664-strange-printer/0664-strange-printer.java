@@ -1,6 +1,6 @@
 class Solution {
     public int strangePrinter(String s) {
-        return official_topdown(s);
+        return others_bottomup(s);
     }
 
     public int official_topdown(String s) {
