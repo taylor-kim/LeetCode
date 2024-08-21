@@ -29,22 +29,20 @@ class Solution {
 
         // Try to optimize by finding matching characters
         for (int k = start + 1; k <= end; k++) {
-            if (s.charAt(start) == s.charAt(k)) {
-                // If match found, try splitting the problem
-                int turnsWithMatch =
-                    minimumTurns(start, k - 1, s, memo) +
-                    minimumTurns(k + 1, end, s, memo);
-                minTurns = Math.min(minTurns, turnsWithMatch);
-            }
-            // if (s.charAt(k - 1) == s.charAt(end)) {
-            //     int temp = minimumTurns(start, k - 1, s, memo) + minimumTurns(k, end, s, memo);
-
+            // if (s.charAt(start) == s.charAt(k)) {
             //     // If match found, try splitting the problem
             //     int turnsWithMatch =
             //         minimumTurns(start, k - 1, s, memo) +
             //         minimumTurns(k + 1, end, s, memo);
             //     minTurns = Math.min(minTurns, turnsWithMatch);
             // }
+            int turnsWithMatch = minimumTurns(start, k - 1, s, memo) + minimumTurns(k, end, s, memo);
+
+            if (s.charAt(k - 1) == s.charAt(end)) {
+                turnsWithMatch--;
+            }
+
+            minTurns = Math.min(minTurns, turnsWithMatch);
         }
 
         // Memoize and return the result
