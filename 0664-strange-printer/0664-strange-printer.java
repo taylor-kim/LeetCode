@@ -32,8 +32,10 @@ class Solution {
 
                     // dp[i][end] = Math.min(dp[i][end], s.charAt(i) == s.charAt(i + k + 1) ? temp - 1 : temp);
                     // dp[i][end] = Math.min(dp[i][end], s.charAt(i) == s.charAt(end) ? temp - 1 : temp);
-                    // dp[i][end] = Math.min(dp[i][end], s.charAt(i + k) == s.charAt(i + k + 1) ? temp - 1 : temp);
                     dp[i][end] = Math.min(dp[i][end], s.charAt(i + k) == s.charAt(end) ? temp - 1 : temp);
+
+                    // bellow does not work.
+                    // dp[i][end] = Math.min(dp[i][end], s.charAt(i + k) == s.charAt(i + k + 1) ? temp - 1 : temp);
                     
                 }
             }
