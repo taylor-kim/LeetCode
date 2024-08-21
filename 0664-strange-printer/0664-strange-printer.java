@@ -1,14 +1,14 @@
 class Solution {
     public int strangePrinter(String s) {
-        return mySol(s);
+        return others_bottomup(s);
     }
 
-    public int mySol(String s) {
+    public int others_bottomup(String s) {
         // dp[start][end] = min number
         // s.charAt(start) == s.charAt(end)
         // dp[start][end] =
 
-        s = removeDup(s);
+        // s = removeDup(s);
 
         int n = s.length();
 
