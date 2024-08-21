@@ -1,6 +1,6 @@
 class Solution {
     public int strangePrinter(String s) {
-        return official_topdown(s);
+        return others_bottomup(s);
     }
 
     public int official_topdown(String s) {
@@ -84,6 +84,16 @@ class Solution {
                     // dp[i][end] = Math.min(dp[i][end], s.charAt(i + k) == s.charAt(i + k + 1) ? temp - 1 : temp);
                     
                 }
+
+                // fail
+                // for (int k = i + 1; k <= end; k++) {
+                //     if (s.charAt(i) == s.charAt(k)) {
+                //         int firstPart = dp[i][k - 1];
+                //         int secondPart = k + 1 <= end ? dp[k + 1][end] : 0;
+
+                //         dp[i][end] = Math.min(dp[i][end], firstPart + secondPart);
+                //     }
+                // }
             }
         }
 
