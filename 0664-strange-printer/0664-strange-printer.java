@@ -1,56 +1,130 @@
 class Solution {
     public int strangePrinter(String s) {
-        return others_bottomup(s);
+        return othersMoreIntuitive(s);
     }
 
-    public int others_bottomup(String s) {
-        // dp[start][end] = min number
-        // s.charAt(start) == s.charAt(end)
-        // dp[start][end] =
-
-        s = removeDup(s);
-
+    public int othersMoreIntuitive(String s) {
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
+        
         int n = s.length();
-
         int[][] dp = new int[n][n];
-
         for (int i = 0; i < n; i++) {
             dp[i][i] = 1;
-
-            if (i + 1 < n) {
+            if (i < n - 1) {
                 dp[i][i + 1] = s.charAt(i) == s.charAt(i + 1) ? 1 : 2;
             }
         }
+        
+        for (int len = 2; len < n; len++) {
+            for (int start = 0; start + len < n; start++) {
+                dp[start][start + len] = len + 1;
+                for (int k = 0; k < len; k++) {
+                    int temp = dp[start][start + k] + dp[start + k + 1][start + len];
+                    dp[start][start + len] = Math.min(
+                        dp[start][start + len],
+                        s.charAt(start + k) == s.charAt(start + len) ? temp - 1 : temp
+                    );
+                }
+            }
+        }
+        
+        return dp[0][n - 1];
+    }
 
-        for (int diff = 2; diff < n; diff++) {
-            for (int i = 0; i + diff < n; i++) {
-                int end = i + diff;
-                dp[i][end] = diff + 1;
+    public int officialDP(String s) {
+        int n = s.length();
+        int[][] dp = new int[n][n];
 
-                for (int k = 0; k < diff; k++) {
-                    int temp = dp[i][i + k] + dp[i + k + 1][end];
+        for (int length = 1; length <= n; length++) {
+            for (int left = 0; left <= n - length; left++) {
+                int right = left + length - 1;
 
-                    // dp[i][end] = Math.min(dp[i][end], s.charAt(i + k) == s.charAt(end) ? temp - 1 : temp);
-                    dp[i][end] = Math.min(dp[i][end], s.charAt(i) == s.charAt(i + k + 1) ? temp - 1 : temp);
+                dp[left][right] = n;
+
+                int j = -1;
+
+                for (int i = left; i < right; i++) {
+                    if (s.charAt(i) != s.charAt(right) && j == -1) {
+                        j = i;
+                    }
+
+                    if (j != -1) {
+                        dp[left][right] = Math.min(dp[left][right], 1 + dp[j][i] + dp[i + 1][right]);
+                    }
+                }
+
+                if (j == -1) {
+                    dp[left][right] = 0;
                 }
             }
         }
 
-        return dp[0][n - 1];
+        return dp[0][n - 1] + 1;
     }
 
-    private String removeDup(String s) {
-        StringBuilder sb = new StringBuilder();
+    public int mySolFail(String s) {
+        int[] start = new int[26];
+        int[] end = new int[26];
 
-        char prev = '0';
+        Arrays.fill(start, -1);
+        Arrays.fill(end, -1);
 
-        for (char c : s.toCharArray()) {
-            if (prev != c) {
-                sb.append(c);
-                prev = c;
+        Queue<Character> queue = new LinkedList();
+
+        char[] arr = s.toCharArray();
+
+        for (int i = 0; i < arr.length; i++) {
+            int ch = arr[i] - 'a';
+
+            if (start[ch] == -1) {
+                start[ch] = i;
+                end[ch] = i;
+
+                queue.add(arr[i]);
+            } else {
+                end[ch] = i;
             }
         }
 
-        return sb.toString();
+        int length = 0;
+        int ans = 0;
+
+        int count = arr.length;
+
+        StringBuilder sb = new StringBuilder();
+
+        while (count-- > 0) {
+            if (s.equals(sb.toString())) {
+                break;
+            }
+
+            char ch = queue.poll();
+
+            int si = start[ch - 'a'];
+            int ei = end[ch - 'a'];
+
+            if (si < sb.length()) {
+                sb.setLength(si);
+            }
+
+            sb.append(getSameCharArray(ei - si + 1, ch));
+
+            ans++;
+
+            System.out.println(sb.toString() + ", eq : " + s.equals(sb.toString()));
+
+            queue.add(ch);
+        }
+
+        return ans;
+    }
+
+    private char[] getSameCharArray(int size, char ch) {
+        char[] arr = new char[size];
+        Arrays.fill(arr, ch);
+
+        return arr;
     }
 }
