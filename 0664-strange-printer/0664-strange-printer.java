@@ -1,6 +1,6 @@
 class Solution {
     public int strangePrinter(String s) {
-        return others_bottomup(s);
+        return official_topdown(s);
     }
 
     public int official_topdown(String s) {
@@ -29,13 +29,22 @@ class Solution {
 
         // Try to optimize by finding matching characters
         for (int k = start + 1; k <= end; k++) {
-            if (s.charAt(k) == s.charAt(start)) {
+            if (s.charAt(start) == s.charAt(k)) {
                 // If match found, try splitting the problem
                 int turnsWithMatch =
                     minimumTurns(start, k - 1, s, memo) +
                     minimumTurns(k + 1, end, s, memo);
                 minTurns = Math.min(minTurns, turnsWithMatch);
             }
+            // if (s.charAt(k - 1) == s.charAt(end)) {
+            //     int temp = minimumTurns(start, k - 1, s, memo) + minimumTurns(k, end, s, memo);
+
+            //     // If match found, try splitting the problem
+            //     int turnsWithMatch =
+            //         minimumTurns(start, k - 1, s, memo) +
+            //         minimumTurns(k + 1, end, s, memo);
+            //     minTurns = Math.min(minTurns, turnsWithMatch);
+            // }
         }
 
         // Memoize and return the result
