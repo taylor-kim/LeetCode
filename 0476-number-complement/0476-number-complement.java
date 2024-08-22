@@ -1,6 +1,20 @@
 class Solution {
     public int findComplement(int num) {
-        return others_good(num);
+        return others_good2(num);
+    }
+
+    public int others_good2(int num) {
+        int mask = ~0;
+
+        while ((num & mask) != 0) mask <<= 1;
+
+        /***
+        num          = 00000101
+        mask         = 11111000
+        ~mask & ~num = 00000010
+         */
+
+        return ~mask & ~num;
     }
 
     public int others_good(int num) {
