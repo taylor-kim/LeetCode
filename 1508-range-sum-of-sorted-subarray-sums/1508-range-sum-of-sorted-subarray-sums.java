@@ -8,6 +8,8 @@ class Solution {
 
         Collections.sort(list);
 
+        System.out.println(list);
+
         long sum = 0;
 
         for (int i = left - 1; i < right; i++) {
