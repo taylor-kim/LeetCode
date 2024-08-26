@@ -19,7 +19,32 @@ class Node {
 
 class Solution {
     public List<Integer> postorder(Node root) {
-        return mySol_rec(root);
+        return official_reverse_preorder(root);
+    }
+
+    public List<Integer> official_reverse_preorder(Node root) {
+        List<Integer> list = new ArrayList();
+
+        if (root == null) return list;
+
+        Stack<Node> stack = new Stack();
+        stack.add(root);
+
+        while (!stack.isEmpty()) {
+            Node node = stack.pop();
+
+            list.add(node.val);
+
+            if (node.children != null) {
+                for (Node child : node.children) {
+                    stack.add(child);
+                }
+            }
+        }
+
+        Collections.reverse(list);
+
+        return list;
     }
 
     public List<Integer> mySol_rec(Node root) {
