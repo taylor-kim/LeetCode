@@ -1,6 +1,40 @@
 class Solution {
     public double maxProbability(int n, int[][] edges, double[] succProb, int start_node, int end_node) {
-        return mySol(n, edges, succProb, start_node, end_node);
+        return official_shortestpath(n, edges, succProb, start_node, end_node);
+    }
+
+    public double official_shortestpath(int n, int[][] edges, double[] succProb, int start, int end) {
+        Map<Integer, List<Pair<Integer, Double>>> graph = new HashMap();
+        double[] scores = new double[n];
+        scores[start] = 1;
+
+        for (int i = 0; i < edges.length; i++) {
+            int[] edge = edges[i];
+            graph.computeIfAbsent(edge[0], k -> new ArrayList()).add(new Pair(edge[1], succProb[i]));
+            graph.computeIfAbsent(edge[1], k -> new ArrayList()).add(new Pair(edge[0], succProb[i]));
+        }
+
+        Queue<Integer> queue = new LinkedList();
+        queue.add(start);
+
+        List<Pair<Integer, Double>> empty = new ArrayList();
+
+        while (!queue.isEmpty()) {
+            int node = queue.poll();
+
+            for (Pair<Integer, Double> pair : graph.getOrDefault(node, empty)) {
+                int next = pair.getKey();
+                double prob = pair.getValue();
+
+                if (scores[next] < scores[node] * prob) {
+                    scores[next] = scores[node] * prob;
+
+                    queue.add(next);
+                }
+            }
+        }
+
+        return scores[end];
     }
 
     public double mySol(int n, int[][] edges, double[] succProb, int start, int end) {
