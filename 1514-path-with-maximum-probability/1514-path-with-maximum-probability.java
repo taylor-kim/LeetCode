@@ -1,6 +1,36 @@
 class Solution {
     public double maxProbability(int n, int[][] edges, double[] succProb, int start_node, int end_node) {
-        return official_shortestpath(n, edges, succProb, start_node, end_node);
+        return official_bellmanford(n, edges, succProb, start_node, end_node);
+    }
+
+    public double official_bellmanford(int n, int[][] edges, double[] succProb, int start, int end) {
+        double[] scores = new double[n];
+        scores[start] = 1;
+
+        for (int i = 0; i < n - 1; i++) {
+            boolean hasUpdate = false;
+
+            for (int j = 0; j < edges.length; j++) {
+                int u = edges[j][0];
+                int v = edges[j][1];
+                double prob = succProb[j];
+
+                if (scores[u] * prob > scores[v]) {
+                    scores[v] = scores[u] * prob;
+                    hasUpdate = true;
+                }
+
+                if (scores[v] * prob > scores[u]) {
+                    scores[u] = scores[v] * prob;
+                    hasUpdate = true;
+                }
+            }
+            if (!hasUpdate) {
+                break;
+            }
+        }        
+
+        return scores[end];
     }
 
     public double official_shortestpath(int n, int[][] edges, double[] succProb, int start, int end) {
