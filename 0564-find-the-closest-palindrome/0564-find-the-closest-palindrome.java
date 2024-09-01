@@ -34,7 +34,8 @@ class Solution {
             }
         }
 
-        return ans;
+        // return ans;
+        return toPalin(left - 1);
     }
 
     private long nextPalin(long num) {
@@ -55,7 +56,8 @@ class Solution {
             }
         }
 
-        return ans;
+        // return ans;
+        return toPalin(left);
     }
 
     private long toPalin(long num) {
