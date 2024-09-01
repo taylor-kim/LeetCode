@@ -1,6 +1,78 @@
 class Solution {
     public String nearestPalindromic(String n) {
-        return official_shit(n);
+        return official_binarySearch(n);
+    }
+
+    public String official_binarySearch(String n) {
+        long num = Long.parseLong(n);
+
+        long prev = prevPalin(num);
+        long next = nextPalin(num);
+
+        System.out.println(String.format("prev:%d, next:%d", prev, next));
+
+        if (Math.abs(prev - num) <= Math.abs(next - num)) {
+            return Long.toString(prev);
+        } else {
+            return Long.toString(next);
+        }
+    }
+
+    private long prevPalin(long num) {
+        long left = 0;
+        long right = num;
+
+        long ans = 0;
+
+        while (left < right) {
+            long mid = (right - left) / 2 + left;
+            long palin = toPalin(mid);
+
+            if (palin < num) {
+                ans = palin;
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+
+        return ans;
+    }
+
+    private long nextPalin(long num) {
+        long left = num + 1;
+        long right = (long) 1e18;
+
+        long ans = 0;
+        
+        while (left < right) {
+            long mid = (right - left) / 2 + left;
+            long palin = toPalin(mid);
+
+            if (palin > num) {
+                ans = palin;
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+
+        return ans;
+    }
+
+    private long toPalin(long num) {
+        String s = Long.toString(num);
+        int n = s.length();
+        int left = (n - 1) / 2;
+        int right = n / 2;
+
+        char[] arr = s.toCharArray();
+
+        while (left >= 0) {
+            arr[right++] = arr[left--];
+        }
+
+        return Long.parseLong(new String(arr));
     }
 
     public String official_shit(String n) {
