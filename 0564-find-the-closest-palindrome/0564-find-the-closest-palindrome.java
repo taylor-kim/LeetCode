@@ -9,8 +9,6 @@ class Solution {
         long prev = prevPalin(num);
         long next = nextPalin(num);
 
-        System.out.println(String.format("prev:%d, next:%d", prev, next));
-
         if (Math.abs(prev - num) <= Math.abs(next - num)) {
             return Long.toString(prev);
         } else {
