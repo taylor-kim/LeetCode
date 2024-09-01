@@ -1,48 +1,175 @@
 class Solution {
-
     public String nearestPalindromic(String n) {
-        int len = n.length();
-        int i = len % 2 == 0 ? len / 2 - 1 : len / 2;
-        long firstHalf = Long.parseLong(n.substring(0, i + 1));
-        /* 
-        Generate possible palindromic candidates:
-        1. Create a palindrome by mirroring the first half.
-        2. Create a palindrome by mirroring the first half incremented by 1.
-        3. Create a palindrome by mirroring the first half decremented by 1.
-        4. Handle edge cases by considering palindromes of the form 999... 
-           and 100...001 (smallest and largest n-digit palindromes).
-        */
-        List<Long> possibilities = new ArrayList<>();
+        return official_shit(n);
+    }
 
-        possibilities.add(halfToPalindrome(firstHalf, len % 2 == 0));
-        possibilities.add(halfToPalindrome(firstHalf + 1, len % 2 == 0));
-        possibilities.add(halfToPalindrome(firstHalf - 1, len % 2 == 0));
-        possibilities.add((long) Math.pow(10, len - 1) - 1);
-        possibilities.add((long) Math.pow(10, len) + 1);
+    public String official_shit(String n) {
+        int l = n.length();
+        int mid = l / 2 - ((l + 1) % 2);
+        long firstHalf = Long.parseLong(n.substring(0, mid + 1));
 
-        // Find the palindrome with minimum difference, and minimum value.
-        long diff = Long.MAX_VALUE, res = 0, nl = Long.parseLong(n);
-        for (long cand : possibilities) {
-            if (cand == nl) continue;
-            if (Math.abs(cand - nl) < diff) {
-                diff = Math.abs(cand - nl);
-                res = cand;
-            } else if (Math.abs(cand - nl) == diff) {
-                res = Math.min(res, cand);
+        List<Long> cands = new ArrayList();
+
+        cands.add(halfToPalindrome(firstHalf, l % 2 == 0));
+        cands.add(halfToPalindrome(firstHalf + 1, l % 2 == 0));
+        cands.add(halfToPalindrome(firstHalf - 1, l % 2 == 0));
+        cands.add((long)Math.pow(10, l - 1) - 1);
+        cands.add((long)Math.pow(10, l) + 1);
+
+        long minDiff = Long.MAX_VALUE;
+        long ans = 0;
+        long origin = Long.parseLong(n);
+
+        for (long cand : cands) {
+            if (cand == origin) continue;
+
+            long diff = Math.abs(cand - origin);
+
+            if (diff < minDiff) {
+                minDiff = diff;
+                ans = cand;
+            } else if (diff == minDiff) {
+                ans = Math.min(cand, ans);
             }
         }
 
-        return String.valueOf(res);
+        return String.valueOf(ans);
     }
 
-    private long halfToPalindrome(long left, boolean even) {
-        // Convert the given half to palindrome.
-        long res = left;
-        if (!even) left = left / 10;
-        while (left > 0) {
-            res = res * 10 + (left % 10);
-            left /= 10;
+    private long halfToPalindrome(long firstHalf, boolean even) {
+        long p = firstHalf;
+
+        if (!even) firstHalf /= 10;
+
+        while (firstHalf > 0) {
+            p = p * 10 + (firstHalf % 10);
+            firstHalf /= 10;
         }
-        return res;
+
+        return p;
+    }
+
+    public String mySol_fail(String n) {
+        if (isPalindrome(n)) {
+            return minimize(n);
+        }
+
+        if (n.charAt(0) == '1') {
+            boolean allZero = true;
+            for (int i = 1; i < n.length() && allZero; i++) {
+                if (n.charAt(i) != '0') {
+                    allZero = false;
+                }
+            }
+
+            if (allZero) {
+                return String.valueOf(Integer.parseInt(n) - 1);
+            }
+        }
+
+        StringBuilder ans = new StringBuilder();
+
+        int l = n.length();
+
+        if (l == 1) {
+            return String.valueOf(Integer.parseInt(n) - 1);
+        } else if (l == -2) {
+            int number = Integer.parseInt(n);
+            int lower = 9;
+            int upper = number / 10 * 10 + number / 10;
+
+            if (number - lower <= upper - number) {
+                ans.append(lower);
+            } else {
+                ans.append(upper);
+            }
+        } else {
+            int mid = l / 2;
+
+            int left = mid - 1;
+            int right = mid + 1;
+
+            if (l % 2 == 0) {
+                int midLeft = mid - 1;
+                ans.append(n.charAt(midLeft) - '0');
+                ans.append(n.charAt(midLeft) - '0');
+                left--;
+            } else {
+                ans.append(n.charAt(mid) - '0');
+            }
+
+            while (left >= 0) {
+                int lv = n.charAt(left--) - '0';
+                int rv = n.charAt(right++) - '0';
+
+                ans.insert(0, lv);
+                ans.append(lv);
+            }
+        }
+
+        return ans.toString();
+    }
+
+    private boolean isPalindrome(String s) {
+        int left = 0;
+        int right = s.length() - 1;
+
+        while (left < right) {
+            if (s.charAt(left++) != s.charAt(right--)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private String minimize(String s) {
+        if (s.length() == 1) {
+            return String.valueOf(Integer.parseInt(s) - 1);
+        }
+
+        if (isOnlyOne(s)) {
+            return String.valueOf(Integer.parseInt(s) - 2);
+        }
+
+        if (isOnlyNine(s)) {
+            return String.valueOf(Integer.parseInt(s) + 2);
+        }
+
+        StringBuilder sb = new StringBuilder();
+        sb.append(s);
+
+        int l = s.length();
+        int mid = l / 2;
+
+        char alt = (char)(s.charAt(mid) - 1);
+
+        if (s.charAt(mid) == '0') {
+            alt = '1';
+        }
+
+        sb.setCharAt(mid, alt);
+
+        if (l % 2 == 0) {
+            sb.setCharAt(mid - 1, alt);
+        }
+
+        return sb.toString();
+    }
+
+    private boolean isOnlyOne(String s) {
+        for (char c : s.toCharArray()) {
+            if (c != '1') return false;
+        }
+
+        return true;
+    }
+
+    private boolean isOnlyNine(String s) {
+        for (char c : s.toCharArray()) {
+            if (c != '9') return false;
+        }
+
+        return true;
     }
 }
