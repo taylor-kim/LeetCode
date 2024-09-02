@@ -16,7 +16,6 @@ class Solution {
 
         while (chalk[ans] <= remainder) {
             remainder -= chalk[ans++];
-            ans = ans % chalk.length;
         }
 
         return ans;
