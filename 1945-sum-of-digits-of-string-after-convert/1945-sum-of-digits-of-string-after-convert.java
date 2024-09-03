@@ -1,6 +1,32 @@
 class Solution {
     public int getLucky(String s, int k) {
-        return mySol(s, k);
+        return official2(s, k);
+    }
+
+    public int official2(String s, int k) {
+        int ans = 0;
+
+        for (char c : s.toCharArray()) {
+            int num = c - 'a' + 1;
+
+            while (num > 0) {
+                ans += num % 10;
+                num /= 10;
+            }
+        }
+
+        while (--k > 0) {
+            int sum = 0;
+
+            while (ans > 0) {
+                sum += ans % 10;
+                ans /= 10;
+            }
+
+            ans = sum;
+        }
+
+        return ans;
     }
 
     public int mySol(String s, int k) {
