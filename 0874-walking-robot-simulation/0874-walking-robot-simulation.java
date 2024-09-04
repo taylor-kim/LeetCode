@@ -3,7 +3,8 @@ class Solution {
         return official(commands, obstacles);
     }
 
-    private static final int HASH_MULTIPLIER = 60013; // Slightly larger than 2 * max coordinate value
+    // private static final int HASH_MULTIPLIER = 60013; // Slightly larger than 2 * max coordinate value
+    private static final int HASH_MULTIPLIER = 30000; // Slightly larger than 2 * max coordinate value
 
     public int official(int[] commands, int[][] obstacles) {
         // Store obstacles in an HashSet for efficient lookup
@@ -55,7 +56,8 @@ class Solution {
 
     // Hash function to convert (x, y) coordinates to a unique integer value
     private int hashCoordinates(int x, int y) {
-        return x + HASH_MULTIPLIER * y;
+        // return x + HASH_MULTIPLIER * y;
+        return (x + HASH_MULTIPLIER) + (2 * HASH_MULTIPLIER) * (HASH_MULTIPLIER + y);
     }
 
     int[][] dirs = {
