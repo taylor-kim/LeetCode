@@ -14,7 +14,7 @@ class Solution {
 
         int missingSum = targetSum - sum;
 
-        System.out.println(String.format("m:%d, n:%d, sum:%d, targetSum:%d, missingSum:%d", m, n, sum, targetSum, missingSum));
+        // System.out.println(String.format("m:%d, n:%d, sum:%d, targetSum:%d, missingSum:%d", m, n, sum, targetSum, missingSum));
 
         if (missingSum < n || missingSum > n * 6) {
             return new int[] {};
