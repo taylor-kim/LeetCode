@@ -29,17 +29,17 @@ class Solution {
     }
 
     public boolean try_iter_hint_by_official(ListNode head, TreeNode root) {
-        Stack<TreeNode> stack = new Stack();
-        stack.push(root);
+        Queue<TreeNode> queue = new LinkedList();
+        queue.add(root);
 
-        while (!stack.isEmpty()) {
-            TreeNode tree = stack.pop();
+        while (!queue.isEmpty()) {
+            TreeNode tree = queue.poll();
 
             if (isMatch(tree, head)) return true;
 
-            if (tree.left != null) stack.push(tree.left);
+            if (tree.left != null) queue.add(tree.left);
 
-            if (tree.right != null) stack.push(tree.right);
+            if (tree.right != null) queue.add(tree.right);
         }
 
         return false;
