@@ -23,8 +23,8 @@ class Solution {
             count++;
         }
 
-        int size = count < k ? 1 : count / k;
-        int odd = size > 1 ? count % k : 0;
+        int size = count / k;
+        int odd = count % k;
 
         ListNode[] ans = new ListNode[k];
 
