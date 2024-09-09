@@ -31,9 +31,7 @@ class Solution {
             ans[y][x] = head.val;
             head = head.next;
 
-            int check = 0;
-
-            while (check++ < 4 && !isOkToGo(y + dirs[dir][0], x + dirs[dir][1], ans)) {
+            if (!isOkToGo(y + dirs[dir][0], x + dirs[dir][1], ans)) {
                 dir = (dir + 1) % dirs.length;
             }
 
