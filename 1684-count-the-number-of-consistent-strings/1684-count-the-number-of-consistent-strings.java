@@ -1,6 +1,6 @@
 class Solution {
     public int countConsistentStrings(String allowed, String[] words) {
-        return mySol_improved(allowed, words);
+        return mySol(allowed, words);
     }
 
     public int official_bit(String allowed, String[] words) {
