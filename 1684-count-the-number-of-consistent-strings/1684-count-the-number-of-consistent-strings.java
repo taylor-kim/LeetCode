@@ -27,7 +27,7 @@ class Solution {
         return ans;
     }
 
-    public int mySol_improved(String allowed, String[] words) {
+    public int mySol(String allowed, String[] words) {
         int[] freq = new int[26];
 
         for (char c : allowed.toCharArray()) freq[c - 'a']++;
@@ -49,7 +49,7 @@ class Solution {
         return ans;
     }
 
-    public int mySol(String allowed, String[] words) {
+    public int mySol_improved(String allowed, String[] words) {
         boolean[] freq = new boolean[26];
 
         for (char c : allowed.toCharArray()) freq[c - 'a'] = true;
