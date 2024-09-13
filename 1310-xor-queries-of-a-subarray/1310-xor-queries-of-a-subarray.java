@@ -1,6 +1,26 @@
 class Solution {
     public int[] xorQueries(int[] arr, int[][] queries) {
-        return mySol(arr, queries);
+        return official_inplace(arr, queries);
+    }
+
+    public int[] official_inplace(int[] arr, int[][] queries) {
+        for (int i = 1; i < arr.length; i++) {
+            arr[i] ^= arr[i - 1];
+        }
+
+        int[] ans = new int[queries.length];
+
+        for (int i = 0; i < queries.length; i++) {
+            int[] q = queries[i];
+
+            if (q[0] > 0) {
+                ans[i] = arr[q[0] - 1] ^ arr[q[1]];
+            } else {
+                ans[i] = arr[q[1]];
+            }
+        }
+
+        return ans;
     }
 
     public int[] mySol(int[] arr, int[][] queries) {
