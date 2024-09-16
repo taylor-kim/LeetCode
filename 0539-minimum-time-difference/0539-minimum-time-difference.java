@@ -6,36 +6,33 @@ class Solution {
     public int official_bucket(List<String> timePoints) {
         boolean[] mins = new boolean[24 * 60];
 
+        int first = Integer.MAX_VALUE;
+        int last = -1;
+
         for (String hhmm : timePoints) {
             int min = toMin(hhmm);
 
             if (mins[min]) return 0;
 
+            first = Math.min(first, min);
+            last = Math.max(last, min);
+
             mins[min] = true;
         }
 
-        int prevMin = -1;
-        int firstMin = -1;
-        int lastMin = -1;
+        int prevMin = first;
 
         int ans = Integer.MAX_VALUE;
 
-        for (int min = 0; min < 24 * 60; min++) {
+        for (int min = first + 1; min <= last; min++) {
             if (!mins[min]) continue;
 
-            if (firstMin == -1) {
-                firstMin = min;
-            }
-
-            if (prevMin != -1) {
-                ans = Math.min(ans, min - prevMin);
-            }
+            ans = Math.min(ans, min - prevMin);
 
             prevMin = min;
-            lastMin = min;
         }
 
-        return Math.min(ans, firstMin + 1440 - lastMin);
+        return Math.min(ans, first + 1440 - last);
     }
 
     public int mySol(List<String> timePoints) {
