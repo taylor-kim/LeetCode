@@ -1,6 +1,41 @@
 class Solution {
     public int findMinDifference(List<String> timePoints) {
-        return mySol(timePoints);
+        return official_bucket(timePoints);
+    }
+
+    public int official_bucket(List<String> timePoints) {
+        boolean[] mins = new boolean[24 * 60];
+
+        for (String hhmm : timePoints) {
+            int min = toMin(hhmm);
+
+            if (mins[min]) return 0;
+
+            mins[min] = true;
+        }
+
+        int prevMin = -1;
+        int firstMin = -1;
+        int lastMin = -1;
+
+        int ans = Integer.MAX_VALUE;
+
+        for (int min = 0; min < 24 * 60; min++) {
+            if (!mins[min]) continue;
+
+            if (firstMin == -1) {
+                firstMin = min;
+            }
+
+            if (prevMin != -1) {
+                ans = Math.min(ans, min - prevMin);
+            }
+
+            prevMin = min;
+            lastMin = min;
+        }
+
+        return Math.min(ans, firstMin + 1440 - lastMin);
     }
 
     public int mySol(List<String> timePoints) {
