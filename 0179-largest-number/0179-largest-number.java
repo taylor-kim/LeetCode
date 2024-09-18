@@ -25,21 +25,34 @@ class Solution {
                 index++;
             }
 
-            if (s1.length() > s2.length()) {
-                String remain = s1.substring(index);
+            int compare = s1.length() > s2.length() ? -1 : 1;
 
-                int a1 = Integer.parseInt(remain + s2);
-                int a2 = Integer.parseInt(s2 + remain);
+            String s = compare == -1 ? s1 : s2;
+            String partA = s.substring(0, index);
+            String partB = s.substring(index);
 
-                return a1 > a2 ? -1 : 1;
-            } else {
-                String remain = s2.substring(index);
+            int a1 = Integer.parseInt(partA + partB);
+            int a2 = Integer.parseInt(partB + partA);
 
-                int a1 = Integer.parseInt(s1 + remain);
-                int a2 = Integer.parseInt(remain + s1);
+            // System.out.println(String.format("a1:%d, a2:%d, compare:%d", a1, a2, compare));
 
-                return a1 > a2 ? -1 : 1;
-            }
+            return a1 > a2 ? -compare : compare;
+
+            // if (s1.length() > s2.length()) {
+            //     String remain = s1.substring(index);
+
+            //     int a1 = Integer.parseInt(remain + s2);
+            //     int a2 = Integer.parseInt(s2 + remain);
+
+            //     return a1 > a2 ? -1 : 1;
+            // } else {
+            //     String remain = s2.substring(index);
+
+            //     int a1 = Integer.parseInt(s1 + remain);
+            //     int a2 = Integer.parseInt(remain + s1);
+
+            //     return a1 > a2 ? -1 : 1;
+            // }
         });
 
         StringBuilder ans = new StringBuilder();
