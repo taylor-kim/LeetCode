@@ -13,15 +13,15 @@ class Solution {
 
         int xor = 0;
 
-        Integer[] map = new Integer[32];
-        map[0] = -1;
+        int[] map = new int[32];
+        Arrays.fill(map, -1);
 
         int ans = 0;
 
         for (int i = 0; i < s.length(); i++) {
             xor ^= bits[s.charAt(i) - 'a'];
 
-            if (xor != 0 && map[xor] == null) {
+            if (xor != 0 && map[xor] == -1) {
                 map[xor] = i;
             }
 
