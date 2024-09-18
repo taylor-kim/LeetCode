@@ -31,12 +31,12 @@ class Solution {
             String partA = s.substring(0, index);
             String partB = s.substring(index);
 
-            int a1 = Integer.parseInt(partA + partB);
-            int a2 = Integer.parseInt(partB + partA);
+            int a1 = Integer.parseInt(partB + partA);
+            int a2 = Integer.parseInt(partA + partB);
 
             // System.out.println(String.format("a1:%d, a2:%d, compare:%d", a1, a2, compare));
 
-            return a1 > a2 ? -compare : compare;
+            return a1 > a2 ? compare : -compare;
 
             // if (s1.length() > s2.length()) {
             //     String remain = s1.substring(index);
