@@ -1,6 +1,60 @@
 class Solution {
     public String largestNumber(int[] nums) {
-        return mySol3(nums);
+        return moreThanOfficial(nums);
+    }
+
+    public String moreThanOfficial(int[] nums) {
+        Integer[] arr = new Integer[nums.length];
+
+        for (int i = 0; i < nums.length; i++) {
+            arr[i] = nums[i];
+        }
+
+        Arrays.sort(arr, new Comparator<Integer>() {
+            public int compare(Integer i1, Integer i2) {
+                int paddingFor2 = 10;
+                int paddingFor1 = 10;
+
+                while (paddingFor1 <= i2) {
+                    paddingFor1 *= 10;
+                }
+
+                while (paddingFor2 <= i1) {
+                    paddingFor2 *= 10;
+                }
+
+                return ((i2 * paddingFor2) + i1) - ((i1 * paddingFor1) + i2);
+            }
+        });
+
+        if (arr[0] == 0) {
+            return "0";
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for (Integer num : arr) {
+            sb.append(num);
+        }
+
+        return sb.toString();
+    }
+
+    public String official_fucking_simple(int[] nums) {
+        String[] arrString = Arrays.stream(nums)
+        .boxed()
+        .map(String::valueOf)
+        .toArray(String[]::new);
+
+        Arrays.sort(arrString, (a, b) -> {
+            return (b + a).compareTo(a + b);
+        });
+
+        StringBuilder ans = new StringBuilder();
+
+        for (String s : arrString) ans.append(s);
+
+        return ans.charAt(0) == '0' ? "0" : ans.toString();
     }
 
     public String mySol3(int[] nums) {
@@ -72,10 +126,15 @@ class Solution {
         Integer[] arrInteger = Arrays.stream(nums).boxed().toArray(Integer[]::new);
 
         Arrays.sort(arrInteger, (a, b) -> {
-            long aFirst = Long.parseLong(String.valueOf(a) + String.valueOf(b));
-            long bFirst = Long.parseLong(String.valueOf(b) + String.valueOf(a));
+            // long aFirst = Long.parseLong(String.valueOf(a) + String.valueOf(b));
+            // long bFirst = Long.parseLong(String.valueOf(b) + String.valueOf(a));
 
-            return aFirst >= bFirst ? -1 : 1;
+            // return aFirst >= bFirst ? -1 : 1;
+
+            Long aFirst = Long.parseLong(String.valueOf(a) + String.valueOf(b));
+            Long bFirst = Long.parseLong(String.valueOf(b) + String.valueOf(a));
+
+            return bFirst.compareTo(aFirst);
         });
 
         StringBuilder ans = new StringBuilder();
