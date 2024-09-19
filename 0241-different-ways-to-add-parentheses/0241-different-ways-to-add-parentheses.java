@@ -10,13 +10,15 @@ class Solution {
         int index = 0;
 
         while (index < n) {
-            // while (index < n && !isOp(s.charAt(index))) {
-            //     index++;
-            // }
-            if (!isOp(s.charAt(index))) {
+            while (index < n && !isOp(s.charAt(index))) {
                 index++;
-                continue;
             }
+            // if (!isOp(s.charAt(index))) {
+            //     index++;
+            //     continue;
+            // }
+
+            if (index >= n) break;
 
             List<Integer> partA = mySol2(s.substring(0, index));
 
