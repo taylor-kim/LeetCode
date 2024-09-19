@@ -20,7 +20,7 @@ class Solution {
     }
 
     private void compute(String s, int start, int end, List<Integer>[][] dp) {
-        for (int i = start; i <= end; i++) {
+        for (int i = start; i < end; i++) {
             if (Character.isDigit(s.charAt(i))) continue;
 
             List<Integer> partA = dp[start][i - 1];
