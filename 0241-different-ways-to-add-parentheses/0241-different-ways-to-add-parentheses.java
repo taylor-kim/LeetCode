@@ -8,7 +8,7 @@ class Solution {
 
         int n = s.length();
 
-        for (int size = 3; size <= n; size++) {
+        for (int size = 0; size <= n; size++) {
             for (int start = 0; start + size - 1 < n; start++) {
                 int end = start + size - 1;
 
