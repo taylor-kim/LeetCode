@@ -1,6 +1,68 @@
 class Solution {
     public List<Integer> diffWaysToCompute(String expression) {
-        return official_memo(expression);
+        return official_iter(expression);
+    }
+
+    public List<Integer> official_iter(String s) {
+        List<Integer>[][] dp = initDp(s);
+
+        int n = s.length();
+
+        for (int size = 3; size <= n; size++) {
+            for (int start = 0; start + size - 1 < n; start++) {
+                int end = start + size - 1;
+
+                compute(s, start, end, dp);
+            }
+        }
+
+        return dp[0][n - 1];
+    }
+
+    private void compute(String s, int start, int end, List<Integer>[][] dp) {
+        for (int i = start; i <= end; i++) {
+            if (Character.isDigit(s.charAt(i))) continue;
+
+            List<Integer> partA = dp[start][i - 1];
+            List<Integer> partB = dp[i + 1][end];
+
+            char op = s.charAt(i);
+
+            for (int a : partA) {
+                for (int b : partB) {
+                    dp[start][end].add(calc(a, b, op));
+                }
+            }
+        }
+    }
+
+    private List<Integer>[][] initDp(String s) {
+        int n = s.length();
+        List<Integer>[][] dp = new List[n][n];
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                dp[i][j] = new ArrayList();
+            }
+        }
+
+        for (int i = 0; i < n; i++) {
+            char c = s.charAt(i);
+
+            if (Character.isDigit(c)) {
+                int num = c - '0';
+
+                dp[i][i].add(num);
+
+                if (i + 1 < n && Character.isDigit(s.charAt(i + 1))) {
+                    int num2 = s.charAt(i + 1) - '0';
+                    num2 = num * 10 + num2;
+                    dp[i][i + 1].add(num2);
+                }
+            }
+        }
+
+        return dp;
     }
 
     public List<Integer> official_memo(String s) {
