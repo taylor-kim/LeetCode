@@ -4,11 +4,11 @@ class Solution {
     }
 
     public List<Integer> official_iter(String s) {
-        List<Integer>[][] dp = initDp(s);
-
         int n = s.length();
 
-        for (int size = 0; size <= n; size++) {
+        List<Integer>[][] dp = initDp(s);
+
+        for (int size = 1; size <= n; size++) {
             for (int start = 0; start + size - 1 < n; start++) {
                 int end = start + size - 1;
 
