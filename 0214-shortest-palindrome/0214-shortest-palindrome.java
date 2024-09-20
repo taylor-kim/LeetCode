@@ -1,6 +1,19 @@
 class Solution {
     public String shortestPalindrome(String s) {
-        return mySol_tuned(s);
+        return try_official_bf(s);
+    }
+
+    public String try_official_bf(String s) {
+        String reversed = new StringBuilder(s).reverse().toString();
+        int n = s.length();
+
+        for (int i = 0; i < n; i++) {
+            if (s.substring(0, n - i).equals(reversed.substring(i, n))) {
+                return reversed.substring(0, i) + s;
+            }
+        }
+
+        return "";
     }
 
     public String mySol_tuned(String s) {
