@@ -1,6 +1,19 @@
 class Solution {
     public String shortestPalindrome(String s) {
-        return mySol3(s);
+        return official_kmp(s);
+    }
+
+    public String official_kmp(String s) {
+        String reversed = new StringBuilder(s).reverse().toString();
+        String comb = s + "#" + reversed;
+
+        int[] pi = createPI(comb);
+
+        int palindromeLength = pi[comb.length() - 1];
+
+        StringBuilder suffix = new StringBuilder(s.substring(palindromeLength)).reverse();
+
+        return suffix.append(s).toString();
     }
 
     public String mySol3(String s) {
