@@ -56,7 +56,6 @@ class Solution {
 
                 // max = Math.max(max, matching);
                 if (begin + matching == rev.length()) {
-                    if (max != 0) throw new RuntimeException(String.format("begin:%d, matching:%d, max:%d", begin, matching, max));
                     max = matching;
                 }
             } else {
