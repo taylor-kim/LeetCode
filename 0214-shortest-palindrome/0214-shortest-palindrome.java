@@ -1,6 +1,30 @@
 class Solution {
     public String shortestPalindrome(String s) {
-        return try_official_bf(s);
+        return mySol_tuned(s);
+    }
+
+    public String official_two_pointer(String s) {
+        int n = s.length();
+
+        if (n == 0) return s;
+
+        int left = 0;
+
+        for (int right = n - 1; right >= 0; right--) {
+            if (s.charAt(left) == s.charAt(right)) {
+                left++;
+            }
+        }
+
+        if (left == n) return s;
+
+        String nonPalinSuffix = s.substring(left);
+        StringBuilder reversedNonPalinSuffix = new StringBuilder(nonPalinSuffix).reverse();
+
+        return reversedNonPalinSuffix
+            .append(official_two_pointer(s.substring(0, left)))
+            .append(nonPalinSuffix)
+            .toString();
     }
 
     public String try_official_bf(String s) {
@@ -32,6 +56,7 @@ class Solution {
 
                 // max = Math.max(max, matching);
                 if (begin + matching == rev.length()) {
+                    if (max != 0) throw new RuntimeException(String.format("begin:%d, matching:%d, max:%d", begin, matching, max));
                     max = matching;
                 }
             } else {
