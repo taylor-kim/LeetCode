@@ -1,6 +1,41 @@
 class Solution {
     public String shortestPalindrome(String s) {
-        return official_kmp(s);
+        return mySol_tuned(s);
+    }
+
+    public String mySol_tuned(String s) {
+        int[] pi = createPI(s);
+
+        int begin = 0;
+        int matching = 0;
+
+        String rev = new StringBuilder().append(s).reverse().toString();
+
+        int max = 0;
+
+        while (begin + matching < rev.length()) {
+            if (rev.charAt(begin + matching) == s.charAt(matching)) {
+                matching++;
+
+                // max = Math.max(max, matching);
+                if (begin + matching == rev.length()) {
+                    max = matching;
+                }
+            } else {
+                if (matching == 0) {
+                    begin++;
+                } else {
+                    begin += matching - pi[matching - 1];
+                    matching = pi[matching - 1];
+                }
+            }
+        }
+
+        String matched = s.substring(0, max);
+        String tail = s.substring(max);
+        String head = new StringBuilder().append(tail).reverse().toString();
+
+        return head + matched + tail;
     }
 
     public String official_kmp(String s) {
@@ -20,7 +55,7 @@ class Solution {
         // return suffix.append(s).toString();
 
         StringBuilder sb = new StringBuilder();
-        
+
         return sb.append(reversed).append(s.substring(palindromeLength)).toString();
     }
 
