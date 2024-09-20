@@ -9,11 +9,19 @@ class Solution {
 
         int[] pi = createPI(comb);
 
+        System.out.println(Arrays.toString(pi));
+
         int palindromeLength = pi[comb.length() - 1];
 
-        StringBuilder suffix = new StringBuilder(s.substring(palindromeLength)).reverse();
+        // StringBuilder suffix = new StringBuilder(s.substring(palindromeLength)).reverse();
 
-        return suffix.append(s).toString();
+        // System.out.println(String.format("suffix:%s", suffix));
+
+        // return suffix.append(s).toString();
+
+        StringBuilder sb = new StringBuilder();
+        
+        return sb.append(reversed).append(s.substring(palindromeLength)).toString();
     }
 
     public String mySol3(String s) {
