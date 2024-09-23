@@ -27,10 +27,6 @@ class Solution {
         for (int i = index; i < s.length(); i++) {
             sb.append(s.charAt(i));
 
-            if (dict.contains(sb.toString())) {
-                
-            }
-
             int length = dict.contains(sb.toString()) ? 0 : sb.length();
 
             ans = Math.min(ans, length + mySol(s, dict, i + 1, memo));
