@@ -19,12 +19,12 @@ class Solution {
         for (int i = n - 1; i >= 0; i--) {
             String word = "";
 
+            dp[i] = 1 + dp[i + 1];
+
             for (int j = i; j < n; j++) {
                 word += s.charAt(j);
 
                 int length = dict.contains(word) ? 0 : word.length();
-
-                dp[i] = Math.min(dp[i], j - i + 1 + dp[j + 1]);
 
                 if (dict.contains(word)) {
                     dp[i] = Math.min(dp[i], dp[j + 1]);
