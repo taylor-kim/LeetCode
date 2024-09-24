@@ -4,10 +4,10 @@ class Solution {
     }
 
     public int bottomup2(String s, String[] dictionary) {
-        Trie trie = new Trie();
+        Trie root = new Trie();
 
         for (String word : dictionary) {
-            trie.add(word);
+            root.add(word);
         }
 
         int n = s.length();
@@ -17,14 +17,16 @@ class Solution {
         dp[n] = 0;
 
         for (int i = n - 1; i >= 0; i--) {
-            String word = "";
+            Trie trie = root;
 
             dp[i] = 1 + dp[i + 1];
 
             for (int j = i; j < n; j++) {
-                word += s.charAt(j);
+                trie = trie.children[s.charAt(j) - 'a'];
 
-                if (trie.find(word)) {
+                if (trie == null) break;
+
+                if (trie.isWord) {
                     dp[i] = Math.min(dp[i], dp[j + 1]);
                 }
             }
