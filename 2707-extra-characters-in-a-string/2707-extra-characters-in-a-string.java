@@ -4,10 +4,10 @@ class Solution {
     }
 
     public int bottomup2(String s, String[] dictionary) {
-        Set<String> dict = new HashSet();
+        Trie trie = new Trie();
 
         for (String word : dictionary) {
-            dict.add(word);
+            trie.add(word);
         }
 
         int n = s.length();
@@ -24,9 +24,7 @@ class Solution {
             for (int j = i; j < n; j++) {
                 word += s.charAt(j);
 
-                int length = dict.contains(word) ? 0 : word.length();
-
-                if (dict.contains(word)) {
+                if (trie.find(word)) {
                     dp[i] = Math.min(dp[i], dp[j + 1]);
                 }
             }
@@ -125,5 +123,34 @@ class Solution {
         }
 
         return memo[index] = ans;
+    }
+
+    class Trie {
+        private Trie[] children = new Trie[26];
+        private boolean isWord = false;
+
+        public void add(String s) {
+            Trie t = this;
+
+            for (char c : s.toCharArray()) {
+                if (t.children[c - 'a'] == null) t.children[c - 'a'] = new Trie();
+
+                t = t.children[c - 'a'];
+            }
+
+            t.isWord = true;
+        }
+
+        public boolean find(String s) {
+            Trie t = this;
+
+            for (char c : s.toCharArray()) {
+                if (t.children[c - 'a'] == null) return false;
+
+                t = t.children[c - 'a'];
+            }
+
+            return t.isWord;
+        }
     }
 }
