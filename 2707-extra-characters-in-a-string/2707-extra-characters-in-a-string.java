@@ -1,6 +1,40 @@
 class Solution {
     public int minExtraChar(String s, String[] dictionary) {
-        return bottomup2(s, dictionary);
+        return mySol_trie(s, dictionary);
+    }
+
+    public int mySol_trie(String s, String[] dictionary) {
+        Trie dict = new Trie();
+
+        for (String word : dictionary) {
+            dict.add(word);
+        }
+
+        return mySol_trie(s, dict, 0, new Integer[s.length()]);
+    }
+
+    public int mySol_trie(String s, Trie dict, int index, Integer[] memo) {
+        if (index >= s.length()) return 0;
+
+        if (memo[index] != null) {
+            return memo[index];
+        }
+
+        int ans = 1 + mySol_trie(s, dict, index + 1, memo);
+
+        Trie trie = dict;
+
+        for (int i = index; i < s.length(); i++) {
+            trie = trie.children[s.charAt(i) - 'a'];
+
+            if (trie == null) break;
+
+            if (trie.isWord) {
+                ans = Math.min(ans, mySol_trie(s, trie, i + 1, memo));
+            }
+        }
+
+        return memo[index] = ans;
     }
 
     public int bottomup2(String s, String[] dictionary) {
