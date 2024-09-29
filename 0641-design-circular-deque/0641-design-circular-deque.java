@@ -1,15 +1,23 @@
 class MyCircularDeque {
-    List<Integer> list = new ArrayList();
+    BiDirList dummyHead;
+    BiDirList dummyTail;
+    int size;
     int k;
 
     public MyCircularDeque(int k) {
         this.k = k;
+        dummyHead = new BiDirList(0);
+        dummyTail = new BiDirList(0);
+
+        dummyHead.next = dummyTail;
+        dummyTail.prev = dummyHead;
     }
     
     public boolean insertFront(int value) {
         if (isFull()) return false;
 
-        list.add(0, value);
+        dummyHead.setNext(new BiDirList(value));
+        size++;
 
         return true;
     }
@@ -17,7 +25,8 @@ class MyCircularDeque {
     public boolean insertLast(int value) {
         if (isFull()) return false;
 
-        list.add(value);
+        dummyTail.setPrev(new BiDirList(value));
+        size++;
 
         return true;
     }
@@ -25,7 +34,12 @@ class MyCircularDeque {
     public boolean deleteFront() {
         if (isEmpty()) return false;
 
-        list.remove(0);
+        BiDirList target = dummyHead.next;
+
+        dummyHead.next = target.next;
+        target.next.prev = dummyHead;
+
+        size--;
 
         return true;
     }
@@ -33,33 +47,56 @@ class MyCircularDeque {
     public boolean deleteLast() {
         if (isEmpty()) return false;
 
-        list.remove(list.size() - 1);
+        BiDirList target = dummyTail.prev;
+
+        dummyTail.prev = target.prev;
+        target.prev.next = dummyTail;
+
+        size--;
 
         return true;
     }
     
     public int getFront() {
-        if (isEmpty()) {
-            return -1;
-        }
+        if (isEmpty()) return -1;
 
-        return list.get(0);
+        return dummyHead.next.value;
     }
     
     public int getRear() {
-        if (isEmpty()) {
-            return -1;
-        }
+        if (isEmpty()) return -1;
 
-        return list.get(list.size() - 1);
+        return dummyTail.prev.value;
     }
     
     public boolean isEmpty() {
-        return list.size() == 0;
+        return size == 0;
     }
     
     public boolean isFull() {
-        return list.size() == k;
+        return size == k;
+    }
+
+    class BiDirList {
+        private BiDirList prev;
+        private BiDirList next;
+        private int value;
+
+        public BiDirList(int value) {
+            this.value = value;
+        }
+
+        public void setNext(BiDirList node) {
+            node.next = this.next;
+            node.prev = this; 
+            this.next = node;
+        }
+
+        public void setPrev(BiDirList node) {
+            node.prev = this.prev;
+            node.next = this;
+            this.prev = node;
+        }
     }
 }
 
