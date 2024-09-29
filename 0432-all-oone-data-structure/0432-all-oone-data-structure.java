@@ -48,7 +48,7 @@ class AllOne {
 
         // return map.get(key).last();
 
-        return map.lastEntry().getValue().last();
+        return map.lastEntry().getValue().first();
     }
     
     public String getMinKey() {
