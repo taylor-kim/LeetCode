@@ -44,17 +44,21 @@ class AllOne {
     public String getMaxKey() {
         if (map.isEmpty()) return "";
 
-        int key = map.lastKey();
+        // int key = map.lastKey();
 
-        return map.get(key).last();
+        // return map.get(key).last();
+
+        return map.lastEntry().getValue().last();
     }
     
     public String getMinKey() {
         if (map.isEmpty()) return "";
 
-        int key = map.firstKey();
+        // int key = map.firstKey();
 
-        return map.get(key).first();
+        // return map.get(key).first();
+
+        return map.firstEntry().getValue().first();
     }
 }
 
