@@ -3,6 +3,8 @@ class AllOne {
     MyList tail;
     Map<String, MyList> map;
 
+    //test
+
     public AllOne() {
         head = new MyList(0);
         tail = new MyList(0);
