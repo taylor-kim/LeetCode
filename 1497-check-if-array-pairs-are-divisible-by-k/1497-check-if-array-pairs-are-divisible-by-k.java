@@ -1,6 +1,34 @@
 class Solution {
     public boolean canArrange(int[] arr, int k) {
-        return mySol2(arr, k);
+        return official_hashing_and_counting(arr, k);
+    }
+
+    public boolean official_hashing_and_counting(int[] arr, int k) {
+        Map<Integer, Integer> counter = new HashMap();
+
+        for (int num : arr) {
+            num = mod(num, k);
+            counter.put(num, counter.getOrDefault(num, 0) + 1);
+        }
+
+        for (int num : arr) {
+            num = mod(num, k);
+
+            if (num == 0) {
+                if (counter.get(num) % 2 == 1) {
+                    return false;
+                }
+            } else if (
+                !Objects.equals(
+                    counter.get(num),
+                    counter.get(k - num)
+                )
+            ) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     public boolean mySol2(int[] arr, int k) {
