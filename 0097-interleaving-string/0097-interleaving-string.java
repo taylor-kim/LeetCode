@@ -1,6 +1,73 @@
 class Solution {
     public boolean isInterleave(String s1, String s2, String s3) {
-        return mySol(s1, s2, s3);
+        return try_bottomup2(s1, s2, s3);
+    }
+
+    public boolean try_bottomup2(String s1, String s2, String s3) {
+        int m = s1.length();
+        int n = s2.length();
+
+        if (m + n != s3.length()) return false;
+
+        boolean[][] dp = new boolean[m + 1][n + 1];
+        dp[0][0] = true;
+
+        for(int i = 1; i <= s1.length(); i++){
+            dp[i][0] = dp[i - 1][0] && s1.charAt(i - 1) == s3.charAt(i - 1);
+        }
+
+        for(int i = 1; i <= s2.length(); i++){
+            dp[0][i] = dp[0][i - 1] && s2.charAt(i - 1) == s3.charAt(i - 1);
+        }
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (s1.charAt(i) == s3.charAt(i + j + 1)) {
+                    dp[i + 1][j + 1] |= dp[i][j + 1];
+                }
+
+                if (s2.charAt(j) == s3.charAt(i + j + 1)) {
+                    dp[i + 1][j + 1] |= dp[i + 1][j];
+                }
+            }
+        }
+
+        return dp[m][n];
+    }
+
+    public boolean try_bottomup_false(String s1, String s2, String s3) {
+        if (s1.length() < s2.length()) {
+            String temp = s1;
+            s1 = s2;
+            s2 = temp;
+        }
+
+        int m = s1.length();
+        int n = s2.length();
+
+        if (m == 0 || n == 0) {
+            return (s1 + s2).equals(s3);
+        }
+
+        if (m + n != s3.length()) return false;
+
+        boolean[][] dp = new boolean[m + 1][n + 1];
+
+        dp[m - 1][n] = s1.charAt(m - 1) == s3.charAt(m + n - 1);
+        dp[m][n - 1] = s2.charAt(n - 1) == s3.charAt(m + n - 1);
+
+        for (int i = m - 1; i >= 0; i--) {
+            for (int j = n - 1; j >= 0; j--) {
+                if (s1.charAt(i) == s3.charAt(i + j)) {
+                    dp[i][j] |= dp[i + 1][j];
+                }
+                if (s2.charAt(j) == s3.charAt(i + j)) {
+                    dp[i][j] |= dp[i][j + 1];
+                }
+            }
+        }
+
+        return dp[0][0];
     }
 
     public boolean mySol(String s1, String s2, String s3) {
