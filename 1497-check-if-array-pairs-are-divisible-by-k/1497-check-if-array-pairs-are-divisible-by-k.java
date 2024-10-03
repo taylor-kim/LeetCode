@@ -1,6 +1,6 @@
 class Solution {
     public boolean canArrange(int[] arr, int k) {
-        return official_sorting_and_two_pointer(arr, k);
+        return mySol2(arr, k);
     }
 
     public boolean official_sorting_and_two_pointer(int[] arr, int k) {
@@ -61,8 +61,6 @@ class Solution {
     public boolean mySol2(int[] arr, int k) {
         Map<Integer, Integer> map = new HashMap();
 
-        int matching = 0;
-
         for (int i = 0; i < arr.length; i++) {
             int num = mod(arr[i], k);
             int complement = mod(k - num, k);
@@ -73,14 +71,12 @@ class Solution {
                 if (map.get(complement) == 0) {
                     map.remove(complement);
                 }
-
-                matching++;
             } else {
                 map.put(num, map.getOrDefault(num, 0) + 1);
             }
         }
 
-        return arr.length / 2 == matching;
+        return map.size() == 0;
     }
 
     private int mod(int num, int m) {
