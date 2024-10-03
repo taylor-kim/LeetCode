@@ -1,6 +1,33 @@
 class Solution {
     public boolean canArrange(int[] arr, int k) {
-        return official_hashing_and_counting(arr, k);
+        return official_sorting_and_two_pointer(arr, k);
+    }
+
+    public boolean official_sorting_and_two_pointer(int[] arr, int k) {
+        Integer[] arr2 = new Integer[arr.length];
+
+        for (int i = 0; i < arr.length; i++) {
+            arr2[i] = arr[i];
+        }
+
+        Arrays.sort(arr2, (a, b) -> {
+            return mod(a, k) - mod(b, k);
+        });
+
+        int start = 0;
+        int end = arr2.length - 1;
+
+        while (start < end) {
+            if (arr2[start] % k != 0) break;
+            if (arr2[start + 1] % k != 0) return false;
+            start += 2;
+        }
+
+        while (start < end) {
+            if ((arr2[start++] + arr2[end--]) % k != 0) return false;
+        }
+
+        return true;
     }
 
     public boolean official_hashing_and_counting(int[] arr, int k) {
