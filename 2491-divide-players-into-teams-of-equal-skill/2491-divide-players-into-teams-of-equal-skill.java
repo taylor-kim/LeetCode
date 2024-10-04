@@ -1,6 +1,6 @@
 class Solution {
     public long dividePlayers(int[] skill) {
-        return official_freq_map(skill);
+        return mySol(skill);
     }
 
     public long official_freq_map(int[] skill) {
@@ -98,6 +98,8 @@ class Solution {
         long sum = 0;
 
         for (int num : skill) sum += num;
+
+        if (sum % teams != 0) return -1;
 
         int target = (int)(sum / teams);
 
