@@ -1,6 +1,27 @@
 class Solution {
     public long dividePlayers(int[] skill) {
-        return mySol(skill);
+        return official_sort(skill);
+    }
+
+    public long official_sort(int[] skill) {
+        int n = skill.length;
+
+        Arrays.sort(skill);
+
+        int target = skill[0] + skill[n - 1];
+
+        long ans = 0;
+
+        for (int i = 0; i < n / 2; i++) {
+            int one = skill[i];
+            int two = skill[n - i - 1];
+
+            if (target != one + two) return -1;
+
+            ans += (long)one * (long)two;
+        }
+
+        return ans;
     }
 
     public long mySol(int[] skill) {
