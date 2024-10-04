@@ -10,11 +10,7 @@ class Solution {
 
         for (int num : skill) sum += num;
 
-        // if (sum % n != 0) return -1;
-
         int target = (int)(sum / teams);
-
-        // System.out.println(String.format("sum:%d, teams:%d, target:%d", sum, teams, target));
 
         Map<Integer, Integer> map = new HashMap();
 
@@ -24,7 +20,6 @@ class Solution {
             int complement = target - num;
 
             if (map.containsKey(complement)) {
-                // System.out.println(String.format("num:%d, complement:%d", num, complement));
                 ans += num * complement;
 
                 map.put(complement, map.get(complement) - 1);
