@@ -1,6 +1,33 @@
 class Solution {
     public long dividePlayers(int[] skill) {
-        return official_sort(skill);
+        return official_freq_array(skill);
+    }
+
+    public long official_freq_array(int[] skill) {
+        int n = skill.length;
+        int sum = 0;
+        int[] freq = new int[1001];
+
+        for (int num : skill) {
+            sum += num;
+            freq[num]++;
+        }
+
+        if (sum % (n / 2) != 0) return -1;
+
+        int target = sum / (n / 2);
+
+        long ans = 0;
+
+        for (int num : skill) {
+            int complement = target - num;
+
+            if (freq[complement]-- == 0) return -1;
+
+            ans += num * complement;
+        }
+
+        return ans / 2;
     }
 
     public long official_sort(int[] skill) {
