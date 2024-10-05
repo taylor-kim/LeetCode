@@ -1,6 +1,51 @@
 class Solution {
     public boolean checkInclusion(String s1, String s2) {
-        return mySol(s1, s2);
+        return official_optimised(s1, s2);
+    }
+
+    public boolean official_optimised(String s1, String s2) {
+        if (s1.length() > s2.length()) return false;
+
+        int[] freq1 = new int[26];
+        int[] freq2 = new int[26];
+
+        for (int i = 0; i < s1.length(); i++) {
+            freq1[s1.charAt(i) - 'a']++;
+            freq2[s2.charAt(i) - 'a']++;
+        }
+
+        int count = 0;
+
+        for (int i = 0; i < freq1.length; i++) {
+            if (freq1[i] == freq2[i]) count++;
+        }
+
+        if (count == 26) return true;
+
+        for (int i = 0; i < s2.length() - s1.length(); i++) {
+            int left = s2.charAt(i) - 'a';
+            int right = s2.charAt(i + s1.length()) - 'a';
+
+            freq2[right]++;
+
+            if (freq1[right] == freq2[right]) {
+                count++;
+            } else if (freq1[right] + 1 == freq2[right]) {
+                count--;
+            }
+
+            freq2[left]--;
+
+            if (freq1[left] == freq2[left]) {
+                count++;
+            } else if (freq1[left] - 1 == freq2[left]) {
+                count--;
+            }
+
+            if (count == 26) return true;
+        }
+
+        return false;
     }
 
     public boolean mySol(String s1, String s2) {
