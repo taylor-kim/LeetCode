@@ -1,6 +1,28 @@
 class Solution {
     public int minLength(String s) {
-        return mySol_stack(s);
+        return official_inplace(s);
+    }
+
+    public int official_inplace(String s) {
+        int writeIndex = 0;
+
+        char[] arr = s.toCharArray();
+
+        for (int readIndex = 0; readIndex < arr.length; readIndex++) {
+            arr[writeIndex] = arr[readIndex];
+
+            if (writeIndex > 0 && 
+                (
+                    (arr[writeIndex - 1] == 'A' || arr[writeIndex - 1] == 'C')
+                    && arr[writeIndex] == arr[writeIndex - 1] + 1
+                )) {
+                    writeIndex--;
+            } else {
+                writeIndex++;
+            }
+        }
+
+        return writeIndex;
     }
 
     public int mySol_stack(String s) {
