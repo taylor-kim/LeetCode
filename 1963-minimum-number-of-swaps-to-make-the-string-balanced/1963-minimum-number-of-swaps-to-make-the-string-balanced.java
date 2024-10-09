@@ -1,26 +1,36 @@
 class Solution {
     public int minSwaps(String s) {
-        return official_stack(s);
+        return mySol(s);
     }
 
-    public int official_stack(String s) {
-        Stack<Character> stack = new Stack();
-        int unmatched = 0;
+    public int mySol(String s) {
+        Stack<Integer> stack = new Stack();
+        int open = 0;
+        int close = 0;
 
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
 
-            if (c == '[') {
-                stack.push(c);
+            if (!stack.isEmpty() && s.charAt(stack.peek()) == '[' && c == ']') {
+                stack.pop();
+                open--;
             } else {
-                if (stack.isEmpty()) {
-                    unmatched++;
+                stack.push(i);
+
+                if (c == '[') {
+                    open++;
                 } else {
-                    stack.pop();
+                    close++;
                 }
             }
         }
 
-        return (unmatched + 1) / 2;
+        // System.out.println(String.format("open:%d, close:%d", open, close));
+
+        int ans = stack.size() / 2;
+
+        // return ans > 1 ? ans - 1 : ans;
+
+        return (stack.size() / 2 + 1) / 2;
     }
 }
