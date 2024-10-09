@@ -1,11 +1,10 @@
 class Solution {
     public int minSwaps(String s) {
-        return mySol(s);
+        return official_opt(s);
     }
 
     public int official_opt(String s) {
         int open = 0;
-        int unmatched = 0;
 
         for (int i = 0; i < s.length(); i++) {
             if (s.charAt(i) == '[') {
@@ -13,13 +12,11 @@ class Solution {
             } else {
                 if (open > 0) {
                     open--;
-                } else {
-                    unmatched++;
                 }
             }
         }
 
-        return (unmatched + 1) / 2;
+        return (open + 1) / 2;
     }
 
     public int mySol(String s) {
