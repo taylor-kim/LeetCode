@@ -46,10 +46,8 @@ class Solution {
 
         // System.out.println(String.format("open:%d, close:%d", open, close));
 
-        int size = stack.size();
+        int unmatched = stack.size() / 2;
 
-        if (size <= 2) return size / 2;
-
-        return size / 4 + (size % 4 == 0 ? 0 : 1);
+        return unmatched / 2 + (unmatched % 2);
     }
 }
