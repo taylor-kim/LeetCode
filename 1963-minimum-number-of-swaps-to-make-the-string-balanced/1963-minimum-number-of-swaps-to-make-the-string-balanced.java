@@ -1,6 +1,6 @@
 class Solution {
     public int minSwaps(String s) {
-        return official_opt(s);
+        return mySol(s);
     }
 
     public int official_opt(String s) {
@@ -46,14 +46,10 @@ class Solution {
 
         // System.out.println(String.format("open:%d, close:%d", open, close));
 
-        int ans = stack.size() / 2;
-
-        // return ans > 1 ? ans - 1 : ans;
-
         int size = stack.size();
 
         if (size <= 2) return size / 2;
 
-        return stack.size() / 4;
+        return size / 4 + (size % 4 == 0 ? 0 : 1);
     }
 }
