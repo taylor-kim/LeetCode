@@ -1,6 +1,27 @@
 class Solution {
     public int minAddToMakeValid(String s) {
-        return mySol2(s);
+        return official_nostack(s);
+    }
+
+    public int official_nostack(String s) {
+        int open = 0;
+        int unmatched = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+
+            if (c == '(') {
+                open++;
+            } else {
+                if (open > 0) {
+                    open--;
+                } else {
+                    unmatched++;
+                }
+            }
+        }
+
+        return open + unmatched;
     }
 
     public int mySol2(String s) {
