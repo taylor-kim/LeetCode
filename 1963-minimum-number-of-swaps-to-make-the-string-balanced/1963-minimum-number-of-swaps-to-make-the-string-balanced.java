@@ -50,6 +50,10 @@ class Solution {
 
         // return ans > 1 ? ans - 1 : ans;
 
-        return (stack.size() / 2 + 1) / 2;
+        int size = stack.size();
+
+        if (size <= 2) return size / 2;
+
+        return stack.size() / 4;
     }
 }
