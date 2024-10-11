@@ -20,7 +20,7 @@ class Solution {
 
         int chair = 0;
 
-        Queue<Integer> returnedChairs = new LinkedList();
+        Queue<Integer> returnedChairs = new PriorityQueue();
 
         TreeMap<Integer, List<Integer>> treeMap = new TreeMap();
 
@@ -35,7 +35,12 @@ class Solution {
 
             while (treeMap.floorKey(a) != null) {
                 Integer key = treeMap.floorKey(a);
-                returnedChairs.addAll(treeMap.get(key));
+
+                for (int c : treeMap.get(key)) {
+                    returnedChairs.add(c);
+                }
+
+                // returnedChairs.addAll(treeMap.get(key));
 
                 treeMap.remove(key);
             }
@@ -49,7 +54,7 @@ class Solution {
             treeMap.computeIfAbsent(l, k -> new ArrayList()).add(ans);
 
             if (fNum == targetFriend) {
-                break;
+                return ans;
             }
         }
 
