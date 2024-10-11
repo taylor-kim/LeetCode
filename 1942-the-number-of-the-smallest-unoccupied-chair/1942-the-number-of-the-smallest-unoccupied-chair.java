@@ -36,11 +36,7 @@ class Solution {
             while (treeMap.floorKey(a) != null) {
                 Integer key = treeMap.floorKey(a);
 
-                for (int c : treeMap.get(key)) {
-                    returnedChairs.add(c);
-                }
-
-                // returnedChairs.addAll(treeMap.get(key));
+                returnedChairs.addAll(treeMap.get(key));
 
                 treeMap.remove(key);
             }
