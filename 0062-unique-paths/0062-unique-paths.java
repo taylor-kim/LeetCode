@@ -5,10 +5,9 @@ class Solution {
 
     public int try_20241012_bottomup_spaceopt2(int m, int n) {
         int[] dp = new int[n];
-        // dp[n - 1] = 1;
-        Arrays.fill(dp, 1);
+        dp[n - 1] = 1;
 
-        for (int r = m - 2; r >= 0; r--) {
+        for (int r = m - 1; r >= 0; r--) {
             for (int c = n - 2; c >= 0; c--) {
                 dp[c] = dp[c] + dp[c + 1];
             }
