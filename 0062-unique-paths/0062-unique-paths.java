@@ -1,6 +1,24 @@
 class Solution {
     public int uniquePaths(int m, int n) {
-        return try_20241012(m, n);
+        return try_20241012_bottomup(m, n);
+    }
+
+    public int try_20241012_bottomup(int m, int n) {
+        int[][] dp = new int[m][n];
+        
+        for (int r = 0; r < dp.length; r++) {
+            dp[r][n - 1] = 1;
+        }
+
+        Arrays.fill(dp[m - 1], 1);
+
+        for (int r = m - 2; r >= 0; r--) {
+            for (int c = n - 2; c >= 0; c--) {
+                dp[r][c] += dp[r + 1][c] + dp[r][c + 1];
+            }
+        }
+
+        return dp[0][0];
     }
 
     public int try_20241012(int m, int n) {
