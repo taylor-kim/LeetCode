@@ -1,11 +1,12 @@
 class Solution {
     public int uniquePaths(int m, int n) {
-        return try_20241012_bottomup(m, n);
+        return try_20241012_bottomup_spaceopt2(m, n);
     }
 
     public int try_20241012_bottomup_spaceopt2(int m, int n) {
         int[] dp = new int[n];
-        dp[n - 1] = 1;
+        // dp[n - 1] = 1;
+        Arrays.fill(dp, 1);
 
         for (int r = m - 2; r >= 0; r--) {
             for (int c = n - 2; c >= 0; c--) {
