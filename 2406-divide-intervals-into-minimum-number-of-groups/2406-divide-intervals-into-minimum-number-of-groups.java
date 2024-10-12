@@ -22,7 +22,7 @@ class Solution {
                     map.remove(key);
                 }
 
-                key = map.ceilingKey(d[1]);
+                key = map.higherKey(d[1]);
             }
 
             ans++;
