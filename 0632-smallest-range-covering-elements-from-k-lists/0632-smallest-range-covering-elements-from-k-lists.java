@@ -1,9 +1,43 @@
 class Solution {
     public int[] smallestRange(List<List<Integer>> nums) {
-        return mySol3_simillar_official_bf(nums);
+        return official_pq(nums);
     }
 
-    public int[] mySol3_simillar_official_bf(List<List<Integer>> nums) {
+    public int[] official_pq(List<List<Integer>> nums) {
+        Queue<int[]> pq = new PriorityQueue<>((a, b) -> {
+            return a[0] - b[0];
+        });
+
+        int max = Integer.MIN_VALUE;
+
+        for (int i = 0; i < nums.size(); i++) {
+            int num = nums.get(i).get(0);
+            pq.add(new int[] {num, i, 0});
+            max = Math.max(max, num);
+        }
+
+        int left = 0;
+        int right = Integer.MAX_VALUE;
+
+        while (pq.size() == nums.size()) {
+            int num = pq.peek()[0], row = pq.peek()[1], col = pq.poll()[2];
+
+            if (max - num < right - left) {
+                left = num;
+                right = max;
+            }
+
+            if (col + 1 < nums.get(row).size()) {
+                int next = nums.get(row).get(col + 1);
+                pq.add(new int[] {next, row, col + 1});
+                max = Math.max(max, next);
+            }
+        }
+
+        return new int[] {left, right};
+    }
+
+    public int[] official_bf(List<List<Integer>> nums) {
         boolean isEmpty = false;
 
         int[] ans = new int[] {0, Integer.MAX_VALUE};
@@ -42,70 +76,66 @@ class Solution {
         return ans;
     }
 
-    public int[] mySol2(List<List<Integer>> nums) {
-        boolean isEmpty = false;
-
+    public int[] mySol2_after_official_bf_fail(List<List<Integer>> nums) {
         int[] ans = new int[] {0, Integer.MAX_VALUE};
 
-        int[] indices = new int[nums.size()];
+        int[] lIndices = new int[nums.size()];
+        int[] rIndices = new int[nums.size()];
 
-        while (!isEmpty) {
-            List<Integer> minRow = null;
-            List<Integer> maxRow = null;
+        for (int i = 0; i < nums.size(); i++) {
+            rIndices[i] = nums.get(i).size() - 1;
+        }
+
+        while (true) {
+            int minRow = 0;
+            int maxRow = 0;
 
             int lMin = Integer.MAX_VALUE;
             int lMax = Integer.MIN_VALUE;
             int rMin = Integer.MAX_VALUE;
             int rMax = Integer.MIN_VALUE;
 
-            for (List<Integer> row : nums) {
-                if (row.size() == 0) {
-                    isEmpty = true;
-                    break;
+            for (int i = 0; i < nums.size(); i++) {
+                List<Integer> row = nums.get(i);
+
+                int lNum = row.get(lIndices[i]);
+
+                if (lMin > lNum) {
+                    lMin = lNum;
+                    minRow = i;
                 }
 
-                if (lMin > row.get(0)) {
-                    lMin = row.get(0);
-                    minRow = row;
-                }
+                lMax = Math.max(lMax, lNum);
 
-                lMax = Math.max(lMax, row.get(0));
+                int rNum = row.get(rIndices[i]);
 
-                rMin = Math.min(rMin, row.get(row.size() - 1));
+                rMin = Math.min(rMin, rNum);
 
-                if (rMax < row.get(row.size() - 1)) {
-                    rMax = row.get(row.size() - 1);
-                    maxRow = row;
-                }
-            }
-
-            // System.out.println(nums);
-
-            if (!isEmpty) {
-                // System.out.println(String.format("lMin:%d, lMax:%d, rMin:%d, rMax:%d", lMin, lMax, rMin, rMax));
-
-                int ld = lMax - lMin;
-                int rd = rMax - rMin;
-
-                if (ld <= rd) {
-                    maxRow.remove(maxRow.size() - 1);
-
-                    if (ld < ans[1] - ans[0]) {
-                        ans[0] = lMin;
-                        ans[1] = lMax;
-                    }
-                } else {
-                    minRow.remove(0);
-
-                    if (rd < ans[1] - ans[0]) {
-                        ans[0] = rMin;
-                        ans[1] = rMax;
-                    }
+                if (rMax < rNum) {
+                    rMax = rNum;
+                    maxRow = i;
                 }
             }
 
-            if (lMin == rMin || lMax == rMax) {
-                break;
+            int ld = lMax - lMin;
+            int rd = rMax - rMin;
+
+            System.out.println(String.format("lMin:%d, lMax:%d, rMin:%d, rMax:%d, ld:%d, rd:%d", lMin, lMax, rMin, rMax, ld, rd));
+
+            if (ld <= rd) {
+                if (ld < ans[1] - ans[0]) {
+                    ans[0] = lMin;
+                    ans[1] = lMax;
+                }
+
+                if (lIndices[maxRow] > --rIndices[maxRow]) break;
+            } else {
+                if (rd < ans[1] - ans[0]) {
+                    ans[0] = rMin;
+                    ans[1] = rMax;
+                }
+
+                if (++lIndices[maxRow] > rIndices[maxRow]) break;
             }
         }
 
