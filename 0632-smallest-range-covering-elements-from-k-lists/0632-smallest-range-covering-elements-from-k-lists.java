@@ -1,6 +1,52 @@
 class Solution {
     public int[] smallestRange(List<List<Integer>> nums) {
-        return official_pq(nums);
+        return official_sliding_window(nums);
+    }
+
+    public int[] official_sliding_window(List<List<Integer>> nums) {
+        List<int[]> list = new ArrayList();
+
+        for (int i = 0; i < nums.size(); i++) {
+            for (int num : nums.get(i)) {
+                list.add(new int[] {num, i});
+            }
+        }
+
+        Collections.sort(list, (a, b) -> {
+            return a[0] - b[0];
+        });
+
+        int left = 0;
+        int count = 0;
+        Map<Integer, Integer> freq = new HashMap();
+        int[] ans = new int[] {0, Integer.MAX_VALUE};
+
+        for (int right = 0; right < list.size(); right++) {
+            int rightNum = list.get(right)[0];
+            int rightRow = list.get(right)[1];
+
+            freq.put(rightRow, freq.getOrDefault(rightRow, 0) + 1);
+
+            if (freq.get(rightRow) == 1) count++;
+
+            while (count == nums.size()) {
+                int leftNum = list.get(left)[0];
+                int leftRow = list.get(left)[1];
+
+                if (rightNum - leftNum < ans[1] - ans[0]) {
+                    ans[0] = leftNum;
+                    ans[1] = rightNum;
+                }
+
+                freq.put(leftRow, freq.get(leftRow) - 1);
+
+                if (freq.get(leftRow) == 0) count--;
+
+                left++;
+            }
+        }
+
+        return ans;
     }
 
     public int[] official_pq(List<List<Integer>> nums) {
