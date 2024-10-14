@@ -1,6 +1,26 @@
 class Solution {
     public int minGroups(int[][] intervals) {
-        return official_events(intervals);
+        return official_treemap(intervals);
+    }
+
+    public int official_treemap(int[][] intervals) {
+        Map<Integer, Integer> map = new TreeMap();
+
+        for (int[] i : intervals) {
+            map.put(i[0], map.getOrDefault(i[0], 0) + 1);
+            map.put(i[1] + 1, map.getOrDefault(i[1] + 1, 0) - 1);
+        }
+
+        int ans = 0;
+        int current = 0;
+
+        for (int value : map.values()) {
+            current += value;
+
+            ans = Math.max(ans, current);
+        }
+
+        return ans;
     }
 
     public int official_events(int[][] intervals) {
