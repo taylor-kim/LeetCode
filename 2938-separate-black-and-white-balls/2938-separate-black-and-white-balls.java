@@ -1,9 +1,23 @@
 class Solution {
     public long minimumSteps(String s) {
-        return trick(s);
+        return mySol3(s);
     }
 
-    public long trick(String s) {
+    public long mySol3(String s) {
+        int n = s.length();
+        long ans = 0;
+        int last = n - 1;
+
+        for (int i = 0; i < n; i++) {
+            if (s.charAt(i) == '1') {
+                ans += last-- - i;
+            }
+        }
+        
+        return ans;
+    }
+
+    public long mySol2(String s) {
         int n = s.length();
         List<Integer> blacks = new ArrayList();
 
@@ -13,7 +27,7 @@ class Solution {
 
         if (blacks.size() == n) return 0;
 
-        int ans = 0;
+        long ans = 0;
 
         int last = n - 1;
 
@@ -25,7 +39,7 @@ class Solution {
         return ans;
     }
 
-    public long mySol(String s) {
+    public long mySol_aborted(String s) {
         char[] arr = s.toCharArray();
         int n = arr.length;
 
