@@ -7,15 +7,13 @@ class Solution {
         String s = String.valueOf(num);
         char[] arr = new char[s.length()];
 
-        List<Integer>[] freq = new List[10];
+        int[] freq = new int[10];
 
-        for (int i = 0; i < freq.length; i++) {
-            freq[i] = new ArrayList();
-        }
+        Arrays.fill(freq, -1);
 
         for (int i = 0; i < arr.length; i++) {
             arr[i] = s.charAt(i);
-            freq[arr[i] - '0'].add(i);
+            freq[arr[i] - '0'] = i;
         }
 
         int left = 0;
@@ -26,8 +24,8 @@ class Solution {
             // System.out.println(String.format("left:%d, digit:%d", left, digit));
 
             for (int max = 9; max > digit; max--) {
-                if (freq[max].size() > 0) {
-                    int j = freq[max].get(freq[max].size() - 1);
+                if (freq[max] > -1) {
+                    int j = freq[max];
 
                     if (left >= j) continue;
 
