@@ -1,6 +1,46 @@
 class Solution {
     public String longestDiverseString(int a, int b, int c) {
-        return mySol(a, b, c);
+        return official_pq(a, b, c);
+    }
+
+    public String official_pq(int a, int b, int c) {
+        Queue<int[]> pq = new PriorityQueue<>((o1, o2) -> {
+            return o2[0] - o1[0];
+        });
+
+        pq.add(new int[] {a, (int)'a'});
+        pq.add(new int[] {b, (int)'b'});
+        pq.add(new int[] {c, (int)'c'});
+
+        StringBuilder sb = new StringBuilder();
+
+        while (!pq.isEmpty()) {
+            int[] data = pq.poll();
+
+            if (data[0] <= 0) break;
+
+            if (sb.length() >= 2 
+                && sb.charAt(sb.length() - 1) == (char)data[1]
+                && sb.charAt(sb.length() - 2) == (char)data[1]) {
+
+                if (pq.isEmpty()) break;
+
+                int[] next = pq.poll();
+                
+                if (next[0] <= 0) break;
+
+                sb.append((char)next[1]);
+                next[0]--;
+                pq.add(next);
+            } else {
+                sb.append((char)data[1]);
+                data[0]--;
+            }
+
+            pq.add(data);
+        }
+
+        return sb.toString();
     }
 
     public String mySol(int a, int b, int c) {
