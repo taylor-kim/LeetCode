@@ -1,6 +1,23 @@
 class Solution {
     public int countMaxOrSubsets(int[] nums) {
-        return my_bf(nums);
+        return official_topdown(nums);
+    }
+
+    public int official_topdown(int[] nums) {
+        int target = 0;
+
+        for (int num : nums) target |= num;
+
+        return official_topdown(nums, 0, 0, target);
+    }
+
+    public int official_topdown(int[] nums, int index, int or, int target) {
+        if (index >= nums.length) return or == target ? 1 : 0;
+
+        int exclude = official_topdown(nums, index + 1, or, target);
+        int include = official_topdown(nums, index + 1, or | nums[index], target);
+
+        return exclude + include;
     }
 
     public int my_bf(int[] nums) {
