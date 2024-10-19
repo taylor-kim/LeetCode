@@ -1,6 +1,22 @@
 class Solution {
     public char findKthBit(int n, int k) {
-        return mySol_bf(n, k);
+        return official_recur(n, k);
+    }
+
+    public char official_recur(int n, int k) {
+        if (n == 1) return '0';
+
+        int len = (1 << n) - 1;
+
+        if (k == len / 2 + 1) {
+            return '1';
+        } else if (k < len / 2 + 1) {
+            return official_recur(n - 1, k);
+        } else {
+            char c = official_recur(n - 1, len - k + 1);
+
+            return c == '0' ? '1' : '0';
+        }
     }
 
     public char mySol_bf(int n, int k) {
