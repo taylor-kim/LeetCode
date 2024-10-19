@@ -8,8 +8,6 @@ class Solution {
 
         for (int num : nums) max |= num;
 
-        System.out.println(max);
-
         int leftMost = 0;
 
         for (int i = 31; i >= 0; i--) {
@@ -35,7 +33,7 @@ class Solution {
             max |= num;
         }
 
-        System.out.println(Arrays.toString(dp));
+        // System.out.println(Arrays.toString(dp));
 
         return dp[max];
     }
