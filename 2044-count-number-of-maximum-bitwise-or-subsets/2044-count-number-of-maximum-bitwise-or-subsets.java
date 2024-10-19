@@ -1,6 +1,43 @@
 class Solution {
     public int countMaxOrSubsets(int[] nums) {
-        return official_bit(nums);
+        return official_bit_dp(nums);
+    }
+
+    public int official_bit_dp(int[] nums) {
+        int max = 0;
+
+        for (int num : nums) max |= num;
+
+        System.out.println(max);
+
+        int leftMost = 0;
+
+        for (int i = 31; i >= 0; i--) {
+            if (((max >> i) & 1) == 1) {
+                leftMost = i;
+                break;
+            }
+        }
+
+        int size = (1 << (leftMost + 1)) - 1;
+
+        // System.out.println(String.format("max:%d, leftMost:%d, size:%d", max, leftMost, size));
+
+        int[] dp = new int[size + 1];
+        dp[0] = 1;
+        max = 0;
+
+        for (int num : nums) {
+            for (int i = max; i >= 0; i--) {
+                dp[i | num] += dp[i];
+            }
+
+            max |= num;
+        }
+
+        System.out.println(Arrays.toString(dp));
+
+        return dp[max];
     }
 
     public int official_bit(int[] nums) {
