@@ -1,6 +1,27 @@
 class Solution {
     public int countMaxOrSubsets(int[] nums) {
-        return official_topdown_memo(nums);
+        return official_bit(nums);
+    }
+
+    public int official_bit(int[] nums) {
+        int subsetCount = 1 << nums.length;
+        int ans = 0;
+
+        int target = 0;
+
+        for (int num : nums) target |= num;
+
+        for (int subset = 0; subset < subsetCount; subset++) {
+            int or = 0;
+
+            for (int i = 0; i < nums.length; i++) {
+                if (((subset >> i) & 1) == 1) or |= nums[i];
+            }
+
+            if (or == target) ans++;
+        }
+
+        return ans;
     }
 
     public int official_topdown_memo(int[] nums) {
