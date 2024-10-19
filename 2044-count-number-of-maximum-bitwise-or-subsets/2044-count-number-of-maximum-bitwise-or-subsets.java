@@ -1,6 +1,25 @@
 class Solution {
     public int countMaxOrSubsets(int[] nums) {
-        return official_topdown(nums);
+        return official_topdown_memo(nums);
+    }
+
+    public int official_topdown_memo(int[] nums) {
+        int target = 0;
+
+        for (int num : nums) target |= num;
+
+        return official_topdown_memo(nums, 0, 0, target, new Integer[nums.length][target + 1]);
+    }
+
+    public int official_topdown_memo(int[] nums, int index, int or, int target, Integer[][] memo) {
+        if (index >= nums.length) return or == target ? 1 : 0;
+
+        if (memo[index][or] != null) return memo[index][or];
+
+        int exclude = official_topdown_memo(nums, index + 1, or, target, memo);
+        int include = official_topdown_memo(nums, index + 1, or | nums[index], target, memo);
+
+        return memo[index][or] = exclude + include;
     }
 
     public int official_topdown(int[] nums) {
