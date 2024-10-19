@@ -1,6 +1,31 @@
 class Solution {
     public int jump(int[] nums) {
-        return greedy(nums);
+        return greedy_study(nums);
+    }
+
+    public int greedy_study(int[] nums) {
+        int n = nums.length;
+
+        if (n == 1) return 0;
+
+        int far = 0;
+        int ans = 0;
+        int end = 0;
+        int i = 0;
+
+        while (i < n - 1) {
+            ans++;
+
+            if (far >= n - 1) break;
+
+            for (int j = i; j <= Math.min(i + nums[i], n - 1); j++) {
+                far = Math.max(far, j + nums[j]);
+            }
+
+            i += nums[i];
+        }
+
+        return ans;
     }
 
     public int greedy(int[] nums) {
