@@ -26,8 +26,12 @@ class Solution {
         max = 0;
 
         for (int num : nums) {
+            // System.out.println(String.format("max:%d", max));
+            
             for (int i = max; i >= 0; i--) {
                 dp[i | num] += dp[i];
+
+                // System.out.println(Arrays.toString(dp));
             }
 
             max |= num;
