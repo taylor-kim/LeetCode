@@ -12,14 +12,12 @@ class Solution {
             } else if (c == ')') {
                 boolean and = true;
                 boolean or = false;
-                boolean one = false;
 
                 while (stack.peek() != '(') {
                     boolean b = stack.pop() == 't';
 
                     and &= b;
                     or |= b;
-                    one = b;
                 }
 
                 stack.pop();
@@ -31,7 +29,7 @@ class Solution {
                 } else if (op == '|') {
                     stack.push(or ? 't' : 'f');
                 } else if (op == '!') {
-                    stack.push(one ? 'f' : 't');
+                    stack.push(and ? 'f' : 't');
                 }
             } else {
                 stack.push(c);
