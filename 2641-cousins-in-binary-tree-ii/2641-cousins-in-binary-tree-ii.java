@@ -61,20 +61,18 @@ class Solution {
                     queue.add(node.right);
                 }
 
-                if (level <= 1) {
-                    node.val = 0;
-                }
-
-                if (node.left != null && level > 0) {
+                if (node.left != null) {
                     node.left.val = levelSum.getOrDefault(level + 1, 0) - childSum;
                 }
-                if (node.right != null && level > 0) {
+                if (node.right != null) {
                     node.right.val = levelSum.getOrDefault(level + 1, 0) - childSum;
                 }
             }
 
             level++;
         }
+
+        root.val = 0;
 
         return root;
     }
