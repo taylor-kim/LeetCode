@@ -15,7 +15,40 @@
  */
 class Solution {
     public TreeNode replaceValueInTree(TreeNode root) {
-        return mySol(root);
+        return official_dfs(root);
+    }
+
+    public TreeNode official_dfs(TreeNode root) {
+        Map<Integer, Integer> map = new HashMap();
+        calc_levelSum(root, 0, map);
+        replace(root, 0, 0, map);
+
+        return root;
+    }
+
+    private void calc_levelSum(TreeNode root, int level, Map<Integer, Integer> map) {
+        if (root == null) return;
+
+        map.put(level, map.getOrDefault(level, 0) + root.val);
+
+        calc_levelSum(root.left, level + 1, map);
+        calc_levelSum(root.right, level + 1, map);
+    }
+
+    private void replace(TreeNode node, int level, int siblingVal, Map<Integer, Integer> map) {
+        if (node == null) return;
+
+        int leftVal = node.left != null ? node.left.val : 0;
+        int rightVal = node.right != null ? node.right.val : 0;
+
+        if (level <= 1) {
+            node.val = 0;
+        } else {
+            node.val = map.get(level) - node.val - siblingVal;
+        }
+
+        replace(node.left, level + 1, rightVal, map);
+        replace(node.right, level + 1, leftVal, map);
     }
 
     public TreeNode mySol(TreeNode root) {
