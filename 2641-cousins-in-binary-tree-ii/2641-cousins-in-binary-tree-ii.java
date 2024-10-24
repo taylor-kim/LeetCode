@@ -15,7 +15,46 @@
  */
 class Solution {
     public TreeNode replaceValueInTree(TreeNode root) {
-        return official_dfs(root);
+        return official_onepass(root);
+    }
+
+    public TreeNode official_onepass(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList();
+        
+        queue.add(root);
+        int currentLevelSum = root.val;
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            int nextLevelSum = 0;
+
+            while (size-- > 0) {
+                TreeNode node = queue.poll();
+
+                node.val = currentLevelSum - node.val;
+
+                int childrenSum = (node.left != null ? node.left.val : 0) 
+                                + (node.right != null ? node.right.val : 0);
+
+                if (node.left != null) {
+                    nextLevelSum += node.left.val;
+                    node.left.val = childrenSum;
+
+                    queue.add(node.left);
+                }
+
+                if (node.right != null) {
+                    nextLevelSum += node.right.val;
+                    node.right.val = childrenSum;
+
+                    queue.add(node.right);
+                }
+            }
+
+            currentLevelSum = nextLevelSum;
+        }
+
+        return root;
     }
 
     public TreeNode official_dfs(TreeNode root) {
