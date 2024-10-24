@@ -15,7 +15,48 @@
  */
 class Solution {
     public boolean flipEquiv(TreeNode root1, TreeNode root2) {
-        return official_topdown(root1, root2);
+        return official_iterative_dfs(root1, root2);
+    }
+
+    public boolean official_iterative_dfs(TreeNode root1, TreeNode root2) {
+        Stack<TreeNode[]> stack = new Stack();
+
+        if (!match(root1, root2)) return false;
+
+        stack.push(new TreeNode[] {root1, root2});
+
+        while (!stack.isEmpty()) {
+            TreeNode[] nodes = stack.pop();
+
+            TreeNode node1 = nodes[0];
+            TreeNode node2 = nodes[1];
+
+            if (node1 == null && node2 == null) continue;
+
+            // if (node1 == null || node2 == null) return false;
+
+            // if (node1.val != node2.val) return false;
+
+            if (match(node1.left, node2.left) && match(node1.right, node2.right)) {
+                stack.push(new TreeNode[] {node1.left, node2.left});
+                stack.push(new TreeNode[] {node1.right, node2.right});
+            } else if (match(node1.left, node2.right) && match(node1.right, node2.left)) {
+                stack.push(new TreeNode[] {node1.left, node2.right});
+                stack.push(new TreeNode[] {node1.right, node2.left});
+            } else {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean match(TreeNode node1, TreeNode node2) {
+        if (node1 == null && node2 == null) return true;
+
+        if (node1 == null || node2 == null) return false;
+
+        return node1.val == node2.val;
     }
 
     public boolean official_topdown(TreeNode root1, TreeNode root2) {
