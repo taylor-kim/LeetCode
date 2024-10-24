@@ -15,7 +15,45 @@
  */
 class Solution {
     public boolean flipEquiv(TreeNode root1, TreeNode root2) {
-        return official_iterative_dfs(root1, root2);
+        return official_findCanonicalForm(root1, root2);
+    }
+
+    public boolean official_findCanonicalForm(TreeNode root1, TreeNode root2) {
+        findCanonicalForm(root1);
+        findCanonicalForm(root2);
+        return areEquivalent(root1, root2);
+    }
+
+    public void findCanonicalForm(TreeNode root) {
+        if (root == null) return;
+
+        findCanonicalForm(root.left);
+        findCanonicalForm(root.right);
+
+        if (root.right == null) {
+            return;
+        }
+
+        if (root.left == null) {
+            root.left = root.right;
+            root.right = null;
+            return;
+        }
+
+        TreeNode left = root.left;
+        TreeNode right = root.right;
+
+        if (root.left.val > root.right.val) {
+            root.left = right;
+            root.right = left;
+        }
+    }
+
+    public boolean areEquivalent(TreeNode root1, TreeNode root2) {
+        if (root1 == null && root2 == null) return true;
+        if (root1 == null || root2 == null || root1.val != root2.val) return false;
+
+        return areEquivalent(root1.left, root2.left) && areEquivalent(root1.right, root2.right);
     }
 
     public boolean official_iterative_dfs(TreeNode root1, TreeNode root2) {
