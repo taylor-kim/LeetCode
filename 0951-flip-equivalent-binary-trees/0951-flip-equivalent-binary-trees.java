@@ -15,7 +15,20 @@
  */
 class Solution {
     public boolean flipEquiv(TreeNode root1, TreeNode root2) {
-        return mySol2(root1, root2);
+        return official_topdown(root1, root2);
+    }
+
+    public boolean official_topdown(TreeNode root1, TreeNode root2) {
+        if (root1 == null && root2 == null) return true;
+        if (root1 == null || root2 == null) return false;
+
+        if (root1.val != root2.val) return false;
+
+        boolean noChange = official_topdown(root1.left, root2.left) && official_topdown(root1.right, root2.right);
+
+        boolean change = official_topdown(root1.left, root2.right) && official_topdown(root1.right, root2.left);
+
+        return change || noChange;
     }
 
     public boolean mySol2(TreeNode root1, TreeNode root2) {
