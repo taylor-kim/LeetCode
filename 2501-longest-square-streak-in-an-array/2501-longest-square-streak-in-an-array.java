@@ -1,6 +1,29 @@
 class Solution {
     public int longestSquareStreak(int[] nums) {
-        return mySol(nums);
+        return mySol2(nums);
+    }
+
+    public int mySol2(int[] nums) {
+        TreeSet<Integer> set = new TreeSet();
+
+        for (int num : nums) set.add(num);
+
+        int ans = 0;
+
+        while (set.size() > 0) {
+            int start = set.first();
+            set.remove(start);
+            int length = 1;
+
+            while (set.remove(start * start)) {
+                length++;
+                start = start * start;
+            }
+
+            ans = Math.max(ans, length);
+        }
+
+        return ans > 1 ? ans : -1;
     }
 
     public int mySol(int[] nums) {
