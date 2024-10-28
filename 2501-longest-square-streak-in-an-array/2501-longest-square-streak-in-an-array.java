@@ -1,6 +1,29 @@
 class Solution {
     public int longestSquareStreak(int[] nums) {
-        return mySol2(nums);
+        return official_binarySearch(nums);
+    }
+
+    public int official_binarySearch(int[] nums) {
+        Arrays.sort(nums);
+        Set<Integer> visit = new HashSet();
+
+        int ans = 0;
+
+        for (int num : nums) {
+            if (!visit.add(num)) continue;
+
+            int length = 1;
+
+            while ((long)num * num <= 1e5 && Arrays.binarySearch(nums, num * num) >= 0) {
+                num = num * num;
+                visit.add(num);
+                length++;
+            }
+
+            ans = Math.max(ans, length);
+        }
+
+        return ans > 1 ? ans : -1;
     }
 
     public int mySol2(int[] nums) {
