@@ -1,6 +1,36 @@
 class Solution {
     public int countSquares(int[][] matrix) {
-        return mySol(matrix);
+        return mySol_space_opt(matrix);
+    }
+
+    public int mySol_space_opt(int[][] matrix) {
+        int m = matrix.length;
+        int n = matrix[0].length;
+
+        int[] dp = new int[n + 1];
+
+        int ans = 0;
+
+        for (int i = 0; i < m; i++) {
+            int topLeft = 0;
+
+            for (int j = 0; j < n; j++) {
+                int nextTopLeft = dp[j + 1];
+                
+                if (matrix[i][j] == 1) {
+                    
+                    dp[j + 1] = Math.min(topLeft, Math.min(dp[j], dp[j + 1])) + 1;
+
+                    ans += dp[j + 1];
+                } else {
+                    dp[j + 1] = 0;
+                }
+
+                topLeft = nextTopLeft;
+            }
+        }
+
+        return ans;
     }
 
     public int mySol(int[][] matrix) {
