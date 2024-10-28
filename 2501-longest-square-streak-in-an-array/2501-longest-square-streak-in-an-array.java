@@ -1,6 +1,30 @@
 class Solution {
     public int longestSquareStreak(int[] nums) {
-        return official_set(nums);
+        return official_map(nums);
+    }
+
+    public int official_map(int[] nums) {
+        Map<Integer, Integer> map = new HashMap();
+
+        Arrays.sort(nums);
+
+        for (int num : nums) {
+            int root = (int)Math.sqrt(num);
+
+            if (root * root == num && map.containsKey(root)) {
+                map.put(num, map.get(root) + 1);
+            } else {
+                map.put(num, 1);
+            }
+        }
+
+        int ans = 0;
+
+        for (int length : map.values()) {
+            ans = Math.max(ans, length);
+        }
+ 
+        return ans > 1 ? ans : -1;
     }
 
     public int official_set(int[] nums) {
