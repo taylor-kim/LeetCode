@@ -15,18 +15,17 @@ class Solution {
             int topLeft = 0;
 
             for (int j = 0; j < n; j++) {
-                int nextTopLeft = dp[j + 1];
-                
                 if (matrix[i][j] == 1) {
+                    int nextTopLeft = dp[j + 1];
                     
                     dp[j + 1] = Math.min(topLeft, Math.min(dp[j], dp[j + 1])) + 1;
 
                     ans += dp[j + 1];
+
+                    topLeft = nextTopLeft;
                 } else {
                     dp[j + 1] = 0;
                 }
-
-                topLeft = nextTopLeft;
             }
         }
 
