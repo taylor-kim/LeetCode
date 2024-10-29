@@ -1,6 +1,6 @@
 class Solution {
     public int maxMoves(int[][] grid) {
-        return mySol(grid);
+        return dfs(grid);
     }
 
     public int dfs(int[][] grid) {
@@ -9,8 +9,7 @@ class Solution {
         boolean[][] visit = new boolean[grid.length][grid[0].length];
 
         for (int r = 0; r < grid.length; r++) {
-            visit[r][0] = true;
-            ans = Math.max(ans, dfs(grid, 0, 0, visit));
+            ans = Math.max(ans, dfs(grid, r, 0, visit));
         }
 
         return ans;
@@ -28,9 +27,9 @@ class Solution {
             int nextC = c + 1;
 
             if (nextR < 0 || nextR >= grid.length || nextC >= grid[0].length
-                || grid[r][c] < grid[nextR][nextC] || visit[nextR][nextC]) continue;
+                || grid[r][c] >= grid[nextR][nextC] || visit[nextR][nextC]) continue;
 
-            ans = Math.max(ans, dfs(grid, nextR, nextC, visit));
+            ans = Math.max(ans, 1 + dfs(grid, nextR, nextC, visit));
         }
 
         return ans;
