@@ -3,6 +3,39 @@ class Solution {
         return mySol(grid);
     }
 
+    public int dfs(int[][] grid) {
+        int ans = 0;
+
+        boolean[][] visit = new boolean[grid.length][grid[0].length];
+
+        for (int r = 0; r < grid.length; r++) {
+            visit[r][0] = true;
+            ans = Math.max(ans, dfs(grid, 0, 0, visit));
+        }
+
+        return ans;
+    }
+
+    public int dfs(int[][] grid, int r, int c, boolean[][] visit) {
+        if (visit[r][c]) return 0;
+
+        visit[r][c] = true;
+
+        int ans = 0;
+
+        for (int delta = -1 ; delta <= 1; delta++) {
+            int nextR = r + delta;
+            int nextC = c + 1;
+
+            if (nextR < 0 || nextR >= grid.length || nextC >= grid[0].length
+                || grid[r][c] < grid[nextR][nextC] || visit[nextR][nextC]) continue;
+
+            ans = Math.max(ans, dfs(grid, nextR, nextC, visit));
+        }
+
+        return ans;
+    }
+
     public int mySol(int[][] grid) {
         int ans = 0;
 
