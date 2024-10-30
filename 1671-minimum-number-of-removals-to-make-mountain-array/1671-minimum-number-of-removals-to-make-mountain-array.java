@@ -1,6 +1,59 @@
 class Solution {
     public int minimumMountainRemovals(int[] nums) {
-        return mySol2(nums);
+        return try_lis_by_bs(nums);
+    }
+
+    public int try_lis_by_bs(int[] nums) {
+        int n = nums.length;
+
+        List<Integer> list = new ArrayList();
+
+        for (int num : nums) list.add(num);
+
+        List<Integer> dp = lis(list);
+        Collections.reverse(list);
+        List<Integer> dp2 = lis(list);
+        Collections.reverse(dp2);
+
+        // System.out.println(dp);
+        // System.out.println(dp2);
+
+        int ans = n - 3;
+
+        for (int i = 1; i < n - 1; i++) {
+            if (dp.get(i) == 1 || dp2.get(i) == 1) continue;
+
+            int removeLeft = i + 1 - dp.get(i);
+            int removeRight = n - i - dp2.get(i);
+
+            ans = Math.min(ans, removeLeft + removeRight);
+        }
+
+        return ans;
+    }
+
+    private List<Integer> lis(List<Integer> nums) {
+        List<Integer> list = new ArrayList();
+        List<Integer> lis = new ArrayList();
+
+        for (int i = 0; i < nums.size(); i++) {
+            int num = nums.get(i);
+            int index = Collections.binarySearch(list, num);
+
+            if (index < 0) {
+                index = -(index + 1);
+            }
+
+            if (index == list.size()) {
+                list.add(num);
+            } else {
+                list.set(index, num);
+            }
+
+            lis.add(index + 1);
+        }
+
+        return lis;
     }
 
     public int mySol2(int[] nums) {
