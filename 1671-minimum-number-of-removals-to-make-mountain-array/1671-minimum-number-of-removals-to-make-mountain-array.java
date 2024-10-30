@@ -10,9 +10,9 @@ class Solution {
 
         for (int num : nums) list.add(num);
 
-        List<Integer> dp = lis(list);
+        List<Integer> dp = lis_official(list);
         Collections.reverse(list);
-        List<Integer> dp2 = lis(list);
+        List<Integer> dp2 = lis_official(list);
         Collections.reverse(dp2);
 
         // System.out.println(dp);
@@ -54,6 +54,33 @@ class Solution {
         }
 
         return lis;
+    }
+
+    private List<Integer> lis_official(List<Integer> nums) {
+        List<Integer> lisLen = new ArrayList(
+            Collections.nCopies(nums.size(), 1)
+        );
+        List<Integer> lis = new ArrayList();
+        lis.add(nums.get(0));
+
+        for (int i = 1; i < nums.size(); i++) {
+            int num = nums.get(i);
+            int index = Collections.binarySearch(lis, num);
+
+            if (index < 0) {
+                index = -(index + 1);
+            }
+
+            if (index == lis.size()) {
+                lis.add(num);
+            } else {
+                lis.set(index, num);
+            }
+
+            lisLen.set(i, lis.size());
+        }
+
+        return lisLen;
     }
 
     public int mySol2(int[] nums) {
