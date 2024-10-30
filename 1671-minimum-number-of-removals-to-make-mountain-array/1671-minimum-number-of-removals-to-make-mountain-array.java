@@ -32,7 +32,6 @@ class Solution {
         // System.out.println(Arrays.toString(dp2));
 
         for (int i = 1; i < n - 1; i++) {
-            // if (dp[i - 1] == dp[i] || dp2[i] == dp2[i + 1]) continue;
             if (dp[i] == 1 || dp2[i] == 1) continue;
 
             int removeLeft = i + 1 - dp[i];
