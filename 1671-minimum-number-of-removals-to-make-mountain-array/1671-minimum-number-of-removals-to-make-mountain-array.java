@@ -10,9 +10,9 @@ class Solution {
 
         for (int num : nums) list.add(num);
 
-        List<Integer> dp = lis_official(list);
+        List<Integer> dp = lis(list);
         Collections.reverse(list);
-        List<Integer> dp2 = lis_official(list);
+        List<Integer> dp2 = lis(list);
         Collections.reverse(dp2);
 
         // System.out.println(dp);
