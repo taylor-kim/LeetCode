@@ -36,9 +36,12 @@ class Solution {
         List<Integer> list = new ArrayList();
         List<Integer> lis = new ArrayList();
 
+        // StringBuilder sb = new StringBuilder();
+
         for (int i = 0; i < nums.size(); i++) {
             int num = nums.get(i);
-            int index = Collections.binarySearch(list, num);
+            // int index = Collections.binarySearch(list, num);
+            int index = leftMostBinarySearch(list, num);
 
             if (index < 0) {
                 index = -(index + 1);
@@ -51,9 +54,39 @@ class Solution {
             }
 
             lis.add(index + 1);
+
+            // sb.append(String.format("[%d]th lis size : %d, ", i, index + 1))
+            //     .append("lis : ");
+
+            // for (int j = 0; j <= index; j++) {
+            //     sb.append(list.get(j)).append(", ");
+            // }
+
+            // sb.append("\n");
         }
 
+        // System.out.println(sb.toString());
+
         return lis;
+    }
+
+    private int leftMostBinarySearch(List<Integer> list, int target) {
+        int left = 0;
+        int right = list.size();
+
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+
+            int midVal = list.get(mid);
+
+            if (midVal >= target) {
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+
+        return left;
     }
 
     private List<Integer> lis_official(List<Integer> nums) {
