@@ -1,6 +1,38 @@
 class Solution {
     public long minimumTotalDistance(List<Integer> robot, int[][] factory) {
-        return official_topdown(robot, factory);
+        return try_bottomup(robot, factory);
+    }
+
+    public long try_bottomup(List<Integer> robot, int[][] factory) {
+        Collections.sort(robot);
+        Arrays.sort(factory, (a, b) -> {
+            return a[0] - b[0];
+        });
+
+        List<Integer> factoryPositions = new ArrayList();
+
+        for (int[] f : factory) {
+            for (int i = 0; i < f[1]; i++) {
+                factoryPositions.add(f[0]);
+            }
+        }
+
+        long[][] dp = new long[robot.size() + 1][factoryPositions.size() + 1];
+
+        for (int i = 0; i < robot.size(); i++) {
+            dp[i][factoryPositions.size()] = (long)1e12;
+        }
+
+        for (int i = robot.size() -1; i >= 0; i--) {
+            for (int j = factoryPositions.size() - 1; j >= 0; j--) {
+                long include = Math.abs(robot.get(i) - factoryPositions.get(j)) + dp[i + 1][j + 1];
+                long exclude = dp[i][j + 1];
+
+                dp[i][j] = Math.min(include, exclude);
+            }
+        }
+
+        return dp[0][0];
     }
 
     public long official_topdown(List<Integer> robot, int[][] factory) {
