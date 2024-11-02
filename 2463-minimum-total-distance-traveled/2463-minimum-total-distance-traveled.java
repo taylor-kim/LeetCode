@@ -23,15 +23,23 @@ class Solution {
     private long dp(int rIndex, int fIndex, List<Integer> robot, List<Integer> fact, Long[][] memo) {
         if (rIndex >= robot.size()) return 0l;
 
-        if (fIndex >= fact.size()) return (long)1e12;
+        if (fIndex >= fact.size()) return -1l;
 
         if (memo[rIndex][fIndex] != null) return memo[rIndex][fIndex];
 
-        long include = Math.abs(robot.get(rIndex) - fact.get(fIndex)) + dp(rIndex + 1, fIndex + 1, robot, fact, memo);
+        long include = dp(rIndex + 1, fIndex + 1, robot, fact, memo);
 
         long exclude = dp(rIndex, fIndex + 1, robot, fact, memo);
 
-        return memo[rIndex][fIndex] = Math.min(include, exclude);
+        if (include < 0 && exclude < 0) {
+            return memo[rIndex][fIndex] = -1l;
+        } else if (include < 0) {
+            return memo[rIndex][fIndex] = exclude;
+        } else if (exclude < 0) {
+            return memo[rIndex][fIndex] = include + Math.abs(robot.get(rIndex) - fact.get(fIndex));
+        } else {
+            return memo[rIndex][fIndex] = Math.min(include + Math.abs(robot.get(rIndex) - fact.get(fIndex)), exclude);
+        }
     }
 
     public long mySol2_fail(List<Integer> robot, int[][] factory) {
