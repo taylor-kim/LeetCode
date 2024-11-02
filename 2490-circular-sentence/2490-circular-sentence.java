@@ -1,6 +1,17 @@
 class Solution {
     public boolean isCircularSentence(String sentence) {
-        return mySol(sentence);
+        return official_spaceopt(sentence);
+    }
+
+    public boolean official_spaceopt(String s) {
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == ' '
+                && s.charAt(i - 1) != s.charAt(i + 1)) {
+                    return false;
+            }
+        }
+
+        return s.charAt(0) == s.charAt(s.length() - 1);
     }
 
     public boolean mySol(String sentence) {
