@@ -1,37 +1,36 @@
 class Solution {
     public String compressedString(String word) {
-        return mySol(word);
-    }
-
-    public String mySol(String word) {
-        int n = word.length();
-
-        if (n == 0) return "";
-
-        StringBuilder sb = new StringBuilder();
-
         char prev = word.charAt(0);
-        int count = 1;
-
-        for (int i = 1; i < n; i++) {
-            char c = word.charAt(i);
-
-            if (prev == c) {
+        
+        StringBuilder sb = new StringBuilder();
+        
+        int index = 0;
+        int count = 0;
+        
+        while (index < word.length()) {
+            prev = word.charAt(index);
+            
+            while (index < word.length() && prev == word.charAt(index)) {
                 count++;
-
-                if (count == 10) {
-                    sb.append(9).append(c);
-                    count = 1;
-                }
-            } else {
-                sb.append(count).append(prev);
-                prev = c;
-                count = 1;
+                index++;
             }
+            
+            if (count != 0) {
+                int n = count / 9;
+                int odd = count % 9;
+
+                while (n-- > 0) {
+                    sb.append("9").append(prev);
+                }
+                
+                if (odd > 0) {
+                    sb.append(odd).append(prev);
+                }
+            }
+            
+            count = 0;
         }
-
-        sb.append(count).append(prev);
-
+        
         return sb.toString();
     }
 }
