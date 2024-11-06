@@ -22,7 +22,7 @@ class Solution {
             }
         }
 
-        return lastMax <= min;
+        return lastMax < min;
     }
 
     public boolean mySol3(int[] nums) {
