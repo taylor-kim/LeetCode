@@ -1,39 +1,9 @@
 class Solution {
     public boolean canSortArray(int[] nums) {
-        return mySol3(nums);
+        return mySol2(nums);
     }
 
-    public boolean mySol3(int[] nums) {
-        int lastMax = nums[0];
-        int groupMax = nums[0];
-
-        int index = 0;
-        List<int[]> minMaxList = new ArrayList();
-
-        while (index < nums.length) {
-            int min = nums[index];
-            int max = nums[index];
-
-            int start = index + 1;
-
-            while (start < nums.length && Integer.bitCount(nums[start - 1]) == Integer.bitCount(nums[start])) {
-                min = Math.min(min, nums[start]);
-                max = Math.max(max, nums[start++]);
-            }
-
-            minMaxList.add(new int[] {min, max});
-
-            index = start;
-        }
-
-        for (int i = 1; i < minMaxList.size(); i++) {
-            if (minMaxList.get(i - 1)[1] > minMaxList.get(i)[0]) return false;
-        }
-
-        return true;
-    }
-
-    public boolean mySol2_fail(int[] nums) {
+    public boolean mySol2(int[] nums) {
         Integer[] arr = new Integer[nums.length];
 
         for (int i = 0; i < arr.length; i++) arr[i] = nums[i];
