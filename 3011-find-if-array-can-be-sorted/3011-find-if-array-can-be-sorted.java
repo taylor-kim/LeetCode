@@ -1,6 +1,6 @@
 class Solution {
     public boolean canSortArray(int[] nums) {
-        return mySol2_retry(nums);
+        return official_forward_backward(nums);
     }
 
     public boolean mySol2_retry(int[] nums) {
