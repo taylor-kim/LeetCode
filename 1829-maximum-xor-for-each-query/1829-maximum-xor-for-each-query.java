@@ -15,7 +15,8 @@ class Solution {
         for (int i = n - 1; i >= 0; i--) {
             int mask = max - 1;
 
-            ans[n - 1 - i] = (~xor) & mask;
+            // ans[n - 1 - i] = (~xor) & mask;
+            ans[n - 1 - i] = xor ^ mask;
 
             xor ^= nums[i];
         }
