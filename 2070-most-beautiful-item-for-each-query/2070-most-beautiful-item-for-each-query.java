@@ -1,6 +1,34 @@
 class Solution {
     public int[] maximumBeauty(int[][] items, int[] queries) {
-        return official_binarySearch(items, queries);
+        return official_sort_both(items, queries);
+    }
+
+    public int[] official_sort_both(int[][] items, int[] queries) {
+        Arrays.sort(items, (a, b) -> a[0] - b[0]);
+        int[][] qAndI = new int[queries.length][2];
+
+        for (int i = 0; i < queries.length; i++) {
+            qAndI[i][0] = queries[i];
+            qAndI[i][1] = i;
+        }
+
+        Arrays.sort(qAndI, (a, b) -> a[0] - b[0]);
+
+        int max = 0;
+        int itemIndex = 0;
+
+        for (int i = 0; i < qAndI.length; i++) {
+            int q = qAndI[i][0];
+            int index = qAndI[i][1];
+
+            while (itemIndex < items.length && items[itemIndex][0] <= q) {
+                max = Math.max(max, items[itemIndex++][1]);
+            }
+
+            queries[index] = max;
+        }
+
+        return queries;
     }
 
     public int[] official_binarySearch(int[][] items, int[] queries) {
