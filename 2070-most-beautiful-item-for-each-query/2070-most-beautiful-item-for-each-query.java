@@ -1,6 +1,43 @@
 class Solution {
     public int[] maximumBeauty(int[][] items, int[] queries) {
-        return try_binarySearch(items, queries);
+        return official_binarySearch(items, queries);
+    }
+
+    public int[] official_binarySearch(int[][] items, int[] queries) {
+        Arrays.sort(items, (a, b) -> a[0] - b[0]);
+
+        int max = -1;
+
+        for (int i = 0; i < items.length; i++) {
+            max = Math.max(max, items[i][1]);
+            items[i][1] = max;
+        }
+
+        for (int i = 0; i < queries.length; i++) {
+            queries[i] = search(items, queries[i]);
+        }
+
+        return queries;
+    }
+
+    private int search(int[][] items, int target) {
+        int lo = 0;
+        int hi = items.length - 1;
+
+        int ans = 0;
+
+        while (lo <= hi) {
+            int mid = lo + (hi - lo) / 2;
+
+            if (items[mid][0] <= target) {
+                ans = items[mid][1];
+                lo = mid + 1;
+            } else {
+                hi = mid - 1;
+            }
+        }
+
+        return ans;
     }
 
     public int[] try_binarySearch(int[][] items, int[] queries) {
@@ -44,23 +81,6 @@ class Solution {
         }
 
         return queries;
-    }
-
-    private int search(int[][] items, int target) {
-        int lo = 1;
-        int hi = (int)1e9;
-
-        int ans = 0;
-
-        while (lo <= hi) {
-            int mid = lo + (hi - lo) / 2;
-
-            int[] item = items[mid];
-
-            // if ()
-        }
-
-        return ans;
     }
 
     public int[] mySol3(int[][] items, int[] queries) {
