@@ -1,6 +1,66 @@
 class Solution {
     public int[] maximumBeauty(int[][] items, int[] queries) {
-        return mySol3(items, queries);
+        return try_binarySearch(items, queries);
+    }
+
+    public int[] try_binarySearch(int[][] items, int[] queries) {
+        Arrays.sort(items, (a, b) -> {
+            return a[0] != b[0] ? a[0] - b[0] : a[1] - b[1];
+        });
+
+        List<int[]> list = new ArrayList();
+        int[] prev = items[0];
+        list.add(prev);
+
+        for (int i = 1; i < items.length; i++) {
+            int[] item = items[i];
+
+            if (prev[0] != item[0]) {
+                item[1] = Math.max(prev[1], item[1]);
+                list.add(item);
+                prev = item;
+            } else {
+                prev[1] = Math.max(prev[1], item[1]);
+            }
+        }
+
+        // for (int[] each : list) {
+        //     System.out.print(Arrays.toString(each));
+        // }
+
+        // System.out.println("");
+
+        for (int i = 0; i < queries.length; i++) {
+            int[] q = {queries[i], 0};
+            int index = Collections.binarySearch(list, q, (a, b) -> {
+                return a[0] - b[0];
+            });
+
+            if (index < 0) {
+                index = -(index + 2);
+            }
+
+            queries[i] = index < 0 ? 0 : list.get(index)[1];
+        }
+
+        return queries;
+    }
+
+    private int search(int[][] items, int target) {
+        int lo = 1;
+        int hi = (int)1e9;
+
+        int ans = 0;
+
+        while (lo <= hi) {
+            int mid = lo + (hi - lo) / 2;
+
+            int[] item = items[mid];
+
+            // if ()
+        }
+
+        return ans;
     }
 
     public int[] mySol3(int[][] items, int[] queries) {
