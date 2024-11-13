@@ -26,7 +26,7 @@ class Solution {
 
             if (hi < 0) continue;
 
-            if (lo > hi) continue;
+            // if (lo > hi) continue;
 
             ans += hi - lo + 1;
         }
