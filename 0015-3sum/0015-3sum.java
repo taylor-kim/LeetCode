@@ -1,47 +1,72 @@
 class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
-        return mySol(nums);
+        if (nums != null && nums.length >= 3) {
+            Arrays.sort(nums);
+            
+            return threeSumWithDoubleIndex(nums);
+        } else {
+            return Collections.emptyList();
+        }
     }
 
-    public List<List<Integer>> mySol(int[] nums) {
+    private List<List<Integer>> threeSumWithBruteForce(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+
         Arrays.sort(nums);
-        List<List<Integer>> ans = new ArrayList();
+        Set<String> addedTriplets = new HashSet<>();
 
-        Set<Integer> visit = new HashSet();
+        for (int i = 0; i < nums.length - 2; i++) {
+            for (int j = i + 1; j < nums.length - 1; j++) {
+                for (int k = j + 1; k < nums.length; k++) {
+                    String key = "" + nums[i] + nums[j] + nums[k];
 
-        for (int i = 0; i < nums.length; i++) {
-            if (!visit.add(nums[i])) continue;
-
-            List<List<Integer>> twoSum = twoSum(nums, i + 1, -nums[i]);
-
-            for (List<Integer> two : twoSum) {
-                two.add(0, nums[i]);
-                ans.add(two);
+                    if (nums[i] + nums[j] + nums[k] == 0 && !addedTriplets.contains(key)) {
+                        result.add(Arrays.asList(nums[i], nums[j], nums[k]));
+                        addedTriplets.add(key);
+                    }
+                }
             }
         }
 
-        return ans;
+        return result;
     }
+    
+    private List<List<Integer>> threeSumWithDoubleIndex(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
 
-    public List<List<Integer>> twoSum(int[] nums, int start, int target) {
-        Map<Integer, Integer> map = new HashMap();
+        for (int i = 0; i < nums.length - 2; i++) {
+            if (i == 0 || nums[i] != nums[i - 1]) {
+                int leftIndex = i + 1;
+                int rightIndex = nums.length - 1;
 
-        List<List<Integer>> ans = new ArrayList();
+                while (leftIndex < rightIndex) {
+                    if (leftIndex > i + 1 && nums[leftIndex] == nums[leftIndex - 1]) {
+                        leftIndex++;
+                        continue;
+                    }
 
-        for (int i = start; i < nums.length; i++) {
-            if (map.containsKey(target - nums[i]) && map.get(target - nums[i]) == 0) {
-                map.put(target - nums[i], 1);
-                List<Integer> two = new ArrayList();
-                two.add(target - nums[i]);
-                two.add(nums[i]);
-                ans.add(two);
+                    if (rightIndex < nums.length -1 && nums[rightIndex] == nums[rightIndex + 1]) {
+                        rightIndex--;
+                        continue;
+                    }
+
+                    int sum = nums[i] + nums[leftIndex] + nums[rightIndex];
+
+                    if (sum == 0) {
+                        result.add(Arrays.asList(nums[i], nums[leftIndex], nums[rightIndex]));
+                        leftIndex++;
+                        rightIndex--;
+                    } else {
+                        if (sum < 0) {
+                            leftIndex++;
+                        } else {
+                            rightIndex--;
+                        }
+                    }
+                }
             }
-
-            map.put(nums[i], 0);
         }
 
-        // System.out.println(String.format("start:%d, target:%d\n", start, target) + ans);
-
-        return ans;
+        return result;
     }
 }
