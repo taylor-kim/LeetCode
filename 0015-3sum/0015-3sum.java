@@ -1,72 +1,95 @@
 class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
-        if (nums != null && nums.length >= 3) {
-            Arrays.sort(nums);
-            
-            return threeSumWithDoubleIndex(nums);
-        } else {
-            return Collections.emptyList();
-        }
+        return pastSol(nums);
     }
 
-    private List<List<Integer>> threeSumWithBruteForce(int[] nums) {
-        List<List<Integer>> result = new ArrayList<>();
+    public List<List<Integer>> pastSol(int[] nums) {
+        if (nums.length < 3) {
+            return new ArrayList();
+        }
 
         Arrays.sort(nums);
-        Set<String> addedTriplets = new HashSet<>();
+        List<List<Integer>> ans = new ArrayList();
 
         for (int i = 0; i < nums.length - 2; i++) {
-            for (int j = i + 1; j < nums.length - 1; j++) {
-                for (int k = j + 1; k < nums.length; k++) {
-                    String key = "" + nums[i] + nums[j] + nums[k];
-
-                    if (nums[i] + nums[j] + nums[k] == 0 && !addedTriplets.contains(key)) {
-                        result.add(Arrays.asList(nums[i], nums[j], nums[k]));
-                        addedTriplets.add(key);
-                    }
-                }
+            if (i == 0 || nums[i - 1] != nums[i]) {
+                twoSum(nums, i + 1, -nums[i], ans);
             }
         }
 
-        return result;
+        return ans;
     }
-    
-    private List<List<Integer>> threeSumWithDoubleIndex(int[] nums) {
-        List<List<Integer>> result = new ArrayList<>();
 
-        for (int i = 0; i < nums.length - 2; i++) {
-            if (i == 0 || nums[i] != nums[i - 1]) {
-                int leftIndex = i + 1;
-                int rightIndex = nums.length - 1;
+    private void twoSum(int[] nums, int start, int target, List<List<Integer>> ans) {
+        int left = start;
+        int right = nums.length - 1;
 
-                while (leftIndex < rightIndex) {
-                    if (leftIndex > i + 1 && nums[leftIndex] == nums[leftIndex - 1]) {
-                        leftIndex++;
-                        continue;
-                    }
+        while (left < right) {
+            if (start < left && nums[left - 1] == nums[left]) {
+                left++;
+                continue;
+            }
 
-                    if (rightIndex < nums.length -1 && nums[rightIndex] == nums[rightIndex + 1]) {
-                        rightIndex--;
-                        continue;
-                    }
+            if (right < nums.length - 1 && nums[right] == nums[right + 1]) {
+                right--;
+                continue;
+            }
 
-                    int sum = nums[i] + nums[leftIndex] + nums[rightIndex];
+            int sum = nums[left] + nums[right];
 
-                    if (sum == 0) {
-                        result.add(Arrays.asList(nums[i], nums[leftIndex], nums[rightIndex]));
-                        leftIndex++;
-                        rightIndex--;
-                    } else {
-                        if (sum < 0) {
-                            leftIndex++;
-                        } else {
-                            rightIndex--;
-                        }
-                    }
-                }
+            if (sum == target) {
+                ans.add(Arrays.asList(-target, nums[left++], nums[right--]));
+            } else if (sum < target) {
+                left++;
+            } else {
+                right--;
+            }
+        }
+    }
+
+    public List<List<Integer>> mySol(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> ans = new ArrayList();
+
+        Set<Integer> visit = new HashSet();
+
+        for (int i = 0; i < nums.length; i++) {
+            if (!visit.add(nums[i])) continue;
+
+            List<List<Integer>> twoSum = twoSum(nums, i + 1, -nums[i]);
+
+            for (List<Integer> two : twoSum) {
+                two.add(0, nums[i]);
+                ans.add(two);
             }
         }
 
-        return result;
+        return ans;
+    }
+
+    public List<List<Integer>> twoSum(int[] nums, int start, int target) {
+        Set<Integer> set = new HashSet();
+
+        Set<List<Integer>> ans = new HashSet();
+
+        for (int i = start; i < nums.length; i++) {
+            int complement = target - nums[i];
+
+            // System.out.println(String.format("complement:%d, num:%d, set:%s", complement, nums[i], set));
+
+            if (set.contains(complement)) {
+                List<Integer> two = new ArrayList();
+                two.add(complement);
+                two.add(nums[i]);
+
+                ans.add(two);
+            }
+
+            set.add(nums[i]);
+        }
+
+        // System.out.println(String.format("start:%d, target:%d, set:%s\n", start, target, set) + ans);
+
+        return new ArrayList(ans);
     }
 }
