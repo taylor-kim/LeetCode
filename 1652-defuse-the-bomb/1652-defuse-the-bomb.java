@@ -26,7 +26,7 @@ class Solution {
                 continue;
             }
 
-            System.out.println(String.format("start:%d, end:%d", start, end));
+            // System.out.println(String.format("start:%d, end:%d", start, end));
 
             if (start <= end) {
                 code[i] = pSum[end] - (start == 0 ? 0 : pSum[start - 1]);
