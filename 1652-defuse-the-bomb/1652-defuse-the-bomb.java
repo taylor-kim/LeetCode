@@ -1,6 +1,33 @@
 class Solution {
     public int[] decrypt(int[] code, int k) {
-        return mySol(code, k);
+        return official_slidingwindow(code, k);
+    }
+
+    public int[] official_slidingwindow(int[] code, int k) {
+        int n = code.length;
+        int[] ans = new int[n];
+
+        if (k == 0) return ans;
+
+        int start = 1;
+        int end = k;
+
+        if (k < 0) {
+            end = n - 1;
+            start = end + k + 1;
+        }
+
+        int sum = 0;
+
+        for (int i = start; i <= end; i++) sum += code[i];
+
+        for (int i = 0; i < n; i++) {
+            ans[i] = sum;
+            sum -= code[start++ % n];
+            sum += code[++end % n];
+        }
+
+        return ans;
     }
 
     public int[] mySol(int[] code, int k) {
