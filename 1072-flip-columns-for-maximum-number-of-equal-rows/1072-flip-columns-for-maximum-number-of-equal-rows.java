@@ -1,6 +1,32 @@
 class Solution {
     public int maxEqualRowsAfterFlips(int[][] matrix) {
-        return official_bf(matrix);
+        return official_hashmap(matrix);
+    }
+
+    public int official_hashmap(int[][] matrix) {
+        Map<String, Integer> map = new HashMap();
+
+        for (int[] row : matrix) {
+            StringBuilder sb = new StringBuilder();
+
+            for (int c = 0; c < row.length; c++) {
+                if (row[0] == row[c]) {
+                    sb.append("T");
+                } else {
+                    sb.append("F");
+                }
+            }
+
+            map.put(sb.toString(), map.getOrDefault(sb.toString(), 0) + 1);
+        }
+
+        int ans = 0;
+
+        for (int count : map.values()) {
+            ans = Math.max(ans, count);
+        }
+
+        return ans;
     }
 
     public int official_bf(int[][] matrix) {
