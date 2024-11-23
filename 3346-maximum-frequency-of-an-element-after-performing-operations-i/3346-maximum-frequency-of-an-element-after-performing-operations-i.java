@@ -1,6 +1,36 @@
 class Solution {
     public int maxFrequency(int[] nums, int k, int numOperations) {
-        return mySol(nums, k, numOperations);
+        return others_prefixSum(nums, k, numOperations);
+    }
+
+    public int others_prefixSum(int[] nums, int k, int op) {
+        int max = 0;
+
+        for (int num : nums) max = Math.max(max, num);
+
+        int n = max + k;
+
+        int[] freq = new int[n + 1];
+        int[] pSum = new int[n + 2];
+
+        for (int num : nums) freq[num]++;
+
+        for (int i = 0; i < freq.length; i++) {
+            pSum[i + 1] = pSum[i] + freq[i];
+        }
+
+        int ans = 0;
+
+        for (int i = 0; i <= n; i++) {
+            int left = Math.max(0, i - k);
+            int right = Math.min(n, i + k);
+
+            int total = pSum[right + 1] - pSum[left];
+
+            ans = Math.max(ans, freq[i] + Math.min(total - freq[i], op));
+        }
+
+        return ans;
     }
 
     public int mySol2_fail(int[] nums, int k, int op) {
