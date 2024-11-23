@@ -13,8 +13,6 @@ class Solution {
             Arrays.fill(row, '.');
         }
 
-        int[] pSum = new int[n + 1];
-
         for (int i = 0; i < m; i++) {
             int row = n - 1;
             int col = m - i - 1;
