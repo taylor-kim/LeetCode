@@ -1,6 +1,34 @@
 class Solution {
     public long maxMatrixSum(int[][] matrix) {
-        return mySol2(matrix);
+        return editorial(matrix);
+    }
+    
+    public long editorial(int[][] matrix) {
+        int n = matrix.length;
+        int negCount = 0;
+        int minAbs = Integer.MAX_VALUE;
+
+        long sum = 0;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                int value = matrix[i][j];
+                int abs = Math.abs(value);
+                sum += abs;
+
+                minAbs = Math.min(minAbs, abs);
+
+                if (value < 0) {
+                    negCount++;
+                }
+            }
+        }
+
+        if (negCount % 2 == 1) {
+            sum -= 2 * minAbs;
+        }
+
+        return sum;
     }
 
     public long mySol2(int[][] matrix) {
