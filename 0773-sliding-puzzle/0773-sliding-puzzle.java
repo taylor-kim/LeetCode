@@ -94,8 +94,6 @@ class Solution {
             }
         }
 
-        System.out.println(String.format("wtf! base:%s, target:%s", Integer.toBinaryString(base), Integer.toBinaryString(target)));
-
         return -1;
     }
 
