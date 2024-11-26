@@ -34,16 +34,14 @@ class Solution {
         int remain = q[index];
 
         for (int i = 0; i < n; i++) {
-            if (remain <= x) {
+            remain -= x;
+
+            if (remain <= 0) {
                 index++;
 
-                if (index == q.length) {
-                    return true;
-                } else {
-                    remain = q[index];
-                }
-            } else {
-                remain -= x;
+                if (index == q.length) return true;
+                
+                remain = q[index];
             }
         }
 
