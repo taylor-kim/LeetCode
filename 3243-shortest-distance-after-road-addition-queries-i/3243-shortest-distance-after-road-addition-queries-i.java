@@ -1,6 +1,58 @@
 class Solution {
     public int[] shortestDistanceAfterQueries(int n, int[][] queries) {
-        return mySol(n, queries);
+        return others_simple_bfs(n, queries);
+    }
+
+    public int[] others_simple_bfs(int n, int[][] queries) {
+        List<Integer>[] edges = new List[n - 1];
+
+        for (int i = 0; i < n - 1; i++) {
+            edges[i] = new ArrayList();
+            edges[i].add(i + 1);
+        }
+
+        int[] ans = new int[queries.length];
+
+        for (int i = 0; i < queries.length; i++) {
+            int[] q = queries[i];
+            edges[q[0]].add(q[1]);
+
+            Queue<Integer> queue = new LinkedList();
+            Set<Integer> visit = new HashSet();
+
+            queue.add(0);
+            visit.add(0);
+
+            int distance = 0;
+
+            while (!queue.isEmpty()) {
+                int size = queue.size();
+                boolean found = false;
+
+                while (size-- > 0) {
+                    int node = queue.poll();
+
+                    if (node == n - 1) {
+                        found = true;
+                        break;
+                    }
+
+                    for (int next : edges[node]) {
+                        if (visit.add(next)) {
+                            queue.add(next);
+                        }
+                    }
+                }
+
+                if (found) break;
+
+                distance++;
+            }
+
+            ans[i] = distance;
+        }
+
+        return ans;
     }
 
     public int[] mySol(int n, int[][] queries) {
