@@ -7,7 +7,52 @@ class Solution {
     };
 
     public int minimumObstacles(int[][] grid) {
-        return after_topic(grid);
+        return official_bfs(grid);
+    }
+
+    public int official_bfs(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        Queue<int[]> queue = new LinkedList();
+        queue.add(new int[] {0, 0});
+        grid[0][0] = -1;
+
+        int ans = 0;
+
+        while (!queue.isEmpty()) {
+            Queue<int[]> nextQueue = new LinkedList();
+
+            while (!queue.isEmpty()) {
+                int y = queue.peek()[0];
+                int x = queue.poll()[1];
+
+                if (y == m - 1 && x == n - 1) {
+                    return ans;
+                }
+
+                for (int[] delta : dirs) {
+                    int ny = y + delta[0];
+                    int nx = x + delta[1];
+
+                    if (isIn(grid, ny, nx) && grid[ny][nx] != -1) {
+                        if (grid[ny][nx] == 0) {
+                            queue.add(new int[] {ny, nx});
+                        } else {
+                            nextQueue.add(new int[] {ny, nx});
+                        }
+
+                        grid[ny][nx] = -1;
+                    }
+                }
+            }
+
+            if (nextQueue.isEmpty()) break;
+
+            queue = nextQueue;
+            ans++;
+        }
+
+        return -1;
     }
 
     public int after_topic(int[][] grid) {
