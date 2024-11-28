@@ -12,7 +12,8 @@ class Solution {
 
     public int after_topic(int[][] grid) {
         Queue<int[]> pq = new PriorityQueue<>((a, b) -> {
-            return a[2] != b[2] ? a[2] - b[2] : grid[a[0]][a[1]] - grid[b[0]][b[1]];
+            // return a[2] != b[2] ? a[2] - b[2] : grid[a[0]][a[1]] - grid[b[0]][b[1]];
+            return a[2] - b[2];
         });
         Set<Integer> visit = new HashSet();
 
