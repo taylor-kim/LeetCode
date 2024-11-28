@@ -13,6 +13,38 @@ class Solution {
     public int official_bfs(int[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
+
+        Integer[][] minOst = new Integer[m][n];
+        minOst[0][0] = 0;
+
+        Deque<int[]> deque = new LinkedList();
+        deque.add(new int[] {0, 0, 0});
+
+        while (!deque.isEmpty()) {
+            int[] d = deque.poll();
+            int ost = d[0], y = d[1], x = d[2];
+
+            for (int[] delta : dirs) {
+                int ny = y + delta[0], nx = x + delta[1];
+
+                if (isIn(grid, ny, nx) && minOst[ny][nx] == null) {
+                    if (grid[ny][nx] == 0) {
+                        minOst[ny][nx] = ost;
+                        deque.addFirst(new int[] {minOst[ny][nx], ny, nx});
+                    } else {
+                        minOst[ny][nx] = ost + 1;
+                        deque.addLast(new int[] {minOst[ny][nx], ny, nx});
+                    }
+                }
+            }
+        }
+
+        return minOst[m - 1][n - 1];
+    }
+
+    public int my_bfs_as_official(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
         Queue<int[]> queue = new LinkedList();
         queue.add(new int[] {0, 0});
         grid[0][0] = -1;
