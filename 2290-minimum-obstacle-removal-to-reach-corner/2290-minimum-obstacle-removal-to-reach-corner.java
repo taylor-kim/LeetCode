@@ -35,6 +35,8 @@ class Solution {
                         minOst[ny][nx] = ost + 1;
                         deque.addLast(new int[] {minOst[ny][nx], ny, nx});
                     }
+
+                    if (ny == m - 1 && nx == n - 1) return minOst[ny][nx];
                 }
             }
         }
