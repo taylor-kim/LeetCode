@@ -15,13 +15,12 @@ class Solution {
             // return a[2] != b[2] ? a[2] - b[2] : grid[a[0]][a[1]] - grid[b[0]][b[1]];
             return a[2] - b[2];
         });
-        Set<Integer> visit = new HashSet();
 
         int m = grid.length;
         int n = grid[0].length;
 
         pq.add(new int[] {0, 0, 0});
-        visit.add(0);
+        grid[0][0] = 2;
 
         while (!pq.isEmpty()) {
             int[] data = pq.poll();
@@ -37,8 +36,9 @@ class Solution {
                 int ny = y + delta[0];
                 int nx = x + delta[1];
 
-                if (isIn(grid, ny, nx) && visit.add(ny * n + nx)) {
+                if (isIn(grid, ny, nx) && grid[ny][nx] != 2) {
                     pq.add(new int[] {ny, nx, cost + grid[ny][nx]});
+                    grid[ny][nx] = 2;
                 }
             }
         }
