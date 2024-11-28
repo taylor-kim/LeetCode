@@ -4,29 +4,24 @@ class Solution {
     }
 
     public int try_bs(int n, int[] q) {
-        int max = 0;
+        int lo = 0;
+        int hi = 0;
 
         for (int count : q) {
-            max = Math.max(max, count);
+            hi = Math.max(hi, count);
         }
 
-        int lo = 0;
-        int hi = max;
-
-        int ans = max;
-
-        while (lo <= hi) {
+        while (lo < hi) {
             int mid = lo + (hi - lo) / 2;
 
             if (check(n, mid, q)) {
-                ans = mid;
-                hi = mid - 1;
+                hi = mid;
             } else {
                 lo = mid + 1;
             }
         }
 
-        return ans;
+        return lo;
     }
 
     private boolean check(int n, int x, int[] q) {
@@ -40,7 +35,7 @@ class Solution {
                 index++;
 
                 if (index == q.length) return true;
-                
+
                 remain = q[index];
             }
         }
