@@ -1,67 +1,67 @@
 class Solution {
-
     public int minimumTime(int[][] grid) {
-        // If both initial moves require more than 1 second, impossible to proceed
-        if (grid[0][1] > 1 && grid[1][0] > 1) {
-            return -1;
-        }
+        return mySol2(grid);
+    }
 
-        int rows = grid.length, cols = grid[0].length;
-        // Possible movements: down, up, right, left
-        int[][] directions = { { 1, 0 }, { -1, 0 }, { 0, 1 }, { 0, -1 } };
-        boolean[][] visited = new boolean[rows][cols];
+    private int[][] dirs = {
+        {0, 1},
+        {0, -1},
+        {1, 0},
+        {-1, 0}
+    };
 
-        // Priority queue stores {time, row, col}
-        // Ordered by minimum time to reach each cell
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) ->
-            Integer.compare(a[0], b[0])
-        );
-        pq.add(new int[] { grid[0][0], 0, 0 });
+    public int mySol2(int[][] grid) {
+        int ans = 0;
+
+        Queue<int[]> pq = new PriorityQueue<>((a, b) -> {
+            return a[0] - b[0];
+        });
+        Set<Integer> visit = new HashSet();
+
+        pq.add(new int[] {0, 0, 0});
+        visit.add(0);
 
         while (!pq.isEmpty()) {
-            int[] curr = pq.poll();
-            int time = curr[0], row = curr[1], col = curr[2];
+            int[] data = pq.poll();
+            int time = data[0], y = data[1], x = data[2];
 
-            // Check if reached target
-            if (row == rows - 1 && col == cols - 1) {
+            if (y == grid.length - 1 && x == grid[0].length - 1) {
                 return time;
             }
 
-            // Skip if cell already visited
-            if (visited[row][col]) {
-                continue;
-            }
-            visited[row][col] = true;
+            List<int[]> laters = new ArrayList();
+            boolean hasAlreadyVisitedNext = false;
 
-            // Try all four directions
-            for (int[] d : directions) {
-                int nextRow = row + d[0], nextCol = col + d[1];
-                if (!isValid(visited, nextRow, nextCol)) {
-                    continue;
+            for (int[] delta : dirs) {
+                int ny = y + delta[0], nx = x + delta[1];
+                if (!isIn(grid, ny, nx)) continue;
+
+                if (time + 1 >= grid[ny][nx]) {
+                    if (visit.add(ny * grid[0].length + nx)) {
+                        pq.add(new int[] {time + 1, ny, nx});
+                    }
+                    hasAlreadyVisitedNext = true;
+                } else {
+                    laters.add(new int[] {grid[ny][nx], ny, nx});
                 }
+            }
 
-                // Calculate the wait time needed to move to next cell
-                int waitTime = ((grid[nextRow][nextCol] - time) % 2 == 0)
-                    ? 1
-                    : 0;
-                int nextTime = Math.max(
-                    grid[nextRow][nextCol] + waitTime,
-                    time + 1
-                );
-                pq.add(new int[] { nextTime, nextRow, nextCol });
+            if (hasAlreadyVisitedNext) {
+                for (int[] later : laters) {
+                    if ((later[0] - time) % 2 == 0) {
+                        later[0]++;
+                    }
+
+                    pq.add(later);
+                    visit.add(later[1] * grid[0].length + later[2]);
+                }
             }
         }
+
         return -1;
     }
 
-    // Checks if given cell coordinates are valid and unvisited
-    private boolean isValid(boolean[][] visited, int row, int col) {
-        return (
-            row >= 0 &&
-            col >= 0 &&
-            row < visited.length &&
-            col < visited[0].length &&
-            !visited[row][col]
-        );
+    private boolean isIn(int[][] grid, int y, int x) {
+        return y >= 0 && x >= 0 && y < grid.length && x < grid[0].length;
     }
 }
