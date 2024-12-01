@@ -1,6 +1,20 @@
 class Solution {
     public boolean checkIfExist(int[] arr) {
-        return mySol(arr);
+        return official_set(arr);
+    }
+
+    public boolean official_set(int[] arr) {
+        Set<Integer> set = new HashSet();
+
+        for (int num : arr) {
+            if (set.contains(num * 2) || num % 2 == 0 && set.contains(num / 2)) {
+                return true;
+            } else {
+                set.add(num);
+            }
+        }
+
+        return false;
     }
 
     public boolean mySol(int[] arr) {
