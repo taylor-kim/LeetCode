@@ -28,15 +28,10 @@ class Solution {
                 int ny = y + delta[0], nx = x + delta[1];
                 if (!isIn(grid, ny, nx)) continue;
 
-                if (time + 1 >= grid[ny][nx]) {
-                    if (visit.add(ny * grid[0].length + nx)) {
-                        pq.add(new int[] {time + 1, ny, nx});
-                    }
-                } else {
-                    if (visit.add(ny * grid[0].length + nx)) {
-                        int nextTime = grid[ny][nx] + ((grid[ny][nx] - time) % 2 == 0 ? 1 : 0);
-                        pq.add(new int[] {nextTime, ny, nx});
-                    }
+                if (visit.add(ny * grid[0].length + nx)) {
+                    int extraWait = (grid[ny][nx] - time) % 2 == 0 ? 1 : 0;
+
+                    pq.add(new int[] {Math.max(time + 1, grid[ny][nx] + extraWait), ny, nx});
                 }
             }
         }
