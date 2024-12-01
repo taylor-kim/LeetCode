@@ -1,6 +1,47 @@
 class Solution {
     public int minimumTime(int[][] grid) {
-        return mySol2(grid);
+        return editorial(grid);
+    }
+
+    public int editorial(int[][] grid) {
+        if (grid[0][1] > 1 && grid[1][0] > 1) return -1;
+
+        int ans = 0;
+
+        Queue<int[]> pq = new PriorityQueue<>((a, b) -> {
+            return a[0] - b[0];
+        });
+        Set<Integer> visit = new HashSet();
+
+        pq.add(new int[] {0, 0, 0});
+        visit.add(0);
+
+        while (!pq.isEmpty()) {
+            int[] data = pq.poll();
+            int time = data[0], y = data[1], x = data[2];
+
+            if (y == grid.length - 1 && x == grid[0].length - 1) {
+                return time;
+            }
+
+            for (int[] delta : dirs) {
+                int ny = y + delta[0], nx = x + delta[1];
+                if (!isIn(grid, ny, nx)) continue;
+
+                if (time + 1 >= grid[ny][nx]) {
+                    if (visit.add(ny * grid[0].length + nx)) {
+                        pq.add(new int[] {time + 1, ny, nx});
+                    }
+                } else {
+                    if (visit.add(ny * grid[0].length + nx)) {
+                        int nextTime = grid[ny][nx] + ((grid[ny][nx] - time) % 2 == 0 ? 1 : 0);
+                        pq.add(new int[] {nextTime, ny, nx});
+                    }
+                }
+            }
+        }
+
+        return -1;
     }
 
     private int[][] dirs = {
