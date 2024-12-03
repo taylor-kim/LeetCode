@@ -17,10 +17,6 @@ class Solution {
             ans.append(s.substring(start));
         }
 
-        // if (ans.charAt(ans.length() - 1) == ' ') {
-        //     ans.setLength(ans.length() - 1);
-        // }
-
         return ans.toString();
     }
 }
