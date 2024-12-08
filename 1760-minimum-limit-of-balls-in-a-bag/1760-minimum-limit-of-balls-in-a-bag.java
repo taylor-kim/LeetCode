@@ -93,7 +93,10 @@ class Solution {
             }
 
             start = end;
-            multiple++;
+
+            if (start < nums.length) {
+                multiple = Math.max((nums[start] + max - 1) / max - 1, 1);
+            }
         }
 
         return true;
