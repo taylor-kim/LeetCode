@@ -19,14 +19,6 @@ class Solution {
         int nextIndex = leftmost(events, index + 1, events[index][1] + 1);
 
         int include = events[index][2] + topdown(events, nextIndex, count + 1, memo);
-        // int sub = 0;
-
-        // for (int i = index + 1; i < events.length; i++) {
-        //     if (events[index][1] < events[i][0]) {
-        //         include += topdown(events, i, count + 1, memo);
-        //         break;
-        //     }
-        // }
 
         int exclude = topdown(events, index + 1, count, memo);
 
