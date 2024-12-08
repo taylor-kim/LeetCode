@@ -27,7 +27,8 @@ class Solution {
 
         for (int num : nums) {
             // totalOp += (num + (max - 1)) / max - 1;
-            totalOp += Math.max(0, num / max - (num % max == 0 ? 1 : 0));
+            // totalOp += Math.max(0, num / max - (num % max == 0 ? 1 : 0));
+            totalOp += num / max - (num % max == 0 ? 1 : 0);
 
             if (op < totalOp) return false;
         }
