@@ -34,7 +34,9 @@ class Solution {
 
             op -= (end - start) * multiple;
 
-            if (op < 0) return false;
+            if (op < 0) {
+                return false;
+            }
 
             start = end;
             multiple++;
