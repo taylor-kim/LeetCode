@@ -1,6 +1,59 @@
 class Solution {
     public int maxTwoEvents(int[][] events) {
-        return mySol(events);
+        return try_topdown(events);
+    }
+
+    public int try_topdown(int[][] events) {
+        Arrays.sort(events, (a, b) -> {
+            return a[0] - b[0];
+        });
+
+        return topdown(events, 0, 0, new Integer[events.length][2]);
+    }
+
+    private int topdown(int[][] events, int index, int count, Integer[][] memo) {
+        if (index >= events.length || count == 2) return 0;
+
+        if (memo[index][count] != null) return memo[index][count];
+
+        int include = events[index][2];
+        int sub = 0;
+
+        for (int i = index + 1; i < events.length; i++) {
+            if (events[index][1] < events[i][0]) {
+                include += topdown(events, i, count + 1, memo);
+                break;
+            }
+        }
+
+        int exclude = topdown(events, index + 1, count, memo);
+
+        return memo[index][count] = Math.max(include, exclude);
+    }
+
+    public int editorial_pq(int[][] events) {
+        Arrays.sort(events, (a, b) -> {
+            return a[0] - b[0];
+        });
+
+        Queue<int[]> pq = new PriorityQueue<>((a, b) -> {
+            return a[0] - b[0];
+        });
+
+        int ans = 0;
+        int currentMax = 0;
+
+        for (int[] event : events) {
+            while (!pq.isEmpty() && pq.peek()[0] < event[0]) {
+                currentMax = Math.max(currentMax, pq.poll()[1]);
+            }
+
+            ans = Math.max(ans, currentMax + event[2]);
+
+            pq.add(new int[] {event[1], event[2]});
+        }
+
+        return ans;
     }
 
     public int mySol(int[][] events) {
