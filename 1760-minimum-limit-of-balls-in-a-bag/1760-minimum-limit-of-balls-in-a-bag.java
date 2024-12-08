@@ -22,24 +22,15 @@ class Solution {
     }
 
     private boolean canMake(int[] nums, int max, int op) {
-        // System.out.println(String.format("max:%d, op:%d", max, op));
-
-        int index = nums.length - 1;
-        int value = nums[index];
-
         int multiple = 1;
         int start = leftmost(nums, 0, nums.length, (max * multiple) + 1);
 
-        // if (start >= nums.length) return true;
-
-        // if (start == 0 && nums[start])
+        if (start >= nums.length) return true;
 
         int end = 0;
 
         while (op > 0 && end < nums.length) {
             end = leftmost(nums, start, nums.length, (max * (multiple + 1)) + 1);
-
-            // System.out.println(String.format("start:%d, end:%d", start, end));
 
             op -= (end - start) * multiple;
 
