@@ -1,51 +1,111 @@
 class Solution {
-
     public int minimumSize(int[] nums, int maxOperations) {
-        // Binary search bounds
-        int left = 1;
-        int right = 0;
-
-        for (int num : nums) {
-            right = Math.max(right, num);
-        }
-
-        // Perform binary search to find the optimal maxBallsInBag
-        while (left < right) {
-            int middle = (left + right) / 2;
-
-            // Check if a valid distribution is possible with the current middle value
-            if (isPossible(middle, nums, maxOperations)) {
-                right = middle; // If possible, try a smaller value (shift right to middle)
-            } else {
-                left = middle + 1; // If not possible, try a larger value (shift left to middle + 1)
-            }
-        }
-
-        // Return the smallest possible value for maxBallsInBag
-        return left;
+        return hint(nums, maxOperations);
     }
 
-    // Helper function to check if a distribution is possible for a given maxBallsInBag
-    private boolean isPossible(
-        int maxBallsInBag,
-        int[] nums,
-        int maxOperations
-    ) {
-        int totalOperations = 0;
+    public int hint(int[] nums, int maxOp) {
+        Arrays.sort(nums);
 
-        // Iterate through each bag in the array
-        for (int num : nums) {
-            // Calculate the number of operations needed to split this bag
-            int operations = (int) Math.ceil(num / (double) maxBallsInBag) - 1;
-            totalOperations += operations;
+        int lo = 1;
+        int hi = nums[nums.length - 1];
 
-            // If total operations exceed maxOperations, return false
-            if (totalOperations > maxOperations) {
-                return false;
+        while (lo < hi) {
+            int mid = lo + (hi - lo) / 2;
+            if (canMake(nums, mid, maxOp)) {
+                hi = mid;
+            } else {
+                lo = mid + 1;
             }
         }
 
-        // We can split the balls within the allowed operations, return true
+        return lo;
+    }
+
+    private boolean canMake(int[] nums, int max, int op) {
+        // System.out.println(String.format("max:%d, op:%d", max, op));
+
+        int index = nums.length - 1;
+        int value = nums[index];
+
+        int multiple = 1;
+        int start = leftmost(nums, 0, nums.length, (max * multiple) + 1);
+
+        // if (start >= nums.length) return true;
+
+        // if (start == 0 && nums[start])
+
+        int end = 0;
+
+        while (op > 0 && end < nums.length) {
+            end = leftmost(nums, start, nums.length, (max * (multiple + 1)) + 1);
+
+            // System.out.println(String.format("start:%d, end:%d", start, end));
+
+            op -= (end - start) * multiple;
+
+            if (op < 0) return false;
+
+            start = end;
+            multiple++;
+        }
+
         return true;
+    }
+
+    private int leftmost(int[] nums, int lo, int hi, int target) {
+        while (lo < hi) {
+            int mid = lo + (hi - lo) / 2;
+
+            if (nums[mid] >= target) {
+                hi = mid;
+            } else {
+                lo = mid + 1;
+            }
+        }
+
+        return lo;
+    }
+
+    public int mySol_fail(int[] nums, int maxOp) {
+        List<Integer> list = new ArrayList();
+
+        for (int num : nums) list.add(num);
+
+        Collections.sort(list);
+
+        // System.out.println(list);
+
+        while (maxOp-- > 0) {
+            int target = list.remove(list.size() - 1);
+
+            int a = 0;
+
+            if (maxOp > 0 && target % 2 == 1) {
+                a = target / 3;
+            } else {
+                a = target / 2;
+            }
+
+            int b = target - a;
+
+            insert(list, a);
+            insert(list, b);
+
+            // System.out.println(list);
+        }
+
+        return list.get(list.size() - 1);
+    }
+
+    private void insert(List<Integer> list, int value) {
+        int index = Collections.binarySearch(list, value);
+
+        if (index < 0) index = -(index + 1);
+
+        if (index < list.size()) {
+            list.add(index, value);
+        } else {
+            list.add(value);
+        }
     }
 }
