@@ -1,6 +1,6 @@
 class Solution {
     public int minimumSize(int[] nums, int maxOperations) {
-        return editorial_bs(nums, maxOperations);
+        return hint(nums, maxOperations);
     }
 
     public int editorial_bs(int[] nums, int maxOp) {
@@ -44,7 +44,7 @@ class Solution {
 
         while (lo < hi) {
             int mid = lo + (hi - lo) / 2;
-            if (canMake(nums, mid, maxOp)) {
+            if (canMake2(nums, mid, maxOp)) {
                 hi = mid;
             } else {
                 lo = mid + 1;
@@ -52,6 +52,21 @@ class Solution {
         }
 
         return lo;
+    }
+
+    private boolean canMake2(int[] nums, int max, int op) {
+        int index = nums.length - 1;
+        int value = nums[index];
+        
+        while (op >= 0 && index >= 0) {
+            if (nums[index] <= max) return true;
+
+            op -= (nums[index--] + max - 1) / max - 1;
+
+            if (op < 0) return false;
+        }
+
+        return index < 0 ? true : nums[index] <= max;
     }
 
     private boolean canMake(int[] nums, int max, int op) {
