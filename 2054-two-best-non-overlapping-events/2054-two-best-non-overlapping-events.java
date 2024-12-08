@@ -1,6 +1,6 @@
 class Solution {
     public int maxTwoEvents(int[][] events) {
-        return official_greedy(events);
+        return editorial_pq(events);
     }
 
     public int official_greedy(int[][] events) {
