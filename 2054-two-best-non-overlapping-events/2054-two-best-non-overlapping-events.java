@@ -16,19 +16,37 @@ class Solution {
 
         if (memo[index][count] != null) return memo[index][count];
 
-        int include = events[index][2];
-        int sub = 0;
+        int nextIndex = leftmost(events, index + 1, events[index][1] + 1);
 
-        for (int i = index + 1; i < events.length; i++) {
-            if (events[index][1] < events[i][0]) {
-                include += topdown(events, i, count + 1, memo);
-                break;
-            }
-        }
+        int include = events[index][2] + topdown(events, nextIndex, count + 1, memo);
+        // int sub = 0;
+
+        // for (int i = index + 1; i < events.length; i++) {
+        //     if (events[index][1] < events[i][0]) {
+        //         include += topdown(events, i, count + 1, memo);
+        //         break;
+        //     }
+        // }
 
         int exclude = topdown(events, index + 1, count, memo);
 
         return memo[index][count] = Math.max(include, exclude);
+    }
+
+    private int leftmost(int[][] events, int lo, int target) {
+        int hi = events.length;
+
+        while (lo < hi) {
+            int mid = lo + (hi - lo) / 2;
+
+            if (events[mid][0] >= target) {
+                hi = mid;
+            } else {
+                lo = mid + 1;
+            }
+        }
+
+        return lo;
     }
 
     public int editorial_pq(int[][] events) {
