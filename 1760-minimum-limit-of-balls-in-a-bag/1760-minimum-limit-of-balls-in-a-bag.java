@@ -51,7 +51,7 @@ class Solution {
             }
         }
 
-        return lo;
+        return hi;
     }
 
     private boolean canMake2(int[] nums, int max, int op) {
@@ -70,8 +70,12 @@ class Solution {
     }
 
     private boolean canMake(int[] nums, int max, int op) {
+        // int multiple = nums[0] / max;
         int multiple = 1;
+
         int start = leftmost(nums, 0, nums.length, (max * multiple) + 1);
+
+        // System.out.println(String.format("multiple:%d, max:%d, start:%d", multiple, max, start));
 
         if (start >= nums.length) return true;
 
