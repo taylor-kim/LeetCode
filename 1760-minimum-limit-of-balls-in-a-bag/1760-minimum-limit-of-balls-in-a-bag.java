@@ -44,7 +44,7 @@ class Solution {
 
         while (lo < hi) {
             int mid = lo + (hi - lo) / 2;
-            if (canMake2(nums, mid, maxOp)) {
+            if (canMake(nums, mid, maxOp)) {
                 hi = mid;
             } else {
                 lo = mid + 1;
