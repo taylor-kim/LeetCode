@@ -1,6 +1,37 @@
 class Solution {
     public int minimumSize(int[] nums, int maxOperations) {
-        return hint(nums, maxOperations);
+        return editorial_bs(nums, maxOperations);
+    }
+
+    public int editorial_bs(int[] nums, int maxOp) {
+        int lo = 1;
+        int hi = 0;
+
+        for (int num : nums) hi = Math.max(hi, num);
+
+        while (lo < hi) {
+            int mid = lo + (hi - lo) / 2;
+
+            if (isPossible(nums, mid, maxOp)) {
+                hi = mid;
+            } else {
+                lo = mid + 1;
+            }
+        }
+
+        return lo;
+    }
+
+    private boolean isPossible(int[] nums, int max, int op) {
+        int totalOp = 0;
+
+        for (int num : nums) {
+            totalOp += (num + (max - 1)) / max - 1;
+
+            if (op < totalOp) return false;
+        }
+
+        return true;
     }
 
     public int hint(int[] nums, int maxOp) {
