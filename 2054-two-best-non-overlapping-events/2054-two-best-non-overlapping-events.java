@@ -1,6 +1,32 @@
 class Solution {
     public int maxTwoEvents(int[][] events) {
-        return try_topdown(events);
+        return official_greedy(events);
+    }
+
+    public int official_greedy(int[][] events) {
+        List<int[]> times = new ArrayList();
+
+        for (int[] event : events) {
+            times.add(new int[] {event[0], 1, event[2]});
+            times.add(new int[] {event[1] + 1, 0, event[2]});
+        }
+
+        Collections.sort(times, (a, b) -> {
+            return a[0] != b[0] ? a[0] - b[0] : a[1] - b[1];
+        });
+
+        int ans = 0;
+        int maxSoFar = 0;
+
+        for (int[] time : times) {
+            if (time[1] == 1) {
+                ans = Math.max(ans, maxSoFar + time[2]);
+            } else {
+                maxSoFar = Math.max(maxSoFar, time[2]);
+            }
+        }
+
+        return ans;
     }
 
     public int try_topdown(int[][] events) {
