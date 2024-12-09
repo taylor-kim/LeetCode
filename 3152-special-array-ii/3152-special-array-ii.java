@@ -1,6 +1,29 @@
 class Solution {
     public boolean[] isArraySpecial(int[] nums, int[][] queries) {
-        return official_binarySearch(nums, queries);
+        return official_pSum(nums, queries);
+    }
+
+    public boolean[] official_pSum(int[] nums, int[][] queries) {
+        int n = nums.length;
+        int[] pSum = new int[n];
+
+        for (int i = 1; i < n; i++) {
+            if (nums[i - 1] % 2 == nums[i] % 2) {
+                pSum[i] = pSum[i - 1] + 1;
+            } else {
+                pSum[i] = pSum[i - 1];
+            }
+        }
+
+        boolean[] ans = new boolean[queries.length];
+
+        for (int i = 0; i < queries.length; i++) {
+            int[] query = queries[i];
+
+            ans[i] = pSum[query[1]] - pSum[query[0]] == 0;
+        }
+
+        return ans;
     }
 
     public boolean[] official_binarySearch(int[] nums, int[][] queries) {
