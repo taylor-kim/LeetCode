@@ -1,21 +1,68 @@
 class Solution {
     public boolean[] isArraySpecial(int[] nums, int[][] queries) {
-        return mySol3(nums, queries);
+        return official_binarySearch(nums, queries);
     }
 
-    public boolean[] mySol3(int[] nums, int[][] queries) {
+    public boolean[] official_binarySearch(int[] nums, int[][] queries) {
+        List<Integer> invalidIndices = new ArrayList();
+
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i - 1] % 2 == nums[i] % 2) {
+                invalidIndices.add(i);
+            }
+        }
+
         boolean[] ans = new boolean[queries.length];
 
         for (int i = 0; i < queries.length; i++) {
             int[] query = queries[i];
-
-            ans[i] = isSpecial(nums, query[0], query[1]);
+            ans[i] = !isInvalid(invalidIndices, query[0] + 1, query[1]);
         }
 
         return ans;
     }
 
-    private boolean isSpecial(int[] nums, int start, int end) {
+    private boolean isInvalid(List<Integer> list, int start, int end) {
+        int lo = 0;
+        int hi = list.size() - 1;
+
+        while (lo <= hi) {
+            int mid = lo + (hi - lo) / 2;
+            int index = list.get(mid);
+
+            if (index < start) {
+                lo = mid + 1;
+            } else if (index > end) {
+                hi = mid - 1;
+            } else {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean[] mySol3_tle(int[] nums, int[][] queries) {
+        boolean[] ans = new boolean[queries.length];
+        Set<int[]> valids = new HashSet();
+        Set<int[]> invalids = new HashSet();
+
+        for (int i = 0; i < queries.length; i++) {
+            int[] query = queries[i];
+
+            ans[i] = isSpecial(nums, query[0], query[1], valids, invalids);
+
+            if (ans[i]) {
+                valids.add(query);
+            } else {
+                invalids.add(query);
+            }
+        }
+
+        return ans;
+    }
+
+    private boolean isSpecial(int[] nums, int start, int end, Set<int[]> valids, Set<int[]> invalids) {
         for (int i = start + 1; i <= end; i++) {
             if (nums[i - 1] % 2 == nums[i] % 2) return false;
         }
@@ -39,7 +86,7 @@ class Solution {
 
     public boolean[] mySol2_fail(int[] nums, int[][] queries) {
         int n = nums.length;
-        Set<int[]> invalids = new HashSet();
+        Set<List<Integer>> invalids = new HashSet();
 
         int left = 0;
         int right = 0;
@@ -53,7 +100,7 @@ class Solution {
             if (start == right) {
                 right++;
             } else {
-                invalids.add(new int[] {start, right++});
+                invalids.add(List.of(start, right++));
             }
         }
 
@@ -67,7 +114,7 @@ class Solution {
         for (int i = 0; i < queries.length; i++) {
             int[] query = queries[i];
 
-            for (int[] invalid : invalids) {
+            for (List<Integer> invalid : invalids) {
                 if (hasIntersect(query, invalid)) {
                     // System.out.println(
                     //     String.format("a:%s and b:%s => have an intersect"
@@ -84,8 +131,8 @@ class Solution {
         return ans;
     }
 
-    private boolean hasIntersect(int[] a, int[] b) {
-        return !(a[1] <= b[0] || b[1] <= a[0]);
+    private boolean hasIntersect(int[] a, List<Integer> b) {
+        return !(a[1] <= b.get(0) || b.get(1) <= a[0]);
     }
 
     public boolean[] mySol_mle(int[] nums, int[][] queries) {
