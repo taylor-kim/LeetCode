@@ -16,10 +16,22 @@ class Solution {
 
         for (int i = 0; i < queries.length; i++) {
             int[] query = queries[i];
-            ans[i] = !isInvalid(invalidIndices, query[0] + 1, query[1]);
+            ans[i] = !isInvalid2(invalidIndices, query[0] + 1, query[1]);
         }
 
         return ans;
+    }
+
+    private boolean isInvalid2(List<Integer> list, int start, int end) {
+        int index1 = Collections.binarySearch(list, start);
+
+        if (index1 < 0) index1 = -(index1 + 1);
+
+        if (index1 >= list.size()) return false;
+
+        if (list.get(index1) > end) return false;
+
+        return true;
     }
 
     private boolean isInvalid(List<Integer> list, int start, int end) {
