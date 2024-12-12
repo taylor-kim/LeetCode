@@ -1,6 +1,22 @@
 class Solution {
     public long pickGifts(int[] gifts, int k) {
-        return mySol_mle_improved(gifts, k);
+        return official_heap(gifts, k);
+    }
+
+    public long official_heap(int[] gifts, int k) {
+        Queue<Integer> pq = new PriorityQueue();
+
+        for (int num : gifts) pq.add(-num);
+
+        while (k-- > 0) {
+            pq.add(-(int)Math.sqrt(-pq.poll()));
+        }
+
+        long ans = 0;
+
+        while (!pq.isEmpty()) ans -= pq.poll();
+
+        return ans;
     }
 
     public long mySol_mle_improved(int[] gifts, int k) {
