@@ -1,9 +1,65 @@
 class Solution {
     public long pickGifts(int[] gifts, int k) {
-        return mySol(gifts, k);
+        return mySol_mle_improved(gifts, k);
     }
 
-    public long mySol(int[] gifts, int k) {
+    public long mySol_mle_improved(int[] gifts, int k) {
+        int max = 0;
+
+        for (int gift : gifts) max = Math.max(max, gift);
+
+        TreeMap<Integer, Integer> counter = new TreeMap();
+
+        for (int gift : gifts) counter.put(gift, counter.getOrDefault(gift, 0) + 1);
+
+        while (k > 0) {
+            int number = counter.lastKey();
+
+            counter.put(number, counter.get(number) - 1);
+
+            int root = (int)Math.sqrt(number);
+            counter.put(root, counter.getOrDefault(root, 0) + 1);
+
+            k--;
+
+            if (counter.get(number) == 0) {
+                counter.remove(number);
+            }
+        }
+
+        long ans = 0;
+
+        for (Integer key : counter.keySet()) {
+            ans += counter.get(key) * key;
+        }
+
+        return ans;
+    }
+
+    public long mySol2(int[] gifts, int k) {
+        List<Integer> list = new ArrayList();
+        
+        for (int num : gifts) list.add(num);
+
+        Collections.sort(list);
+
+        while (k-- > 0) {
+            int root = (int)Math.sqrt(list.remove(list.size() - 1));
+            int index = Collections.binarySearch(list, root);
+
+            if (index < 0) index = -(index + 1);
+
+            list.add(index, root);
+        }
+
+        long ans = 0;
+
+        for (int num : list) ans += num;
+
+        return ans;
+    }
+
+    public long mySol_mle(int[] gifts, int k) {
         int max = 0;
 
         for (int gift : gifts) max = Math.max(max, gift);
