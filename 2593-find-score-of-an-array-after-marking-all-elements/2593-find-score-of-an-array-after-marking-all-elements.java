@@ -8,15 +8,50 @@ class Solution {
 
         for (int num : nums) max = Math.max(max, num);
 
-        int[][] freq = new int[max + 1][2];
+        int[] freq = new int[max + 1];
+        Map<Integer, List<Integer>> indices = new HashMap();
         
         for (int i = 0; i < nums.length; i++) {
-            // freq[nums[i]][0]
+            freq[nums[i]]++;
+            indices.computeIfAbsent(nums[i], k -> new ArrayList()).add(i);
         }
 
         long sum = 0;
+        int num = 1;
+
+        while (num <= max) {
+            while (freq[num]-- > 0 && indices.containsKey(num)) {
+                sum += num;
+                int index = removeFirstAndClearIfEmpty(indices, num);
+
+                if (index < 0) break;
+
+                if (index - 1 >= 0) {
+                    int prev = nums[index - 1];
+                    freq[prev]--;
+                    // removeFirstAndClearIfEmpty(indices, prev);
+                }
+
+                if (index + 1 < nums.length) {
+                    int next = nums[index + 1];
+                    freq[next]--;
+                    // removeFirstAndClearIfEmpty(indices, next);
+                }
+            }
+            num++;
+        }
 
         return sum;
+    }
+
+    private int removeFirstAndClearIfEmpty(Map<Integer, List<Integer>> map, int key) {
+        if (!map.containsKey(key)) return -1;
+
+        int index = map.get(key).remove(0);
+
+        if (map.get(key).size() == 0) map.remove(key);
+
+        return index;
     }
 
     public long mySol(int[] nums) {
@@ -34,8 +69,8 @@ class Solution {
 
         Set<Integer> marked = new HashSet();
 
-        while (list.size() > 0) {
-            int[] pick = list.remove(0);
+        for (int i = 0; i < list.size(); i++) {
+            int[] pick = list.get(i);
 
             if (marked.add(pick[1])) {
                 sum += pick[0];
