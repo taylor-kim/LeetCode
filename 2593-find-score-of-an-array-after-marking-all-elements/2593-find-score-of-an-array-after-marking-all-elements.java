@@ -3,6 +3,22 @@ class Solution {
         return mySol(nums);
     }
 
+    public long mySol2(int[] nums) {
+        int max = 0;
+
+        for (int num : nums) max = Math.max(max, num);
+
+        int[][] freq = new int[max + 1][2];
+        
+        for (int i = 0; i < nums.length; i++) {
+            // freq[nums[i]][0]
+        }
+
+        long sum = 0;
+
+        return sum;
+    }
+
     public long mySol(int[] nums) {
         List<int[]> list = new ArrayList();
         
