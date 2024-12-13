@@ -1,6 +1,37 @@
 class Solution {
     public long findScore(int[] nums) {
-        return others_genious_sliding_window(nums);
+        return try_monotonic_stack(nums);
+    }
+
+    public long try_monotonic_stack(int[] nums) {
+        Stack<Integer> stack = new Stack();
+        long ans = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+            boolean marked = false;
+
+            while (!stack.isEmpty() && nums[stack.peek()] <= nums[i]) {
+                marked = true;
+
+                ans += nums[stack.pop()];
+
+                if (!stack.isEmpty()) {
+                    stack.pop();
+                }
+            }
+
+            if (!marked) {
+                stack.push(i);
+            }
+        }
+
+        while (!stack.isEmpty()) {
+            ans += nums[stack.pop()];
+
+            if (!stack.isEmpty()) stack.pop();
+        }
+
+        return ans;
     }
 
     public long others_genious_sliding_window(int[] nums) {
