@@ -3,7 +3,7 @@ class Solution {
         return mySol(nums);
     }
 
-    public long mySol2(int[] nums) {
+    public long mySol2_fail(int[] nums) {
         int max = 0;
 
         for (int num : nums) max = Math.max(max, num);
