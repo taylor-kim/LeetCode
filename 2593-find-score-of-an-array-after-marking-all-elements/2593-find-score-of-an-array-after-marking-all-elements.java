@@ -1,6 +1,24 @@
 class Solution {
     public long findScore(int[] nums) {
-        return mySol(nums);
+        return others_genious_sliding_window(nums);
+    }
+
+    public long others_genious_sliding_window(int[] nums) {
+        long ans = 0;
+
+        for (int i = 0; i < nums.length; i += 2) {
+            int left = i;
+
+            while (i + 1 < nums.length && nums[i] > nums[i + 1]) {
+                i++;
+            }
+
+            for (int right = i; right >= left; right -= 2) {
+                ans += nums[right];
+            }
+        }
+
+        return ans;
     }
 
     public long mySol2_fail(int[] nums) {
