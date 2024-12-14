@@ -6,11 +6,13 @@ class Solution {
     public long mySol(int[] nums) {
         long ans = 0;
         int left = 0;
+
         int min = Integer.MAX_VALUE;
         int max = Integer.MIN_VALUE;
 
         for (int right = 0; right < nums.length; right++) {
             int num = nums[right];
+
             min = Math.min(num, min);
             max = Math.max(num, max);
 
@@ -21,11 +23,31 @@ class Solution {
             }
 
             ans += (right - left) + 1;
-
-            // System.out.println(String.format("left:%d, right:%d, dp:%d, ans:%d", left, right, dp, ans));
         }
 
         return ans;
+    }
+
+    private int[] getMinMax2(int[] freq, int[] prevMinMax) {
+        int[] minMax = {-1, -1};
+
+        System.out.println(String.format("prevMinMax:%s", Arrays.toString(prevMinMax)));
+
+        for (int i = prevMinMax[0]; i <= prevMinMax[1]; i++) {
+            if (freq[i] > 0) {
+                minMax[0] = i;
+                break;
+            }
+        }
+
+        for (int i = prevMinMax[1]; i >= prevMinMax[0]; i--) {
+            if (freq[i] > 0) {
+                minMax[1] = i;
+                break;
+            }
+        }
+
+        return minMax;
     }
 
     private int[] getMinMax(int[] nums, int left, int right) {
