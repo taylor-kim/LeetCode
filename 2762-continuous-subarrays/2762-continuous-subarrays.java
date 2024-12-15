@@ -1,6 +1,6 @@
 class Solution {
     public long continuousSubarrays(int[] nums) {
-        return official_min_max_heap(nums);
+        return try_monotonic_deque(nums);
     }
 
     public long try_monotonic_deque(int[] nums) {
@@ -11,25 +11,23 @@ class Solution {
         long ans = 0;
 
         for (int right = 0; right < nums.length; right++) {
-            while (!minHeap.isEmpty() && nums[minHeap.peekLast()] < nums[right]) {
+            while (!minHeap.isEmpty() && nums[minHeap.peekLast()] > nums[right]) {
                 minHeap.pollLast();
             }
             minHeap.addLast(right);
 
-            while (!maxHeap.isEmpty() && nums[maxHeap.peekLast()] > nums[right]) {
+            while (!maxHeap.isEmpty() && nums[maxHeap.peekLast()] < nums[right]) {
                 maxHeap.pollLast();
             }
             maxHeap.addLast(right);
 
-            while (left < right && nums[maxHeap.peekLast()] - nums[minHeap.peekLast()] > 2) {
-                left++;
+            while (!minHeap.isEmpty() && !maxHeap.isEmpty() 
+                    && nums[maxHeap.peekFirst()] - nums[minHeap.peekFirst()] > 2) {
 
-                while (!maxHeap.isEmpty() && maxHeap.peekLast() < left) {
-                    maxHeap.pollLast();
-                }
-
-                while (!minHeap.isEmpty() && minHeap.peekLast() < left) {
-                    minHeap.pollLast();
+                if (minHeap.peekFirst() < maxHeap.peekFirst()) {
+                    left = minHeap.pollFirst() + 1;
+                } else {
+                    left = maxHeap.pollFirst() + 1;
                 }
             }
 
