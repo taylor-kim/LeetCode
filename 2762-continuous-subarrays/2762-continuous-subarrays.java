@@ -7,25 +7,39 @@ class Solution {
         long ans = 0;
         int left = 0;
 
-        int min = Integer.MAX_VALUE;
-        int max = Integer.MIN_VALUE;
+        Map<Integer, Integer> freq = new HashMap();
 
         for (int right = 0; right < nums.length; right++) {
             int num = nums[right];
 
-            min = Math.min(num, min);
-            max = Math.max(num, max);
+            freq.put(num, freq.getOrDefault(num, 0) + 1);
 
-            while (Math.abs(num - min) > 2 || Math.abs(num - max) > 2) {
-                int[] minMax = getMinMax(nums, ++left, right);
-                min = minMax[0];
-                max = minMax[1];
+            int[] minMax = getMinMax3(freq);
+
+            while (Math.abs(num - minMax[0]) > 2 || Math.abs(num - minMax[1]) > 2) {
+                int ln = nums[left++];
+                freq.put(ln, freq.get(ln) - 1);
+
+                if (freq.get(ln) == 0) freq.remove(ln);
+
+                minMax = getMinMax3(freq);
             }
 
             ans += (right - left) + 1;
         }
 
         return ans;
+    }
+
+    private int[] getMinMax3(Map<Integer, Integer> map) {
+        int[] minMax = {Integer.MAX_VALUE, Integer.MIN_VALUE};
+        
+        for (Integer key : map.keySet()) {
+            minMax[0] = Math.min(minMax[0], key);
+            minMax[1] = Math.max(minMax[1], key);
+        }
+
+        return minMax;
     }
 
     private int[] getMinMax2(int[] freq, int[] prevMinMax) {
