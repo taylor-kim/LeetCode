@@ -1,6 +1,30 @@
 class Solution {
     public long continuousSubarrays(int[] nums) {
-        return mySol(nums);
+        return official_treemap(nums);
+    }
+
+    public long official_treemap(int[] nums) {
+        long ans = 0;
+        int left = 0;
+
+        TreeMap<Integer, Integer> freq = new TreeMap();
+
+        for (int right = 0; right < nums.length; right++) {
+            int num = nums[right];
+
+            freq.put(num, freq.getOrDefault(num, 0) + 1);
+
+            while (freq.lastKey() - freq.firstKey() > 2) {
+                int ln = nums[left++];
+                freq.put(ln, freq.get(ln) - 1);
+
+                if (freq.get(ln) == 0) freq.remove(ln);
+            }
+
+            ans += (right - left) + 1;
+        }
+
+        return ans;
     }
 
     public long mySol(int[] nums) {
@@ -16,7 +40,7 @@ class Solution {
 
             int[] minMax = getMinMax3(freq);
 
-            while (minMax[1] - minMax[0] > 2) {
+            while (Math.abs(num - minMax[0]) > 2 || Math.abs(num - minMax[1]) > 2) {
                 int ln = nums[left++];
                 freq.put(ln, freq.get(ln) - 1);
 
@@ -33,7 +57,7 @@ class Solution {
 
     private int[] getMinMax3(Map<Integer, Integer> map) {
         int[] minMax = {Integer.MAX_VALUE, Integer.MIN_VALUE};
-
+        
         for (Integer key : map.keySet()) {
             minMax[0] = Math.min(minMax[0], key);
             minMax[1] = Math.max(minMax[1], key);
