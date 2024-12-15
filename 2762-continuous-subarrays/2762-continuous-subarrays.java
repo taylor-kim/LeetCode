@@ -16,7 +16,7 @@ class Solution {
 
             int[] minMax = getMinMax3(freq);
 
-            while (Math.abs(num - minMax[0]) > 2 || Math.abs(num - minMax[1]) > 2) {
+            while (minMax[1] - minMax[0] > 2) {
                 int ln = nums[left++];
                 freq.put(ln, freq.get(ln) - 1);
 
@@ -33,7 +33,7 @@ class Solution {
 
     private int[] getMinMax3(Map<Integer, Integer> map) {
         int[] minMax = {Integer.MAX_VALUE, Integer.MIN_VALUE};
-        
+
         for (Integer key : map.keySet()) {
             minMax[0] = Math.min(minMax[0], key);
             minMax[1] = Math.max(minMax[1], key);
