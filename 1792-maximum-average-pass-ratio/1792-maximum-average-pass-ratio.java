@@ -16,20 +16,15 @@ class Solution {
         double ans = 0.0;
 
         while (extra-- > 0) {
-            int size = pq.size();
-
             int[] data = pq.poll();
 
-            // System.out.println(Arrays.toString(data));
-
             if (data[0] == data[1]) {
-                ans++;
-                extra++;
-            } else {
-                data[0]++;
-                data[1]++;
-                pq.add(data);
+                return classes.length / (double)extra;
             }
+
+            data[0]++;
+            data[1]++;
+            pq.add(data);
         }
 
         // System.out.println(String.format("====== size:%d, ans:%f", pq.size(), ans));
