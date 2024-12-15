@@ -1,6 +1,35 @@
 class Solution {
     public long continuousSubarrays(int[] nums) {
-        return official_treemap(nums);
+        return official_min_max_heap(nums);
+    }
+
+    public long official_min_max_heap(int[] nums) {
+        Queue<Integer> minHeap = new PriorityQueue<>((a, b) -> {
+            return nums[a] != nums[b] ? nums[a] - nums[b] : a - b;
+        });
+        Queue<Integer> maxHeap = new PriorityQueue<>((a, b) -> {
+            return nums[b] != nums[a] ? nums[b] - nums[a] : a - b;
+        });
+
+        int left = 0;
+        long ans = 0;
+
+        for (int right = 0; right < nums.length; right++) {
+            minHeap.add(right);
+            maxHeap.add(right);
+
+            while (left < right && nums[maxHeap.peek()] - nums[minHeap.peek()] > 2) {
+                left++;
+
+                while (!minHeap.isEmpty() && minHeap.peek() < left) minHeap.poll();
+
+                while (!maxHeap.isEmpty() && maxHeap.peek() < left) maxHeap.poll();
+            }
+
+            ans += right - left + 1;
+        }
+
+        return ans;
     }
 
     public long official_treemap(int[] nums) {
