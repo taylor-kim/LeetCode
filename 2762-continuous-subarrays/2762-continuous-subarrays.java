@@ -3,6 +3,42 @@ class Solution {
         return official_min_max_heap(nums);
     }
 
+    public long try_monotonic_deque(int[] nums) {
+        Deque<Integer> minHeap = new ArrayDeque();
+        Deque<Integer> maxHeap = new ArrayDeque();
+
+        int left = 0;
+        long ans = 0;
+
+        for (int right = 0; right < nums.length; right++) {
+            while (!minHeap.isEmpty() && nums[minHeap.peekLast()] < nums[right]) {
+                minHeap.pollLast();
+            }
+            minHeap.addLast(right);
+
+            while (!maxHeap.isEmpty() && nums[maxHeap.peekLast()] > nums[right]) {
+                maxHeap.pollLast();
+            }
+            maxHeap.addLast(right);
+
+            while (left < right && nums[maxHeap.peekLast()] - nums[minHeap.peekLast()] > 2) {
+                left++;
+
+                while (!maxHeap.isEmpty() && maxHeap.peekLast() < left) {
+                    maxHeap.pollLast();
+                }
+
+                while (!minHeap.isEmpty() && minHeap.peekLast() < left) {
+                    minHeap.pollLast();
+                }
+            }
+
+            ans += right - left + 1;
+        }
+
+        return ans;
+    }
+
     public long official_min_max_heap(int[] nums) {
         Queue<Integer> minHeap = new PriorityQueue<>((a, b) -> {
             return nums[a] != nums[b] ? nums[a] - nums[b] : a - b;
@@ -21,10 +57,16 @@ class Solution {
             while (left < right && nums[maxHeap.peek()] - nums[minHeap.peek()] > 2) {
                 left++;
 
-                while (!minHeap.isEmpty() && minHeap.peek() < left) minHeap.poll();
+                while (!minHeap.isEmpty() && minHeap.peek() < left) {
+                    minHeap.poll();
+                }
 
-                while (!maxHeap.isEmpty() && maxHeap.peek() < left) maxHeap.poll();
+                while (!maxHeap.isEmpty() && maxHeap.peek() < left) {
+                    maxHeap.poll();
+                }
             }
+
+            // System.out.println(String.format("left:%d, right:%d, min:%s, max:%s", left, right, minHeap, maxHeap));
 
             ans += right - left + 1;
         }
