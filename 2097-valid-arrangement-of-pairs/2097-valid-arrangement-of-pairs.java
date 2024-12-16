@@ -1,6 +1,74 @@
 class Solution {
     public int[][] validArrangement(int[][] pairs) {
-        return after_youtube(pairs);
+        return try_iterative(pairs);
+    }
+
+    public int[][] try_iterative(int[][] pairs) {
+        Map<Integer, Integer> indegree = new HashMap();
+        Map<Integer, Integer> outdegree = new HashMap();
+        Map<Integer, List<Integer>> edges = new HashMap();
+        Set<Integer> nodes = new HashSet();
+
+        for (int[] pair : pairs) {
+            indegree.put(pair[1], indegree.getOrDefault(pair[1], 0) + 1);
+            outdegree.put(pair[0], outdegree.getOrDefault(pair[0], 0) + 1);
+
+            edges.computeIfAbsent(pair[0], k -> new ArrayList()).add(pair[1]);
+
+            nodes.add(pair[0]);
+            nodes.add(pair[1]);
+        }
+
+        int start = -1;
+        int end = -1;
+
+        for (int node : nodes) {
+            int in = indegree.getOrDefault(node, 0);
+            int out = outdegree.getOrDefault(node, 0);
+
+            if (in == out) continue;
+
+            if (out - in == 1) start = node;
+
+            if (in - out == 1) end = node;
+        }
+
+        if (start == -1) start = pairs[0][0];
+
+        // Stack<Integer> stack = new Stack();
+        // Set<Integer> visit = new HashSet();
+
+        // stack.push(start);
+
+        // List<Integer> path = new ArrayList();
+
+        // while (!stack.isEmpty()) {
+        //     int node = stack.pop();
+
+        //     if 
+        // }
+        List<Integer> path = new ArrayList();
+
+        try_dfs(start, edges, path);
+
+        Collections.reverse(path);
+
+        for (int i = 0; i < pairs.length; i++) {
+            pairs[i][0] = path.get(i);
+            pairs[i][1] = path.get(i + 1);
+        }
+
+        return pairs;
+    }
+
+    private void try_dfs(int node, Map<Integer, List<Integer>> edges, List<Integer> path) {
+        while (edges.containsKey(node) && edges.get(node).size() > 0) {
+            int next = edges.get(node).remove(0);
+
+            try_dfs(next, edges, path);
+        }
+
+        path.add(node);
     }
 
     public int[][] after_youtube(int[][] pairs) {
