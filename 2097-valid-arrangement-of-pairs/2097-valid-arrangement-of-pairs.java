@@ -40,14 +40,15 @@ class Solution {
 
         // stack.push(start);
 
-        // List<Integer> path = new ArrayList();
+        List<Integer> path = new ArrayList();
 
         // while (!stack.isEmpty()) {
         //     int node = stack.pop();
 
-        //     if 
+        //     while (edges.containsKey(node) && edges.get(node).size() > 0) {
+        //         int next = edges.get(node)
+        //     }
         // }
-        List<Integer> path = new ArrayList();
 
         try_dfs(start, edges, path);
 
@@ -62,8 +63,9 @@ class Solution {
     }
 
     private void try_dfs(int node, Map<Integer, List<Integer>> edges, List<Integer> path) {
-        while (edges.containsKey(node) && edges.get(node).size() > 0) {
-            int next = edges.get(node).remove(0);
+        List<Integer> nexts = edges.get(node);
+        while (nexts != null && nexts.size() > 0) {
+            int next = nexts.remove(nexts.size() - 1);
 
             try_dfs(next, edges, path);
         }
