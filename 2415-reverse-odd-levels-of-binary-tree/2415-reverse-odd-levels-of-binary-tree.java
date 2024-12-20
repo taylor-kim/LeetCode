@@ -20,8 +20,7 @@ class Solution {
 
     public TreeNode mySol(TreeNode root) {
         Queue<TreeNode> queue = new LinkedList();
-        Stack<TreeNode> stack = new Stack();
-        Set<TreeNode> set = new HashSet();
+        List<TreeNode> list = new ArrayList();
 
         int level = 0;
 
@@ -36,36 +35,28 @@ class Solution {
                 TreeNode node = queue.poll();
 
                 if (oddLevel) {
-                    TreeNode opposite = stack.pop();
-
-                    if (set.add(opposite) && set.add(node)) {
-                        node.val += opposite.val;
-                        opposite.val = node.val - opposite.val;
-                        node.val -= opposite.val;
-                    }
+                    list.add(node);
                 }
 
                 if (node.left != null) {
-                    if (!oddLevel) {
-                        stack.push(node.left);
-                    }
-
                     queue.add(node.left);
                 }
 
                 if (node.right != null) {
-                    if (!oddLevel) {
-                        stack.push(node.right);
-                    }
-
                     queue.add(node.right);
                 }
             }
 
-            if (oddLevel) {
-                stack.clear();
-                set.clear();
+            for (int i = 0; i < list.size() / 2; i++) {
+                TreeNode one = list.get(i);
+                TreeNode opposite = list.get(list.size() - 1 - i);
+
+                one.val += opposite.val;
+                opposite.val = one.val - opposite.val;
+                one.val -= opposite.val;
             }
+
+            list.clear();
 
             level++;
         }
