@@ -15,7 +15,26 @@
  */
 class Solution {
     public TreeNode reverseOddLevels(TreeNode root) {
-        return mySol(root);
+        return editorial_dfs(root);
+    }
+
+    public TreeNode editorial_dfs(TreeNode root) {
+        dfs(root.left, root.right, 1);
+
+        return root;
+    }
+
+    private void dfs(TreeNode left, TreeNode right, int level) {
+        if (left == null || right == null) return;
+
+        if (level % 2 == 1) {
+            left.val += right.val;
+            right.val = left.val - right.val;
+            left.val -= right.val;
+        }
+
+        dfs(left.left, right.right, level + 1);
+        dfs(left.right, right.left, level + 1);
     }
 
     public TreeNode mySol(TreeNode root) {
