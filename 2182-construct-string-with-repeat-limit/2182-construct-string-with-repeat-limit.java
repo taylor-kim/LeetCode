@@ -1,6 +1,48 @@
 class Solution {
     public String repeatLimitedString(String s, int repeatLimit) {
-        return mySol(s, repeatLimit);
+        return editorial_pq(s, repeatLimit);
+    }
+
+    public String editorial_pq(String s, int repeatLimit) {
+        StringBuilder ans = new StringBuilder();
+        Map<Character, Integer> freq = new HashMap();
+        Queue<Character> pq = new PriorityQueue<>((a, b) -> {
+            return b - a;
+        });
+
+        for (char c : s.toCharArray()) {
+            freq.put(c, freq.getOrDefault(c, 0) + 1);
+        }
+
+        for (char c : freq.keySet()) {
+            pq.add(c);
+        }
+
+        while (!pq.isEmpty()) {
+            char c = pq.poll();
+
+            int use = Math.min(freq.get(c), repeatLimit);
+
+            freq.put(c, freq.get(c) - use);
+
+            for (int i = 0; i < use; i++) {
+                ans.append(c);
+            }
+
+            if (freq.get(c) > 0 && !pq.isEmpty()) {
+                char nextC = pq.peek();
+                ans.append(nextC);
+                freq.put(nextC, freq.get(nextC) - 1);
+
+                if (freq.get(nextC) == 0) {
+                    pq.poll();
+                }
+
+                pq.add(c);
+            }
+        }
+
+        return ans.toString();
     }
 
     public String mySol(String s, int repeatLimit) {
