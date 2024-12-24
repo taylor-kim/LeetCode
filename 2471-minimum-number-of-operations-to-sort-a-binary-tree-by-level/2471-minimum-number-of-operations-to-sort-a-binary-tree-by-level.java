@@ -38,21 +38,43 @@ class Solution {
                 if (node.right != null) queue.add(node.right);
             }
 
-            List<Integer> sorted = new ArrayList(list);
-
-            Collections.sort(sorted);
-
-            int delta = 0;
-
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i) != sorted.get(i)) delta++;
-            }
-
-            // System.out.println(String.format("delta:%d", delta));
-
-            ans += delta / 2 + (delta % 2);
+            ans += getSwaps(list);
         }
 
         return ans;
+    }
+
+    private int getSwaps(List<Integer> list) {
+        Set<Integer> set = new TreeSet();
+        Map<Integer, Integer> map = new HashMap();
+
+        for (int i = 0; i < list.size(); i++) {
+            set.add(list.get(i));
+            map.put(list.get(i), i);
+        }
+
+        int[] arr = new int[list.size()];
+
+        int value = 0;
+
+        for (int num : set) {
+            arr[map.get(num)] = value++;
+        }
+
+        // System.out.println(Arrays.toString(arr));
+
+        int swap = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+            while (arr[i] != i) {
+                int temp = arr[arr[i]];
+                arr[arr[i]] = arr[i];
+                arr[i] = temp;
+
+                swap++;
+            }
+        }
+
+        return swap;
     }
 }
