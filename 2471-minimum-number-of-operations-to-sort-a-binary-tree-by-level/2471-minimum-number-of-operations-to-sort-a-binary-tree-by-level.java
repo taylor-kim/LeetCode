@@ -1,53 +1,58 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
 class Solution {
-
     public int minimumOperations(TreeNode root) {
-        Queue<TreeNode> queue = new LinkedList<>();
+        return myBfs(root);
+    }
+
+    public int myBfs(TreeNode root) {
+        Queue<TreeNode> queue = new LinkedList();
         queue.add(root);
-        int totalSwaps = 0;
 
-        // Process tree level by level using BFS
+        int ans = 0;
+
         while (!queue.isEmpty()) {
-            int levelSize = queue.size();
-            int[] levelValues = new int[levelSize];
+            int size = queue.size();
 
-            // Store values of current level and add children to queue
-            for (int i = 0; i < levelSize; i++) {
+            List<Integer> list = new ArrayList();
+
+            while (size-- > 0) {
                 TreeNode node = queue.poll();
-                levelValues[i] = node.val;
+
+                list.add(node.val);
 
                 if (node.left != null) queue.add(node.left);
                 if (node.right != null) queue.add(node.right);
             }
 
-            // Add minimum swaps needed for current level
-            totalSwaps += getMinSwaps(levelValues);
-        }
-        return totalSwaps;
-    }
+            List<Integer> sorted = new ArrayList(list);
 
-    // Calculate minimum swaps needed to sort an array
-    private int getMinSwaps(int[] original) {
-        int swaps = 0;
-        int[] target = original.clone();
-        Arrays.sort(target);
+            Collections.sort(sorted);
 
-        // Map to track current positions of values
-        Map<Integer, Integer> pos = new HashMap<>();
-        for (int i = 0; i < original.length; i++) {
-            pos.put(original[i], i);
-        }
+            int delta = 0;
 
-        // For each position, swap until correct value is placed
-        for (int i = 0; i < original.length; i++) {
-            if (original[i] != target[i]) {
-                swaps++;
-
-                // Update position of swapped values
-                int curPos = pos.get(target[i]);
-                pos.put(original[i], curPos);
-                original[curPos] = original[i];
+            for (int i = 0; i < list.size(); i++) {
+                if (list.get(i) != sorted.get(i)) delta++;
             }
+
+            // System.out.println(String.format("delta:%d", delta));
+
+            ans += delta / 2 + (delta % 2);
         }
-        return swaps;
+
+        return ans;
     }
 }
