@@ -15,7 +15,28 @@
  */
 class Solution {
     public List<Integer> largestValues(TreeNode root) {
-        return mySol_bfs(root);
+        return mySol_dfs(root);
+    }
+
+    public List<Integer> mySol_dfs(TreeNode root) {
+        List<Integer> ans = new ArrayList();
+
+        dfs(root, 0, ans);
+
+        return ans;
+    }
+
+    private void dfs(TreeNode node, int level, List<Integer> ans) {
+        if (node == null) return;
+
+        if (ans.size() == level) {
+            ans.add(node.val);
+        } else {
+            ans.set(level, Math.max(ans.get(level), node.val));
+        }
+
+        dfs(node.left, level + 1, ans);
+        dfs(node.right, level + 1, ans);
     }
 
     public List<Integer> mySol_bfs(TreeNode root) {
@@ -24,7 +45,7 @@ class Solution {
         List<Integer> ans = new ArrayList();
 
         if (root == null) return ans;
-        
+
         queue.add(root);
 
         while (!queue.isEmpty()) {
