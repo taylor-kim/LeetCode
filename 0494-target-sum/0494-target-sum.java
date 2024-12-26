@@ -1,6 +1,28 @@
 class Solution {
     public int findTargetSumWays(int[] nums, int target) {
-        return official_topdown(nums, target);
+        return official_bottomup(nums, target);
+    }
+
+    public int official_bottomup(int[] nums, int target) {
+        int max = 0;
+        for (int num : nums) max += num;
+
+        if (Math.abs(target) > max) return 0;
+
+        int[][] dp = new int[nums.length + 1][max * 2 + 1];
+        dp[0][nums[0] + max] = 1;
+        dp[0][-nums[0] + max] += 1;
+
+        for (int i = 1; i < nums.length; i++) {
+            for (int sum = -max; sum <= max; sum++) {
+                if (dp[i - 1][sum + max] > 0) {
+                    dp[i][sum + nums[i] + max] += dp[i - 1][sum + max];
+                    dp[i][sum - nums[i] + max] += dp[i - 1][sum + max];
+                }
+            }
+        }
+
+        return dp[nums.length - 1][target + max];
     }
 
     public int official_topdown(int[] nums, int target) {
