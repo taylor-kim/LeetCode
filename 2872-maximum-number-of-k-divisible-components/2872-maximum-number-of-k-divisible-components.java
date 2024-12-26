@@ -1,70 +1,188 @@
 class Solution {
-
-    public int maxKDivisibleComponents(
-        int n,
-        int[][] edges,
-        int[] values,
-        int k
-    ) {
-        // Step 1: Create adjacency list from edges
-        List<Integer>[] adjList = new ArrayList[n];
-        for (int i = 0; i < n; i++) {
-            adjList[i] = new ArrayList<>();
-        }
-        for (int[] edge : edges) {
-            int node1 = edge[0];
-            int node2 = edge[1];
-            adjList[node1].add(node2);
-            adjList[node2].add(node1);
-        }
-
-        // Step 2: Initialize component count
-        int[] componentCount = new int[1]; // Use array to pass by reference
-
-        // Step 3: Start DFS traversal from node 0
-        dfs(0, -1, adjList, values, k, componentCount);
-
-        // Step 4: Return the total number of components
-        return componentCount[0];
+    public int maxKDivisibleComponents(int n, int[][] edges, int[] values, int k) {
+        return editorial_dfs(n, edges, values, k);
     }
 
-    private int dfs(
-        int currentNode,
-        int parentNode,
-        List<Integer>[] adjList,
-        int[] nodeValues,
-        int k,
-        int[] componentCount
-    ) {
-        // Step 1: Initialize sum for the current subtree
+    public int editorial_dfs(int n, int[][] edges, int[] values, int k) {
+        Map<Integer, List<Integer>> graph = new HashMap();
+
+        for (int[] edge : edges) {
+            graph.computeIfAbsent(edge[0], key -> new ArrayList()).add(edge[1]);
+            graph.computeIfAbsent(edge[1], key -> new ArrayList()).add(edge[0]);
+        }
+
+        int[] ans = new int[1];
+
+        dfs(graph, -1, 0, values, k, ans);
+
+        return ans[0];
+    }
+
+    private int dfs(Map<Integer, List<Integer>> graph, int parent, int node, int[] values, int k, int[] ans) {
         int sum = 0;
 
-        // Step 2: Traverse all neighbors
-        for (int neighborNode : adjList[currentNode]) {
-            if (neighborNode != parentNode) {
-                // Recursive call to process the subtree rooted at the neighbor
-                sum += dfs(
-                    neighborNode,
-                    currentNode,
-                    adjList,
-                    nodeValues,
-                    k,
-                    componentCount
-                );
-                sum %= k; // Ensure the sum stays within bounds
+        for (int next : graph.getOrDefault(node, new ArrayList<>())) {
+            if (next != parent) {
+                sum += dfs(graph, node, next, values, k, ans);
             }
         }
 
-        // Step 3: Add the value of the current node to the sum
-        sum += nodeValues[currentNode];
+        sum += values[node];
         sum %= k;
 
-        // Step 4: Check if the sum is divisible by k
         if (sum == 0) {
-            componentCount[0]++;
+            ans[0]++;
         }
 
-        // Step 5: Return the computed sum for the current subtree
         return sum;
+    }
+
+    public int tryAgain_20241226(int n, int[][] edges, int[] values, int k) {
+        Map<Integer, Set<Integer>> graph = new HashMap();
+        Map<Integer, Set<Integer>> graph2 = new HashMap();
+
+        for (int[] edge : edges) {
+            graph.computeIfAbsent(edge[0], key -> new HashSet()).add(edge[1]);
+            graph.computeIfAbsent(edge[1], key -> new HashSet()).add(edge[0]);
+
+            graph2.computeIfAbsent(edge[0], key -> new HashSet()).add(edge[1]);
+            graph2.computeIfAbsent(edge[1], key -> new HashSet()).add(edge[0]);
+        }
+
+        int root = -1;
+
+        for (int key : graph.keySet()) {
+            if (graph.get(key).size() == 2) {
+                root = key;
+                break;
+            }
+        }
+
+        UnionFind uf = new UnionFind(n);
+
+        while (graph2.containsKey(root)) {
+            // dfs()
+            dfs(graph, graph2, root, root, k, new HashSet(), values, uf);
+        }
+
+        return uf.getComponentsCount();
+    }
+
+    private void dfs(Map<Integer, Set<Integer>> graph, Map<Integer, Set<Integer>> graph2,
+            int parent, int node, int k,
+            Set<Integer> visit, int[] values, UnionFind uf) {
+
+        if (!visit.add(node)) {
+            return;
+        }
+
+        // System.out.println(String.format("parent:%d, node:%d", parent, node));
+
+        if (parent != node && isLeaf(graph2, node)) {
+            if (values[node] % k == 0) {
+
+            } else {
+                values[parent] += values[node];
+                uf.merge(parent, node);
+                // System.out.println(String.format("merged, p:%d <= n:%d", parent, node));
+            }
+            
+            remove(graph2, parent, node);
+            remove(graph2, node, parent);
+
+            // System.out.println(String.format("node is leaf. node:%d, value:%d, g2:%s", node, values[node], graph2));
+        } else {
+            for (int next : graph.get(node)) {
+                dfs(graph, graph2, node, next, k, visit, values, uf);
+            }
+        }
+    }
+
+    private boolean isLeaf(Map<Integer, Set<Integer>> graph, int node) {
+        return graph.get(node) == null || graph.get(node).size() == 1;
+    }
+
+    private void remove(Map<Integer, Set<Integer>> graph, int a, int b) {
+        if (!graph.containsKey(a)) return;
+
+        graph.get(a).remove(b);
+
+        if (graph.get(a).size() == 0) {
+            graph.remove(a);
+        }
+    }
+
+    public class UnionFind {
+        private int[] parents;
+
+        public UnionFind(int n) {
+            parents = new int[n];
+
+            for (int i = 0; i < n; i++) parents[i] = i;
+        }
+
+        public int find(int node) {
+            if (parents[node] != node) {
+                parents[node] = find(parents[node]);
+            }
+
+            return parents[node];
+        }
+
+        public void merge(int a, int b) {
+            parents[b] = a;
+        }
+
+        public int getComponentsCount() {
+            Set<Integer> set = new HashSet();
+
+            for (int i = 0; i < parents.length; i++) {
+                set.add(find(i));
+            }
+
+            return set.size();
+        }
+    }
+
+    public int mySol_fail(int n, int[][] edges, int[] values, int k) {
+        Map<Integer, List<Integer>> graph = new HashMap();
+
+        for (int[] edge : edges) {
+            graph.computeIfAbsent(edge[0], key -> new ArrayList()).add(edge[1]);
+            graph.computeIfAbsent(edge[1], key -> new ArrayList()).add(edge[0]);
+        }
+
+        return dfs(graph, 0, 0, n, values, k, new HashSet());
+    }
+
+    private int dfs(Map<Integer, List<Integer>> graph, int node, int sum, int n, int[] values, int k, Set<String> used) {
+        if (node >= n) {
+            System.out.println(String.format("node:%d, sum:%d, k:%d", node, sum, k));
+            return (sum != 0 && sum % k == 0) ? 1 : 0;
+        }
+
+        System.out.println(String.format("node:%d, sum:%d, k:%d", node, sum, k));
+
+        int ans = 0;
+
+        if (values[node] % k == 0 || (sum + values[node]) % k == 0) {
+            for (int next : graph.get(node)) {
+                String key = Math.min(node, next) + "_" + Math.max(node, next);
+                if (used.add(key)) {
+                    ans = Math.max(ans, 1 + dfs(graph, next, 0, n, values, k, used));
+                    used.remove(key);
+                }
+            }
+        }
+
+        for (int next : graph.get(node)) {
+            String key = Math.min(node, next) + "_" + Math.max(node, next);
+            if (used.add(key)) {
+                ans = Math.max(ans, dfs(graph, next, sum + values[node], n, values, k, used));
+                used.remove(key);
+            }
+        }
+
+        return ans;
     }
 }
