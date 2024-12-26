@@ -1,6 +1,25 @@
 class Solution {
     public int findTargetSumWays(int[] nums, int target) {
-        return try_space_opt(nums, target);
+        return official_topdown(nums, target);
+    }
+
+    public int official_topdown(int[] nums, int target) {
+        int max = 0;
+        for (int num : nums) max += num;
+
+        return official_topdown(nums, target, 0, 0, new Integer[nums.length][max * 2 + 1], max);
+    }
+
+    private int official_topdown(int[] nums, int target, int index, int sum, Integer[][] memo, int shift) {
+        if (index >= nums.length) return sum == target ? 1: 0;
+
+        if (memo[index][sum + shift] != null) return memo[index][sum + shift];
+
+        int plus = official_topdown(nums, target, index + 1, sum + nums[index], memo, shift);
+
+        int minus = official_topdown(nums, target, index + 1, sum - nums[index], memo, shift);
+
+        return memo[index][sum + shift] = plus + minus;
     }
 
     public int try_space_opt(int[] nums, int target) {
