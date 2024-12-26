@@ -1,6 +1,6 @@
 class Solution {
     public int findTargetSumWays(int[] nums, int target) {
-        return mySol_bottomup(nums, target);
+        return mySol_bf(nums, target);
     }
 
     public int mySol_bottomup(int[] nums, int target) {
@@ -14,17 +14,7 @@ class Solution {
 
         for (int i = nums.length - 1; i >= 0; i--) {
             for (int sum = -max; sum <= max; sum++) {
-                // if (sum + nums[i] + max >= 0 && sum + nums[i] + max <= 2 * max) {
-                //     dp[i][sum + max] += dp[i + 1][nums[i] + sum + max];
-                // }
-
-                // if (sum - nums[i] + max >= 0 && sum - nums[i] + max <= 2 * max) {
-                //     dp[i][sum + max] += dp[i + 1][sum - nums[i] + max];
-                // }
-                if (dp[i + 1][sum + max] > 0) {  // If there's a valid way to form `sum`
-                    dp[i][sum + nums[i] + max] += dp[i + 1][sum + max]; // Add current number
-                    dp[i][sum - nums[i] + max] += dp[i + 1][sum + max]; // Subtract current number
-                }
+                
             }
         }
 
