@@ -1,9 +1,9 @@
 class Solution {
     public int findTargetSumWays(int[] nums, int target) {
-        return mySol_bf(nums, target);
+        return mySol_bottomup_fail_and_gpt(nums, target);
     }
 
-    public int mySol_bottomup(int[] nums, int target) {
+    public int mySol_bottomup_fail_and_gpt(int[] nums, int target) {
         int max = Math.abs(target);
 
         for (int num : nums) max += num;
@@ -14,7 +14,13 @@ class Solution {
 
         for (int i = nums.length - 1; i >= 0; i--) {
             for (int sum = -max; sum <= max; sum++) {
-                
+                if (sum + nums[i] + max >= 0 && sum + nums[i] + max <= 2 * max) {
+                    dp[i][sum + max] += dp[i + 1][sum + nums[i] + max];
+                }
+
+                if (sum - nums[i] + max >= 0 && sum - nums[i] + max <= 2 * max) {
+                    dp[i][sum + max] += dp[i + 1][sum - nums[i] + max];
+                }
             }
         }
 
