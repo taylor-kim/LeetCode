@@ -21,6 +21,12 @@ class Solution {
             }
         }
 
+        long[] longValues = new long[n];
+
+        for (int i = 0; i < values.length; i++) {
+            longValues[i] = values[i];
+        }
+
         int ans = 0;
 
         while (!queue.isEmpty()) {
@@ -37,10 +43,10 @@ class Solution {
                 remove(graph, next, node);
             }
 
-            if (values[node] % k == 0) {
+            if (longValues[node] % k == 0) {
                 ans++;
             } else if (next >= 0) {
-                values[next] += values[node];
+                longValues[next] += longValues[node];
             }
 
             if (next >= 0 && graph.containsKey(next) && graph.get(next).size() == 1) {
