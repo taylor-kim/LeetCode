@@ -1,6 +1,32 @@
 class Solution {
     public int findTargetSumWays(int[] nums, int target) {
-        return official_bottomup(nums, target);
+        return official_bottomup_space_opt(nums, target);
+    }
+
+    public int official_bottomup_space_opt(int[] nums, int target) {
+        int max = 0;
+        for (int num : nums) max += num;
+
+        if (Math.abs(target) > max) return 0;
+
+        int[] dp = new int[max * 2 + 1];
+        dp[nums[0] + max] = 1;
+        dp[-nums[0] + max] += 1;
+
+        for (int i = 1; i < nums.length; i++) {
+            int[] newDp = new int[max * 2 + 1];
+
+            for (int sum = -max; sum <= max; sum++) {
+                if (dp[sum + max] > 0) {
+                    newDp[sum + nums[i] + max] += dp[sum + max];
+                    newDp[sum - nums[i] + max] += dp[sum + max];
+                }
+            }
+
+            dp = newDp;
+        }
+
+        return dp[target + max];
     }
 
     public int official_bottomup(int[] nums, int target) {
@@ -9,7 +35,7 @@ class Solution {
 
         if (Math.abs(target) > max) return 0;
 
-        int[][] dp = new int[nums.length + 1][max * 2 + 1];
+        int[][] dp = new int[nums.length][max * 2 + 1];
         dp[0][nums[0] + max] = 1;
         dp[0][-nums[0] + max] += 1;
 
