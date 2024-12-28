@@ -1,6 +1,26 @@
 class Solution {
     public int maxScoreSightseeingPair(int[] values) {
-        return mySol2_bf(values);
+        return after_editorial(values);
+    }
+
+    public int after_editorial(int[] values) {
+        int n = values.length;
+        int[] maxSoFar = new int[n];
+        maxSoFar[0] = values[0];
+
+        for (int i = 1; i < n; i++) {
+            maxSoFar[i] = Math.max(maxSoFar[i - 1], values[i] + i);
+        }
+
+        int ans = Integer.MIN_VALUE;
+
+        for (int i = 1; i < n; i++) {
+            int score = maxSoFar[i - 1] + values[i] - i;
+
+            ans = Math.max(ans, score);
+        }
+
+        return ans;
     }
 
     public int mySol2_bf(int[] values) {
