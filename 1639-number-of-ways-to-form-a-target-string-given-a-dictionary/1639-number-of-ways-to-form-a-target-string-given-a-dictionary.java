@@ -1,9 +1,9 @@
 class Solution {
     public int numWays(String[] words, String target) {
-        return mySol(words, target);
+        return mySol2_with_assist(words, target);
     }
 
-    public int mySol(String[] words, String target) {
+    public int mySol2_with_assist(String[] words, String target) {
         List<int[]> chars = new ArrayList();
 
         for (int k = 0; k < words[0].length(); k++) {
@@ -16,10 +16,10 @@ class Solution {
             chars.add(freq);
         }
 
-        return (int)topdown(chars, target, 0, 0, new Long[words[0].length() + 1][target.length()]);
+        return (int)topdown2(chars, target, 0, 0, new Long[words[0].length() + 1][target.length()]);
     }
 
-    public long topdown(List<int[]> chars, String target, int k, int index, Long[][] memo) {
+    public long topdown2(List<int[]> chars, String target, int k, int index, Long[][] memo) {
         if (index >= target.length()) return 1;
         if (k >= chars.size()) return 0;
 
@@ -31,9 +31,56 @@ class Solution {
 
         long ans = 0;
 
-        // int[] indices = findCandidates(chars.get(k), target.charAt(index));
-
         int count = chars.get(k)[target.charAt(index) - 'a'];
+
+        if (count > 0) {
+            long result = topdown2(chars, target, k + 1, index + 1, memo);
+
+            if (result > 0) {
+                
+                ans = (ans + ((count * result) % mod)) % mod;
+            }
+        }
+
+        ans = (ans + topdown2(chars, target, k + 1, index, memo)) % mod;
+
+        return memo[k][index] = ans;
+    }
+
+    public int mySol(String[] words, String target) {
+        List<List<Character>> chars = new ArrayList();
+
+        for (int k = 0; k < words[0].length(); k++) {
+            List<Character> list = new ArrayList();
+
+            for (String word : words) {
+                list.add(word.charAt(k));
+            }
+
+            Collections.sort(list);
+            chars.add(list);
+        }
+
+        return (int)topdown(chars, target, 0, 0, new Long[words[0].length() + 1][target.length()]);
+    }
+
+    public long topdown(List<List<Character>> chars, String target, int k, int index, Long[][] memo) {
+        if (index >= target.length()) return 1;
+        if (k >= chars.size()) return 0;
+
+        if (memo[k][index] != null) {
+            return memo[k][index];
+        }
+
+        int mod = (int)1e9 + 7;
+
+        long ans = 0;
+
+        int[] indices = findCandidates(chars.get(k), target.charAt(index));
+
+        int count = indices[1] - indices[0];
+
+        // int count = chars.get(k)[target.charAt(index) - 'a'];
 
         // for (int i = 0; i < count; i++) {
         //     ans = (ans + topdown(chars, target, k + 1, index + 1, memo)) % mod;
