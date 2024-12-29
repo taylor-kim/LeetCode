@@ -4,23 +4,22 @@ class Solution {
     }
 
     public int mySol(String[] words, String target) {
-        List<List<Character>> chars = new ArrayList();
+        List<int[]> chars = new ArrayList();
 
         for (int k = 0; k < words[0].length(); k++) {
-            List<Character> list = new ArrayList();
+            int[] freq = new int[26];
 
             for (String word : words) {
-                list.add(word.charAt(k));
+                freq[word.charAt(k) - 'a']++;
             }
 
-            Collections.sort(list);
-            chars.add(list);
+            chars.add(freq);
         }
 
         return (int)topdown(chars, target, 0, 0, new Long[words[0].length() + 1][target.length()]);
     }
 
-    public long topdown(List<List<Character>> chars, String target, int k, int index, Long[][] memo) {
+    public long topdown(List<int[]> chars, String target, int k, int index, Long[][] memo) {
         if (index >= target.length()) return 1;
         if (k >= chars.size()) return 0;
 
@@ -32,11 +31,9 @@ class Solution {
 
         long ans = 0;
 
-        int[] indices = findCandidates(chars.get(k), target.charAt(index));
+        // int[] indices = findCandidates(chars.get(k), target.charAt(index));
 
-        int count = indices[1] - indices[0];
-
-        // int count = chars.get(k)[target.charAt(index) - 'a'];
+        int count = chars.get(k)[target.charAt(index) - 'a'];
 
         // for (int i = 0; i < count; i++) {
         //     ans = (ans + topdown(chars, target, k + 1, index + 1, memo)) % mod;
