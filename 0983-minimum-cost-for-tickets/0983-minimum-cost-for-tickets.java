@@ -8,7 +8,7 @@ class Solution {
 
         for (int day : days) needTravels.add(day);
 
-        return editorial_topdown(costs, 1, new Integer[366], needTravels);
+        return editorial_topdown(costs, 1, new Integer[days[days.length - 1] + 1], needTravels);
     }
 
     public int editorial_topdown(int[] costs, int day, Integer[] memo, Set<Integer> needTravels) {
