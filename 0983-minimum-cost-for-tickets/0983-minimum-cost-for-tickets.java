@@ -1,6 +1,6 @@
 class Solution {
     public int mincostTickets(int[] days, int[] costs) {
-        return editorial_topdown(days, costs);
+        return mySol(days, costs);
     }
 
     public int editorial_topdown(int[] days, int[] costs) {
