@@ -1,6 +1,28 @@
 class Solution {
     public int mincostTickets(int[] days, int[] costs) {
-        return mySol(days, costs);
+        return editorial_topdown(days, costs);
+    }
+
+    public int editorial_topdown(int[] days, int[] costs) {
+        Set<Integer> needTravels = new HashSet();
+
+        for (int day : days) needTravels.add(day);
+
+        return editorial_topdown(costs, 1, new Integer[366], needTravels);
+    }
+
+    public int editorial_topdown(int[] costs, int day, Integer[] memo, Set<Integer> needTravels) {
+        if (day >= memo.length) return 0;
+
+        if (!needTravels.contains(day)) return editorial_topdown(costs, day + 1, memo, needTravels);
+
+        if (memo[day] != null) return memo[day];
+
+        int ans = costs[0] + editorial_topdown(costs, day + 1, memo, needTravels);
+        ans = Math.min(ans, costs[1] + editorial_topdown(costs, day + 7, memo, needTravels));
+        ans = Math.min(ans, costs[2] + editorial_topdown(costs, day + 30, memo, needTravels));
+
+        return memo[day] = ans;
     }
 
     public int mySol(int[] days, int[] costs) {
