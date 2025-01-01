@@ -1,6 +1,30 @@
 class Solution {
     public int[] findDiagonalOrder(List<List<Integer>> nums) {
-        return gpt(nums);
+        return editorial_bfs(nums);
+    }
+
+    public int[] editorial_bfs(List<List<Integer>> nums) {
+        Queue<int[]> queue = new LinkedList();
+        List<Integer> ans = new ArrayList();
+
+        queue.add(new int[] {0, 0});
+
+        while (!queue.isEmpty()) {
+            int row = queue.peek()[0];
+            int col = queue.poll()[1];
+
+            ans.add(nums.get(row).get(col));
+
+            if (col == 0 && row + 1 < nums.size()) {
+                queue.add(new int[] {row + 1, col});
+            }
+
+            if (col + 1 < nums.get(row).size()) {
+                queue.add(new int[] {row, col + 1});
+            }
+        }
+
+        return ans.stream().mapToInt(i -> (int)i).toArray();
     }
 
     public int[] gpt(List<List<Integer>> nums) {
