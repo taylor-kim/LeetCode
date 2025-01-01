@@ -13,9 +13,7 @@ class Solution {
             for (int i = n - 1; i > n - 1 - length && !found; i--) {
                 for (int j = i - 1; j > n - 1 - length && !found; j--) {
                     if (nums[j] < nums[i]) {
-                        int temp = nums[i];
-                        nums[i] = nums[j];
-                        nums[j] = temp;
+                        swap(nums, i, j);
 
                         left = j;
                         right = i;
@@ -27,12 +25,28 @@ class Solution {
         }
 
         // System.out.println(String.format("left:%d, right:%d", left, right));
-        Arrays.sort(nums, left + 1, n);
+        // Arrays.sort(nums, left + 1, n);
+        reverse(nums, left + 1);
 
         // if (!found) {
         //     Arrays.sort(nums);
         // } else {
             
         // }
+    }
+
+    private void reverse(int[] nums, int start) {
+        int left = start;
+        int right = nums.length - 1;
+
+        while (left < right) {
+            swap(nums, left++, right--);
+        }
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
     }
 }
