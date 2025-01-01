@@ -1,6 +1,46 @@
 class Solution {
     public int[] maxSumOfThreeSubarrays(int[] nums, int k) {
-        return editorial_memo(nums, k);
+        return editorial_bottomup(nums, k);
+    }
+
+    public int[] editorial_bottomup(int[] nums, int k) {
+        int n = nums.length;
+        int[] pSum = new int[n + 1];
+
+        for (int i = 0; i < n; i++) {
+            pSum[i + 1] = pSum[i] + nums[i];
+        }
+
+        int[][] bestSum = new int[4][n + 1];
+        int[][] bestIndex = new int[4][n + 1];
+
+        for (int length = 1; length <= 3; length++) {
+            for (int end = length * k; end <= n; end++) {
+                int currentSum = pSum[end] - pSum[end - k];
+                int prevBestSum = bestSum[length - 1][end - k];
+
+                int include = currentSum + prevBestSum;
+                int exclude = bestSum[length][end - 1];
+
+                if (include > exclude) {
+                    bestSum[length][end] = include;
+                    bestIndex[length][end] = end - k;
+                } else {
+                    bestSum[length][end] = exclude;
+                    bestIndex[length][end] = bestIndex[length][end - 1];
+                }
+            }
+        }
+
+        int[] ans = new int[3];
+        int currentEnd = n;
+
+        for (int subIndex = 3; subIndex >= 1; subIndex--) {
+            ans[subIndex - 1] = bestIndex[subIndex][currentEnd];
+            currentEnd = ans[subIndex - 1];
+        }
+
+        return ans;
     }
 
     public int[] editorial_memo(int[] nums, int k) {
