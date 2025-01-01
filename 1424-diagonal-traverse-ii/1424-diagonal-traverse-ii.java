@@ -24,7 +24,7 @@ class Solution {
             }
         }
 
-        return ans.stream().mapToInt(i -> (int)i).toArray();
+        return ans.stream().mapToInt(Integer::intValue).toArray();
     }
 
     public int[] gpt(List<List<Integer>> nums) {
