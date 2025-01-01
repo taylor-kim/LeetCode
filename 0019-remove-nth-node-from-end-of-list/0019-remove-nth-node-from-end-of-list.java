@@ -10,7 +10,28 @@
  */
 class Solution {
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        return try_onepass(head, n);
+        return others_onepass(head, n);
+    }
+
+    public ListNode others_onepass(ListNode head, int n) {
+        ListNode dummy = new ListNode(0, head);
+
+        ListNode p1 = dummy;
+        ListNode p2 = dummy;
+
+        int count = 0;
+
+        while (p1.next != null) {
+            if (count >= n) {
+                p2 = p2.next;
+            }
+            p1 = p1.next;
+            count++;
+        }
+
+        p2.next = p2.next.next;
+
+        return dummy.next;
     }
 
     public ListNode try_onepass(ListNode head, int n) {
