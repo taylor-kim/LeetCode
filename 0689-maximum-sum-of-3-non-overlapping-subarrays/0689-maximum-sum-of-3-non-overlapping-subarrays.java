@@ -49,6 +49,7 @@ class Solution {
         int exclude = editorial_topdown(kSum, index + 1, remain, k, memo);
 
         if (include >= exclude) {
+            // System.out.println(String.format("ans[%d] = %d, (remain:%d)", 3 - remain, index, remain));
             ans[3 - remain] = index;
             dfs(kSum, index + k, remain - 1, k, memo, ans);
         } else {
