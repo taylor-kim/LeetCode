@@ -10,51 +10,44 @@
  */
 class Solution {
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        return others(head, n);
+        return try_onepass(head, n);
     }
-    
-    public ListNode others(ListNode head, int n) {
+
+    public ListNode try_onepass(ListNode head, int n) {
         ListNode dummy = new ListNode(0, head);
-        
-        ListNode p1 = dummy;
-        ListNode p2 = dummy;
-        
-        for (int i = 0; i < n; i++) {
-            p1 = p1.next;
+
+        ListNode node = dummy.next;
+        ListNode prev = dummy;
+
+        int count = 0;
+
+        while (count == 0 || node != dummy) {
+            if (node.next != null && count == 0) {
+                ListNode next = node.next;
+                node.next = prev;
+                prev = node;
+                node = next;
+            } else {
+                count++;
+
+                // System.out.println(String.format("count:%d, node.val:%d", count, node.val));
+
+                if (count == n) {
+                    //delete
+                    // System.out.println("delete");
+                    ListNode temp = prev.next;
+                    prev.next = node.next;
+                    node = prev;
+                    prev = temp;
+                } else {
+                    ListNode temp = prev.next;
+                    prev.next = node;
+                    node = prev;
+                    prev = temp;
+                }
+            }
         }
-        
-        while (p1.next != null) {
-            p1 = p1.next;
-            p2 = p2.next;
-        }
-        
-        p2.next = p2.next.next;
-        
+
         return dummy.next;
-    }
-    
-    public ListNode mySol(ListNode head, int n) {
-        int size = 0;
-        
-        ListNode node = head;
-        
-        while (node != null) {
-            size++;
-            node = node.next;
-        }
-        
-        int move = size - n - 1;
-        
-        if (move < 0) return head.next;
-        
-        node = head;
-        
-        while (move-- > 0) {
-            node = node.next;
-        }
-        
-        node.next = node.next != null ? node.next.next : null;
-        
-        return head;
     }
 }
