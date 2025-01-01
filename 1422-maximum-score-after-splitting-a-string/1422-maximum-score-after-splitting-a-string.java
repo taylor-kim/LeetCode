@@ -1,6 +1,28 @@
 class Solution {
     public int maxScore(String s) {
-        return mySol_spaceopt(s);
+        return constant_space(s);
+    }
+
+    public int constant_space(String s) {
+        int ones = 0;
+
+        for (char c : s.toCharArray()) {
+            if (c == '1') ones++;
+        }
+
+        int zeros = 0;
+        int ans = 0;
+
+        for (int i = 0; i < s.length() - 1; i++) {
+            if (s.charAt(i) == '0') {
+                zeros++;
+            } else {
+                ones--;
+            }
+            ans = Math.max(ans, zeros + ones);
+        }
+
+        return ans;
     }
 
     public int mySol_spaceopt(String s) {
