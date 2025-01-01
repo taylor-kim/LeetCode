@@ -1,6 +1,35 @@
 class Solution {
     public int maxScore(String s) {
-        return constant_space(s);
+        return official_onepass(s);
+    }
+    
+    public int official_onepass(String s) {
+        int leftZeros = 0;
+        int leftOnes = 0;
+
+        /**
+            score = leftZeros + rightOnes
+            totalOnes = leftOnes + rightOnes
+            rightOnes = totalOnes - leftOnes
+            score = leftZeros + totalOnes - leftOnes
+            totalOnes is a constant. so, find the max(leftZeros - leftOnes) to maximize score.
+         */
+
+        int ans = Integer.MIN_VALUE;
+        
+        for (int i = 0; i < s.length() - 1; i++) {
+            if (s.charAt(i) == '0') {
+                leftZeros++;
+            } else {
+                leftOnes++;
+            }
+
+            ans = Math.max(ans, leftZeros - leftOnes);
+        }
+
+        if (s.charAt(s.length() - 1) == '1') leftOnes++;
+
+        return ans + leftOnes;
     }
 
     public int constant_space(String s) {
