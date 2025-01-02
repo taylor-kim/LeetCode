@@ -1,6 +1,89 @@
 class Solution {
     public int[] maxSumOfThreeSubarrays(int[] nums, int k) {
-        return editorial_bottomup(nums, k);
+        return try_three_pointers(nums, k);
+    }
+
+    public int[] try_three_pointers(int[] nums, int k) {
+        int n = nums.length;
+        int[] pSum = new int[n + 1];
+        int[] leftMaxIndex = calcLeftMaxIndex(nums, k);
+        int[] rightMaxIndex = calcRightMaxIndex(nums, k);
+
+        for (int i = 0; i < n; i++) {
+            pSum[i + 1] = pSum[i] + nums[i];
+        }
+
+        int totalSum = 0;
+        int[] ans = new int[3];
+
+        for (int i = k; i + k - 1 < n - k; i++) {
+            int leftStart = leftMaxIndex[i - 1];
+            int rightStart = rightMaxIndex[i + k];
+
+            int leftSum = pSum[leftStart + k] - pSum[leftStart];
+            int midSum = pSum[i + k] - pSum[i];
+            int rightSum = pSum[rightStart + k] - pSum[rightStart];
+
+            int currentSum = leftSum + midSum + rightSum;
+
+            if (totalSum < currentSum) {
+                totalSum = currentSum;
+                ans[0] = leftStart;
+                ans[1] = i;
+                ans[2] = rightStart;
+            }
+        }
+
+        return ans;
+    }
+
+    private int[] calcLeftMaxIndex(int[] nums, int k) {
+        int n = nums.length;
+        int left = 0;
+        int leftSum = 0;
+        int maxSoFar = 0;
+        int[] leftMaxIndex = new int[n];
+
+        for (int right = 0; right < n; right++) {
+            leftSum += nums[right];
+
+            if (right - left + 1 == k) {
+                if (maxSoFar < leftSum) {
+                    maxSoFar = leftSum;
+                    leftMaxIndex[right] = left;
+                } else {
+                    leftMaxIndex[right] = leftMaxIndex[right - 1];
+                }
+                leftSum -= nums[left++];
+            }
+        }
+
+        return leftMaxIndex;
+    }
+
+    private int[] calcRightMaxIndex(int[] nums, int k) {
+        int n = nums.length;
+        int right = n - 1;
+        int rightSum = 0;
+        int maxSoFar = 0;
+        int[] rightMaxIndex = new int[n];
+
+        for (int left = n - 1; left >= 0; left--) {
+            rightSum += nums[left];
+
+            if (right - left + 1 == k) {
+                if (maxSoFar <= rightSum) {
+                    maxSoFar = rightSum;
+                    rightMaxIndex[left] = left;
+                } else {
+                    rightMaxIndex[left] = rightMaxIndex[left + 1];
+                }
+
+                rightSum -= nums[right--];
+            }
+        }
+
+        return rightMaxIndex;
     }
 
     public int[] editorial_bottomup(int[] nums, int k) {
