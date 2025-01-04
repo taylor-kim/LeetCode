@@ -20,9 +20,21 @@ class Solution {
 
         int ans = 0;
 
+        // 1,2,3,4,5
+        
+        // 2,3,4,5,5
+        // 5,5,5,5,5
+
         for (int i = 1; i < n; i++) {
+            // for (int j = max - 1; j >= 0; j--) {
+            //     dp[i - 1][j] = Math.max(dp[i - 1][j], dp[i - 1][j + 1]);
+            // }
+
+            int currentMax = dp[i - 1][max];
+
             for (int j = max - 1; j >= 0; j--) {
-                dp[i - 1][j] = Math.max(dp[i - 1][j], dp[i - 1][j + 1]);
+                currentMax = Math.max(currentMax, dp[i - 1][j]);
+                dp[i - 1][j] = currentMax;
             }
 
             for (int j = 0; j < i; j++) {
