@@ -3,6 +3,24 @@ class Solution {
         return mySol2_with_assist(words, target);
     }
 
+    public int try_bottomup(String[] words, String target) {
+        List<int[]> chars = new ArrayList();
+
+        for (int k = 0; k < words[0].length(); k++) {
+            int[] freq = new int[26];
+
+            for (String word : words) {
+                freq[word.charAt(k) - 'a']++;
+            }
+
+            chars.add(freq);
+        }
+
+        // int[][] dp = new int[][];
+
+        return 1;
+    }
+
     public int mySol2_with_assist(String[] words, String target) {
         List<int[]> chars = new ArrayList();
 
@@ -16,7 +34,7 @@ class Solution {
             chars.add(freq);
         }
 
-        return (int)topdown2(chars, target, 0, 0, new Long[words[0].length() + 1][target.length()]);
+        return (int)topdown2(chars, target, 0, 0, new Long[words[0].length()][target.length()]);
     }
 
     public long topdown2(List<int[]> chars, String target, int k, int index, Long[][] memo) {
