@@ -5,7 +5,14 @@ class Solution {
 
     public int others(int[] nums) {
         int n = nums.length;
-        int[][] dp = new int[n][300];
+        int min = 300;
+        int max = 0;
+
+        for (int num : nums) {
+            min = Math.min(min, num);
+            max = Math.max(max, num);
+        }
+        int[][] dp = new int[n][max + 1];
 
         for (int[] arr : dp) {
             Arrays.fill(arr, 1);
@@ -14,11 +21,7 @@ class Solution {
         int ans = 0;
 
         for (int i = 1; i < n; i++) {
-            // for (int j = 0; j < 299; j++) {
-            //     dp[i - 1][j] = Math.max(dp[i - 1][j], dp[i - 1][j + 1]);
-            // }
-
-            for (int j = 298; j >= 0; j--) {
+            for (int j = max - 1; j >= 0; j--) {
                 dp[i - 1][j] = Math.max(dp[i - 1][j], dp[i - 1][j + 1]);
             }
 
