@@ -20,7 +20,7 @@ class Solution {
 
         int[][] dp = new int[k + 1][n + 1];
 
-        for (int i = 0; i <= k; i++) {
+        for (int i = n; i <= k; i++) {
             dp[i][n] = 1;
         }
 
@@ -30,7 +30,7 @@ class Solution {
             for (int j = n - 1; j >= 0; j--) {
                 char c = target.charAt(j);
 
-                long include = (chars.get(i)[c - 'a'] * dp[i + 1][j + 1]) % mod;
+                long include = (chars.get(i)[c - 'a'] * (long)dp[i + 1][j + 1]) % mod;
                 int exclude = dp[i + 1][j];
 
                 dp[i][j] = (int)((include + exclude) % mod);
