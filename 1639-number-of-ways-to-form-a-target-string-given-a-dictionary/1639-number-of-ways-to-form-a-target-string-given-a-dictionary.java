@@ -19,7 +19,6 @@ class Solution {
         }
 
         long[][] dp = new long[k + 1][n + 1];
-        dp[k][n] = 1;
 
         for (int i = 0; i <= k; i++) {
             dp[i][n] = 1;
