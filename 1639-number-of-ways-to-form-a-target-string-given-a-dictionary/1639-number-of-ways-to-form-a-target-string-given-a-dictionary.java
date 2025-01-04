@@ -18,7 +18,7 @@ class Solution {
             chars.add(freq);
         }
 
-        long[][] dp = new long[k + 1][n + 1];
+        int[][] dp = new int[k + 1][n + 1];
 
         for (int i = 0; i <= k; i++) {
             dp[i][n] = 1;
@@ -31,13 +31,13 @@ class Solution {
                 char c = target.charAt(j);
 
                 long include = (chars.get(i)[c - 'a'] * dp[i + 1][j + 1]) % mod;
-                long exclude = dp[i + 1][j];
+                int exclude = dp[i + 1][j];
 
-                dp[i][j] = (include + exclude) % mod;
+                dp[i][j] = (int)((include + exclude) % mod);
             }
         }
 
-        return (int)dp[0][0];
+        return dp[0][0];
     }
 
     public int mySol2_with_assist(String[] words, String target) {
