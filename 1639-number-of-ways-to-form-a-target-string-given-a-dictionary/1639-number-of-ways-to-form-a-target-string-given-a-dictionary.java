@@ -1,6 +1,44 @@
 class Solution {
     public int numWays(String[] words, String target) {
-        return try_bottomup(words, target);
+        return try_bottomup_space_opt(words, target);
+    }
+
+    public int try_bottomup_space_opt(String[] words, String target) {
+        List<int[]> chars = new ArrayList();
+        int k = words[0].length();
+        int n = target.length();
+
+        for (int i = 0; i < k; i++) {
+            int[] freq = new int[26];
+
+            for (String word : words) {
+                freq[word.charAt(i) - 'a']++;
+            }
+
+            chars.add(freq);
+        }
+
+        int[] dp = new int[n + 1];
+        dp[n] = 1;
+
+        int mod = (int)1e9 + 7;
+
+        for (int i = k - 1; i >= 0; i--) {
+            int prev = 1;
+
+            for (int j = n - 1; j >= 0; j--) {
+                char c = target.charAt(j);
+
+                long include = (chars.get(i)[c - 'a'] * (long)prev) % mod;
+                int exclude = dp[j];
+
+                prev = dp[j];
+
+                dp[j] = (int)((include + exclude) % mod);
+            }
+        }
+
+        return dp[0];
     }
 
     public int try_bottomup(String[] words, String target) {
