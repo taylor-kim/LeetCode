@@ -1,6 +1,55 @@
 class Solution {
     public int[] maxSumOfThreeSubarrays(int[] nums, int k) {
-        return try_three_pointers(nums, k);
+        return editorial_sliding_window(nums, k);
+    }
+
+    public int[] editorial_sliding_window(int[] nums, int k) {
+        int windowSumFirst = 0;
+        int windowSumSecond = 0;
+        int windowSumThird = 0;
+
+        for (int i = 0; i < k; i++) windowSumFirst += nums[i];
+        for (int i = k; i < 2 * k; i++) windowSumSecond += nums[i];
+        for (int i = 2 * k; i < 3 * k; i++) windowSumThird += nums[i];
+
+        int bestSumSingle = windowSumFirst;
+        int bestSumDouble = windowSumFirst + windowSumSecond;
+        int bestSumTriple = windowSumFirst + windowSumSecond + windowSumThird;
+
+        int bestSingleIndex = 0;
+        int[] bestDoubleIndex = {0, k};
+        int[] bestTripleIndex = {0, k, 2 * k};
+
+        for (int i = 2 * k + 1; i <= nums.length - k; i++) {
+            int indexFirst = i - (2 * k);
+            windowSumFirst += -nums[indexFirst - 1] + nums[indexFirst + k - 1];
+
+            if (windowSumFirst > bestSumSingle) {
+                bestSumSingle = windowSumFirst;
+                bestSingleIndex = indexFirst;
+            }
+
+            int indexSecond = i - k;
+            windowSumSecond += -nums[indexSecond - 1] + nums[indexSecond + k - 1];
+
+            if (windowSumSecond + bestSumSingle > bestSumDouble) {
+                bestSumDouble = windowSumSecond + bestSumSingle;
+                bestDoubleIndex[0] = bestSingleIndex;
+                bestDoubleIndex[1] = indexSecond;
+            }
+
+            int indexThird = i;
+            windowSumThird += -nums[indexThird - 1] + nums[indexThird + k - 1];
+
+            if (windowSumThird + bestSumDouble > bestSumTriple) {
+                bestSumTriple = windowSumThird + bestSumDouble;
+                bestTripleIndex[0] = bestDoubleIndex[0];
+                bestTripleIndex[1] = bestDoubleIndex[1];
+                bestTripleIndex[2] = indexThird;
+            }
+        }
+
+        return bestTripleIndex;
     }
 
     public int[] try_three_pointers(int[] nums, int k) {
