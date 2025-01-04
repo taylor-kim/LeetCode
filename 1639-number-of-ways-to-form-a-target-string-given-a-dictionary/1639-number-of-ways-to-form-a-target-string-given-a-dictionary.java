@@ -1,24 +1,44 @@
 class Solution {
     public int numWays(String[] words, String target) {
-        return mySol2_with_assist(words, target);
+        return try_bottomup(words, target);
     }
 
     public int try_bottomup(String[] words, String target) {
         List<int[]> chars = new ArrayList();
+        int k = words[0].length();
+        int n = target.length();
 
-        for (int k = 0; k < words[0].length(); k++) {
+        for (int i = 0; i < k; i++) {
             int[] freq = new int[26];
 
             for (String word : words) {
-                freq[word.charAt(k) - 'a']++;
+                freq[word.charAt(i) - 'a']++;
             }
 
             chars.add(freq);
         }
 
-        // int[][] dp = new int[][];
+        long[][] dp = new long[k + 1][n + 1];
+        dp[k][n] = 1;
 
-        return 1;
+        for (int i = 0; i <= k; i++) {
+            dp[i][n] = 1;
+        }
+
+        int mod = (int)1e9 + 7;
+
+        for (int i = k - 1; i >= 0; i--) {
+            for (int j = n - 1; j >= 0; j--) {
+                char c = target.charAt(j);
+
+                long include = (chars.get(i)[c - 'a'] * dp[i + 1][j + 1]) % mod;
+                long exclude = dp[i + 1][j];
+
+                dp[i][j] = (include + exclude) % mod;
+            }
+        }
+
+        return (int)dp[0][0];
     }
 
     public int mySol2_with_assist(String[] words, String target) {
