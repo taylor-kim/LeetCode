@@ -1,6 +1,40 @@
 class Solution {
     public int countPalindromicSubsequence(String s) {
-        return mySol(s);
+        return editorial_improve_mySol(s);
+    }
+
+    public int editorial_improve_mySol(String s) {
+        int[] first = new int[26];
+        int[] last = new int[26];
+
+        Arrays.fill(first, -1);
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+
+            if (first[c - 'a'] == -1) {
+                first[c - 'a'] = i;
+            }
+
+            last[c - 'a'] = i;
+        }
+
+        int ans = 0;
+
+        for (int i = 0; i < 26; i++) {
+            int left = first[i];
+            int right = last[i];
+
+            Set<Integer> between = new HashSet();
+
+            for (int mid = left + 1; mid < right; mid++) {
+                between.add(s.charAt(mid) - 'a');
+            }
+
+            ans += between.size();
+        }
+
+        return ans;
     }
 
     public int mySol(String s) {
