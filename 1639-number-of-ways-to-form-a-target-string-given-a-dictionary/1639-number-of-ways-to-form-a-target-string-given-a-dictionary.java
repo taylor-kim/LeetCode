@@ -21,7 +21,7 @@ class Solution {
 
     public long topdown2(List<int[]> chars, String target, int k, int index, Long[][] memo) {
         if (index >= target.length()) return 1;
-        if (k >= chars.size()) return 0;
+        if (chars.size() - k < target.length() - index) return 0;
 
         if (memo[k][index] != null) {
             return memo[k][index];
