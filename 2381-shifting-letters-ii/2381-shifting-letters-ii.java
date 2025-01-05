@@ -1,6 +1,37 @@
 class Solution {
     public String shiftingLetters(String s, int[][] shifts) {
-        return mySol(s, shifts);
+        return editorial(s, shifts);
+    }
+
+    public String editorial(String s, int[][] shifts) {
+        int n = s.length();
+        int[] moves = new int[n];
+
+        for (int[] shift : shifts) {
+            int move = shift[2] == 0 ? -1 : 1;
+
+            moves[shift[0]] += move;
+
+            if (shift[1] + 1 < n) {
+                moves[shift[1] + 1] -= move;
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        int move = 0;
+
+        for (int i = 0; i < n; i++) {
+            move = (move + moves[i]) % 26;
+
+            if (move < 0) move += 26;
+
+            char next = (char)(((s.charAt(i) - 'a' + move) % 26) + 'a');
+
+            sb.append(next);
+        }
+
+        return sb.toString();
     }
 
     public String mySol(String s, int[][] shifts) {
