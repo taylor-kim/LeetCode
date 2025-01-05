@@ -4,16 +4,17 @@ class Solution {
     }
 
     public String mySol(String s, int[][] shifts) {
-        Map<Integer, Integer> moves = new HashMap();
+        int n = s.length();
+        int[] moves = new int[n + 1];
 
         for (int[] shift : shifts) {
             int move = shift[2] == 0 ? -1 : 1;
 
-            int openMove = (moves.getOrDefault(shift[0], 0) + move + 26) % 26;
-            moves.put(shift[0], openMove);
+            int openMove = (moves[shift[0]] + move + 26) % 26;
+            moves[shift[0]] = openMove;
 
-            int closeMove = (moves.getOrDefault(shift[1] + 1, 0) - move + 26) % 26;
-            moves.put(shift[1] + 1, closeMove);
+            int closeMove = (moves[shift[1] + 1] - move + 26) % 26;
+            moves[shift[1] + 1] = closeMove;
         }
 
         StringBuilder sb = new StringBuilder();
@@ -22,8 +23,8 @@ class Solution {
 
         // System.out.println(moves);
 
-        for (int i = 0; i < s.length(); i++) {
-            move = (move + moves.getOrDefault(i, 0) + 26) % 26;
+        for (int i = 0; i < n; i++) {
+            move = (move + moves[i] + 26) % 26;
 
             int next = ((s.charAt(i) - 'a') + move) % 26;
 
