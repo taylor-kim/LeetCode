@@ -14,6 +14,8 @@ class Solution {
         long sum = 0;
 
         for (int left = 0, right = 0; left < n; left++) {
+            if (right + 1 < left) throw new RuntimeException(String.format("left:%d, right:%d", left, right));
+
             while (right < n && coins[right][1] <= coins[left][0] + k - 1) {
                 sum += 1l * (coins[right][1] - coins[right][0] + 1) * coins[right][2];
                 right++;
