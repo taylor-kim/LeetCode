@@ -1,6 +1,32 @@
 class Solution {
     public int[] minOperations(String boxes) {
-        return official_bruteforce(boxes);
+        return official_onepass_and_space_opt(boxes);
+    }
+
+    public int[] official_onepass_and_space_opt(String boxes) {
+        int toRightBallCount = 0;
+        int movesToRight = 0;
+        int toLeftBallCount = 0;
+        int movesToLeft = 0;
+
+        int n = boxes.length();
+        int[] ans = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            ans[i] += movesToRight;
+
+            toRightBallCount += boxes.charAt(i) - '0';
+            movesToRight += toRightBallCount;
+
+            int j = n - i - 1;
+
+            ans[j] += movesToLeft;
+
+            toLeftBallCount += boxes.charAt(j) - '0';
+            movesToLeft += toLeftBallCount;
+        }
+
+        return ans;
     }
 
     public int[] official_bruteforce(String boxes) {
