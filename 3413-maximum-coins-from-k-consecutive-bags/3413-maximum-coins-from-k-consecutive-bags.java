@@ -14,7 +14,7 @@ class Solution {
         long sum = 0;
 
         for (int left = 0, right = 0; left < n; left++) {
-            if (right + 1 < left) throw new RuntimeException(String.format("left:%d, right:%d", left, right));
+            if (left > right + 1) throw new RuntimeException(String.format("left:%d, right:%d", left, right));
 
             while (right < n && coins[right][1] <= coins[left][0] + k - 1) {
                 sum += 1l * (coins[right][1] - coins[right][0] + 1) * coins[right][2];
@@ -31,15 +31,17 @@ class Solution {
 
         sum = 0;
 
-        for (int left = 0, right = 0; left < n; left++) {
-            sum += 1l * (coins[left][1] - coins[left][0] + 1) * coins[left][2];
+        for (int right = 0, left = 0; right < n; right++) {
+            if (left > right) throw new RuntimeException(String.format("left:%d, right:%d", left, right));
 
-            while (right < n && coins[right][1] < coins[left][1] - k + 1) {
-                sum -= 1l * (coins[right][1] - coins[right][0] + 1) * coins[right][2];
-                right++;
+            sum += 1l * (coins[right][1] - coins[right][0] + 1) * coins[right][2];
+
+            while (left < n && coins[left][1] < coins[right][1] - k + 1) {
+                sum -= 1l * (coins[left][1] - coins[left][0] + 1) * coins[left][2];
+                left++;
             }
 
-            long part = 1l * Math.max(0, coins[left][1] - k + 1 - coins[right][0]) * coins[right][2];
+            long part = 1l * Math.max(0, coins[right][1] - k + 1 - coins[left][0]) * coins[left][2];
             ans = Math.max(ans, sum - part);
         }
 
