@@ -4,21 +4,22 @@ class Solution {
     }
 
     public long others(String s) {
-        List<Integer>[] seen = new List[26];
+        LinkedList<Integer>[] seen = new LinkedList[26];
 
         for (int i = 0; i < seen.length; i++) {
-            seen[i] = new ArrayList();
+            seen[i] = new LinkedList();
         }
 
         long ans = 0;
 
         for (int i = 0; i < s.length(); i++) {
             int index = s.charAt(i) - 'a';
+            int pair = 25 - index;
 
-            if (seen[25 - index].size() == 0) {
-                seen[index].add(i);
+            if (seen[index].size() == 0) {
+                seen[25 - index].add(i);
             } else {
-                ans += i - seen[25 - index].remove(seen[25 - index].size() - 1);
+                ans += i - seen[index].pollLast();
             }
         }
 
