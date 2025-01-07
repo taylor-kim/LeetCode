@@ -1,6 +1,28 @@
 class Solution {
     public long calculateScore(String s) {
-        return mySol(s);
+        return others(s);
+    }
+
+    public long others(String s) {
+        List<Integer>[] seen = new List[26];
+
+        for (int i = 0; i < seen.length; i++) {
+            seen[i] = new ArrayList();
+        }
+
+        long ans = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+            int index = s.charAt(i) - 'a';
+
+            if (seen[25 - index].size() == 0) {
+                seen[index].add(i);
+            } else {
+                ans += i - seen[25 - index].remove(seen[25 - index].size() - 1);
+            }
+        }
+
+        return ans;
     }
 
     public long mySol(String s) {
@@ -30,6 +52,8 @@ class Solution {
             if (indices.size() == 0) continue;
 
             int index = rightMost(indices, i - 1);
+
+            // System.out.println(String.format("i:%d, j:%d, indices:%s", i, index, indices));
 
             if (index >= 0) {
                 int j = indices.remove(index);
