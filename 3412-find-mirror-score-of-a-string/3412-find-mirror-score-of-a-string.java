@@ -14,12 +14,12 @@ class Solution {
 
         for (int i = 0; i < s.length(); i++) {
             int index = s.charAt(i) - 'a';
-            int pair = 25 - index;
+            int mirror = 25 - index;
 
-            if (seen[index].size() == 0) {
-                seen[25 - index].add(i);
+            if (seen[mirror].size() == 0) {
+                seen[index].add(i);
             } else {
-                ans += i - seen[index].pollLast();
+                ans += i - seen[mirror].pollLast();
             }
         }
 
