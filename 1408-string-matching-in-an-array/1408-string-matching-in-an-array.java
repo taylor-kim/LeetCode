@@ -1,6 +1,54 @@
 class Solution {
     public List<String> stringMatching(String[] words) {
-        return bruteForce(words);
+        return official_trie(words);
+    }
+
+    public List<String> official_trie(String[] words) {
+        List<String> ans = new ArrayList();
+
+        OfficialTrie root = new OfficialTrie();
+
+        for (String word : words) {
+            for (int i = 0; i < word.length(); i++) {
+                root.build(word.substring(i));
+            }
+        }
+
+        for (String word : words) {
+            if (root.isSubString(word)) {
+                ans.add(word);
+            }
+        }
+
+        return ans;
+    }
+
+    public class OfficialTrie {
+        OfficialTrie[] children = new OfficialTrie[26];
+        int freq = 0;
+
+        public void build(String s) {
+            OfficialTrie t = this;
+
+            for (char c : s.toCharArray()) {
+                if (t.children[c - 'a'] == null) {
+                    t.children[c - 'a'] = new OfficialTrie();
+                }
+
+                t = t.children[c - 'a'];
+                t.freq++;
+            }
+        }
+
+        public boolean isSubString(String s) {
+            OfficialTrie t = this;
+
+            for (char c : s.toCharArray()) {
+                t = t.children[c - 'a'];
+            }
+
+            return t.freq > 1;
+        }
     }
 
     public List<String> bruteForce(String[] words) {
