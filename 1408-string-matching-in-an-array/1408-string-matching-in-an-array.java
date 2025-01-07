@@ -1,6 +1,28 @@
 class Solution {
     public List<String> stringMatching(String[] words) {
-        return mySol(words);
+        return bruteForce(words);
+    }
+
+    public List<String> bruteForce(String[] words) {
+        List<String> ans = new ArrayList();
+
+        Arrays.sort(words, (a, b) -> {
+            return a.length() != b.length() ? a.length() - b.length() : a.compareTo(b);
+        });
+
+        for (int i = 0; i < words.length; i++) {
+            String a = words[i];
+            for (int j = i + 1; j < words.length; j++) {
+                String b = words[j];
+
+                if (!a.equals(b) && b.contains(a)) {
+                    ans.add(a);
+                    break;
+                }
+            }
+        }
+
+        return ans;
     }
 
     public List<String> mySol(String[] words) {
