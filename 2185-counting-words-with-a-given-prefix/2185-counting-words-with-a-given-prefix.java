@@ -1,0 +1,15 @@
+class Solution {
+    public int prefixCount(String[] words, String pref) {
+        return mySol(words, pref);
+    }
+
+    public int mySol(String[] words, String pref) {
+        int ans = 0;
+
+        for (String word : words) {
+            if (word.startsWith(pref)) ans++;
+        }
+
+        return ans;
+    }
+}
