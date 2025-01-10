@@ -14,12 +14,12 @@ class Solution {
             while (!minHeap.isEmpty() && nums[minHeap.peekLast()] > nums[right]) {
                 minHeap.pollLast();
             }
-            minHeap.addLast(right);
+            minHeap.add(right);
 
             while (!maxHeap.isEmpty() && nums[maxHeap.peekLast()] < nums[right]) {
                 maxHeap.pollLast();
             }
-            maxHeap.addLast(right);
+            maxHeap.add(right);
 
             while (!minHeap.isEmpty() && !maxHeap.isEmpty() 
                     && Math.abs(nums[minHeap.peekFirst()] - nums[maxHeap.peekFirst()]) > 2) {
