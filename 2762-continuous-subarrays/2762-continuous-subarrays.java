@@ -22,7 +22,7 @@ class Solution {
             maxHeap.addLast(right);
 
             while (!minHeap.isEmpty() && !maxHeap.isEmpty() 
-                    && Math.abs(nums[minHeap.peekFirst()] - nums[maxHeap.peekFirst()]) > 2) {
+                    && nums[maxHeap.peekFirst()] - nums[minHeap.peekFirst()] > 2) {
                 if (minHeap.peekFirst() < maxHeap.peekFirst()) {
                     left = minHeap.pollFirst() + 1;
                 } else {
