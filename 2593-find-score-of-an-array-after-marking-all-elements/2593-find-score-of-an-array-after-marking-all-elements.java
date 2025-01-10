@@ -1,6 +1,24 @@
 class Solution {
     public long findScore(int[] nums) {
-        return tryAgain_20250111_monotonic_stack(nums);
+        return practice_20250111_slidingWindow(nums);
+    }
+
+    public long practice_20250111_slidingWindow(int[] nums) {
+        long ans = 0;
+
+        for (int i = 0; i < nums.length; i += 2) {
+            int left = i;
+
+            while (i + 1 < nums.length && nums[i] > nums[i + 1]) {
+                i++;
+            }
+
+            for (int right = i; right >= left; right -= 2) {
+                ans += nums[right];
+            }
+        }
+
+        return ans;
     }
 
     public long tryAgain_20250111_monotonic_stack(int[] nums) {
