@@ -1,6 +1,39 @@
 class Solution {
     public long continuousSubarrays(int[] nums) {
-        return try_monotonic_deque(nums);
+        return try_20250111_monotonic_deque(nums);
+    }
+
+    public long try_20250111_monotonic_deque(int[] nums) {
+        Deque<Integer> minHeap = new ArrayDeque();
+        Deque<Integer> maxHeap = new ArrayDeque();
+
+        int left = 0;
+        long ans = 0;
+
+        for (int right = 0; right < nums.length; right++) {
+            while (!minHeap.isEmpty() && nums[minHeap.peekLast()] > nums[right]) {
+                minHeap.pollLast();
+            }
+            minHeap.addLast(right);
+
+            while (!maxHeap.isEmpty() && nums[maxHeap.peekLast()] < nums[right]) {
+                maxHeap.pollLast();
+            }
+            maxHeap.addLast(right);
+
+            while (!minHeap.isEmpty() && !maxHeap.isEmpty() 
+                    && Math.abs(nums[minHeap.peekFirst()] - nums[maxHeap.peekFirst()]) > 2) {
+                if (minHeap.peekFirst() < maxHeap.peekFirst()) {
+                    left = minHeap.pollFirst() + 1;
+                } else {
+                    left = maxHeap.pollFirst() + 1;
+                }
+            }
+
+            ans += right - left + 1;
+        }
+
+        return ans;
     }
 
     public long try_monotonic_deque(int[] nums) {
