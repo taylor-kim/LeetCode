@@ -1,7 +1,45 @@
 class Solution {
     public long continuousSubarrays(int[] nums) {
-        return try_20250111_monotonic_deque(nums);
+        return chatgpt(nums);
     }
+
+    public long chatgpt(int[] nums) {
+        Deque<Integer> minHeap = new ArrayDeque<>();
+        Deque<Integer> maxHeap = new ArrayDeque<>();
+
+        int left = 0;
+        long ans = 0;
+
+        for (int right = 0; right < nums.length; right++) {
+            // minHeap: 중복된 값 제거
+            while (!minHeap.isEmpty() && (nums[minHeap.peekLast()] > nums[right] || nums[minHeap.peekLast()] == nums[right])) {
+                minHeap.pollLast();
+            }
+            minHeap.addLast(right);
+
+            // maxHeap: 중복된 값 제거
+            while (!maxHeap.isEmpty() && (nums[maxHeap.peekLast()] < nums[right] || nums[maxHeap.peekLast()] == nums[right])) {
+                maxHeap.pollLast();
+            }
+            maxHeap.addLast(right);
+
+            // 조건을 만족하지 않으면 left를 이동
+            while (!minHeap.isEmpty() && !maxHeap.isEmpty()
+                    && nums[maxHeap.peekFirst()] - nums[minHeap.peekFirst()] > 2) {
+                if (minHeap.peekFirst() < maxHeap.peekFirst()) {
+                    left = minHeap.pollFirst() + 1;
+                } else {
+                    left = maxHeap.pollFirst() + 1;
+                }
+            }
+
+            // 구간의 길이를 결과에 더함
+            ans += right - left + 1;
+        }
+
+        return ans;
+    }
+
 
     public long try_20250111_monotonic_deque(int[] nums) {
         Deque<Integer> minHeap = new ArrayDeque();
