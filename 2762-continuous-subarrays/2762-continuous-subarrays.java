@@ -1,6 +1,45 @@
 class Solution {
     public long continuousSubarrays(int[] nums) {
-        return chatgpt(nums);
+        return official_two_pointers(nums);
+    }
+
+    public long official_two_pointers(int[] nums) {
+        int left = 0;
+        int right = 0;
+        long ans = 0;
+        long window = 0;
+
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+
+        for (right = 0; right < nums.length; right++) {
+            min = Math.min(min, nums[right]);
+            max = Math.max(max, nums[right]);
+
+            if (max - min > 2) {
+                window = right - left; // exclude right
+                ans += window * (1 + window) / 2;
+
+                left = right;
+                min = max = nums[right];
+
+                while (left > 0 && Math.abs(nums[right] - nums[left - 1]) <= 2) {
+                    left--;
+                    min = Math.min(min, nums[left]);
+                    max = Math.max(max, nums[left]);
+                }
+
+                if (left < right) {
+                    window = right - left; // exclude right
+                    ans -= window * (1 + window) / 2;
+                }
+            }
+        }
+
+        window = right - left; // exclude right
+        ans += window * (1 + window) / 2;
+
+        return ans;
     }
 
     public long chatgpt(int[] nums) {
