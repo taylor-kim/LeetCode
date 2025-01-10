@@ -1,6 +1,33 @@
 class Solution {
     public long findScore(int[] nums) {
-        return try_monotonic_stack(nums);
+        return tryAgain_20250111(nums);
+    }
+
+    public long tryAgain_20250111(int[] nums) {
+        long ans = 0;
+        
+        Set<Integer> visit = new HashSet();
+
+        Queue<int[]> pq = new PriorityQueue<>((a, b) -> {
+            return a[0] != b[0] ? a[0] - b[0] : a[1] - b[1];
+        });
+
+        for (int i = 0; i < nums.length; i++) {
+            pq.add(new int[] {nums[i], i});
+        }
+
+        while (!pq.isEmpty()) {
+            int[] data = pq.poll();
+
+            if (!visit.add(data[1])) continue;
+
+            ans += data[0];
+
+            visit.add(data[1] - 1);
+            visit.add(data[1] + 1);
+        }
+
+        return ans;
     }
 
     public long try_monotonic_stack(int[] nums) {
@@ -8,19 +35,13 @@ class Solution {
         long ans = 0;
 
         for (int i = 0; i < nums.length; i++) {
-            boolean marked = false;
+            if (!stack.isEmpty() && nums[stack.peek()] <= nums[i]) {
+                while (!stack.isEmpty()) {
+                    ans += nums[stack.pop()];
 
-            while (!stack.isEmpty() && nums[stack.peek()] <= nums[i]) {
-                marked = true;
-
-                ans += nums[stack.pop()];
-
-                if (!stack.isEmpty()) {
-                    stack.pop();
+                    if (!stack.isEmpty()) stack.pop();
                 }
-            }
-
-            if (!marked) {
+            } else {
                 stack.push(i);
             }
         }
