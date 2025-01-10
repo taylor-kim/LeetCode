@@ -1,6 +1,49 @@
 class Solution {
     public long maximumCoins(int[][] coins, int k) {
-        return lee(coins, k);
+        return tryAgain_20250110(coins, k);
+    }
+
+    public long tryAgain_20250110(int[][] coins, int k) {
+        Arrays.sort(coins, (a, b) -> {
+            return a[0] - b[0];
+        });
+
+        int n = coins.length;
+
+        long ans = 0;
+        long sum = 0;
+
+        for (int i = 0, j = 0; i < n; i++) {
+            while (j < n && coins[j][1] <= coins[i][0] + k - 1) {
+                sum += 1l * (coins[j][1] - coins[j][0] + 1) * coins[j][2];
+                j++;
+            }
+
+            if (j < n) {
+                long part = 1l * Math.max(0, coins[i][0] + k - coins[j][0]) * coins[j][2];
+                ans = Math.max(ans, sum + part);
+            }
+
+            sum -= 1l * (coins[i][1] - coins[i][0] + 1) * coins[i][2];
+        }
+
+        sum = 0;
+
+        for (int i = 0, j = 0; i < n; i++) {
+            sum += 1l * (coins[i][1] - coins[i][0] + 1) * coins[i][2];
+
+            while (j < n && coins[j][1] < coins[i][1] - k + 1) {
+                sum -= 1l * (coins[j][1] - coins[j][0] + 1) * coins[j][2];
+                j++;
+            }
+
+            if (j < n) {
+                long part = 1l * (Math.max(0, coins[i][1] - k + 1 - (coins[j][0]))) * coins[j][2];
+                ans = Math.max(ans, sum - part);
+            }
+        }
+
+        return ans;
     }
 
     public long lee(int[][] coins, int k) {
@@ -27,6 +70,8 @@ class Solution {
             }
 
             sum -= 1l * (coins[left][1] - coins[left][0] + 1) * coins[left][2];
+
+            // System.out.println(ans);
         }
 
         sum = 0;
@@ -43,6 +88,10 @@ class Solution {
 
             long part = 1l * Math.max(0, coins[right][1] - k + 1 - coins[left][0]) * coins[left][2];
             ans = Math.max(ans, sum - part);
+
+            // System.out.println(String.format("sum:%d, part:%d", sum, part));
+
+            // System.out.println(ans);
         }
 
         return ans;
