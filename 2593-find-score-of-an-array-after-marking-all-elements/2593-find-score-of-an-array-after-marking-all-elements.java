@@ -1,6 +1,32 @@
 class Solution {
     public long findScore(int[] nums) {
-        return tryAgain_20250111(nums);
+        return tryAgain_20250111_monotonic_stack(nums);
+    }
+
+    public long tryAgain_20250111_monotonic_stack(int[] nums) {
+        Stack<Integer> stack = new Stack();
+
+        long ans = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+            if (!stack.isEmpty() && nums[stack.peek()] <= nums[i]) {
+                while (!stack.isEmpty()) {
+                    ans += nums[stack.pop()];
+
+                    if (!stack.isEmpty()) stack.pop();
+                }
+            } else {
+                stack.push(i);
+            }
+        }
+
+        while (!stack.isEmpty()) {
+            ans += nums[stack.pop()];
+
+            if (!stack.isEmpty()) stack.pop();
+        }
+        
+        return ans;
     }
 
     public long tryAgain_20250111(int[] nums) {
