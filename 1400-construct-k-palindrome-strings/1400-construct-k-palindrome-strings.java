@@ -1,6 +1,24 @@
 class Solution {
     public boolean canConstruct(String s, int k) {
-        return mySol3(s, k);
+        return official_odd_freq(s, k);
+    }
+
+    public boolean official_odd_freq(String s, int k) {
+        if (s.length() < k) return false;
+        
+        int[] freq = new int[26];
+
+        for (char c : s.toCharArray()) {
+            freq[c - 'a']++;
+        }
+
+        int oddCount = 0;
+
+        for (int count : freq) {
+            if (count % 2 == 1) oddCount++;
+        }
+
+        return oddCount <= k;
     }
 
     public boolean mySol3(String s, int k) {
