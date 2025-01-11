@@ -1,11 +1,23 @@
 class Solution {
     public boolean canConstruct(String s, int k) {
-        return official_odd_freq(s, k);
+        return official_odd_freq_with_bit(s, k);
+    }
+
+    public boolean official_odd_freq_with_bit(String s, int k) {
+        if (s.length() < k) return false;
+
+        int oddCount = 0;
+
+        for (char c : s.toCharArray()) {
+            oddCount ^= 1 << (c - 'a');
+        }
+
+        return Integer.bitCount(oddCount) <= k;
     }
 
     public boolean official_odd_freq(String s, int k) {
         if (s.length() < k) return false;
-        
+
         int[] freq = new int[26];
 
         for (char c : s.toCharArray()) {
