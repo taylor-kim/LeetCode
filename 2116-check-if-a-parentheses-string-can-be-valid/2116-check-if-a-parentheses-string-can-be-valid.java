@@ -46,9 +46,9 @@ class Solution {
                 return false;
             }
 
-            // if (joker == 0 && open == 0) {
-            //     break;
-            // }
+            if (joker == 0 && open == 0) {
+                break;
+            }
         }
 
         if (open > 0) {
@@ -98,6 +98,8 @@ class Solution {
 
         if (n % 2 == 1) return false;
 
+        StringBuilder sb = new StringBuilder("-".repeat(n));
+
         Stack<Integer> open = new Stack();
         Stack<Integer> joker = new Stack();
 
@@ -110,12 +112,14 @@ class Solution {
                 open.push(i);
             } else {
                 if (!open.isEmpty()) {
-                    open.pop();
+                    sb.setCharAt(open.pop(), '(');
                 } else if (!joker.isEmpty()) {
-                    joker.pop();
+                    sb.setCharAt(joker.pop(), '(');
                 } else {
                     return false;
                 }
+
+                sb.setCharAt(i, ')');
             }
         }
 
@@ -129,11 +133,21 @@ class Solution {
             if (open.peek() > joker.peek()) {
                 return false;
             }
-            open.pop();
-            joker.pop();
+            sb.setCharAt(open.pop(), '(');
+            sb.setCharAt(joker.pop(), ')');
         }
 
         System.out.println(String.format("open:%s, joker:%s", open, joker));
+
+        while (!joker.isEmpty()) {
+            sb.setCharAt(joker.pop(), ')');
+
+            if (!joker.isEmpty()) {
+                sb.setCharAt(joker.pop(), '(');
+            }
+        }
+
+        System.out.println(String.format("answer : %s", sb.toString()));
 
         return joker.size() % 2 == 0;
     }
