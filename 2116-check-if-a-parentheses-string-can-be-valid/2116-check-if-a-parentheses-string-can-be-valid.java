@@ -46,9 +46,9 @@ class Solution {
                 return false;
             }
 
-            if (joker == 0 && open == 0) {
-                break;
-            }
+            // if (joker == 0 && open == 0) {
+            //     break;
+            // }
         }
 
         if (open > 0) {
