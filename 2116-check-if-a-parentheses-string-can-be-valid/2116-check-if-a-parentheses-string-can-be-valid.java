@@ -6,6 +6,8 @@ class Solution {
     public boolean mySol(String s, String locked) {
         int n = s.length();
 
+        if (n % 2 == 1) return false;
+
         Stack<Integer> open = new Stack();
         Stack<Integer> joker = new Stack();
 
