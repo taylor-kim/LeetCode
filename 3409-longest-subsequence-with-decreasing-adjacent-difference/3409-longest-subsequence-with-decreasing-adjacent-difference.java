@@ -6,15 +6,24 @@ class Solution {
     public int tryAgain_20250113(int[] nums) {
         int n = nums.length;
         int ans = 0;
-        int max = 299;
-        int[][] dp = new int[n][max + 1];
+        int min = 300;
+        int max = 0;
+
+        for (int num : nums) {
+            min = Math.min(min, num);
+            max = Math.max(max, num);
+        }
+
+        int maxDiff = max - min;
+
+        int[][] dp = new int[n][maxDiff + 1];
 
         for (int[] row : dp) {
             Arrays.fill(row, 1);
         }
 
         for (int i = 1; i < n; i++) {
-            for (int diff = max - 1; diff >= 0; diff--) {
+            for (int diff = maxDiff - 1; diff >= 0; diff--) {
                 dp[i - 1][diff] = Math.max(dp[i - 1][diff], dp[i - 1][diff + 1]);
             }
 
