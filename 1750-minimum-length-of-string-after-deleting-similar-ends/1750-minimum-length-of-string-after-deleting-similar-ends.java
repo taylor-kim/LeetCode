@@ -1,6 +1,6 @@
 class Solution {
     public int minimumLength(String s) {
-        return official_two_pointer(s);
+        return try_20250113(s);
     }
 
     public int official_two_pointer(String s) {
@@ -28,11 +28,13 @@ class Solution {
         int right = n - 1;
 
         while (left < right && s.charAt(left) == s.charAt(right)) {
-            while (left + 1 < right && s.charAt(left) == s.charAt(left + 1)) {
+            char c = s.charAt(left);
+
+            while (left + 1 < right && c == s.charAt(left + 1)) {
                 left++;
             }
 
-            while (right - 1 > left && s.charAt(right - 1) == s.charAt(right)) {
+            while (right - 1 > left && s.charAt(right - 1) == c) {
                 right--;
             }
 
@@ -40,6 +42,7 @@ class Solution {
             right--;
         }
 
-        return Math.max(0, right - left + 1);
+        // return Math.max(0, right - left + 1);
+        return right - left + 1;
     }
 }
