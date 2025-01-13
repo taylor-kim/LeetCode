@@ -1,6 +1,32 @@
 class Solution {
     public int longestSubsequence(int[] nums) {
-        return others(nums);
+        return tryAgain_20250113(nums);
+    }
+
+    public int tryAgain_20250113(int[] nums) {
+        int n = nums.length;
+        int ans = 0;
+        int max = 299;
+        int[][] dp = new int[n][max + 1];
+
+        for (int[] row : dp) {
+            Arrays.fill(row, 1);
+        }
+
+        for (int i = 1; i < n; i++) {
+            for (int diff = max - 1; diff >= 0; diff--) {
+                dp[i - 1][diff] = Math.max(dp[i - 1][diff], dp[i - 1][diff + 1]);
+            }
+
+            for (int j = 0; j < i; j++) {
+                int diff = Math.abs(nums[i] - nums[j]);
+                dp[i][diff] = Math.max(dp[i][diff], dp[j][diff] + 1);
+
+                ans = Math.max(ans, dp[i][diff]);
+            }
+        }
+
+        return ans;
     }
 
     public int others(int[] nums) {
