@@ -1,4 +1,4 @@
-<h2><a href="https://leetcode.com/problems/minimum-length-of-string-after-deleting-similar-ends/">1750. Minimum Length of String After Deleting Similar Ends</a></h2><h3>Medium</h3><hr><div><p>Given a string <code>s</code> consisting only of characters <code>'a'</code>, <code>'b'</code>, and <code>'c'</code>. You are asked to apply the following algorithm on the string any number of times:</p>
+<h2><a href="https://leetcode.com/problems/minimum-length-of-string-after-deleting-similar-ends">1750. Minimum Length of String After Deleting Similar Ends</a></h2><h3>Medium</h3><hr><p>Given a string <code>s</code> consisting only of characters <code>&#39;a&#39;</code>, <code>&#39;b&#39;</code>, and <code>&#39;c&#39;</code>. You are asked to apply the following algorithm on the string any number of times:</p>
 
 <ol>
 	<li>Pick a <strong>non-empty</strong> prefix from the string <code>s</code> where all the characters in the prefix are equal.</li>
@@ -13,28 +13,31 @@
 <p>&nbsp;</p>
 <p><strong class="example">Example 1:</strong></p>
 
-<pre><strong>Input:</strong> s = "ca"
+<pre>
+<strong>Input:</strong> s = &quot;ca&quot;
 <strong>Output:</strong> 2
-<strong>Explanation: </strong>You can't remove any characters, so the string stays as is.
+<strong>Explanation: </strong>You can&#39;t remove any characters, so the string stays as is.
 </pre>
 
 <p><strong class="example">Example 2:</strong></p>
 
-<pre><strong>Input:</strong> s = "cabaabac"
+<pre>
+<strong>Input:</strong> s = &quot;cabaabac&quot;
 <strong>Output:</strong> 0
 <strong>Explanation:</strong> An optimal sequence of operations is:
-- Take prefix = "c" and suffix = "c" and remove them, s = "abaaba".
-- Take prefix = "a" and suffix = "a" and remove them, s = "baab".
-- Take prefix = "b" and suffix = "b" and remove them, s = "aa".
-- Take prefix = "a" and suffix = "a" and remove them, s = "".</pre>
+- Take prefix = &quot;c&quot; and suffix = &quot;c&quot; and remove them, s = &quot;abaaba&quot;.
+- Take prefix = &quot;a&quot; and suffix = &quot;a&quot; and remove them, s = &quot;baab&quot;.
+- Take prefix = &quot;b&quot; and suffix = &quot;b&quot; and remove them, s = &quot;aa&quot;.
+- Take prefix = &quot;a&quot; and suffix = &quot;a&quot; and remove them, s = &quot;&quot;.</pre>
 
 <p><strong class="example">Example 3:</strong></p>
 
-<pre><strong>Input:</strong> s = "aabccabba"
+<pre>
+<strong>Input:</strong> s = &quot;aabccabba&quot;
 <strong>Output:</strong> 3
 <strong>Explanation:</strong> An optimal sequence of operations is:
-- Take prefix = "aa" and suffix = "a" and remove them, s = "bccabb".
-- Take prefix = "b" and suffix = "bb" and remove them, s = "cca".
+- Take prefix = &quot;aa&quot; and suffix = &quot;a&quot; and remove them, s = &quot;bccabb&quot;.
+- Take prefix = &quot;b&quot; and suffix = &quot;bb&quot; and remove them, s = &quot;cca&quot;.
 </pre>
 
 <p>&nbsp;</p>
@@ -42,6 +45,5 @@
 
 <ul>
 	<li><code>1 &lt;= s.length &lt;= 10<sup>5</sup></code></li>
-	<li><code>s</code> only consists of characters <code>'a'</code>, <code>'b'</code>, and <code>'c'</code>.</li>
+	<li><code>s</code> only consists of characters <code>&#39;a&#39;</code>, <code>&#39;b&#39;</code>, and <code>&#39;c&#39;</code>.</li>
 </ul>
-</div>
