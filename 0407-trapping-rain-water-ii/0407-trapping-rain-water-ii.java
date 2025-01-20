@@ -1,17 +1,76 @@
 class Solution {
     public int trapRainWater(int[][] heightMap) {
-        return mySol2_after_fail(heightMap);
+        return after_editorial(heightMap);
+    }
+
+    public int after_editorial(int[][] heightMap) {
+        int m = heightMap.length;
+        int n = heightMap[0].length;
+
+        Queue<int[]> pq = new PriorityQueue<>((a, b) -> {
+            return heightMap[a[0]][a[1]] - heightMap[b[0]][b[1]];
+        });
+
+        boolean[][] boundaries = new boolean[m][n];
+        
+        for (int i = 0; i < m; i++) {
+            boundaries[i][0] = true;
+            boundaries[i][n - 1] = true;
+
+            pq.add(new int[] {i, 0});
+            pq.add(new int[] {i, n - 1});
+        }
+
+        for (int j = 0; j < n; j++) {
+            boundaries[0][j] = true;
+            boundaries[m - 1][j] = true;
+
+            pq.add(new int[] {0, j});
+            pq.add(new int[] {m - 1, j});
+        }
+
+        int ans = 0;
+
+        int[][] dirs = {
+            {0, 1},
+            {0, -1},
+            {1, 0},
+            {-1, 0}
+        };
+
+        while (!pq.isEmpty()) {
+            int y = pq.peek()[0];
+            int x = pq.poll()[1];
+
+            for (int[] d : dirs) {
+                int ny = y + d[0];
+                int nx = x + d[1];
+
+                if (ny >= 0 && ny < m && nx >= 0 && nx < n && !boundaries[ny][nx]) {
+                    boundaries[ny][nx] = true;
+                    
+                    if (heightMap[ny][nx] < heightMap[y][x]) {
+                        ans += heightMap[y][x] - heightMap[ny][nx];
+                        heightMap[ny][nx] = heightMap[y][x];
+                    }
+
+                    pq.add(new int[] {ny, nx});
+                }
+            }
+        }
+
+        return ans;
     }
 
     public int mySol2_after_fail(int[][] heightMap) {
         int m = heightMap.length;
         int n = heightMap[0].length;
 
-        // for (int[] row : heightMap) {
-        //     System.out.println(Arrays.toString(row));
-        // }
+        for (int[] row : heightMap) {
+            System.out.println(Arrays.toString(row));
+        }
 
-        // System.out.println("");
+        System.out.println("");
 
         int[][] dirs = {
             {0, 1},
@@ -78,14 +137,15 @@ class Solution {
 
         int ans = 0;
 
+        Set<String> rain = new HashSet();
+
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (!visit.contains(i + "_" + j)) {
+                if (!visit.contains(i + "_" + j) && !rain.contains(i + "_" + j)) {
                     // System.out.println(String.format("i:%d, j:%d, val:%d", i, j, heightMap[i][j]));
                     // ans += Math.max(min - heightMap[i][j], 0);
 
                     Queue<int[]> queue = new LinkedList();
-                    Set<String> rain = new HashSet();
                     int minOuter = Integer.MAX_VALUE;
                     List<Integer> list = new ArrayList();
 
@@ -110,11 +170,11 @@ class Solution {
                         }
                     }
 
+                    System.out.println(String.format("minOuter:%d, list:%s", minOuter, list));
+
                     for (int value : list) {
                         ans += Math.max(minOuter - value, 0);
                     }
-
-                    visit.addAll(rain);
                 }
             }
         }
