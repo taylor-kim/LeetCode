@@ -1,121 +1,208 @@
 class Solution {
-
     public int trapRainWater(int[][] heightMap) {
-        // Direction arrays
-        int[] dRow = { 0, 0, -1, 1 };
-        int[] dCol = { -1, 1, 0, 0 };
+        return mySol2_after_fail(heightMap);
+    }
 
-        int numOfRows = heightMap.length;
-        int numOfCols = heightMap[0].length;
+    public int mySol2_after_fail(int[][] heightMap) {
+        int m = heightMap.length;
+        int n = heightMap[0].length;
 
-        boolean[][] visited = new boolean[numOfRows][numOfCols];
+        // for (int[] row : heightMap) {
+        //     System.out.println(Arrays.toString(row));
+        // }
 
-        // Priority queue (min-heap) to process boundary cells in increasing height order
-        PriorityQueue<Cell> boundary = new PriorityQueue<>();
+        // System.out.println("");
 
-        // Add the first and last column cells to the boundary and mark them as visited
-        for (int i = 0; i < numOfRows; i++) {
-            boundary.offer(new Cell(heightMap[i][0], i, 0));
-            boundary.offer(
-                new Cell(heightMap[i][numOfCols - 1], i, numOfCols - 1)
-            );
-            // Mark left and right boundary cells as visited
-            visited[i][0] = visited[i][numOfCols - 1] = true;
+        int[][] dirs = {
+            {0, 1},
+            {0, -1},
+            {1, 0},
+            {-1, 0}
+        };
+
+        Queue<int[]> pq = new PriorityQueue<>((a, b) -> {
+            return heightMap[a[0]][a[1]] - heightMap[b[0]][b[1]];
+        });
+
+        TreeMap<Integer, Integer> map = new TreeMap();
+        Set<String> visit = new HashSet();
+
+        for (int i = 0; i < m; i++) {
+            pq.add(new int[] {i, 0});
+            pq.add(new int[] {i, n - 1});
+
+            visit.add(i + "_" + 0);
+            visit.add(i + "_" + (n - 1));
+
+            put(map, heightMap[i][0], 1);
+            put(map, heightMap[i][n - 1], 1);
         }
 
-        // Add the first and last row cells to the boundary and mark them as visited
-        for (int i = 0; i < numOfCols; i++) {
-            boundary.offer(new Cell(heightMap[0][i], 0, i));
-            boundary.offer(
-                new Cell(heightMap[numOfRows - 1][i], numOfRows - 1, i)
-            );
-            // Mark top and bottom boundary cells as visited
-            visited[0][i] = visited[numOfRows - 1][i] = true;
+        for (int j = 1; j < n - 1; j++) {
+            pq.add(new int[] {0, j});
+            pq.add(new int[] {m - 1, j});
+
+            visit.add(0 + "_" + j);
+            visit.add((m - 1) + "_" + j);
+
+            put(map, heightMap[0][j], 1);
+            put(map, heightMap[m - 1][j], 1);
         }
 
-        // Initialize the total water volume to 0
-        int totalWaterVolume = 0;
+        while (!pq.isEmpty()) {
+            int[] pos = pq.poll();
+            int y = pos[0];
+            int x = pos[1];
 
-        // Process cells in the boundary (min-heap will always pop the smallest height)
-        while (!boundary.isEmpty()) {
-            // Pop the cell with the smallest height from the boundary
-            Cell currentCell = boundary.poll();
+            boolean foundBetter = false;
 
-            int currentRow = currentCell.row;
-            int currentCol = currentCell.col;
-            int minBoundaryHeight = currentCell.height;
+            for (int[] d : dirs) {
+                int ny = y + d[0];
+                int nx = x + d[1];
 
-            // Explore all 4 neighboring cells
-            for (int direction = 0; direction < 4; direction++) {
-                // Calculate the row and column of the neighbor
-                int neighborRow = currentRow + dRow[direction];
-                int neighborCol = currentCol + dCol[direction];
+                if (ny >= 0 && nx >= 0 && ny < m && nx < n && heightMap[y][x] <= heightMap[ny][nx] && visit.add(ny + "_" + nx)) {
+                    pq.add(new int[] {ny, nx});
+                    put(map, heightMap[ny][nx], 1);
+                    foundBetter = true;
+                }
+            }
 
-                // Check if the neighbor is within the grid bounds and not yet visited
-                if (
-                    isValidCell(
-                        neighborRow,
-                        neighborCol,
-                        numOfRows,
-                        numOfCols
-                    ) &&
-                    !visited[neighborRow][neighborCol]
-                ) {
-                    // Get the height of the neighbor cell
-                    int neighborHeight = heightMap[neighborRow][neighborCol];
+            if (foundBetter) {
+                put(map, heightMap[y][x], -1);
+            }
+        }
 
-                    // If the neighbor's height is less than the current boundary height, water can be trapped
-                    if (neighborHeight < minBoundaryHeight) {
-                        // Add the trapped water volume
-                        totalWaterVolume += minBoundaryHeight - neighborHeight;
+        // System.out.println(map);
+
+        Integer min = map.firstKey();
+
+        int ans = 0;
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (!visit.contains(i + "_" + j)) {
+                    // System.out.println(String.format("i:%d, j:%d, val:%d", i, j, heightMap[i][j]));
+                    // ans += Math.max(min - heightMap[i][j], 0);
+
+                    Queue<int[]> queue = new LinkedList();
+                    Set<String> rain = new HashSet();
+                    int minOuter = Integer.MAX_VALUE;
+                    List<Integer> list = new ArrayList();
+
+                    queue.add(new int[] {i, j});
+                    rain.add(i + "_" + j);
+
+                    while (!queue.isEmpty()) {
+                        int y = queue.peek()[0];
+                        int x = queue.poll()[1];
+
+                        list.add(heightMap[y][x]);
+
+                        for (int[] d : dirs) {
+                            int ny = y + d[0];
+                            int nx = x + d[1];
+
+                            if (visit.contains(ny + "_" + nx)) {
+                                minOuter = Math.min(minOuter, heightMap[ny][nx]);
+                            } else if (ny >= 0 && nx >= 0 && ny < m && nx < n && rain.add(ny + "_" + nx)) {
+                                queue.add(new int[] {ny, nx});
+                            }
+                        }
                     }
 
-                    // Push the neighbor into the boundary with updated height (to prevent water leakage)
-                    boundary.offer(
-                        new Cell(
-                            Math.max(neighborHeight, minBoundaryHeight),
-                            neighborRow,
-                            neighborCol
-                        )
-                    );
-                    visited[neighborRow][neighborCol] = true;
+                    for (int value : list) {
+                        ans += Math.max(minOuter - value, 0);
+                    }
+
+                    visit.addAll(rain);
                 }
             }
         }
 
-        // Return the total amount of trapped water
-        return totalWaterVolume;
+        return ans;
     }
 
-    // Class to store the height and coordinates of a cell in the grid
-    private static class Cell implements Comparable<Cell> {
+    private void put(Map<Integer, Integer> map, int val, int delta) {
+        map.put(val, map.getOrDefault(val, 0) + delta);
 
-        int height;
-        int row;
-        int col;
-
-        // Constructor to initialize a cell
-        public Cell(int height, int row, int col) {
-            this.height = height;
-            this.row = row;
-            this.col = col;
-        }
-
-        // Overload the compareTo method to make the priority queue a min-heap based on height
-        @Override
-        public int compareTo(Cell other) {
-            // Min-heap comparison
-            return Integer.compare(this.height, other.height);
+        if (map.get(val) == 0) {
+            map.remove(val);
         }
     }
 
-    // Helper function to check if a cell is valid (within grid bounds)
-    private boolean isValidCell(
-        int row,
-        int col,
-        int numOfRows,
-        int numOfCols
-    ) {
-        return row >= 0 && col >= 0 && row < numOfRows && col < numOfCols;
+    public int mySol_fail(int[][] heightMap) {
+        int m = heightMap.length;
+        int n = heightMap[0].length;
+
+        for (int[] row : heightMap) {
+            System.out.println(Arrays.toString(row));
+        }
+
+        System.out.println("");
+
+        int[][] dp = new int[m][n];
+
+        for (int i = 1; i < m - 1; i++) {
+            int[] leftToRight = new int[n];
+            int[] rightToLeft = new int[n];
+
+            for (int left = 0; left < n; left++) {
+                int right = n - left - 1;
+                if (left > 0) {
+                    leftToRight[left] = Math.max(leftToRight[left - 1], heightMap[i][left]);
+                    rightToLeft[right] = Math.max(rightToLeft[right + 1], heightMap[i][right]);
+                } else {
+                    leftToRight[left] = heightMap[i][left];
+                    rightToLeft[right] = heightMap[i][right];
+                }
+            }
+
+            for (int left = 0; left < n; left++) {
+                dp[i][left] = Math.min(leftToRight[left], rightToLeft[left]) - heightMap[i][left];
+            }
+
+            System.out.println(Arrays.toString(dp[i]));
+        }
+
+        System.out.println("");
+
+        int[][] dp2 = new int[n][m];
+
+        for (int j = 1; j < n - 1; j++) {
+            int[] leftToRight = new int[m];
+            int[] rightToLeft = new int[m];
+
+            for (int left = 0; left < m; left++) {
+                int right = m - left - 1;
+                if (left > 0) {
+                    leftToRight[left] = Math.max(leftToRight[left - 1], heightMap[left][j]);
+                    rightToLeft[right] = Math.max(rightToLeft[right + 1], heightMap[right][j]);
+                } else {
+                    leftToRight[left] = heightMap[left][j];
+                    rightToLeft[right] = heightMap[right][j];
+                }
+            }
+
+            for (int left = 0; left < m; left++) {
+                dp2[j][left] = Math.min(leftToRight[left], rightToLeft[left]) - heightMap[left][j];
+            }
+
+            System.out.println(Arrays.toString(dp2[j]));
+        }
+
+        System.out.println("");
+
+        int ans = 0;
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                System.out.println(String.format("dp[%d][%d]:%d, dp2[%d][%d]:%d", i, j, dp[i][j], j, i, dp2[j][i]));
+                ans += Math.min(dp[i][j], dp2[j][i]);
+            }
+
+            System.out.println("");
+        }
+
+        return ans;
     }
 }
