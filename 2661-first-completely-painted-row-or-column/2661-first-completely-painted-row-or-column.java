@@ -1,6 +1,46 @@
 class Solution {
     public int firstCompleteIndex(int[] arr, int[][] mat) {
-        return official_counting(arr, mat);
+        return official_reverse_mapping(arr, mat);
+    }
+
+    public int official_reverse_mapping(int[] arr, int[][] mat) {
+        int m = mat.length;
+        int n = mat[0].length;
+
+        int[] rowCount = new int[m];
+        int[] colCount = new int[n];
+
+        Map<Integer, Integer> map = new HashMap();
+
+        for (int i = 0; i < m * n; i++) {
+            map.put(arr[i], i);
+        }
+
+        int ans = Integer.MAX_VALUE;
+
+        for (int i = 0; i < m; i++) {
+            int lastIndex = Integer.MIN_VALUE;
+            for (int j = 0; j < n; j++) {
+                int index = map.get(mat[i][j]);
+
+                lastIndex = Math.max(lastIndex, index);
+            }
+
+            ans = Math.min(ans, lastIndex);
+        }
+
+        for (int j = 0; j < n; j++) {
+            int lastIndex = Integer.MIN_VALUE;
+            for (int i = 0; i < m; i++) {
+                int index = map.get(mat[i][j]);
+
+                lastIndex = Math.max(lastIndex, index);
+            }
+
+            ans = Math.min(ans, lastIndex);
+        }
+
+        return ans;
     }
 
     public int official_counting(int[] arr, int[][] mat) {
