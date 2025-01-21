@@ -14,9 +14,13 @@ class Solution {
         for (int turnIndex = 0; turnIndex < grid[0].length; turnIndex++) {
             firstRowSum -= grid[0][turnIndex];
 
+            if (turnIndex > 0) {
+                secondRowSum += grid[1][turnIndex - 1];
+            }
+
             minimumSum = Math.min(minimumSum, Math.max(firstRowSum, secondRowSum));
 
-            secondRowSum += grid[1][turnIndex];
+            
         }
 
         return minimumSum;
