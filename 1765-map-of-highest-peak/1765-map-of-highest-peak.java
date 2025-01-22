@@ -7,14 +7,15 @@ class Solution {
         int m = mat.length;
         int n = mat[0].length;
 
-        int[][] ans = new int[m][n];
-
         Queue<int[]> queue = new LinkedList();
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (mat[i][j] == 1) {
                     queue.add(new int[] {i, j});
+                    mat[i][j] = 0;
+                } else {
+                    mat[i][j] = -1;
                 }
             }
         }
@@ -37,16 +38,14 @@ class Solution {
 
                 // System.out.println(String.format("y:%d, x:%d", y, x));
 
-                for (int i = 0, set = 0; i < dirs.length && set < 4; i++) {
+                for (int i = 0; i < dirs.length; i++) {
                     int ny = y + dirs[i][0];
                     int nx = x + dirs[i][1];
 
-                    if (ny >= 0 && nx >= 0 && ny < m && nx < n && mat[ny][nx] == 0 && ans[ny][nx] == 0) {
+                    if (ny >= 0 && nx >= 0 && ny < m && nx < n && mat[ny][nx] == -1) {
                         // System.out.println(String.format("y:%d, x:%d, ny:%d, nx:%d", y, x, ny, nx));
-                        set++;
-                        mat[ny][nx] = -mat[ny][nx];
+                        mat[ny][nx] = height;
                         queue.add(new int[] {ny, nx});
-                        ans[ny][nx] = height;
                     }
                 }
             }
@@ -54,6 +53,6 @@ class Solution {
             height++;
         }
 
-        return ans;
+        return mat;
     }
 }
