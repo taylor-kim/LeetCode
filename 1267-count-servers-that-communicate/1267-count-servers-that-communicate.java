@@ -19,13 +19,13 @@ class Solution {
             }
         }
 
-        Set<String> set = new HashSet();
+        Set<Integer> set = new HashSet();
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (grid[i][j] == 1
                     && (numberOfRow[i] > 1 || numberOfCol[j] > 1)) {
-                    set.add(i + "_" + j);
+                    set.add(i * n + j);
                 }
             }
         }
