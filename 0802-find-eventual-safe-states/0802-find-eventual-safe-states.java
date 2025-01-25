@@ -113,7 +113,7 @@ class Solution {
 
         for (int i = 0; i < n; i++) {
             if (!set.contains(i)) {
-                if (myDfs(i, graph, new boolean[n], memo)) {
+                if (!myDfs(i, graph, new boolean[n], memo)) {
                     set.add(i);
                 }
             }
@@ -134,18 +134,18 @@ class Solution {
             return memo[node];
         }
         
-        if (visit[node]) return false;
+        if (visit[node]) return true;
         visit[node] = true;
 
-        boolean ans = true;
+        boolean ans = false;
 
         if (graph[node].length == 0) {
-            ans = true;
+            ans = false;
         } else {
             for (int next : graph[node]) {
-                ans &= myDfs(next, graph, visit, memo);
+                ans |= myDfs(next, graph, visit, memo);
 
-                if (!ans) break;
+                if (ans) break;
             }
         }
 
