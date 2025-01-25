@@ -113,47 +113,32 @@ class Solution {
         boolean[] inStack = new boolean[n];
 
         for (int i = 0; i < n; i++) {
-            if (!set.contains(i)) {
-                if (myDfs(i, graph, visit, inStack)) {
-                    set.add(i);
-                }
-            }
+            myDfs(i, graph, visit, inStack);
         }
 
         List<Integer> ans = new ArrayList();
 
         for (int i = 0; i < n; i++) {
-            if (set.contains(i)) ans.add(i);
+            if (!inStack[i]) ans.add(i);
         }
 
         return ans;
     }
 
     private boolean myDfs(int node, int[][] graph, boolean[] visit, boolean[] inStack) {
-        // System.out.println(String.format("node:%d", node));
-
-        if (inStack[node]) {
-            // System.out.println(String.format("node is in stack:%d\n", node));
-            return false;
-        }
-
-        // System.out.println(String.format("node is not in stack:%d\n", node));
+        if (inStack[node]) return false;
 
         if (visit[node]) return true;
 
         visit[node] = true;
         inStack[node] = true;
 
-        boolean ans = true;
-
         for (int next : graph[node]) {
-            if (!myDfs(next, graph, visit, inStack)) {
-                return false;
-            }
+            if (!myDfs(next, graph, visit, inStack)) return false;
         }
 
         inStack[node] = false;
 
-        return ans;
+        return true;
     }
 }
