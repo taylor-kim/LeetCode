@@ -1,6 +1,49 @@
 class Solution {
     public List<Integer> eventualSafeNodes(int[][] graph) {
-        return mySol(graph);
+        return official_topological_sort(graph);
+    }
+
+    public List<Integer> official_topological_sort(int[][] graph) {
+        int n = graph.length;
+        Map<Integer, List<Integer>> backEdges = new HashMap();
+        int[] indgree = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            for (int next : graph[i]) {
+                backEdges.computeIfAbsent(next, k -> new ArrayList()).add(i);
+                indgree[i]++;
+            }
+        }
+
+        Queue<Integer> queue = new LinkedList();
+        for (int i = 0; i < n; i++) {
+            if (indgree[i] == 0) {
+                queue.add(i);
+            }
+        }
+
+        Set<Integer> set = new HashSet();
+
+        while (!queue.isEmpty()) {
+            int node = queue.poll();
+            set.add(node);
+
+            if (!backEdges.containsKey(node)) continue;
+
+            for (int next : backEdges.get(node)) {
+                if (--indgree[next] == 0) {
+                    queue.add(next);
+                }
+            }
+        }
+
+        List<Integer> ans = new ArrayList();
+
+        for (int i = 0; i < n; i++) {
+            if (set.contains(i)) ans.add(i);
+        }
+
+        return ans;
     }
 
     public List<Integer> mySol(int[][] graph) {
