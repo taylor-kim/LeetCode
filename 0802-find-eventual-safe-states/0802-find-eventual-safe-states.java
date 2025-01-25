@@ -1,6 +1,6 @@
 class Solution {
     public List<Integer> eventualSafeNodes(int[][] graph) {
-        return official_dfs(graph);
+        return mySol(graph);
     }
 
     public List<Integer> official_dfs(int[][] graph) {
@@ -144,6 +144,8 @@ class Solution {
         } else {
             for (int next : graph[node]) {
                 ans &= myDfs(next, graph, visit, memo);
+
+                if (!ans) break;
             }
         }
 
