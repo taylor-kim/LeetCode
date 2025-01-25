@@ -109,11 +109,12 @@ class Solution {
         //     }
         // }
 
-        Boolean[] memo = new Boolean[n];
+        boolean[] visit = new boolean[n];
+        boolean[] inStack = new boolean[n];
 
         for (int i = 0; i < n; i++) {
             if (!set.contains(i)) {
-                if (!myDfs(i, graph, new boolean[n], memo)) {
+                if (myDfs(i, graph, visit, inStack)) {
                     set.add(i);
                 }
             }
@@ -128,29 +129,31 @@ class Solution {
         return ans;
     }
 
-    private boolean myDfs(int node, int[][] graph, boolean[] visit, Boolean[] memo) {
-        // if (term.contains(node) || visit.add(node)) return true;
-        if (memo[node] != null) {
-            return memo[node];
+    private boolean myDfs(int node, int[][] graph, boolean[] visit, boolean[] inStack) {
+        // System.out.println(String.format("node:%d", node));
+
+        if (inStack[node]) {
+            // System.out.println(String.format("node is in stack:%d\n", node));
+            return false;
         }
-        
+
+        // System.out.println(String.format("node is not in stack:%d\n", node));
+
         if (visit[node]) return true;
+
         visit[node] = true;
+        inStack[node] = true;
 
-        boolean ans = false;
+        boolean ans = true;
 
-        if (graph[node].length == 0) {
-            ans = false;
-        } else {
-            for (int next : graph[node]) {
-                ans |= myDfs(next, graph, visit, memo);
-
-                if (ans) break;
+        for (int next : graph[node]) {
+            if (!myDfs(next, graph, visit, inStack)) {
+                return false;
             }
         }
 
-        visit[node] = false;
+        inStack[node] = false;
 
-        return memo[node] = ans;
+        return ans;
     }
 }
