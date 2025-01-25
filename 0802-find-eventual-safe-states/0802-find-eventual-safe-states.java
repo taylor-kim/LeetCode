@@ -1,51 +1,6 @@
 class Solution {
     public List<Integer> eventualSafeNodes(int[][] graph) {
-        return mySol(graph);
-    }
-
-    public List<Integer> official_dfs(int[][] graph) {
-        int n = graph.length;
-        boolean[] visit = new boolean[n];
-        boolean[] inStack = new boolean[n];
-
-        for (int i = 0; i < n; i++) {
-            dfs(i, graph, visit, inStack);
-        }
-
-        List<Integer> safeNodes = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            if (!inStack[i]) {
-                safeNodes.add(i);
-            }
-        }
-
-        return safeNodes;
-    }
-
-    public boolean dfs(
-        int node,
-        int[][] adj,
-        boolean[] visit,
-        boolean[] inStack
-    ) {
-        // If the node is already in the stack, we have a cycle.
-        if (inStack[node]) {
-            return true;
-        }
-        if (visit[node]) {
-            return false;
-        }
-        // Mark the current node as visited and part of current recursion stack.
-        visit[node] = true;
-        inStack[node] = true;
-        for (int neighbor : adj[node]) {
-            if (dfs(neighbor, adj, visit, inStack)) {
-                return true;
-            }
-        }
-        // Remove the node from the stack.
-        inStack[node] = false;
-        return false;
+        return official_topological_sort(graph);
     }
 
     public List<Integer> official_topological_sort(int[][] graph) {
@@ -92,53 +47,61 @@ class Solution {
     }
 
     public List<Integer> mySol(int[][] graph) {
-        int n = graph.length;
         Set<Integer> set = new HashSet();
-        // Map<Integer, List<Integer>> edges = new HashMap();
+        Map<Integer, List<Integer>> edges = new HashMap();
 
-        // for (int i = 0; i < n; i++) {
-        //     List<Integer> nexts = new ArrayList();
-        //     for (int j = 0; j < graph[i].length; j++) {
-        //         nexts.add(graph[i][j]);
-        //     }
+        for (int i = 0; i < graph.length; i++) {
+            List<Integer> nexts = new ArrayList();
+            for (int j = 0; j < graph[i].length; j++) {
+                nexts.add(graph[i][j]);
+            }
 
-        //     edges.put(i, nexts);
+            edges.put(i, nexts);
 
-        //     if (nexts.size() == 0) {
-        //         set.add(i);
-        //     }
-        // }
+            if (nexts.size() == 0) {
+                set.add(i);
+            }
+        }
 
-        boolean[] visit = new boolean[n];
-        boolean[] inStack = new boolean[n];
+        Boolean[] memo = new Boolean[graph.length];
 
-        for (int i = 0; i < n; i++) {
-            myDfs(i, graph, visit, inStack);
+        for (int i = 0; i < graph.length; i++) {
+            if (!set.contains(i)) {
+                if (dfs(i, edges, new HashSet(), memo)) {
+                    set.add(i);
+                }
+            }
         }
 
         List<Integer> ans = new ArrayList();
 
-        for (int i = 0; i < n; i++) {
-            if (!inStack[i]) ans.add(i);
+        for (int i = 0; i < graph.length; i++) {
+            if (set.contains(i)) ans.add(i);
         }
 
         return ans;
     }
 
-    private boolean myDfs(int node, int[][] graph, boolean[] visit, boolean[] inStack) {
-        if (inStack[node]) return false;
+    private boolean dfs(int node, Map<Integer, List<Integer>> edges, Set<Integer> visit, Boolean[] memo) {
+        // if (term.contains(node) || visit.add(node)) return true;
+        if (memo[node] != null) {
+            return memo[node];
+        }
+        
+        if (!visit.add(node)) return false;
 
-        if (visit[node]) return true;
+        boolean ans = true;
 
-        visit[node] = true;
-        inStack[node] = true;
-
-        for (int next : graph[node]) {
-            if (!myDfs(next, graph, visit, inStack)) return false;
+        if (edges.get(node).size() == 0) {
+            ans = true;
+        } else {
+            for (int next : edges.get(node)) {
+                ans &= dfs(next, edges, visit, memo);
+            }
         }
 
-        inStack[node] = false;
+        visit.remove(node);
 
-        return true;
+        return memo[node] = ans;
     }
 }
