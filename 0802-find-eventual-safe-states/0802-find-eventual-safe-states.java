@@ -1,6 +1,6 @@
 class Solution {
     public List<Integer> eventualSafeNodes(int[][] graph) {
-        return official_topological_sort(graph);
+        return mySol(graph);
     }
 
     public List<Integer> official_topological_sort(int[][] graph) {
@@ -47,27 +47,28 @@ class Solution {
     }
 
     public List<Integer> mySol(int[][] graph) {
+        int n = graph.length;
         Set<Integer> set = new HashSet();
-        Map<Integer, List<Integer>> edges = new HashMap();
+        // Map<Integer, List<Integer>> edges = new HashMap();
 
-        for (int i = 0; i < graph.length; i++) {
-            List<Integer> nexts = new ArrayList();
-            for (int j = 0; j < graph[i].length; j++) {
-                nexts.add(graph[i][j]);
-            }
+        // for (int i = 0; i < n; i++) {
+        //     List<Integer> nexts = new ArrayList();
+        //     for (int j = 0; j < graph[i].length; j++) {
+        //         nexts.add(graph[i][j]);
+        //     }
 
-            edges.put(i, nexts);
+        //     edges.put(i, nexts);
 
-            if (nexts.size() == 0) {
-                set.add(i);
-            }
-        }
+        //     if (nexts.size() == 0) {
+        //         set.add(i);
+        //     }
+        // }
 
-        Boolean[] memo = new Boolean[graph.length];
+        Boolean[] memo = new Boolean[n];
 
-        for (int i = 0; i < graph.length; i++) {
+        for (int i = 0; i < n; i++) {
             if (!set.contains(i)) {
-                if (dfs(i, edges, new HashSet(), memo)) {
+                if (dfs(i, graph, new boolean[n], memo)) {
                     set.add(i);
                 }
             }
@@ -75,32 +76,33 @@ class Solution {
 
         List<Integer> ans = new ArrayList();
 
-        for (int i = 0; i < graph.length; i++) {
+        for (int i = 0; i < n; i++) {
             if (set.contains(i)) ans.add(i);
         }
 
         return ans;
     }
 
-    private boolean dfs(int node, Map<Integer, List<Integer>> edges, Set<Integer> visit, Boolean[] memo) {
+    private boolean dfs(int node, int[][] graph, boolean[] visit, Boolean[] memo) {
         // if (term.contains(node) || visit.add(node)) return true;
         if (memo[node] != null) {
             return memo[node];
         }
         
-        if (!visit.add(node)) return false;
+        if (visit[node]) return false;
+        visit[node] = true;
 
         boolean ans = true;
 
-        if (edges.get(node).size() == 0) {
+        if (graph[node].length == 0) {
             ans = true;
         } else {
-            for (int next : edges.get(node)) {
-                ans &= dfs(next, edges, visit, memo);
+            for (int next : graph[node]) {
+                ans &= dfs(next, graph, visit, memo);
             }
         }
 
-        visit.remove(node);
+        visit[node] = false;
 
         return memo[node] = ans;
     }
