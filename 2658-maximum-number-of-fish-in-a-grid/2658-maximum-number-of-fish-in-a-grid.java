@@ -1,6 +1,37 @@
 class Solution {
     public int findMaxFish(int[][] grid) {
-        return mySol(grid);
+        return official_dfs(grid);
+    }
+
+    public int official_dfs(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+
+        int ans = 0;
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] > 0) {
+                    ans = Math.max(ans, dfs(grid, i, j));
+                }
+            }
+        }
+
+        return ans;
+    }
+
+    public int dfs(int[][] grid, int y, int x) {
+        if (y < 0 || x < 0 || y >= grid.length || x >= grid[0].length || grid[y][x] <= 0) return 0;
+
+        int current = grid[y][x];
+
+        grid[y][x] = -grid[y][x];
+
+        return current +
+            dfs(grid, y + 1, x) +
+            dfs(grid, y - 1, x) +
+            dfs(grid, y, x + 1) +
+            dfs(grid, y, x - 1);
     }
 
     public int mySol(int[][] grid) {
