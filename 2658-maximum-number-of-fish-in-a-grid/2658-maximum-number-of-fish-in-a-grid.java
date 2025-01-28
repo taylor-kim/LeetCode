@@ -1,6 +1,6 @@
 class Solution {
     public int findMaxFish(int[][] grid) {
-        return official_dfs(grid);
+        return mySol(grid);
     }
 
     public int official_dfs(int[][] grid) {
@@ -77,10 +77,12 @@ class Solution {
 
     class UnionFind {
         int[] parents;
+        int[] ranks;
         int[] scores;
 
         public UnionFind(int n) {
             parents = new int[n];
+            ranks = new int[n];
             scores = new int[n];
 
             for (int i = 0; i < n; i++) parents[i] = i;
@@ -98,9 +100,18 @@ class Solution {
             a = find(a);
             b = find(b);
 
-            if (a != b) {
+            if (a == b) return;
+
+            if (ranks[a] > ranks[b]) {
                 parents[b] = a;
                 scores[a] += scores[b];
+            } else if (ranks[a] < ranks[b]) {
+                parents[a] = b;
+                scores[b] += scores[a];
+            } else {
+                parents[b] = a;
+                scores[a] += scores[b];
+                ranks[a]++;
             }
         }
     }
