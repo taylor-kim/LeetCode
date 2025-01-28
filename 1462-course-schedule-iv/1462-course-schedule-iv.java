@@ -1,6 +1,32 @@
 class Solution {
     public List<Boolean> checkIfPrerequisite(int numCourses, int[][] prerequisites, int[][] queries) {
-        return official_topological_sort(numCourses, prerequisites, queries);
+        return official_floyd(numCourses, prerequisites, queries);
+    }
+
+    public List<Boolean> official_floyd(int n, int[][] prerequisites, int[][] queries) {
+        boolean[][] isPrerequisites = new boolean[n][n];
+
+        for (int[] pre : prerequisites) {
+            isPrerequisites[pre[0]][pre[1]] = true;
+        }
+
+        for (int mid = 0; mid < n; mid++) {
+            for (int start = 0; start < n; start++) {
+                for (int end = 0; end < n; end++) {
+                    isPrerequisites[start][end] = isPrerequisites[start][end] || (
+                        isPrerequisites[start][mid] && isPrerequisites[mid][end]
+                    );
+                }
+            }
+        }
+
+        List<Boolean> ans = new ArrayList();
+
+        for (int[] q : queries) {
+            ans.add(isPrerequisites[q[0]][q[1]]);
+        }
+
+        return ans;
     }
 
     public List<Boolean> official_topological_sort(int numCourses, int[][] prerequisites, int[][] queries) {
