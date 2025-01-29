@@ -1,17 +1,6 @@
 class Solution {
     public int[] findRedundantConnection(int[][] edges) {
-        return official_uf(edges);
-    }
-
-    public int[] official_uf(int[][] edges) {
-        UnionFind uf = new UnionFind(edges.length);
-        for (int[] edge : edges) {
-            if (!uf.merge(edge[0], edge[1])) {
-                return edge;
-            }
-        }
-
-        return null;
+        return mySol2_prim(edges);
     }
 
     public int[] mySol2_prim(int[][] edges) {
@@ -54,13 +43,11 @@ class Solution {
             return parents[a];
         }
 
-        public boolean merge(int a, int b) {
+        public void merge(int a, int b) {
             a = find(a);
             b = find(b);
 
-            if (a == b) {
-                return false;
-            } else {
+            if (a != b) {
                 if (ranks[a] > ranks[b]) {
                     parents[b] = a;
                 } else if (ranks[a] < ranks[b]) {
@@ -69,8 +56,6 @@ class Solution {
                     parents[b] = a;
                     ranks[a]++;
                 }
-
-                return true;
             }
         }
 
