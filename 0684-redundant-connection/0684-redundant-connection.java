@@ -1,6 +1,51 @@
 class Solution {
     public int[] findRedundantConnection(int[][] edges) {
-        return mySol2_prim(edges);
+        return official_bf(edges);
+    }
+
+    public int[] official_bf(int[][] edges) {
+        int n = edges.length;
+
+        List<Integer>[] graph = new ArrayList[n];
+
+        for (int i = 0; i < n; i++) {
+            graph[i] = new ArrayList();
+        }
+
+        for (int[] edge : edges) {
+            if (isConnected(graph, edge[0] - 1, edge[1] - 1, new boolean[n])) {
+                return edge;
+            }
+            graph[edge[0] - 1].add(edge[1] - 1);
+            graph[edge[1] - 1].add(edge[0] - 1);
+        }
+
+        return null;
+    }
+
+    private boolean isConnected(List<Integer>[] graph, int node, int target, boolean[] visit) {
+        if (node == target) return true;
+
+        visit[node] = true;
+
+        for (int next : graph[node]) {
+            if (!visit[next] && isConnected(graph, next, target, visit)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public int[] official_uf(int[][] edges) {
+        UnionFind uf = new UnionFind(edges.length);
+        for (int[] edge : edges) {
+            if (!uf.merge(edge[0], edge[1])) {
+                return edge;
+            }
+        }
+
+        return null;
     }
 
     public int[] mySol2_prim(int[][] edges) {
@@ -43,11 +88,13 @@ class Solution {
             return parents[a];
         }
 
-        public void merge(int a, int b) {
+        public boolean merge(int a, int b) {
             a = find(a);
             b = find(b);
 
-            if (a != b) {
+            if (a == b) {
+                return false;
+            } else {
                 if (ranks[a] > ranks[b]) {
                     parents[b] = a;
                 } else if (ranks[a] < ranks[b]) {
@@ -56,6 +103,8 @@ class Solution {
                     parents[b] = a;
                     ranks[a]++;
                 }
+
+                return true;
             }
         }
 
