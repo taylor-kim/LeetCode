@@ -1,6 +1,39 @@
 class Solution {
     public boolean[] isArraySpecial(int[] nums, int[][] queries) {
-        return official_binarySearch(nums, queries);
+        return try_20250201_sw(nums, queries);
+    }
+
+    public boolean[] try_20250201_sw(int[] nums, int[][] queries) {
+        Arrays.sort(queries, (a, b) -> {
+            return a[0] != b[0] ? a[0] - b[0] : a[1] - b[1];
+        });
+
+        int n = nums.length;
+        int left = 0;
+        int right = 1;
+
+        boolean[] ans = new boolean[queries.length];
+
+        for (int i = 0; i < queries.length; i++) {
+            int[] q = queries[i];
+
+            left = Math.max(left, q[0]);
+            right = left + 1;
+
+            while (right <= q[1] && nums[right - 1] % 2 != nums[right] % 2) {
+                right++;
+            }
+
+            if (right <= q[1]) {
+                ans[i] = false;
+            } else {
+                ans[i] = true;
+            }
+
+            left = right - 1;
+        }
+
+        return ans;
     }
 
     public boolean[] try_20250201(int[] nums, int[][] queries) {
