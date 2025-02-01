@@ -1,6 +1,6 @@
 class Solution {
     public boolean[] isArraySpecial(int[] nums, int[][] queries) {
-        return try_20250201(nums, queries);
+        return official_binarySearch(nums, queries);
     }
 
     public boolean[] try_20250201(int[] nums, int[][] queries) {
@@ -79,10 +79,16 @@ class Solution {
             }
         }
 
+        // System.out.println(invalidIndices);
+
         boolean[] ans = new boolean[queries.length];
 
         for (int i = 0; i < queries.length; i++) {
             int[] query = queries[i];
+            if (query[0] == query[1]) {
+                ans[i] = true;
+                continue;
+            }
             ans[i] = !isInvalid2(invalidIndices, query[0] + 1, query[1]);
         }
 
@@ -96,7 +102,10 @@ class Solution {
 
         if (index1 >= list.size()) return false;
 
-        if (list.get(index1) > end) return false;
+        if (list.get(index1) > end) {
+            // System.out.println(String.format("%d, %d", list.get(index1), end));
+            return false;
+        }
 
         return true;
     }
