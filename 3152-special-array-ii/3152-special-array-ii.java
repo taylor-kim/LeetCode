@@ -4,33 +4,39 @@ class Solution {
     }
 
     public boolean[] try_20250201_sw(int[] nums, int[][] queries) {
-        Arrays.sort(queries, (a, b) -> {
+        int qn = queries.length;
+
+        int[][] arr = new int[qn][3];
+
+        for (int i = 0; i < qn; i++) {
+            arr[i][0] = queries[i][0];
+            arr[i][1] = queries[i][1];
+            arr[i][2] = i;
+        }
+        
+        Arrays.sort(arr, (a, b) -> {
             return a[0] != b[0] ? a[0] - b[0] : a[1] - b[1];
         });
 
         int n = nums.length;
-        int left = 0;
-        int right = 1;
+        int right = 0;
 
         boolean[] ans = new boolean[queries.length];
 
-        for (int i = 0; i < queries.length; i++) {
-            int[] q = queries[i];
+        for (int i = 0; i < arr.length; i++) {
+            int[] q = arr[i];
 
-            left = Math.max(left, q[0]);
-            right = left + 1;
+            right = Math.max(right, q[0] + 1);
 
             while (right <= q[1] && nums[right - 1] % 2 != nums[right] % 2) {
                 right++;
             }
 
             if (right <= q[1]) {
-                ans[i] = false;
+                ans[q[2]] = false;
             } else {
-                ans[i] = true;
+                ans[q[2]] = true;
             }
-
-            left = right - 1;
         }
 
         return ans;
