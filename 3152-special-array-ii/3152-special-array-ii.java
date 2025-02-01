@@ -73,8 +73,8 @@ class Solution {
     public boolean[] official_binarySearch(int[] nums, int[][] queries) {
         List<Integer> invalidIndices = new ArrayList();
 
-        for (int i = 1; i < nums.length; i++) {
-            if (nums[i - 1] % 2 == nums[i] % 2) {
+        for (int i = 0; i < nums.length - 1; i++) {
+            if (nums[i] % 2 == nums[i + 1] % 2) {
                 invalidIndices.add(i);
             }
         }
@@ -85,10 +85,35 @@ class Solution {
 
         for (int i = 0; i < queries.length; i++) {
             int[] query = queries[i];
-            ans[i] = !isInvalid2(invalidIndices, query[0] + 1, query[1]);
+            ans[i] = !isInvalid3(invalidIndices, query[0], query[1] - 1);
         }
 
         return ans;
+    }
+
+    private boolean isInvalid3(List<Integer> list, int start, int end) {
+        int lo = 0; 
+        int hi = list.size() - 1;
+
+        while (lo <= hi) {
+            int mid = lo + (hi - lo) / 2;
+            int index = list.get(mid);
+
+            // System.out.println(String.format("index:%d, lo:%d, hi:%d, mid:%d, start:%d, end:%d", index, lo, hi, mid, start, end));
+
+            if (index < start) {
+                lo = mid + 1;
+            } else if (index > end) {
+                hi = mid - 1;
+            } else {
+                // System.out.println(String.format("index:%d, lo:%d, hi:%d", index, lo, hi));
+                return true;
+            }
+
+            // System.out.println(String.format("lo:%d, hi:%d", lo, hi));
+        }
+
+        return false;
     }
 
     private boolean isInvalid2(List<Integer> list, int start, int end) {
