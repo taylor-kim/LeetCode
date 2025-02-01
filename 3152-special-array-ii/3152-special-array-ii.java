@@ -79,12 +79,16 @@ class Solution {
             }
         }
 
-        System.out.println(invalidIndices);
+        // System.out.println(invalidIndices);
 
         boolean[] ans = new boolean[queries.length];
 
         for (int i = 0; i < queries.length; i++) {
             int[] query = queries[i];
+            if (query[0] == query[1]) {
+                ans[i] = true;
+                continue;
+            }
             ans[i] = !isInvalid3(invalidIndices, query[0], query[1] - 1);
         }
 
