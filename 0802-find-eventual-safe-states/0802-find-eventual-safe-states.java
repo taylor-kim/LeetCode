@@ -145,7 +145,7 @@ class Solution {
             }
         }
 
-        visit.remove(node);
+        // visit.remove(node);
 
         return memo[node] = ans;
     }
