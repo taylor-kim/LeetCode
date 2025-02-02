@@ -30,22 +30,22 @@ class Solution {
     ) {
         // If the node is already in the stack, we have a cycle.
         if (inStack[node]) {
-            return false;
+            return true;
         }
         if (visit[node]) {
-            return true;
+            return false;
         }
         // Mark the current node as visited and part of current recursion stack.
         visit[node] = true;
         inStack[node] = true;
         for (int neighbor : adj[node]) {
-            if (!dfs(neighbor, adj, visit, inStack)) {
-                return false;
+            if (dfs(neighbor, adj, visit, inStack)) {
+                return true;
             }
         }
         // Remove the node from the stack.
         inStack[node] = false;
-        return true;
+        return false;
     }
 
     public List<Integer> official_topological_sort(int[][] graph) {
@@ -92,19 +92,28 @@ class Solution {
     }
 
     public List<Integer> mySol(int[][] graph) {
+        int n = graph.length;
         Set<Integer> set = new HashSet();
+        // Map<Integer, List<Integer>> edges = new HashMap();
 
-        for (int i = 0; i < graph.length; i++) {
-            if (graph[i].length == 0) {
-                set.add(i);
-            }
-        }
+        // for (int i = 0; i < n; i++) {
+        //     List<Integer> nexts = new ArrayList();
+        //     for (int j = 0; j < graph[i].length; j++) {
+        //         nexts.add(graph[i][j]);
+        //     }
 
-        Boolean[] memo = new Boolean[graph.length];
+        //     edges.put(i, nexts);
 
-        for (int i = 0; i < graph.length; i++) {
+        //     if (nexts.size() == 0) {
+        //         set.add(i);
+        //     }
+        // }
+
+        Boolean[] memo = new Boolean[n];
+
+        for (int i = 0; i < n; i++) {
             if (!set.contains(i)) {
-                if (dfs(i, graph, new HashSet(), memo)) {
+                if (myDfs(i, graph, new boolean[n], memo)) {
                     set.add(i);
                 }
             }
@@ -112,20 +121,21 @@ class Solution {
 
         List<Integer> ans = new ArrayList();
 
-        for (int i = 0; i < graph.length; i++) {
+        for (int i = 0; i < n; i++) {
             if (set.contains(i)) ans.add(i);
         }
 
         return ans;
     }
 
-    private boolean dfs(int node, int[][] graph, Set<Integer> visit, Boolean[] memo) {
+    private boolean myDfs(int node, int[][] graph, boolean[] visit, Boolean[] memo) {
         // if (term.contains(node) || visit.add(node)) return true;
         if (memo[node] != null) {
             return memo[node];
         }
         
-        if (!visit.add(node)) return false;
+        if (visit[node]) return false;
+        visit[node] = true;
 
         boolean ans = true;
 
@@ -133,11 +143,11 @@ class Solution {
             ans = true;
         } else {
             for (int next : graph[node]) {
-                ans &= dfs(next, graph, visit, memo);
+                ans &= myDfs(next, graph, visit, memo);
             }
         }
 
-        // visit.remove(node);
+        visit[node] = false;
 
         return memo[node] = ans;
     }
