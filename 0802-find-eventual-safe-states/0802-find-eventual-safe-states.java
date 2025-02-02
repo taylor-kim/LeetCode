@@ -101,10 +101,11 @@ class Solution {
         }
 
         Boolean[] memo = new Boolean[graph.length];
+        boolean[] visit = new boolean[graph.length];
 
         for (int i = 0; i < graph.length; i++) {
             if (!set.contains(i)) {
-                if (dfs(i, graph, new boolean[graph.length], memo)) {
+                if (dfs(i, graph, visit, memo)) {
                     set.add(i);
                 }
             }
@@ -136,8 +137,13 @@ class Solution {
         } else {
             for (int next : graph[node]) {
                 ans &= dfs(next, graph, visit, memo);
+                if (!ans) {
+                    return memo[node] = ans;
+                }
             }
         }
+
+        visit[node] = false;
 
         return memo[node] = ans;
     }
