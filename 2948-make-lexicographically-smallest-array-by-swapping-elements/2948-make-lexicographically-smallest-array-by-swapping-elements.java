@@ -1,47 +1,100 @@
 class Solution {
     public int[] lexicographicallySmallestArray(int[] nums, int limit) {
-        return official_sort_and_grouping(nums, limit);
+        return tryAgain_20250202(nums, limit);
     }
 
-    public int[] official_sort_and_grouping(int[] nums, int limit) {
-        int[] numsSorted = new int[nums.length];
-        for (int i = 0; i < nums.length; i++) numsSorted[i] = nums[i];
-        Arrays.sort(numsSorted);
+    public int[] tryAgain_20250202(int[] nums, int limit) {
+        int n = nums.length;
+        Integer[][] arr = new Integer[n][2];
 
-        int currGroup = 0;
-        HashMap<Integer, Integer> numToGroup = new HashMap<>();
-        numToGroup.put(numsSorted[0], currGroup);
-
-        HashMap<Integer, LinkedList<Integer>> groupToList = new HashMap<>();
-        groupToList.put(
-            currGroup,
-            new LinkedList<Integer>(Arrays.asList(numsSorted[0]))
-        );
-
-        for (int i = 1; i < nums.length; i++) {
-            if (Math.abs(numsSorted[i] - numsSorted[i - 1]) > limit) {
-                // new group
-                currGroup++;
-            }
-
-            // assign current element to group
-            numToGroup.put(numsSorted[i], currGroup);
-
-            // add element to sorted group list
-            if (!groupToList.containsKey(currGroup)) {
-                groupToList.put(currGroup, new LinkedList<Integer>());
-            }
-            groupToList.get(currGroup).add(numsSorted[i]);
+        for (int i = 0; i < n; i++) {
+            arr[i][0] = nums[i];
+            arr[i][1] = i;
         }
 
-        // iterate through input and overwrite each element with the next element in its corresponding group
-        for (int i = 0; i < nums.length; i++) {
-            int num = nums[i];
-            int group = numToGroup.get(num);
-            nums[i] = groupToList.get(group).pop();
+        Arrays.sort(arr, (a, b) -> {
+            return a[0] - b[0];
+        });
+
+        UnionFind uf = new UnionFind(n, arr);
+
+        for (int i = 1; i < n; i++) {
+            if (Math.abs(arr[i - 1][0] - arr[i][0]) <= limit) {
+                uf.merge(i - 1, i);
+            }
+        }
+
+        System.out.println(Arrays.toString(uf.parents));
+
+        Set<Integer> groups = new HashSet();
+        
+        for (int i = 0; i < n; i++) {
+            groups.add(uf.find(i));
+        }
+
+        for (int group : groups) {
+            // StringBuilder sb = new StringBuilder();
+
+            List<Integer> indices = new ArrayList();
+
+            for (Integer[] item : uf.items[group]) {
+                // sb.append(Arrays.toString(item)).append(", ");
+                indices.add(item[1]);
+            }
+
+            Collections.sort(indices);
+
+            int itemIndex = 0;
+
+            for (int index : indices) {
+                nums[index] = uf.items[group].get(itemIndex++)[0];
+            }
+
+            // System.out.println(sb.toString());
         }
 
         return nums;
+    }
+
+    class UnionFind {
+        int[] parents;
+        List<Integer[]>[] items;
+
+        public UnionFind(int n, Integer[][] arr) {
+            parents = new int[n];
+            items = new List[n];
+
+            for (int i = 0; i < n; i++) {
+                parents[i] = i;
+                items[i] = new ArrayList();
+                items[i].add(arr[i]);
+            }
+        }
+
+        public int find(int a) {
+            if (parents[a] != a) {
+                parents[a] = find(parents[a]);
+            }
+
+            return parents[a];
+        }
+
+        public void merge(int a, int b) {
+            a = find(a);
+            b = find(b);
+
+            if (a == b) return;
+
+            if (a > b) {
+                a += b;
+                b = a - b;
+                a = a - b;
+            }
+
+            parents[b] = a;
+            items[a].addAll(items[b]);
+            items[b] = null;
+        }
     }
 
     public int[] mySol_fail(int[] nums, int limit) {
