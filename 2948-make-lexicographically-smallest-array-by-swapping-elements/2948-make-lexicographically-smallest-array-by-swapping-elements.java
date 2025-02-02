@@ -35,7 +35,7 @@ class Solution {
         for (int i = 0; i < n; i++) {
             int num = nums[i];
             groupId = numToGroup.get(num);
-            nums[i] = groups.get(groupId).pollFirst()[0];
+            nums[i] = groups.get(groupId).pop()[0];
         }
 
         return nums;
