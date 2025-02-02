@@ -24,6 +24,10 @@ class Solution {
             }
         }
 
+        for (int i = 0; i < n; i++) {
+            uf.addItem(i, arr[i]);
+        }
+
         // System.out.println(Arrays.toString(uf.parents));
 
         Set<Integer> groups = new HashSet();
@@ -67,7 +71,7 @@ class Solution {
             for (int i = 0; i < n; i++) {
                 parents[i] = i;
                 items[i] = new ArrayList();
-                items[i].add(arr[i]);
+                // items[i].add(arr[i]);
             }
         }
 
@@ -92,8 +96,12 @@ class Solution {
             }
 
             parents[b] = a;
-            items[a].addAll(items[b]);
-            items[b] = null;
+            // items[a].addAll(items[b]);
+            // items[b] = null;
+        }
+
+        public void addItem(int a, Integer[] item) {
+            items[find(a)].add(item);
         }
     }
 
