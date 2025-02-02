@@ -24,7 +24,7 @@ class Solution {
             }
         }
 
-        System.out.println(Arrays.toString(uf.parents));
+        // System.out.println(Arrays.toString(uf.parents));
 
         Set<Integer> groups = new HashSet();
         
