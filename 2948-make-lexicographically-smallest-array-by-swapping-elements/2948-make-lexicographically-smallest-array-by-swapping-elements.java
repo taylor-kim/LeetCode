@@ -1,6 +1,49 @@
 class Solution {
     public int[] lexicographicallySmallestArray(int[] nums, int limit) {
-        return tryAgain_20250202(nums, limit);
+        return tryAgain_20250203(nums, limit);
+    }
+
+    public int[] tryAgain_20250203(int[] nums, int limit) {
+        int n = nums.length;
+        Integer[][] arr = new Integer[n][2];
+
+        for (int i = 0; i < n; i++) {
+            arr[i][0] = nums[i];
+            arr[i][1] = i;
+        }
+
+        Arrays.sort(arr, (a, b) -> {
+            return a[0] - b[0];
+        });
+
+        Map<Integer, List<Integer[]>> groups = new HashMap();
+
+        int groupId = 0;
+
+        groups.computeIfAbsent(groupId, k -> new ArrayList()).add(arr[0]);
+
+        for (int i = 1; i < n; i++) {
+            if (Math.abs(arr[i - 1][0] - arr[i][0]) > limit) {
+                groupId++;
+            }
+            groups.computeIfAbsent(groupId, k -> new ArrayList()).add(arr[i]);
+        }
+
+        for (List<Integer[]> group : groups.values()) {
+            List<Integer> indices = new ArrayList();
+
+            for (Integer[] item : group) {
+                indices.add(item[1]);
+            }
+
+            Collections.sort(indices);
+
+            for (int i = 0; i < group.size(); i++) {
+                nums[indices.get(i)] = group.get(i)[0];
+            }
+        }
+
+        return nums;
     }
 
     public int[] tryAgain_20250202(int[] nums, int limit) {
@@ -24,37 +67,27 @@ class Solution {
             }
         }
 
+        Set<Integer> groups = new HashSet();
+
         for (int i = 0; i < n; i++) {
             uf.addItem(i, arr[i]);
-        }
-
-        // System.out.println(Arrays.toString(uf.parents));
-
-        Set<Integer> groups = new HashSet();
-        
-        for (int i = 0; i < n; i++) {
             groups.add(uf.find(i));
         }
 
         for (int group : groups) {
-            // StringBuilder sb = new StringBuilder();
+            List<Integer[]> groupItems = uf.items[group];
 
             List<Integer> indices = new ArrayList();
 
-            for (Integer[] item : uf.items[group]) {
-                // sb.append(Arrays.toString(item)).append(", ");
+            for (Integer[] item : groupItems) {
                 indices.add(item[1]);
             }
 
             Collections.sort(indices);
 
-            int itemIndex = 0;
-
-            for (int index : indices) {
-                nums[index] = uf.items[group].get(itemIndex++)[0];
+            for (int i = 0; i < indices.size(); i++) {
+                nums[indices.get(i)] = groupItems.get(i)[0];
             }
-
-            // System.out.println(sb.toString());
         }
 
         return nums;
@@ -71,7 +104,6 @@ class Solution {
             for (int i = 0; i < n; i++) {
                 parents[i] = i;
                 items[i] = new ArrayList();
-                // items[i].add(arr[i]);
             }
         }
 
@@ -96,8 +128,6 @@ class Solution {
             }
 
             parents[b] = a;
-            // items[a].addAll(items[b]);
-            // items[b] = null;
         }
 
         public void addItem(int a, Integer[] item) {
