@@ -15,19 +15,19 @@ class Solution {
             int ball = queries[i][0];
             int color = queries[i][1];
 
-            colorToBalls.computeIfAbsent(color, k -> new HashSet()).add(ball);
+            if (colorToBalls.computeIfAbsent(color, k -> new HashSet()).add(ball)) {
+                if (ballToColor.containsKey(ball)) {
+                    int prevColor = ballToColor.get(ball);
 
-            if (ballToColor.containsKey(ball)) {
-                int prevColor = ballToColor.get(ball);
+                    colorToBalls.get(prevColor).remove(ball);
 
-                colorToBalls.get(prevColor).remove(ball);
-
-                if (colorToBalls.get(prevColor).size() == 0) {
-                    colorToBalls.remove(prevColor);
+                    if (colorToBalls.get(prevColor).size() == 0) {
+                        colorToBalls.remove(prevColor);
+                    }
                 }
-            }
 
-            ballToColor.put(ball, color);
+                ballToColor.put(ball, color);
+            }
 
             ans[i] = colorToBalls.size();
         }
