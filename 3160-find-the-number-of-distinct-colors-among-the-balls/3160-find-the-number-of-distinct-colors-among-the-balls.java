@@ -1,36 +1,71 @@
 class Solution {
-
     public int[] queryResults(int limit, int[][] queries) {
-        int n = queries.length;
-        int[] result = new int[n];
-        Map<Integer, Integer> colorMap = new HashMap<>();
-        int[] ballArray = new int[limit + 1];
+        return official(limit, queries);
+    }
 
-        // Iterate through queries
-        for (int i = 0; i < n; i++) {
-            // Extract ball label and color from query
+    public int[] official(int limit, int[][] queries) {
+        int[] ans = new int[queries.length];
+
+        Map<Integer, Integer> colorToBalls = new HashMap();
+        Map<Integer, Integer> ballToColor = new HashMap();
+
+        int count = 0;
+
+        for (int i = 0; i < queries.length; i++) {
             int ball = queries[i][0];
             int color = queries[i][1];
 
-            // Check if ball is already colored
-            if (ballArray[ball] != 0) {
-                // Decrement count of the previous color on the ball
-                int prevColor = ballArray[ball];
-                colorMap.put(prevColor, colorMap.get(prevColor) - 1);
+            if (!ballToColor.containsKey(ball)) {
+                colorToBalls.put(color, colorToBalls.getOrDefault(color, 0) + 1);
+            } else if (ballToColor.get(ball) != color) {
+                int prevColor = ballToColor.get(ball);
 
-                // If there are no balls with previous color left, remove color from color map
-                if (colorMap.get(prevColor) == 0) {
-                    colorMap.remove(prevColor);
+                colorToBalls.put(prevColor, colorToBalls.get(prevColor) - 1);
+
+                if (colorToBalls.get(prevColor) == 0) {
+                    colorToBalls.remove(prevColor);
                 }
+
+                colorToBalls.put(color, colorToBalls.getOrDefault(color, 0) + 1);
             }
-            // Set color of ball to the new color
-            ballArray[ball] = color;
 
-            // Increment the count of the new color
-            colorMap.put(color, colorMap.getOrDefault(color, 0) + 1);
+            ballToColor.put(ball, color);
 
-            result[i] = colorMap.size();
+            ans[i] = colorToBalls.size();
         }
-        return result;
+
+        return ans;
+    }
+
+    public int[] mySol(int limit, int[][] queries) {
+        int[] ans = new int[queries.length];
+
+        Map<Integer, Set<Integer>> colorToBalls = new HashMap();
+        Map<Integer, Integer> ballToColor = new HashMap();
+
+        int count = 0;
+
+        for (int i = 0; i < queries.length; i++) {
+            int ball = queries[i][0];
+            int color = queries[i][1];
+
+            if (colorToBalls.computeIfAbsent(color, k -> new HashSet()).add(ball)) {
+                if (ballToColor.containsKey(ball)) {
+                    int prevColor = ballToColor.get(ball);
+
+                    colorToBalls.get(prevColor).remove(ball);
+
+                    if (colorToBalls.get(prevColor).size() == 0) {
+                        colorToBalls.remove(prevColor);
+                    }
+                }
+
+                ballToColor.put(ball, color);
+            }
+
+            ans[i] = colorToBalls.size();
+        }
+
+        return ans;
     }
 }
