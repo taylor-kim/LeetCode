@@ -1,40 +1,80 @@
 class Solution {
-
     public int tupleSameProduct(int[] nums) {
-        int numsLength = nums.length;
-        Arrays.sort(nums);
+        return mySol2(nums);
+    }
 
-        int totalNumberOfTuples = 0;
+    public int mySol2(int[] nums) {
+        int n = nums.length;
+        Map<Integer, Integer> map = new HashMap();
 
-        // Iterate over all possible values for 'a'
-        for (int aIndex = 0; aIndex < numsLength; aIndex++) {
-            // Iterate over all possible values for 'b', starting from the end
-            // of the array
-            for (int bIndex = numsLength - 1; bIndex >= aIndex + 1; bIndex--) {
-                int product = nums[aIndex] * nums[bIndex];
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                int multi = nums[i] * nums[j];
 
-                // Use a hash set to store possible values of 'd'
-                Set<Integer> possibleDValues = new HashSet<>();
-
-                // Iterate over all possible values for 'c' between 'a' and 'b'
-                for (int cIndex = aIndex + 1; cIndex < bIndex; cIndex++) {
-                    // Check if the product is divisible by nums[cIndex]
-                    if (product % nums[cIndex] == 0) {
-                        int dValue = product / nums[cIndex];
-
-                        // If 'dValue' is in the set, increment the tuple count
-                        // by 8
-                        if (possibleDValues.contains(dValue)) {
-                            totalNumberOfTuples += 8;
-                        }
-
-                        // Add nums[cIndex] to the set for future checks
-                        possibleDValues.add(nums[cIndex]);
-                    }
-                }
+                map.put(multi, map.getOrDefault(multi, 0) + 1);
             }
         }
 
-        return totalNumberOfTuples;
+        int ans = 0;
+        Integer[] memo = new Integer[500];
+
+        // System.out.println(map);
+
+        for (int count : map.values()) {
+            if (count > 1) {
+                // ans += fact(count, memo);
+                // ans += fact(count, memo) * 4;
+                int pairsOfEqualProduct = (count - 1) * count / 2;
+
+                ans += pairsOfEqualProduct * 8;
+            }
+        }
+
+        return ans;
+    }
+
+    private int fact(int number, Integer[] memo) {
+        if (memo[number] != null) return memo[number];
+
+        int fact = 1;
+        
+        for (int i = number; i > 0; i--) {
+            fact *= i;
+        }
+
+        return memo[number] = fact;
+    }
+
+    public int mySol_tle(int[] nums) {
+        int ans = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+            ans += topdown(nums, i, 0, new int[3]);
+        }
+
+        return ans;
+    }
+
+    public int topdown(int[] nums, int index, int count, int[] datas) {
+        // System.out.println(String.format("index:%d, count:%d", index, count));
+
+        if (count == 3) {
+            return datas[0] * datas[1] == datas[2] * nums[index] ? 1 : 0;
+        }
+
+        datas[count] = nums[index];
+        nums[index] = -nums[index];
+
+        int ans = 0;
+
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] < 0) continue;
+            
+            ans += topdown(nums, i, count + 1, datas);
+        }
+
+        nums[index] = -nums[index];
+
+        return ans;
     }
 }
