@@ -16,7 +16,6 @@ class Solution {
         }
 
         int ans = 0;
-        Integer[] memo = new Integer[500];
 
         // System.out.println(map);
 
