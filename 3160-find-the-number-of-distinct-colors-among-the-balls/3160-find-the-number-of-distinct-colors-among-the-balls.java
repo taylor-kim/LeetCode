@@ -1,37 +1,36 @@
 class Solution {
+
     public int[] queryResults(int limit, int[][] queries) {
-        return mySol(limit, queries);
-    }
+        int n = queries.length;
+        int[] result = new int[n];
+        Map<Integer, Integer> colorMap = new HashMap<>();
+        int[] ballArray = new int[limit + 1];
 
-    public int[] mySol(int limit, int[][] queries) {
-        int[] ans = new int[queries.length];
-
-        Map<Integer, Set<Integer>> colorToBalls = new HashMap();
-        Map<Integer, Integer> ballToColor = new HashMap();
-
-        int count = 0;
-
-        for (int i = 0; i < queries.length; i++) {
+        // Iterate through queries
+        for (int i = 0; i < n; i++) {
+            // Extract ball label and color from query
             int ball = queries[i][0];
             int color = queries[i][1];
 
-            if (colorToBalls.computeIfAbsent(color, k -> new HashSet()).add(ball)) {
-                if (ballToColor.containsKey(ball)) {
-                    int prevColor = ballToColor.get(ball);
+            // Check if ball is already colored
+            if (ballArray[ball] != 0) {
+                // Decrement count of the previous color on the ball
+                int prevColor = ballArray[ball];
+                colorMap.put(prevColor, colorMap.get(prevColor) - 1);
 
-                    colorToBalls.get(prevColor).remove(ball);
-
-                    if (colorToBalls.get(prevColor).size() == 0) {
-                        colorToBalls.remove(prevColor);
-                    }
+                // If there are no balls with previous color left, remove color from color map
+                if (colorMap.get(prevColor) == 0) {
+                    colorMap.remove(prevColor);
                 }
-
-                ballToColor.put(ball, color);
             }
+            // Set color of ball to the new color
+            ballArray[ball] = color;
 
-            ans[i] = colorToBalls.size();
+            // Increment the count of the new color
+            colorMap.put(color, colorMap.getOrDefault(color, 0) + 1);
+
+            result[i] = colorMap.size();
         }
-
-        return ans;
+        return result;
     }
 }
