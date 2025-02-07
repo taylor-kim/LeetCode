@@ -24,8 +24,12 @@ class Solution {
             if (count > 1) {
                 // ans += fact(count, memo);
                 // ans += fact(count, memo) * 4;
+
+                // n 개에서 2개 조합
+                // n! / 2 * (n - 2)! => n * (n - 1) / 2
                 int pairsOfEqualProduct = (count - 1) * count / 2;
 
+                // 1개의 조합당 8개의 tuple
                 ans += pairsOfEqualProduct * 8;
             }
         }
