@@ -1,6 +1,6 @@
 class NumberContainers {
     private Map<Integer, Integer> indexToNumber;
-    private Map<Integer, TreeSet<Integer>> numberToIndices;
+    private Map<Integer, PriorityQueue<Integer>> numberToIndices;
 
     public NumberContainers() {
         indexToNumber = new HashMap();
@@ -8,22 +8,29 @@ class NumberContainers {
     }
     
     public void change(int index, int number) {
-        if (indexToNumber.containsKey(index)) {
-            int prevNumber = indexToNumber.get(index);
-            numberToIndices.get(prevNumber).remove(index);
-
-            if (numberToIndices.get(prevNumber).size() == 0) {
-                numberToIndices.remove(prevNumber);
-            }
-        }
-
         indexToNumber.put(index, number);
-        numberToIndices.computeIfAbsent(number, k -> new TreeSet()).add(index);
+        numberToIndices.computeIfAbsent(number, k -> new PriorityQueue()).add(index);
     }
     
     public int find(int number) {
-        if (numberToIndices.containsKey(number)) {
-            return numberToIndices.get(number).first();
+        if (!numberToIndices.containsKey(number)) {
+            return -1;
+        }
+
+        PriorityQueue<Integer> pq = numberToIndices.get(number);
+
+        while (!pq.isEmpty()) {
+            int index = pq.peek();
+
+            if (indexToNumber.get(index) == number) {
+                return index;
+            }
+
+            pq.poll();
+        }
+
+        if (pq.isEmpty()) {
+            numberToIndices.remove(number);
         }
 
         return -1;
