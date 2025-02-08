@@ -1,6 +1,29 @@
 class Solution {
     public int maxDistance(String s, int k) {
-        return try_20250208(s, k);
+        return others_genious(s, k);
+    }
+
+    public int others_genious(String str, int k) {
+        int[] map = new int[26];
+
+        int ans = 0;
+
+        for (int i = 0; i < str.length(); i++) {
+            char c = str.charAt(i);
+            map[c - 'A']++;
+
+            int n = map['N' - 'A'];
+            int s = map['S' - 'A'];
+
+            int w = map['W' - 'A'];
+            int e = map['E' - 'A'];
+
+            int diff = Math.abs(n - s) + Math.abs(w - e);
+
+            ans = Math.max(ans, diff + Math.min(i + 1 - diff, 2 * k));
+        }
+
+        return ans;
     }
 
     Map<Character, Integer> deltaMap = Map.of('N', 1, 'S', -1, 'W', -1, 'E', 1);
