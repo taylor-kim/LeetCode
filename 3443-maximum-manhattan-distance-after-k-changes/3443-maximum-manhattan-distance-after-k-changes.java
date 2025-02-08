@@ -1,18 +1,55 @@
 class Solution {
     public int maxDistance(String s, int k) {
-        return bf(s, k);
+        return try_20250208(s, k);
     }
 
     Map<Character, Integer> deltaMap = Map.of('N', 1, 'S', -1, 'W', -1, 'E', 1);
     Set<Character> vertical = Set.of('N', 'S');
     Set<Character> dirs = Set.of('N', 'S', 'W', 'E');
 
-    public int bf(String s, int k) {
-        return topdown(s, 0, k, 0, 0);
+    public int try_20250208(String str, int k) {
+        int[] map = new int[26];
+
+        int ans = 0;
+
+        for (char c : str.toCharArray()) {
+            map[c - 'A']++;
+
+            int changeMax = k;
+
+            int n = map['N' - 'A'];
+            int s = map['S' - 'A'];
+
+            int distance = 0;
+
+            int[] data = getInfo(n, s, changeMax);
+
+            distance = data[0];
+            changeMax = data[1];
+
+            int w = map['W' - 'A'];
+            int e = map['E' - 'A'];
+
+            int[] data2 = getInfo(w, e, changeMax);
+
+            distance += data2[0];
+
+            ans = Math.max(ans, distance);
+        }
+
+        return ans;
     }
 
-    private int topdown(String s, int index, int k, int v, int h) {
+    public int bf(String s, int k) {
+        return topdown(s, 0, k, 0, 0, new Integer[s.length()][k + 1]);
+    }
+
+    private int topdown(String s, int index, int k, int v, int h, Integer[][] memo) {
         if (index >= s.length()) return Math.abs(v) + Math.abs(h);
+
+        if (memo[index][k] != null) {
+            return memo[index][k];
+        }
 
         char c = s.charAt(index);
 
@@ -22,7 +59,7 @@ class Solution {
 
         boolean isV = vertical.contains(c);
         int delta = deltaMap.get(c);
-        ans = Math.max(ans, topdown(s, index + 1, k, v + (isV ? delta : 0), h + (isV ? 0 : delta)));
+        ans = Math.max(ans, topdown(s, index + 1, k, v + (isV ? delta : 0), h + (isV ? 0 : delta), memo));
 
         if (k > 0) {
             for (char d : dirs) {
@@ -30,11 +67,11 @@ class Solution {
 
                 isV = vertical.contains(d);
                 delta = deltaMap.get(d);
-                ans = Math.max(ans, topdown(s, index + 1, k - 1, v + (isV ? delta : 0), h + (isV ? 0 : delta)));
+                ans = Math.max(ans, topdown(s, index + 1, k - 1, v + (isV ? delta : 0), h + (isV ? 0 : delta), memo));
             }
         }
 
-        return ans;
+        return memo[index][k] = ans;
     }
 
     public int mySol3(String s, int k) {
@@ -76,19 +113,34 @@ class Solution {
 
         for (int right = 0; right < s.length(); right++) {
             char c = s.charAt(right);
+            
             map.put(c, map.get(c) + 1);
 
             int canChange = k;
+            int vMax = 0;
 
             if (map.get('N') > 1 && map.get('S') > 1) {
-                int vMax = Math.max(map.get('N'), map.get('S'));
-                int vMin = Math.min(map.get('N'), map.get('S'));
+                int[] info = getInfo(map.get('N'), map.get('S'), canChange);
+                vMax = info[0];
+                canChange -= info[1];
+            } else {
+                vMax = Math.abs(map.get('N') - map.get('S'));
             }
 
-            
+            int hMax = 0;
+
+            if (map.get('W') > 1 && map.get('E') > 1) {
+                int[] info = getInfo(map.get('W'), map.get('E'), canChange);
+                hMax = info[0];
+                canChange -= info[1];
+            } else {
+                hMax = Math.abs(map.get('W') - map.get('E'));
+            }
+
+            ans = Math.max(ans, vMax + hMax);
         }
 
-        return 0;
+        return ans;
     }
 
     public int mySol_fail(String s, int k) {
@@ -122,5 +174,16 @@ class Solution {
         System.out.println(h);
 
         return Math.abs(v) + Math.abs(h);
+    }
+
+    private int[] getInfo(int a, int b, int k) {
+        int max = Math.max(a, b);
+        int min = Math.min(a, b);
+        int change = Math.min(min, k);
+
+        int move = max + change - (min - change);
+        k -= change;
+
+        return new int[] {move, k};
     }
 }
