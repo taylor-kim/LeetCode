@@ -1,6 +1,25 @@
 class Solution {
     public long countBadPairs(int[] nums) {
-        return mySol_after_hint(nums);
+        return official_map(nums);
+    }
+
+    public long official_map(int[] nums) {
+        int n = nums.length;
+
+        Map<Integer, Integer> map = new HashMap();
+        long ans = 0;
+
+        for (int i = 0; i < n; i++) {
+            int key = nums[i] - i;
+
+            int goodPairCount = map.getOrDefault(key, 0);
+
+            ans += i - goodPairCount;
+
+            map.put(key, goodPairCount + 1);
+        }
+
+        return ans;
     }
 
     public long mySol_after_hint(int[] nums) {
