@@ -4,15 +4,17 @@ class Solution {
     }
 
     public int mySol(int[] nums, int k) {
-        Queue<Integer> pq = new PriorityQueue();
+        Queue<Long> pq = new PriorityQueue();
 
-        for (int num : nums) pq.add(num);
+        for (int num : nums) pq.add((long)num);
 
         int ans = 0;
 
-        while (pq.size() >= 2 && pq.peek() < k) {
-            int x = pq.poll();
-            int y = pq.poll();
+        long kl = (long)k;
+
+        while (pq.size() >= 2 && pq.peek() < kl) {
+            long x = pq.poll();
+            long y = pq.poll();
 
             pq.add(Math.min(x, y) * 2 + Math.max(x, y));
 
