@@ -17,7 +17,7 @@ class Solution {
             if (x >= (Integer.MAX_VALUE  - y) / 2) {
                 pq.add(k);
             } else {
-                pq.add(Math.min(x, y) * 2 + Math.max(x, y));
+                pq.add(2 * x + y);
             }
 
             ans++;
@@ -39,7 +39,8 @@ class Solution {
             long x = pq.poll();
             long y = pq.poll();
 
-            pq.add(Math.min(x, y) * 2 + Math.max(x, y));
+            // pq.add(Math.min(x, y) * 2 + Math.max(x, y));
+            pq.add(2 * x + y);
 
             ans++;
         }
