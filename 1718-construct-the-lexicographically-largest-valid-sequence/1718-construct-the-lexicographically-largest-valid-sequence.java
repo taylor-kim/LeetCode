@@ -15,8 +15,10 @@ class Solution {
     }
 
     private boolean topdown(int i, int remain, int[] ans, boolean[] visit) {
-        if (i >= ans.length) return remain == 0;
         if (remain == 0) return true;
+        // if (i >= ans.length) return remain == 0;
+        // if (i >= ans.length) return remain == 0;
+        // if (remain == 0) return true;
 
         // System.out.println(String.format("i:%d, remain:%d, ans:%s, visit:%s", i, remain, Arrays.toString(ans), Arrays.toString(visit)));
 
