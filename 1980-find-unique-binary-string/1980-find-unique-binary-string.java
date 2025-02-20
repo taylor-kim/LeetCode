@@ -1,26 +1,27 @@
 class Solution {
     public String findDifferentBinaryString(String[] nums) {
-        return try_20250215(nums);
+        return mySol(nums);
     }
 
-    public String try_20250215(String[] nums) {
+    public String mySol(String[] nums) {
         int n = nums.length;
-        Arrays.sort(nums);
+        int max = (int)Math.pow(2, n);
 
-        int max = (int)Math.pow(2, n) - 1;
+        Set<Integer> set = new HashSet();
 
-        for (int i = 0; i <= max; i++) {
-            String target = Integer.toBinaryString(i);
-
-            if (target.length() < n) {
-                target = "0".repeat(n - target.length()) + target;
-            }
-
-            if (Arrays.binarySearch(nums, target) < 0) {
-                return target;
-            }
+        for (String bin : nums) {
+            set.add(Integer.parseInt(bin, 2));
         }
 
-        return "";
+        int missing = -1;
+        Random random = new Random();
+
+        do {
+            missing = random.nextInt(max);
+        } while (set.contains(missing));
+
+        String s = Integer.toBinaryString(missing);
+
+        return s.length() == n ? s : "0".repeat(n - s.length()) + s;
     }
 }
