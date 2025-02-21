@@ -15,10 +15,22 @@
  */
 class FindElements {
     private List<Integer> list;
+    private Set<Integer> set = new HashSet();
 
     public FindElements(TreeNode root) {
-        list = new ArrayList();
-        recoverBfs(root, 0);
+        // list = new ArrayList();
+        // recoverBfs(root, 0);
+
+        recoverDfs_official(root, 0);
+    }
+
+    private void recoverDfs_official(TreeNode node, int val) {
+        if (node == null) return;
+
+        set.add(val);
+
+        recoverDfs_official(node.left, val * 2 + 1);
+        recoverDfs_official(node.right, val * 2 + 2);
     }
 
     private void recoverBfs(TreeNode root, int val) {
@@ -53,7 +65,8 @@ class FindElements {
     }
     
     public boolean find(int target) {
-        return Collections.binarySearch(list, target) >= 0;
+        // return Collections.binarySearch(list, target) >= 0;
+        return set.contains(target);
     }
 
     private boolean find(TreeNode node, int target) {
