@@ -14,11 +14,33 @@
  * }
  */
 class FindElements {
-    private TreeNode root;
+    private List<Integer> list;
 
     public FindElements(TreeNode root) {
-        recover(root, 0);
-        this.root = root;
+        list = new ArrayList();
+        recoverBfs(root, 0);
+    }
+
+    private void recoverBfs(TreeNode root, int val) {
+        Queue<TreeNode> queue = new LinkedList();
+        root.val = 0;
+        queue.add(root);
+
+        while (!queue.isEmpty()) {
+            TreeNode node = queue.poll();
+
+            list.add(node.val);
+
+            if (node.left != null) {
+                node.left.val = node.val * 2 + 1;
+                queue.add(node.left);
+            }
+
+            if (node.right != null) {
+                node.right.val = node.val * 2 + 2;
+                queue.add(node.right);
+            }
+        }
     }
 
     private void recover(TreeNode node, int val) {
@@ -31,9 +53,7 @@ class FindElements {
     }
     
     public boolean find(int target) {
-        TreeNode node = root;
-
-        return find(node, target);
+        return Collections.binarySearch(list, target) >= 0;
     }
 
     private boolean find(TreeNode node, int target) {
