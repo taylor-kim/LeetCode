@@ -18,7 +18,7 @@ class Solution {
 
         int ans = Integer.MIN_VALUE;
 
-        System.out.println(bobsPaths);
+        // System.out.println(bobsPaths);
 
         for (List<Integer> bobsPath : bobsPaths) {
             ans = Math.max(ans, dfs(graph, amount, 0, bobsPath, 0, new boolean[n], new boolean[n]));
