@@ -1,6 +1,31 @@
 class Solution {
     public int numOfSubarrays(int[] arr) {
-        return official_dp(arr);
+        return official_prefixsum(arr);
+    }
+
+    public int official_prefixsum(int[] arr) {
+        int ans = 0;
+        int mod = (int)1e9 + 7;
+        int prefixSum = 0;
+
+        int oddCount = 0;
+        int evenCount = 1; // due to initial sum is 0
+
+        for (int num : arr) {
+            prefixSum += num;
+
+            if (prefixSum % 2 == 0) {
+                ans += oddCount;
+                evenCount++;
+            } else {
+                ans += evenCount;
+                oddCount++;
+            }
+
+            ans %= mod;
+        }
+
+        return ans;
     }
 
     public int official_dp(int[] arr) {
