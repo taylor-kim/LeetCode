@@ -1,16 +1,15 @@
 class Solution {
     public int numOfSubarrays(int[] arr) {
-        return mySol(arr);
+        return official_dp(arr);
     }
 
-    public int mySol(int[] arr) {
+    public int official_dp(int[] arr) {
         int n = arr.length;
         int[] odd = new int[n];
         int[] even = new int[n];
 
         int ans = 0;
         int mod = (int)1e9 + 7;
-        long sum = 0;
 
         if (arr[0] % 2 == 0) {
             even[0] = 1;
@@ -19,8 +18,6 @@ class Solution {
         }
 
         for (int i = 1; i < n; i++) {
-            // sum += arr[i];
-
             if (arr[i] % 2 == 0) {
                 even[i] = (1 + even[i - 1]) % mod;
                 odd[i] = odd[i - 1];
