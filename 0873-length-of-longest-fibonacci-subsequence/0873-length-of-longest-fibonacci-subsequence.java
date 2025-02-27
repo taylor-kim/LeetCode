@@ -1,9 +1,43 @@
 class Solution {
     public int lenLongestFibSubseq(int[] arr) {
-        return mySol(arr);
+        return bf(arr);
     }
 
-    public int mySol(int[] arr) {
+    public int bf(int[] arr) {
+        int n = arr.length;
+        int ans = 0;
+
+        Set<Integer> set = new HashSet();
+
+        for (int num : arr) set.add(num);
+
+        for (int i = 0; i < n; i++) {
+            int a = arr[i];
+
+            for (int j = i + 1; j < n; j++) {
+                int b = arr[j];
+
+                ans = Math.max(ans, findLength(a, b, set));
+            }
+        }
+
+        return ans;
+    }
+
+    private int findLength(int a, int b, Set<Integer> set) {
+        int length = 2;
+
+        while (set.contains(a + b)) {
+            int sum = a + b;
+            a = b;
+            b = sum;
+            length++;
+        }
+
+        return length == 2 ? 0 : length;
+    }
+
+    public int mySol_tle(int[] arr) {
         return backtrack(arr, 0, new ArrayList());
     }
 
