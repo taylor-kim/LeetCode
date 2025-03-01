@@ -15,7 +15,49 @@
  */
 class Solution {
     public TreeNode recoverFromPreorder(String traversal) {
-        return try_iterative_stack(traversal);
+        return try_iterative_list(traversal);
+    }
+
+    public TreeNode try_iterative_list(String s) {
+        List<TreeNode> levels = new ArrayList();
+
+        int n = s.length();
+        int index = 0;
+
+        while (index < n) {
+            int dash = 0;
+
+            while (index < n && s.charAt(index) == '-') {
+                dash++;
+                index++;
+            }
+
+            int number = 0;
+
+            while (index < n && Character.isDigit(s.charAt(index))) {
+                number = number * 10 + ((int)s.charAt(index++) - '0');
+            }
+
+            TreeNode node = new TreeNode(number);
+
+            if (dash < levels.size()) {
+                levels.set(dash, node);
+            } else {
+                levels.add(node);
+            }
+
+            if (dash > 0) {
+                TreeNode parent = levels.get(dash - 1);
+
+                if (parent.left == null) {
+                    parent.left = node;
+                } else {
+                    parent.right = node;
+                }
+            }
+        }
+
+        return levels.get(0);
     }
 
     public TreeNode try_iterative_stack(String s) {
