@@ -15,7 +15,29 @@
  */
 class Solution {
     public TreeNode constructFromPrePost(int[] preorder, int[] postorder) {
-        return mySol(preorder, postorder);
+        return official_dfs(preorder, postorder);
+    }
+
+    public TreeNode official_dfs(int[] preorder, int[] postorder) {
+        return official_dfs(preorder, new int[1], postorder, new int[1]);
+    }
+
+    public TreeNode official_dfs(int[] preorder, int[] index, int[] postorder, int[] index2) {
+        if (index[0] >= preorder.length) return null;
+
+        TreeNode node = new TreeNode(preorder[index[0]++]);
+
+        if (node.val != postorder[index2[0]]) {
+            node.left = official_dfs(preorder, index, postorder, index2);
+        }
+
+        if (node.val != postorder[index2[0]]) {
+            node.right = official_dfs(preorder, index, postorder, index2);
+        }
+
+        index2[0]++;
+
+        return node;
     }
 
     public TreeNode mySol(int[] preorder, int[] postorder) {
