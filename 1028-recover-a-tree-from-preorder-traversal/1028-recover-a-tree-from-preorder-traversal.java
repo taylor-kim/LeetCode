@@ -24,16 +24,7 @@ class Solution {
         int n = s.length();
         int index = 0;
 
-        int number = 0;
-
-        while (index < n && Character.isDigit(s.charAt(index))) {
-            number = number * 10 + ((int)s.charAt(index++) - '0');
-        }
-
-        TreeNode root = new TreeNode(number);
-        stack.push(root);
-
-        while (!stack.isEmpty() || index < n) {
+        while (index < n) {
             int dash = 0;
 
             while (index < n && s.charAt(index) == '-') {
@@ -41,7 +32,7 @@ class Solution {
                 index++;
             }
 
-            number = 0;
+            int number = 0;
 
             while (index < n && Character.isDigit(s.charAt(index))) {
                 number = number * 10 + ((int)s.charAt(index++) - '0');
@@ -53,20 +44,24 @@ class Solution {
                 stack.pop();
             }
 
-            if (stack.size() == 0) break;
+            if (stack.size() > 0) {
+                TreeNode parent = stack.peek();
 
-            TreeNode parent = stack.peek();
-
-            if (parent.left == null) {
-                parent.left = node;
-            } else {
-                parent.right = node;
+                if (parent.left == null) {
+                    parent.left = node;
+                } else {
+                    parent.right = node;
+                }
             }
 
             stack.push(node);
         }
 
-        return root;
+        while (stack.size() > 1) {
+            stack.pop();
+        }
+
+        return stack.peek();
     }
 
     public TreeNode mySol(String s) {
