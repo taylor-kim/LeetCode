@@ -1,6 +1,40 @@
 class Solution {
     public int[] pivotArray(int[] nums, int pivot) {
-        return mySol2(nums, pivot);
+        return official_twopasses_with_fixed_array(nums, pivot);
+    }
+
+    public int[] official_twopasses_with_fixed_array(int[] nums, int pivot) {
+        int n = nums.length;
+        int less = 0;
+        int equal = 0;
+
+        for (int num : nums) {
+            if (num < pivot) {
+                less++;
+            } else if (num == pivot) {
+                equal++;
+            }
+        }
+
+        int li = 0;
+        int ei = less;
+        int gi = less + equal;
+
+        int[] ans = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            int num = nums[i];
+
+            if (num < pivot) {
+                ans[li++] = num;
+            } else if (num == pivot) {
+                ans[ei++] = num;
+            } else {
+                ans[gi++] = num;
+            }
+        }
+
+        return ans;
     }
 
     public int[] mySol2(int[] nums, int pivot) {
