@@ -16,10 +16,10 @@ class Solution {
 
         for (int i = 1; i < n; i++) {
             if (arr[i] % 2 == 0) {
-                evenDp[i] = Math.max(evenDp[i - 1] + 1, 1);
+                evenDp[i] = evenDp[i - 1] + 1;
                 oddDp[i] = oddDp[i - 1];
             } else {
-                oddDp[i] = Math.max(evenDp[i - 1] + 1, 1);
+                oddDp[i] = evenDp[i - 1] + 1;
                 evenDp[i] = oddDp[i - 1];
             }
         }
