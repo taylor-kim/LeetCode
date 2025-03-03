@@ -1,0 +1,66 @@
+class Solution {
+    public int[] pivotArray(int[] nums, int pivot) {
+        return mySol2(nums, pivot);
+    }
+
+    public int[] mySol2(int[] nums, int pivot) {
+        int n = nums.length;
+        List<Integer> lows = new ArrayList();
+        List<Integer> highs = new ArrayList();
+
+        for (int i = 0; i < n; i++) {
+            if (nums[i] < pivot) {
+                lows.add(nums[i]);
+            } else if (nums[i] > pivot) {
+                highs.add(nums[i]);
+            }
+        }
+
+        for (int i = 0; i < lows.size(); i++) {
+            nums[i] = lows.get(i);
+        }
+
+        for (int i = lows.size(); i < n - highs.size(); i++) {
+            nums[i] = pivot;
+        }
+        
+        for (int i = n - highs.size(); i < n; i++) {
+            nums[i] = highs.get(i - (n - highs.size()));
+        }
+
+        return nums;
+    }
+    
+    public int[] mySol_fail(int[] nums, int pivot) {
+        int n = nums.length;
+        int lo = 0;
+        int hi = n - 1;
+
+        for (int i = 0; i < n && i <= hi; i++) {
+            if (nums[i] < pivot) {
+                swap(nums, i, lo++);
+            } else if (nums[i] > pivot) {
+                swap(nums, i--, hi--);
+            }
+            // System.out.println(Arrays.toString(nums));
+        }
+
+        // System.out.println(String.format("lo:%d, hi:%d", lo, hi));
+        lo = hi + 1;
+        hi = n - 1;
+
+        while (lo < hi) {
+            swap(nums, lo++, hi--);
+        }
+
+        return nums;
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        if (i == j) return;
+
+        nums[i] += nums[j];
+        nums[j] = nums[i] - nums[j];
+        nums[i] -= nums[j];
+    }
+}
