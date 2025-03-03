@@ -20,18 +20,10 @@ class Solution {
 
         for (int i = 1; i < n; i++) {
             if (nums[i] < 0) {
-                if (dpNeg[i - 1] != 0) {
-                    dpNeg[i] = nums[i] + dpNeg[i - 1];
-                } else {
-                    dpNeg[i] = nums[i];
-                }
+                dpNeg[i] = nums[i] + dpNeg[i - 1];
                 dpPos[i] = Math.max(dpPos[i - 1] + nums[i], 0);
             } else {
-                if (dpPos[i - 1] != 0) {
-                    dpPos[i] = nums[i] + dpPos[i - 1];
-                } else {
-                    dpPos[i] = nums[i];
-                }
+                dpPos[i] = nums[i] + dpPos[i - 1];
                 dpNeg[i] = Math.min(dpNeg[i - 1] + nums[i], 0);
             }
 
