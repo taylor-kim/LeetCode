@@ -1,9 +1,33 @@
 class Solution {
     public int numOfSubarrays(int[] arr) {
-        return tryAgain_20250303(arr);
+        return tryAgain_20250303_prefixSum(arr);
     }
 
-    public int tryAgain_20250303(int[] arr) {
+    public int tryAgain_20250303_prefixSum(int[] arr) {
+        int sum = 0;
+        int oddCount = 0;
+        int evenCount = 1;
+        int mod = (int)1e9 + 7;
+        int ans = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+            sum += arr[i];
+
+            if (sum % 2 == 0) {
+                ans = (ans + oddCount) % mod;
+                evenCount++;
+            } else {
+                ans = (ans + evenCount) % mod;
+                oddCount++;
+            }
+
+            // System.out.println(String.format("sum:%d, ec:%d, oc:%d, ans:%d", sum, evenCount, oddCount, ans));
+        }
+
+        return ans;
+    }
+
+    public int tryAgain_20250303_dp(int[] arr) {
         int n = arr.length;
         int[] oddDp = new int[n];
         int[] evenDp = new int[n];
