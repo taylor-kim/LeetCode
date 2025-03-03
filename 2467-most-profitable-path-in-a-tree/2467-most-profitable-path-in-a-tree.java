@@ -1,6 +1,46 @@
 class Solution {
     public int mostProfitablePath(int[][] edges, int bob, int[] amount) {
-        return mySol2(edges, bob, amount);
+        return official_dfs(edges, bob, amount);
+    }
+
+    public int official_dfs(int[][] edges, int bob, int[] amount) {
+        Map<Integer, List<Integer>> graph = new HashMap();
+        int n = edges.length + 1;
+
+        for (int[] edge : edges) {
+            graph.computeIfAbsent(edge[0], k -> new ArrayList()).add(edge[1]);
+            graph.computeIfAbsent(edge[1], k -> new ArrayList()).add(edge[0]);
+        }
+
+        return findMax(graph, 0, 0, 0, bob, new int[n], amount);
+    }
+
+    private int findMax(Map<Integer, List<Integer>> graph, int source, int parent, int time
+                        , int bob, int[] distanceFromBob, int[] amount) {
+        if (source == bob) {
+            distanceFromBob[source] = 0;
+        } else {
+            distanceFromBob[source] = distanceFromBob.length;
+        }
+
+        int score = 0;
+        int sub = Integer.MIN_VALUE;
+
+        for (int next : graph.getOrDefault(source, new ArrayList<>())) {
+            if (next != parent) {
+                sub = Math.max(sub, findMax(graph, next, source, time + 1, bob, distanceFromBob, amount));
+
+                distanceFromBob[source] = Math.min(distanceFromBob[source], distanceFromBob[next] + 1);
+            }
+        }
+
+        if (distanceFromBob[source] > time) {
+            score += amount[source];
+        } else if (distanceFromBob[source] == time) {
+            score += amount[source] / 2;
+        }
+
+        return score + (sub == Integer.MIN_VALUE ? 0 : sub);
     }
 
     public int mySol2(int[][] edges, int bob, int[] amount) {
