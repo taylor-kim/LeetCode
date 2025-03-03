@@ -16,6 +16,10 @@ class Solution {
 
         findBobs(bob, graph, new boolean[n], bobsPaths, new ArrayList());
 
+        if (bobsPaths.size() != 1) {
+            throw new RuntimeException(String.format("bobsPaths.size() is not 1, actual:%d", bobsPaths.size()));
+        }
+
         int ans = Integer.MIN_VALUE;
 
         // System.out.println(bobsPaths);
