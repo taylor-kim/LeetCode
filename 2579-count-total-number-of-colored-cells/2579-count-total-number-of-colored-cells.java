@@ -1,6 +1,10 @@
 class Solution {
     public long coloredCells(int n) {
-        return mySol2(n);
+        return official_math(n);
+    }
+
+    public long official_math(int n) {
+        return 1 + (long) n * (n - 1) * 2;
     }
 
     public long mySol2(int n) {
