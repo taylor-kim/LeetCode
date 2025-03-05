@@ -1,6 +1,17 @@
 class Solution {
     public long coloredCells(int n) {
-        return mySol(n);
+        return mySol2(n);
+    }
+
+    public long mySol2(int n) {
+        long ans = 1;
+        int time = 1;
+
+        while (time < n) {
+            ans += time++ * 4;
+        }
+
+        return ans;
     }
 
     public long mySol(int n) {
@@ -8,9 +19,12 @@ class Solution {
         queue.add(new int[] {n, n});
 
         Set<Long> visit = new HashSet();
-        visit.add(getKey(n, n));
+        // visit.add(getKey(n, n));
 
-        int ans = 0;
+        boolean[][] used = new boolean[2 * n + 1][2 * n + 1];
+        used[n][n] = true;
+
+        long ans = 0;
 
         int[][] dirs = {
             {1, 0},
@@ -30,7 +44,8 @@ class Solution {
                     int ny = y + dir[0];
                     int nx = x + dir[1];
 
-                    if (visit.add(getKey(ny, nx))) {
+                    if (!used[ny][nx]) {
+                        used[ny][nx] = true;
                         queue.add(new int[] {ny, nx});
                     }
                 }
