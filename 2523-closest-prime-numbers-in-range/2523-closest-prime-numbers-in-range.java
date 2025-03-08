@@ -4,18 +4,7 @@ class Solution {
     }
 
     public int[] mySol(int left, int right) {
-        boolean[] primes = new boolean[right + 1];
-        Arrays.fill(primes, true);
-        primes[0] = false;
-        primes[1] = false;
-
-        for (int i = 2; i < primes.length; i++) {
-            if (!primes[i]) continue;
-
-            for (int j = i * 2; j < primes.length; j += i) {
-                primes[j] = false;
-            }
-        }
+        boolean[] primes = getPrimes_edit(right + 1);
 
         List<Integer> list = new ArrayList();
 
@@ -40,5 +29,39 @@ class Solution {
         }
 
         return ans;
+    }
+
+    private boolean[] getPrimes_mine(int max) {
+        boolean[] primes = new boolean[max];
+        Arrays.fill(primes, true);
+        primes[0] = false;
+        primes[1] = false;
+
+        for (int i = 2; i < primes.length; i++) {
+            if (!primes[i]) continue;
+
+            for (int j = i * 2; j < primes.length; j += i) {
+                primes[j] = false;
+            }
+        }
+
+        return primes;
+    }
+
+    private boolean[] getPrimes_edit(int max) {
+        boolean[] primes = new boolean[max];
+        Arrays.fill(primes, true);
+        primes[0] = false;
+        primes[1] = false;
+
+        for (int i = 2; i * i < primes.length; i++) {
+            if (!primes[i]) continue;
+
+            for (int j = i * i; j < primes.length; j += i) {
+                primes[j] = false;
+            }
+        }
+
+        return primes;
     }
 }
