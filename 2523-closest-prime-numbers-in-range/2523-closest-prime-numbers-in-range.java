@@ -1,6 +1,40 @@
 class Solution {
     public int[] closestPrimes(int left, int right) {
-        return mySol(left, right);
+        return official_twin_primes(left, right);
+    }
+
+    public int[] official_twin_primes(int left, int right) {
+        int[] ans = {-1, -1};
+        int minDiff = Integer.MAX_VALUE;
+        int num1 = -1;
+
+        for (int num2 = left; num2 <= right; num2++) {
+            if (isPrime(num2)) {
+                if (num1 != -1 && num2 - num1 < minDiff) {
+                    minDiff = num2 - num1;
+                    ans[0] = num1;
+                    ans[1] = num2;
+                }
+
+                if (minDiff == 2 || minDiff == 1) return ans;
+                
+                num1 = num2;
+            }
+        }
+
+        return ans;
+    }
+
+    private boolean isPrime(int number) {
+        if (number < 2) return false;
+        if (number == 2 || number == 3) return true;
+        if (number % 2 == 0) return false;
+
+        for (int divisor = 3; divisor * divisor <= number; divisor += 2) {
+            if (number % divisor == 0) return false;
+        }
+
+        return true;
     }
 
     public int[] mySol(int left, int right) {
