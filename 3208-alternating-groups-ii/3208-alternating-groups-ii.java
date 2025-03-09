@@ -1,32 +1,68 @@
 class Solution {
     public int numberOfAlternatingGroups(int[] colors, int k) {
-        return mySol(colors, k);
+        return mySol2(colors, k);
     }
 
-    public int mySol(int[] colors, int k) {
+    public int mySol2(int[] colors, int k) {
         int n = colors.length;
-        int count = 0;
 
         int left = 0;
-        int prev = colors[0];
+        int ans = 0;
 
-        for (int right = 1; right < n + k - 1; right++) {
-            int index = right % n;
+        for (int right = 1; left < n && right < 2 * n; right++) {
+            int prev = (right - 1) % n;
+            int current = right % n;
 
-            // System.out.print(colors[index] + ", ");
-
-            if (prev == colors[index]) {
-                // System.out.println(String.format("%d == %d, left:%d, right:%d", prev, colors[index], left, right));
+            if (colors[prev] == colors[current]) {
                 left = right;
-            } else if (right - left + 1 == k) {
-                // System.out.println(String.format("counting! left:%d, right:%d", left, right));
-                count++;
-                left++;
+            } else {
+                if (right - left + 1 == k) {
+                    left++;
+                    ans++;
+                }
             }
-
-            prev = colors[index];
         }
 
-        return count;
+        return ans;
+    }
+
+    public int mySol_fail(int[] colors, int k) {
+        int n = colors.length;
+        Map<Integer, Integer> map = new HashMap();
+
+        // 0,1,0,1,1,0
+        map.put(colors[0], 0);
+
+        int ans = 0;
+
+        Set<String> set = new HashSet();
+
+        for (int i = 1; i < 2 * n; i++) {
+            int prev = (i - 1) % n;
+            int current = i % n;
+
+            if (colors[prev] == colors[current]) {
+                map.clear();
+                map.put(colors[current], i);
+            } else {
+                if (!map.containsKey(colors[current])) {
+                    map.put(colors[current], i);
+                }
+
+                int left = k % 2 == 0 ? 1 - colors[current] : colors[current];
+
+                if (i - map.getOrDefault(left, 0) + 1 >= k) {
+                    if (!set.add(left + "_" + i)) {
+                        break;
+                    }
+                    System.out.println(String.format("i:%d, left:%d, map:%s", i, left, map));
+                    ans++;
+                }
+            }
+        }
+
+        System.out.println(set);
+
+        return set.size();
     }
 }
