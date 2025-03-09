@@ -1,38 +1,29 @@
 class Solution {
     public long countSubarrays(int[] nums, int k) {
-        return others(nums, k);
+        return mySol(nums, k);
     }
 
-    public long others(int[] nums, int k) {
+    public long mySol(int[] nums, int k) {
         int n = nums.length;
-        Map<Integer, Integer> prevCounter = new HashMap();
+        Map<Integer, Integer> counter = new HashMap();
 
         long ans = 0;
 
-        /**
-            target : 111
-            1111, 11 : x
-            1111, 11111 ..
-            1111, 111 : 1ea
-            1111, 111, 111 : 3ea
-         */
-
         for (int i = 0; i < n; i++) {
             int num = nums[i];
-            Map<Integer, Integer> currentCounter = new HashMap();
+            Map<Integer, Integer> nextCounter = new HashMap();
 
             if (isCandidate(num, k)) {
-                prevCounter.put(num, prevCounter.getOrDefault(num, 0) + 1);
+                counter.put(num, counter.getOrDefault(num, 0) + 1);
 
-                for (int cand : prevCounter.keySet()) {
-                    int andValue = cand & num;
-                    currentCounter.put(andValue, currentCounter.getOrDefault(andValue, 0) + prevCounter.getOrDefault(cand, 0));
+                for (int cand : counter.keySet()) {
+                    nextCounter.put(cand & num, nextCounter.getOrDefault(cand & num, 0) + counter.get(cand));
                 }
 
-                ans += currentCounter.getOrDefault(k, 0);
+                ans += nextCounter.getOrDefault(k, 0);
             }
 
-            prevCounter = currentCounter;
+            counter = nextCounter;
         }
 
         return ans;
