@@ -1,6 +1,6 @@
 class Solution {
     public long countOfSubstrings(String word, int k) {
-        return official_sw2(word, k);
+        return official_sw(word, k);
     }
 
     public long official_sw2(String word, int k) {
@@ -79,7 +79,7 @@ class Solution {
                 }
             }
 
-            while (left < arr.length && vowels.size() == 5 && consonants == k) {
+            while (vowels.size() == 5 && consonants == k) {
                 ans += nextConsonant[right] - right;
 
                 char removed = arr[left++];
