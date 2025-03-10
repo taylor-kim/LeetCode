@@ -1,6 +1,44 @@
 class Solution {
     public long countOfSubstrings(String word, int k) {
-        return official_sw(word, k);
+        return official_sw2(word, k);
+    }
+
+    public long official_sw2(String word, int k) {
+        return atLeastK(word, k) - atLeastK(word, k + 1);
+    }
+
+    public long atLeastK(String word, int k) {
+        char[] arr = word.toCharArray();
+        
+        Map<Character, Integer> vowels = new HashMap();
+        int consonants = 0;
+
+        int left = 0;
+        long ans = 0;
+
+        for (int right = 0; right < arr.length; right++) {
+            char c = arr[right];
+
+            if (isVowel(c)) {
+                vowels.put(c, vowels.getOrDefault(c, 0) + 1);
+            } else {
+                consonants++;
+            }
+
+            while (vowels.size() == 5 && consonants >= k) {
+                ans += arr.length - right;
+
+                char removed = arr[left++];
+
+                if (isVowel(removed)) {
+                    remove(vowels, removed);
+                } else {
+                    consonants--;
+                }
+            }
+        }
+
+        return ans;
     }
 
     public long official_sw(String word, int k) {
