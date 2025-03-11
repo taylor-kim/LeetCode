@@ -1,7 +1,24 @@
 class Solution {
     public int numberOfSubstrings(String s) {
-        return mySol(s);
+        return official_track_last_pos(s);
     }
+
+    public int official_track_last_pos(String s) {
+        int ans = 0;
+        int[] pos = {-1,-1,-1};
+        char[] arr = s.toCharArray();
+
+        for (int i = 0; i < arr.length; i++) {
+            char c = arr[i];
+
+            pos[c - 'a'] = i;
+
+            ans += 1 + Math.min(pos[0], Math.min(pos[1], pos[2]));
+        }
+
+        return ans;
+    }
+
 
     public int mySol(String s) {
         char[] arr = s.toCharArray();
