@@ -1,47 +1,84 @@
 class Solution {
-
     public int maximumCandies(int[] candies, long k) {
-        // Find the maximum number of candies in any pile
-        int maxCandiesInPile = 0;
-        for (int i = 0; i < candies.length; i++) {
-            maxCandiesInPile = Math.max(maxCandiesInPile, candies[i]);
+        return mySol(candies, k);
+    }
+
+    public int mySol(int[] candies, long k) {
+        int n = candies.length;
+
+        Arrays.sort(candies);
+
+        long sum = 0;
+        int max = 0;
+
+        for (int i = 0; i < n; i++) {
+            int candy = candies[i];
+            sum += candy;
+            max = Math.max(max, candy);
         }
 
-        // Set the initial search range for binary search
-        int left = 0;
-        int right = maxCandiesInPile;
+        if (sum < k) return 0;
 
-        // Binary search to find the maximum number of candies each child can get
-        while (left < right) {
-            // Calculate the middle value of the current range
-            int middle = (left + right + 1) / 2;
+        int lo = 0;
+        int hi = max + 1;
 
-            // Check if it's possible to allocate candies so that each child gets 'middle' candies
-            if (canAllocateCandies(candies, k, middle)) {
-                // If possible, move to the upper half to search for a larger number
-                left = middle;
+        print(String.format("sum:%d, k:%d", sum, k));
+
+        while (lo < hi) {
+            int mid = lo + (hi - lo) / 2;
+
+            print(String.format("lo:%d, hi:%d, mid:%d", lo, hi, mid));
+
+            if (canGive(candies, k, mid)) {
+                lo = mid + 1;
             } else {
-                // Otherwise, move to the lower half
-                right = middle - 1;
+                hi = mid;
+            }
+
+            print("\n");
+        }
+
+        return lo - 1;
+    }
+
+    private boolean canGive(int[] candies, long k, int amount) {
+        int n = candies.length;
+
+        int index = leftmost(candies, amount);
+
+        if (index < 0) {
+            index = -(index + 1);
+        }
+
+        for (int i = index; i < n && k > 0; i++) {
+            k -= candies[i] / amount;
+        }
+
+        return k <= 0;
+    }
+
+    private int leftmost(int[] arr, int target) {
+        int lo = 0;
+        int hi = arr.length;
+
+        while (lo < hi) {
+            int mid = lo + (hi - lo) / 2;
+
+            if (target <= arr[mid]) {
+                hi = mid;
+            } else {
+                lo = mid + 1;
             }
         }
 
-        return left;
-    }
-
-    private boolean canAllocateCandies(
-        int[] candies,
-        long k,
-        int numOfCandies
-    ) {
-        // Initialize the total number of children that can be served
-        long maxNumOfChildren = 0;
-
-        // Iterate over all piles to calculate how many children each pile can serve
-        for (int pileIndex = 0; pileIndex < candies.length; pileIndex++) {
-            maxNumOfChildren += candies[pileIndex] / numOfCandies;
+        if (lo == arr.length || (lo == 0 && arr[lo] != target)) {
+            return -(lo + 1);
         }
 
-        return maxNumOfChildren >= k;
+        return lo;
+    }
+
+    private void print(String s) {
+        // System.out.println(s);
     }
 }
