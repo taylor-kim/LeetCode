@@ -1,6 +1,44 @@
 class Solution {
     public long repairCars(int[] ranks, int cars) {
-        return mySol(ranks, cars);
+        return official_minHeap(ranks, cars);
+    }
+
+    public long official_minHeap(int[] ranks, int cars) {
+        Map<Integer, Integer> freq = new HashMap();
+
+        for (int rank : ranks) {
+            freq.put(rank, freq.getOrDefault(rank, 0) + 1);
+        }
+
+        Queue<long[]> pq = new PriorityQueue<>((a, b) -> {
+            return (int)(a[0] - b[0]);
+        });
+
+        for (int rank : freq.keySet()) {
+            int count = freq.get(rank);
+
+            // time, rank, fixedCar, mechCount
+            pq.add(new long[] {rank, rank, 1, count});
+        }
+
+        long time = 0;
+
+        while (cars > 0) {
+            long[] data = pq.poll();
+
+            time = data[0];
+            int rank = (int)data[1];
+            long fixed = data[2];
+            int count = (int)data[3];
+
+            cars -= count;
+
+            fixed++;
+
+            pq.add(new long[] {rank * fixed * fixed, rank, fixed, count});
+        }
+
+        return time;
     }
 
     public long mySol(int[] ranks, int cars) {
