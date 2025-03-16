@@ -1,6 +1,33 @@
 class Solution {
     public int maximumCandies(int[] candies, long k) {
-        return mySol(candies, k);
+        return official_bs(candies, k);
+    }
+
+    public int official_bs(int[] candies, long k) {
+        int n = candies.length;
+
+        int max = Arrays.stream(candies).max().getAsInt();
+
+        int lo = 1;
+        int hi = max + 1;
+
+        while (lo < hi) {
+            int mid = lo + (hi - lo) / 2;
+
+            long given = 0;
+
+            for (int i = 0; i < candies.length && given < k; i++) {
+                given += candies[i] / mid;
+            }
+
+            if (given >= k) {
+                lo = mid + 1;
+            } else {
+                hi = mid;
+            }
+        }
+
+        return lo - 1;
     }
 
     public int mySol(int[] candies, long k) {
@@ -17,9 +44,9 @@ class Solution {
             max = Math.max(max, candy);
         }
 
-        if (sum < k) return 0;
+        // if (sum < k) return 0;
 
-        int lo = 0;
+        int lo = 1;
         int hi = max + 1;
 
         print(String.format("sum:%d, k:%d", sum, k));
