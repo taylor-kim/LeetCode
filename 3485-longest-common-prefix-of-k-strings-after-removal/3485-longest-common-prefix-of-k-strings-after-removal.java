@@ -51,7 +51,7 @@ class Solution {
 
                 node = node.children[c - 'a'];
 
-                if (node.count == k) {
+                if (node.count >= k) {
                     map.put(i + 1, map.get(i + 1) - 1);
 
                     if (map.get(i + 1) == 0) {
