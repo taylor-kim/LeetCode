@@ -1,6 +1,24 @@
 class Solution {
     public int longestNiceSubarray(int[] nums) {
-        return mySol(nums);
+        return official_sw(nums);
+    }
+
+    public int official_sw(int[] nums) {
+        int left = 0;
+        int sum = 0;
+        int ans = 0;
+
+        for (int right = 0; right < nums.length; right++) {
+            while (left < right && (sum & nums[right]) != 0) {
+                sum ^= nums[left++];
+            }
+
+            sum |= nums[right];
+
+            ans = Math.max(ans, right - left + 1);
+        }
+
+        return ans;
     }
 
     public int mySol(int[] nums) {
