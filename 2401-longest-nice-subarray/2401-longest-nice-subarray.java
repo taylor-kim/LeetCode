@@ -69,6 +69,8 @@ class Solution {
 
             if ((num & mask) != 0) {
                 bits[i]++;
+
+                if (bits[i] > 1) throw new RuntimeException("bits[i] set more than 1 time.");
             }
         }
     }
