@@ -1,6 +1,6 @@
 class Solution {
     public int longestNiceSubarray(int[] nums) {
-        return official_sw(nums);
+        return mySol(nums);
     }
 
     public int official_sw(int[] nums) {
@@ -31,7 +31,7 @@ class Solution {
 
         int n = nums.length;
 
-        int ans = 1;
+        int ans = 0;
         int left = 0;
         int sum = 0;
         int[] bits = new int[32];
