@@ -1,6 +1,44 @@
 class Solution {
     public int longestNiceSubarray(int[] nums) {
-        return mySol(nums);
+        return try_binarySearch(nums);
+    }
+
+    public int try_binarySearch(int[] nums) {
+        int n = nums.length;
+        int lo = 1;
+        int hi = n + 1;
+
+        while (lo < hi) {
+            int mid = lo + (hi - lo) / 2;
+
+            if (isNice(nums, mid)) {
+                lo = mid + 1;
+            } else {
+                hi = mid;
+            }
+        }
+
+        return lo - 1;
+    }
+
+    private boolean isNice(int[] nums, int length) {
+        for (int i = 0; i <= nums.length - length; i++) {
+            int sum = 0;
+            boolean ret = true;
+            
+            for (int j = i; j < i + length; j++) {
+                if ((sum & nums[j]) != 0) {
+                    ret = false;
+                    break;
+                }
+
+                sum |= nums[j];
+            }
+
+            if (ret) return true;
+        }
+
+        return false;
     }
 
     public int official_sw(int[] nums) {
