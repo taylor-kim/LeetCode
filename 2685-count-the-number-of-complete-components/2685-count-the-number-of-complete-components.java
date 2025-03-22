@@ -6,8 +6,6 @@ class Solution {
     public int mySol(int n, int[][] edges) {
         UnionFind uf = new UnionFind(n);
 
-        uf.print();
-
         for (int[] edge : edges) {
             uf.merge(edge[0], edge[1]);
         }
@@ -19,9 +17,6 @@ class Solution {
         for (int i = 0; i < n; i++) {
             components.put(uf.find(i), components.getOrDefault(uf.find(i), 0) + 1);
         }
-
-        // System.out.println(components);
-        // uf.print();
 
         for (int component : components.keySet()) {
             int expectedEdgeCount = components.get(component) * (components.get(component) - 1) / 2;
