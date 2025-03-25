@@ -1,6 +1,6 @@
 class Solution {
     public int countPaths(int n, int[][] roads) {
-        return mySol_tle(n, roads);
+        return official_dijkstra(n, roads);
     }
 
     public int mySol2(int n, int[][] roads) {
@@ -56,7 +56,7 @@ class Solution {
         return ans;
     }
 
-    public int mySol_tle(int n, int[][] roads) {
+    public int official_dijkstra(int n, int[][] roads) {
         Map<Integer, List<int[]>> graph = new HashMap();
 
         for (int[] road : roads) {
@@ -100,5 +100,56 @@ class Solution {
         }
 
         return pathCounts[n - 1];
+    }
+
+    public int mySol_tle(int n, int[][] roads) {
+        Map<Integer, List<int[]>> graph = new HashMap();
+
+        for (int[] road : roads) {
+            graph.computeIfAbsent(road[0], k -> new ArrayList()).add(new int[] {road[1], road[2]});
+            graph.computeIfAbsent(road[1], k -> new ArrayList()).add(new int[] {road[0], road[2]});
+        }
+
+        Queue<long[]> queue = new PriorityQueue<>((a, b) -> {
+            return Long.compare(a[1], b[1]);
+        });
+        queue.add(new long[] {0, 0});
+
+        long[] minCosts = new long[n];
+
+        Arrays.fill(minCosts, Long.MAX_VALUE);
+
+        int ans = 0;
+        int mod = (int)1e9 + 7;
+
+        while (!queue.isEmpty()) {
+            long[] data = queue.poll();
+
+            int node = (int)data[0];
+            long cost = data[1];
+
+            if (minCosts[node] < cost) continue;
+
+            if (node == n - 1) {
+                if (minCosts[node] > cost) {
+                    ans = 1;
+                } else if (minCosts[node] == cost) {
+                    ans = (ans + 1) % mod;
+                }
+            }
+
+            for (int next[] : graph.getOrDefault(node, new ArrayList<>())) {
+                if (next[1] + cost < minCosts[next[0]]) {
+                    minCosts[next[0]] = next[1] + cost;
+                    queue.add(new long[] {next[0], next[1] + cost});
+                } else if (next[1] + cost == minCosts[next[0]]) {
+                    if (next[0] == n - 1) {
+                        ans = (ans + 1) % mod;
+                    }
+                }
+            }
+        }
+
+        return ans;
     }
 }
