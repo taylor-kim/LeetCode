@@ -1,6 +1,34 @@
 class Solution {
     public boolean checkValidCuts(int n, int[][] rectangles) {
-        return mySol(n, rectangles);
+        return official_linesweep(n, rectangles);
+    }
+
+    public boolean official_linesweep(int n, int[][] rect) {
+        return checkCuts(rect, 0) || checkCuts(rect, 1);
+    }
+
+    private boolean checkCuts(int[][] rect, int dim) {
+        Arrays.sort(rect, (a, b) -> {
+            return a[dim] - b[dim];
+        });
+
+        int prevEnd = rect[0][dim + 2];
+
+        int line = 0;
+
+        for (int i = 1; i < rect.length; i++) {
+            int[] current = rect[i];
+
+            if (prevEnd <= current[dim]) {
+                line++;
+            }
+
+            prevEnd = Math.max(prevEnd, current[dim + 2]);
+
+            if (line == 2) return true;
+        }
+
+        return false;
     }
 
     public boolean mySol(int n, int[][] rect) {
