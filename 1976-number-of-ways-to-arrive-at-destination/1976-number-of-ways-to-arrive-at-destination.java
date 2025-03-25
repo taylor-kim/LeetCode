@@ -1,9 +1,54 @@
 class Solution {
     public int countPaths(int n, int[][] roads) {
-        return official_dijkstra(n, roads);
+        return official_floyd(n, roads);
     }
 
-    public int mySol2(int n, int[][] roads) {
+    public int official_floyd(int n, int[][] roads) {
+        long[][][] costs = new long[n][n][2];
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i == j) {
+                    costs[i][j][0] = 0;
+                    costs[i][j][1] = 1;
+                } else {
+                    costs[i][j][0] = (long)1e12;
+                    costs[i][j][1] = 0;
+                }
+            }
+        }
+
+        for (int[] road : roads) {
+            costs[road[0]][road[1]][0] = road[2];
+            costs[road[0]][road[1]][1] = 1;
+
+            costs[road[1]][road[0]][0] = road[2];
+            costs[road[1]][road[0]][1] = 1;
+        }
+
+        int mod = (int)1e9 + 7;
+
+        for (int k = 0; k < n; k++) {
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < n; j++) {
+                    if (i != k && j != k && i != j) {
+                        long newCost = costs[i][k][0] + costs[k][j][0];
+
+                        if (newCost < costs[i][j][0]) {
+                            costs[i][j][0] = newCost;
+                            costs[i][j][1] = (costs[i][k][1] * costs[k][j][1]) % mod;
+                        } else if (newCost == costs[i][j][0]) {
+                            costs[i][j][1] = (costs[i][j][1] + ((costs[i][k][1] * costs[k][j][1]) % mod)) % mod;
+                        }
+                    }
+                }
+            }
+        }
+
+        return (int)costs[0][n - 1][1];
+    }
+
+    public int mySol2_floyd_fail(int n, int[][] roads) {
         int ans = 0;
 
         int[][] costs = new int[n][n];
