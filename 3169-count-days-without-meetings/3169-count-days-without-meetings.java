@@ -19,6 +19,8 @@ class Solution {
         int ans = prevDay - 1;
         int pSum = 0;
 
+        System.out.println(treeMap);
+
         for (int day : treeMap.keySet()) {
             int count = treeMap.get(day);
 
@@ -26,7 +28,13 @@ class Solution {
                 ans += day - prevDay;
             }
 
+            int oldPsum = pSum;
+
             pSum += count;
+
+            // System.out.println(String.format("prevDay:%d, day:%d, oldPsum:%d, pSum:%d, count:%d, ans:%d",
+            //     prevDay, day, oldPsum, pSum, count, ans));
+
             prevDay = day;
         }
 
