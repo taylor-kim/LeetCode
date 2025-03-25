@@ -1,9 +1,9 @@
 class Solution {
     public int countDays(int days, int[][] meetings) {
-        return try_lineSweep_with_treemap(days, meetings);
+        return official_lineSweep_with_treemap(days, meetings);
     }
 
-    public int try_lineSweep_with_treemap(int days, int[][] meetings) {
+    public int official_lineSweep_with_treemap(int days, int[][] meetings) {
         TreeMap<Integer, Integer> treeMap = new TreeMap();
         int prevDay = days;
 
@@ -18,8 +18,6 @@ class Solution {
 
         int ans = prevDay - 1;
         int pSum = 0;
-
-        System.out.println(treeMap);
 
         for (int day : treeMap.keySet()) {
             int count = treeMap.get(day);
