@@ -1,6 +1,38 @@
 class Solution {
     public int countDays(int days, int[][] meetings) {
-        return mySol2(days, meetings);
+        return try_lineSweep_with_treemap(days, meetings);
+    }
+
+    public int try_lineSweep_with_treemap(int days, int[][] meetings) {
+        TreeMap<Integer, Integer> treeMap = new TreeMap();
+        int prevDay = days;
+
+        for (int[] meeting : meetings) {
+            int start = meeting[0], end = meeting[1];
+
+            treeMap.put(start, treeMap.getOrDefault(start, 0) + 1);
+            treeMap.put(end + 1, treeMap.getOrDefault(end + 1, 0) - 1);
+
+            prevDay = Math.min(prevDay, start);
+        }
+
+        int ans = prevDay - 1;
+        int pSum = 0;
+
+        for (int day : treeMap.keySet()) {
+            int count = treeMap.get(day);
+
+            if (pSum == 0) {
+                ans += day - prevDay;
+            }
+
+            pSum += count;
+            prevDay = day;
+        }
+
+        ans += days - prevDay + 1;
+
+        return ans;
     }
 
     public int mySol2(int days, int[][] meetings) {
