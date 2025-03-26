@@ -50,15 +50,18 @@ class Solution {
                 i2++;
             } else {
                 int start = Math.max(d1[0], d2[0]);
-                int end = Math.min(d1[1], d2[1]);
-
-                ans.add(new int[] {start, end});
+                // int end = Math.min(d1[1], d2[1]);
+                int end = 0;
 
                 if (d1[1] < d2[1]) {
                     i1++;
+                    end = d1[1];
                 } else {
                     i2++;
+                    end = d2[1];
                 }
+
+                ans.add(new int[] {start, end});
             }
         }
 
