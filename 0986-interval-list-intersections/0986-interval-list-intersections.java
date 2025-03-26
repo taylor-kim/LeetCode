@@ -1,6 +1,6 @@
 class Solution {
     public int[][] intervalIntersection(int[][] firstList, int[][] secondList) {
-        return mySol(firstList, secondList);
+        return others_good_condition(firstList, secondList);
     }
 
     public int[][] tryLineSweep(int[][] list1, int[][] list2) {
@@ -29,6 +29,30 @@ class Solution {
 
             pSum += count;
             prevTime = time;
+        }
+
+        return ans.toArray(int[][]::new);
+    }
+
+    public int[][] others_good_condition(int[][] list1, int[][] list2) {
+        List<int[]> ans = new ArrayList();
+
+        int i1 = 0;
+        int i2 = 0;
+
+        while (i1 < list1.length && i2 < list2.length) {
+            int[] d1 = list1[i1];
+            int[] d2 = list2[i2];
+
+            if (d1[0] <= d2[1] && d1[1] >= d2[0]) {
+                ans.add(new int[] {Math.max(d1[0], d2[0]), Math.min(d1[1], d2[1])});
+            }
+
+            if (d1[1] <= d2[1]) {
+                i1++;
+            } else {
+                i2++;
+            }
         }
 
         return ans.toArray(int[][]::new);
