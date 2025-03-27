@@ -25,13 +25,23 @@ class Solution {
             int left = first[i];
             int right = last[i];
 
-            Set<Integer> between = new HashSet();
+            // Set<Integer> between = new HashSet();
+
+            // for (int mid = left + 1; mid < right; mid++) {
+            //     between.add(s.charAt(mid) - 'a');
+            // }
+
+            // ans += between.size();
+
+            int[] freq = new int[26];
 
             for (int mid = left + 1; mid < right; mid++) {
-                between.add(s.charAt(mid) - 'a');
+                freq[s.charAt(mid) - 'a']++;
             }
 
-            ans += between.size();
+            for (int count : freq) {
+                if (count > 0) ans++;
+            }
         }
 
         return ans;
