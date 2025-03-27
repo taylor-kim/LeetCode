@@ -1,6 +1,6 @@
 class Solution {
     public int minimumIndex(List<Integer> nums) {
-        return try_better(nums);
+        return mySol2(nums);
     }
 
     public int try_better(List<Integer> nums) {
