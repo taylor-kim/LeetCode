@@ -1,6 +1,30 @@
 class Solution {
     public int minimumIndex(List<Integer> nums) {
-        return mySol2(nums);
+        return try_better(nums);
+    }
+
+    public int try_better(List<Integer> nums) {
+        int n = nums.size();
+
+        int[] xAndCount = findXAndCount(nums);
+        int x = xAndCount[0];
+        int totalCount = xAndCount[1];
+
+        int count = 0;
+
+        for (int i = 0; i < n - 1; i++) {
+            if (nums.get(i) == x) count++;
+
+            int leftLength = i + 1;
+            int rightLength = n - leftLength;
+
+            if (count >= (leftLength / 2) + 1
+                && totalCount - count >= (rightLength / 2) + 1) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     public int mySol2(List<Integer> nums) {
@@ -59,6 +83,25 @@ class Solution {
         }
 
         return lo;
+    }
+
+    private int[] findXAndCount(List<Integer> nums) {
+        int target = 0;
+        int count = 0;
+
+        Map<Integer, Integer> freqMap = new HashMap();
+
+        for (int num : nums) {
+            freqMap.put(num, freqMap.getOrDefault(num, 0) + 1);
+            if (target == num) {
+                count++;
+            } else if (count-- == 0) {
+                target = num;
+                count = 1;
+            }
+        }
+
+        return new int[] {target, freqMap.get(target)};
     }
 
     private int findX(List<Integer> nums) {
