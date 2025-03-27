@@ -17,14 +17,14 @@ class Solution {
                 if (lMax < height[left]) {
                     lMax = height[left];
                 } else {
-                    ans += lMax - height[left];
+                    ans += Math.min(lMax, height[right]) - height[left];
                 }
                 left++;
             } else {
                 if (rMax < height[right]) {
                     rMax = height[right];
                 } else {
-                    ans += rMax - height[right];
+                    ans += Math.min(rMax, height[left]) - height[right];
                 }
                 right--;
             }
