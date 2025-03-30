@@ -1,38 +1,43 @@
 class Bank {
-
-    long[] balance;
-    int n;
+    private int n;
+    private long[] balance;
 
     public Bank(long[] balance) {
         this.n = balance.length;
-        this.balance = new long[n + 1];
-        // for 1 based indexing
-        for (int i = 0; i < n; i++)
-            this.balance[i + 1] = balance[i];
+        this.balance = balance;
     }
     
     public boolean transfer(int account1, int account2, long money) {
-        // account1 ---> account2, check valid account numbers
-        if (account1 > n || account2 > n || balance[account1] < money) 
-            return false;
-        balance[account1] -= money;
-        balance[account2] += money;
-        return true;
+        if (account1 > n || account2 > n) return false;
+
+        if (!withdraw(account1, money)) return false;
+
+        return deposit(account2, money);
     }
     
     public boolean deposit(int account, long money) {
-        // check valid account number
-        if (account > n)
-            return false;
-        balance[account] += money;
+        if (account > n) return false;
+
+        balance[account - 1] += money;
+
         return true;
     }
     
     public boolean withdraw(int account, long money) {
-        // check valid account numbers
-        if (account > n || balance[account] < money)
-            return false;
-        balance[account] -= money;
+        if (account > n) return false;
+
+        if (balance[account - 1] < money) return false;
+
+        balance[account - 1] -= money;
+
         return true;
     }
 }
+
+/**
+ * Your Bank object will be instantiated and called as such:
+ * Bank obj = new Bank(balance);
+ * boolean param_1 = obj.transfer(account1,account2,money);
+ * boolean param_2 = obj.deposit(account,money);
+ * boolean param_3 = obj.withdraw(account,money);
+ */
