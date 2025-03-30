@@ -1,6 +1,41 @@
 class Solution {
     public List<Integer> partitionLabels(String s) {
-        return mySol(s);
+        return try_merge_intervals(s);
+    }
+
+    public List<Integer> try_merge_intervals(String s) {
+        int n = s.length();
+
+        int[] firstIndex = new int[26];
+        Arrays.fill(firstIndex, -1);
+
+        int[] lastIndex = new int[26];
+        for (int i = 0; i < n; i++) {
+            lastIndex[s.charAt(i) - 'a'] = i;
+        }
+
+        int start = 0, end = 0;
+        List<Integer> ans = new ArrayList();
+
+        for (int i = 0; i < n; i++) {
+            char c = s.charAt(i);
+
+            if (firstIndex[c - 'a'] == -1) {
+                firstIndex[c - 'a'] = i;
+            }
+
+            if (end < firstIndex[c - 'a']) {
+                ans.add(end - start + 1);
+                start = i;
+                end = i;
+            }
+
+            end = Math.max(end, lastIndex[c - 'a']);
+        }
+
+        ans.add(end - start + 1);
+
+        return ans;
     }
 
     public List<Integer> mySol(String s) {
