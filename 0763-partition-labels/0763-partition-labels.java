@@ -14,18 +14,17 @@ class Solution {
             lastIndex[s.charAt(i) - 'a'] = i;
         }
 
+        int left = 0;
         int farthest = 0;
-        int count = 0;
 
-        for (int i = 0; i < n; i++) {
-            char c = s.charAt(i);
-            count++;
+        for (int right = 0; right < n; right++) {
+            char c = s.charAt(right);
 
             farthest = Math.max(farthest, lastIndex[c - 'a']);
 
-            if (farthest == i) {
-                ans.add(count);
-                count = 0;
+            if (farthest == right) {
+                ans.add(right - left + 1);
+                left = right + 1;
             }
         }
 
