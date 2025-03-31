@@ -4,7 +4,7 @@ class Solution {
     }
 
     public long hint_and_king_god_doo(int[] weights, int k) {
-        if (k == 1 || weights.length == k) return 0l;
+        // if (k == 1 || weights.length == k) return 0l;
 
         Queue<Integer> minHeap = new PriorityQueue<>((a, b) -> {
             return b - a;
