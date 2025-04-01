@@ -1,6 +1,17 @@
 class Solution {
     public long mostPoints(int[][] questions) {
-        return mySol(questions);
+        return try_bottomup(questions);
+    }
+
+    public long try_bottomup(int[][] questions) {
+        int n = questions.length;
+        long[] dp = new long[n + 1];
+
+        for (int i = n - 1; i >= 0; i--) {
+            dp[i] = Math.max(dp[i + 1], questions[i][0] + dp[ Math.min(i + questions[i][1] + 1, n) ]);
+        }
+
+        return dp[0];
     }
 
     public long mySol(int[][] questions) {
