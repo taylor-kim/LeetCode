@@ -1,6 +1,32 @@
 class Solution {
     public long maximumTripletValue(int[] nums) {
-        return try_prefix_suffix_sum(nums);
+        return try_greedy_spaceopt(nums);
+    }
+
+    public long try_greedy_spaceopt(int[] nums) {
+        int n = nums.length;
+        long ans = 0, imax = Math.max(nums[0], nums[1]), dmax = Math.max(0, nums[0] - nums[1]);
+
+        for (int k = 2; k < n; k++) {
+            ans = Math.max(ans, dmax * nums[k]);
+            dmax = Math.max(dmax, imax - nums[k]);
+            imax = Math.max(imax, nums[k]);
+        }
+
+        return ans;
+    }
+
+    public long official_greedy_spaceopt(int[] nums) {
+        int n = nums.length;
+        long ans = 0, imax = 0, dmax = 0;
+
+        for (int k = 0; k < n; k++) {
+            ans = Math.max(ans, dmax * nums[k]);
+            dmax = Math.max(dmax, imax - nums[k]);
+            imax = Math.max(imax, nums[k]);
+        }
+
+        return ans;
     }
 
     public long try_prefix_suffix_sum(int[] nums) {
