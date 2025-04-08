@@ -1,99 +1,59 @@
 class Solution {
     public boolean canPartition(int[] nums) {
-        return niceDP(nums);
+        return try_bottomup(nums);
     }
 
-    public boolean niceDP(int[] nums) {
+    public boolean try_bottomup(int[] nums) {
         int sum = 0;
-        int n = nums.length;
-        
-        for(int i : nums) sum+=i;
-        
-        if(sum%2!=0) return false;
-        
-        sum /= 2;
-        
-        boolean[] dp = new boolean[sum + 1];
-        dp[0] = true;
 
         for (int num : nums) {
-            for (int i = sum; i > 0; i--) {
-                if (i >= num) {
-                    dp[i] = dp[i] || dp[i - num];
+            sum += num;
+        }
+
+        if (sum % 2 == 1) return false;
+
+        sum /= 2;
+
+        int n = nums.length;
+
+        boolean[][] dp = new boolean[n + 1][sum + 1];
+        dp[n][0] = true;
+
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = 0; j <= sum; j++) {
+                if (j >= nums[i]) {
+                    dp[i][j] = dp[i + 1][j - nums[i]] || dp[i + 1][j];
+                } else {
+                    dp[i][j] |= dp[i + 1][j];
                 }
             }
         }
-        
-        return dp[sum];
+
+        return dp[0][sum];
     }
 
-    Boolean mem[][];
-    public boolean othersMemoization(int[] nums) {
+    public boolean try_20250408(int[] nums) {
         int sum = 0;
-        int n = nums.length;
-        
-        for(int i : nums) sum+=i;
-        
-        if(sum%2!=0) return false;
-        
-        sum /= 2;
-        
-        mem = new Boolean[n+1][sum+1];
-        
-        return subsetSum(nums,0,sum);
-    }
-    
-    boolean subsetSum(int[] nums, int pos, int sum){
-        if(sum==0) return true;
-        
-        else if(pos>=nums.length || sum<0) return false;
-        
-        if(mem[pos][sum]!=null) return mem[pos][sum];
-        
-        return mem[pos][sum] = subsetSum(nums,pos+1,sum-nums[pos]) ||
-                                subsetSum(nums,pos+1,sum);
-        
-        
-    }
-
-    public boolean mySol(int[] nums) {
-        int total = 0;
 
         for (int num : nums) {
-            total += num;
+            sum += num;
         }
 
-        if (total % 2 == 1) {
-            return false;
-        }
+        if (sum % 2 == 1) return false;
 
-        total /= 2;
-
-        int[][] memo = new int[nums.length][total + 1];
-
-        for (int i = 0; i < nums.length; i++) {
-            Arrays.fill(memo[i], -1);
-        }
-
-        return mySol(nums, total, 0, memo);
+        return topdown(nums, 0, sum / 2, new Boolean[nums.length][sum / 2 + 1]);
     }
 
-    public boolean mySol(int[] nums, int total, int index, int[][] memo) {
-        if (total == 0) {
-            return true;
-        }
+    private boolean topdown(int[] nums, int index, int remain, Boolean[][] memo) {
+        if (remain < 0) return false;
 
-        if (index >= nums.length || total < 0) {
-            return false;
-        }
+        if (remain == 0) return true;
 
-        if (memo[index][total] != -1) {
-            return memo[index][total] == 1;
-        }
+        if (index >= nums.length) return remain == 0;
 
-        memo[index][total] = (mySol(nums, total - nums[index], index + 1, memo) 
-                                || mySol(nums, total, index + 1, memo)) ? 1 : 0;
+        if (memo[index][remain] != null) return memo[index][remain];
 
-        return memo[index][total] == 1;
+        return memo[index][remain] = topdown(nums, index + 1, remain - nums[index], memo)
+            || topdown(nums, index + 1, remain, memo);
     }
 }
