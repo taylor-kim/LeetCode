@@ -1,6 +1,18 @@
 class Solution {
     public int minOperations(int[] nums, int k) {
-        return others_linear(nums, k);
+        return try_20250409(nums, k);
+    }
+
+    public int try_20250409(int[] nums, int k) {
+        Set<Integer> greater = new HashSet();
+
+        for (int num : nums) {
+            if (num < k) return -1;
+
+            if (num > k) greater.add(num);
+        }
+
+        return greater.size();
     }
 
     public int others_linear(int[] nums, int k) {
