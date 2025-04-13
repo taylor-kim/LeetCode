@@ -18,7 +18,7 @@ class Solution {
     private long pow(long base, long exp, int mod, Map<Long, Long> memo) {
         if (exp == 0) return 1l;
 
-        if (memo.containsKey(exp)) return memo.get(exp);
+        // if (memo.containsKey(exp)) return memo.get(exp);
 
         long sqrt = pow(base, exp / 2, mod, memo) % mod;
 
@@ -28,8 +28,8 @@ class Solution {
             ret = (ret * base) % mod;
         }
 
-        memo.put(exp, ret);
+        // memo.put(exp, ret);
 
-        return memo.get(exp);
+        return ret;
     }
 }
