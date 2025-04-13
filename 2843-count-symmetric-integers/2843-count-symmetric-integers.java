@@ -1,6 +1,6 @@
 class Solution {
     public int countSymmetricIntegers(int low, int high) {
-        return official(low, high);
+        return mySol(low, high);
     }
 
     public int official(int low, int high) {
@@ -40,12 +40,9 @@ class Solution {
         int sum = 0;
         int half = n / 2;
 
-        for (int i = 0; i < n; i++) {
-            if (i < half) {
-                sum += arr[i];
-            } else {
-                sum -= arr[i];
-            }
+        for (int i = 0; i < half; i++) {
+            sum += arr[i];
+            sum -= arr[n - i - 1];
         }
 
         return sum == 0;
