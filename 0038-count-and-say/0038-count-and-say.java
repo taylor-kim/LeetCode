@@ -1,63 +1,40 @@
 class Solution {
     public String countAndSay(int n) {
-        return try_20240901_topdown(n);
+        return mySol(n);
     }
 
-    public String try_20240901_topdown(int n) {
+    public String mySol(int n) {
+        return topdown(n);
+    }
+
+    public String topdown(int n) {
         if (n == 1) return "1";
 
-        String s = try_20240901_topdown(n - 1);
+        String s = topdown(n - 1);
 
-        char prev = '0';
-        int count = 0;
+        return encode(s);
+    }
 
+    private String encode(String s) {
         StringBuilder sb = new StringBuilder();
+
+        int count = 1;
+        char prev = 'x';
 
         for (char c : s.toCharArray()) {
             if (prev == c) {
                 count++;
             } else {
-                if (prev != '0') {
+                if (prev != 'x') {
                     sb.append(count).append(prev);
                 }
-
-                prev = c;
                 count = 1;
+                prev = c;
             }
         }
 
         sb.append(count).append(prev);
 
         return sb.toString();
-    }
-
-    public String try_20240901(int n) {
-        StringBuilder ans = new StringBuilder();
-        ans.append("1");
-
-        while (--n > 0) {
-            StringBuilder next = new StringBuilder();
-
-            char prev = '0';
-            int count = 1;
-
-            for (char c : ans.toString().toCharArray()) {
-                if (prev == c) {
-                    count++;
-                } else {
-                    if (prev != '0') {
-                        next.append(count).append(prev);
-                    }
-                    prev = c;
-                    count = 1;
-                }
-            }
-
-            next.append(count).append(prev);
-
-            ans = next;
-        }
-
-        return ans.toString();
     }
 }
