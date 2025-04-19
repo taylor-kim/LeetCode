@@ -3,6 +3,11 @@ class Solution {
         return official_good_bs(nums, lower, upper);
     }
 
+    public long try_20250419(int[] nums, int lower, int upper) {
+
+        return 0;
+    }
+
     public long official_good_bs(int[] nums, int lower, int upper) {
         Arrays.sort(nums);
         return lower_bound(nums, upper + 1) - lower_bound(nums, lower);
