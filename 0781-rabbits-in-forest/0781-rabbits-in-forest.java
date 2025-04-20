@@ -15,11 +15,13 @@ class Solution {
         for (int number : map.keySet()) {
             int reporters = map.get(number);
 
-            if (number >= reporters) {
-                ans += number;
-            } else {
-                ans += ((reporters + number - 1) / number) * number;
-            }
+            // if (number >= reporters) {
+            //     ans += number;
+            // } else {
+            //     ans += ((reporters + number - 1) / number) * number;
+            // }
+
+            ans += ((reporters + number - 1) / number) * number;
         }
 
         return ans;
