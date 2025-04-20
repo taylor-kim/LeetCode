@@ -12,13 +12,15 @@ class Solution {
             map.put(num + 1, map.getOrDefault(num + 1, 0) + 1);
         }
 
-        int count = 0;
+        for (int number : map.keySet()) {
+            int reporters = map.get(number);
 
-        // while ((count = reduce(map)) > 0) {
-        //     ans += count;
-        // }
-
-        ans = reduce(map);
+            if (number >= reporters) {
+                ans += number;
+            } else {
+                ans += ((reporters + number - 1) / number) * number;
+            }
+        }
 
         return ans;
     }
@@ -34,12 +36,13 @@ class Solution {
             if (numberOfSameColor >= rabbits) {
                 ans += numberOfSameColor;
             } else {
-                int colors = rabbits / numberOfSameColor;
+                int colors = (rabbits + numberOfSameColor - 1) / numberOfSameColor;
                 // int odd = colors % numberOfSameColor;
 
                 // System.out.println(String.format(""))
 
-                ans += (colors * numberOfSameColor) + (rabbits % numberOfSameColor == 0 ? 0 : numberOfSameColor);
+                // ans += (colors * numberOfSameColor) + (rabbits % numberOfSameColor == 0 ? 0 : numberOfSameColor);
+                ans += colors * numberOfSameColor;
             }
         }
 
