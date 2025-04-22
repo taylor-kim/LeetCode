@@ -51,7 +51,7 @@ class Solution {
 
     public long official_good_bs(int[] nums, int lower, int upper) {
         Arrays.sort(nums);
-        return lower_bound(nums, upper + 1) - lower_bound(nums, lower);
+        return lower_bound(nums, upper) - lower_bound(nums, lower - 1);
     }
 
     // Calculate the number of pairs with sum less than `value`.
@@ -62,7 +62,7 @@ class Solution {
             int sum = nums[left] + nums[right];
             // If sum is less than value, add the size of window to result and move to the
             // next index.
-            if (sum < value) {
+            if (sum <= value) {
                 result += (right - left);
                 left++;
             } else {
@@ -121,7 +121,7 @@ class Solution {
 
         // if (lo >= nums.length || nums[lo] < target) return -1;
 
-        if (lo >= nums.length) return -1;
+        // if (lo >= nums.length) return -1;
 
         return lo;
     }
@@ -144,7 +144,7 @@ class Solution {
 
         // if (lo < 0 || nums[lo] > target) return -1;
 
-        if (lo < 0) return -1;
+        // if (lo < 0) return -1;
 
         return lo;
     }
