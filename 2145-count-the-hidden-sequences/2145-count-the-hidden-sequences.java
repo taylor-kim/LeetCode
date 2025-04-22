@@ -1,6 +1,21 @@
 class Solution {
     public int numberOfArrays(int[] differences, int lower, int upper) {
-        return try_simple(differences, lower, upper);
+        return official_simple(differences, lower, upper);
+    }
+
+    public int official_simple(int[] differences, int lower, int upper) {
+        int current = 1, max = 1, min = 1;
+
+        for (int diff : differences) {
+            current += diff;
+
+            max = Math.max(max, current);
+            min = Math.min(min, current);
+
+            if (max - min > upper - lower) return 0;
+        }
+
+        return upper - max + min - lower + 1;
     }
 
     public int try_simple(int[] differences, int lower, int upper) {
