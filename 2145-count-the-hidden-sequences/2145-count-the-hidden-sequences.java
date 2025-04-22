@@ -15,7 +15,7 @@ class Solution {
             if (max - min > upper - lower) return 0;
         }
 
-        return upper - max + min - lower + 1;
+        return (upper - lower) - (max - min) + 1;
     }
 
     public int try_simple(int[] differences, int lower, int upper) {
