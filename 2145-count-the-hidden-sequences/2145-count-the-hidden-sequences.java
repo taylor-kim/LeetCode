@@ -4,17 +4,17 @@ class Solution {
     }
 
     public int try_simple(int[] differences, int lower, int upper) {
-        int prev = lower;
-        int min = lower;
-        int max = lower;
+        long prev = lower;
+        long min = lower;
+        long max = lower;
 
         for (int i = 0; i < differences.length; i++) {
-            int next = differences[i] + prev;
+            long next = differences[i] + prev;
 
             min = Math.min(min, next);
             max = Math.max(max, next);
 
-            System.out.println(String.format("min:%d, max:%d, next:%d", min, max, next));
+            // System.out.println(String.format("min:%d, max:%d, next:%d", min, max, next));
 
             prev = next;
         }
@@ -31,7 +31,7 @@ class Solution {
 
         if (max > upper || min < lower) return 0;
 
-        return upper - max + min - lower + 1;
+        return (int)(upper - max + min - lower + 1);
     }
 
     public int mySol2(int[] differences, int lower, int upper) {
