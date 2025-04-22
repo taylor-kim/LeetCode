@@ -1,11 +1,52 @@
 class Solution {
     public long countFairPairs(int[] nums, int lower, int upper) {
-        return official_good_bs(nums, lower, upper);
+        return mySol2(nums, lower, upper);
     }
 
-    public long try_20250419(int[] nums, int lower, int upper) {
+    public long try_20250419_treemap_fail(int[] nums, int lower, int upper) {
+        Arrays.sort(nums);
 
-        return 0;
+        TreeMap<Integer, int[]> map = new TreeMap();
+
+        for (int i = 0; i < nums.length; i++) {
+            int num = nums[i];
+
+            if (map.containsKey(num)) {
+                map.get(num)[1] = i;
+            } else {
+                map.put(num, new int[] {i, i});
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int key : map.keySet()) {
+            sb
+            .append(key)
+            .append(":")
+            .append(String.format("[%d, %d], ", map.get(key)[0], map.get(key)[1]));
+        }
+
+        System.out.println(sb.toString());
+
+        int ans = 0;
+
+        for (int num : nums) {
+            Integer leftKey = map.floorKey(lower - num);
+
+            if (leftKey == null || leftKey > num) continue;
+
+            Integer rightKey = map.ceilingKey(upper - num);
+
+            if (rightKey == null || rightKey < num) continue;
+
+            System.out.println(String.format("num:%d, leftKey:%d, rightKey:%d, rIndex:%d, lIndex:%d",
+            num, leftKey, rightKey, map.get(rightKey)[1], map.get(leftKey)[0]));
+
+            ans += (map.get(rightKey)[1] - map.get(leftKey)[0]) + 1;
+        }
+
+        return ans;
     }
 
     public long official_good_bs(int[] nums, int lower, int upper) {
@@ -78,7 +119,9 @@ class Solution {
             }
         }
 
-        if (lo >= nums.length || nums[lo] < target) return -1;
+        // if (lo >= nums.length || nums[lo] < target) return -1;
+
+        if (lo >= nums.length) return -1;
 
         return lo;
     }
@@ -99,7 +142,9 @@ class Solution {
 
         lo--;
 
-        if (lo < 0 || nums[lo] > target) return -1;
+        // if (lo < 0 || nums[lo] > target) return -1;
+
+        if (lo < 0) return -1;
 
         return lo;
     }
