@@ -1,4 +1,4 @@
-<h2><a href="https://leetcode.com/problems/count-of-interesting-subarrays">2845. Count of Interesting Subarrays</a></h2><h3>Medium</h3><hr><p>You are given a <strong>0-indexed</strong> integer array <code>nums</code>, an integer <code>modulo</code>, and an integer <code>k</code>.</p>
+<h2><a href="https://leetcode.com/problems/count-of-interesting-subarrays/?envType=daily-question&envId=2025-04-25">2845. Count of Interesting Subarrays</a></h2><h3>Medium</h3><hr><p>You are given a <strong>0-indexed</strong> integer array <code>nums</code>, an integer <code>modulo</code>, and an integer <code>k</code>.</p>
 
 <p>Your task is to find the count of subarrays that are <strong>interesting</strong>.</p>
 
