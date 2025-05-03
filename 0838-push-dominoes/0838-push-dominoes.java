@@ -1,35 +1,60 @@
 class Solution {
     public String pushDominoes(String dominoes) {
-        int N = dominoes.length();
-        int[] indexes = new int[N+2];
-        char[] symbols = new char[N+2];
-        int len = 1;
-        indexes[0] = -1;
-        symbols[0] = 'L';
+        return mySol(dominoes);
+    }
 
-        for (int i = 0; i < N; ++i)
-            if (dominoes.charAt(i) != '.') {
-                indexes[len] = i;
-                symbols[len++] = dominoes.charAt(i);
+    public String mySol(String dominoes) {
+        int n = dominoes.length();
+        int[] toRight = new int[n];
+        int[] toLeft = new int[n];
+
+        toRight[0] = dominoes.charAt(0) == 'R' ? 1 : 0;
+        toLeft[n - 1] = dominoes.charAt(n - 1) == 'L' ? 1 : 0;
+
+        for (int i = 0; i < n; i++) {
+            int j = n - i - 1;
+
+            char lc = dominoes.charAt(i);
+            char rc = dominoes.charAt(j);
+
+            // toRight[i] = lc != 'L' ? toRight[i - 1] + (lc == 'R' ? 1 : 0) : 0;
+            // toLeft[j] = rc != 'R' ? toLeft[j + 1] + (rc == 'L' ? 1 : 0) : 0;
+
+            if (lc == 'R') {
+                toRight[i] = 1;
+            } else if (lc == '.' && i - 1 >= 0 && toRight[i - 1] != 0) {
+                toRight[i] = toRight[i - 1] + 1;
             }
 
-        indexes[len] = N;
-        symbols[len++] = 'R';
-
-        char[] ans = dominoes.toCharArray();
-        for (int index = 0; index < len - 1; ++index) {
-            int i = indexes[index], j = indexes[index+1];
-            char x = symbols[index], y = symbols[index+1];
-            char write;
-            if (x == y) {
-                for (int k = i+1; k < j; ++k)
-                    ans[k] = x;
-            } else if (x > y) { // RL
-                for (int k = i+1; k < j; ++k)
-                    ans[k] = k-i == j-k ? '.' : k-i < j-k ? 'R' : 'L';
+            if (rc == 'L') {
+                toLeft[j] = 1;
+            } else if (rc == '.' && j + 1 < n && toLeft[j + 1] != 0) {
+                toLeft[j] = toLeft[j + 1] + 1;
             }
         }
 
-        return String.valueOf(ans);
+        StringBuilder sb = new StringBuilder();
+
+        // System.out.println(Arrays.toString(toRight));
+        // System.out.println(Arrays.toString(toLeft));
+
+        //".L.R...LR..L.."
+        //"00012340123000"
+        //"21004321032100"
+        //""
+
+        for (int i = 0; i < n; i++) {
+            if (toRight[i] == toLeft[i]) {
+                sb.append(".");
+            } else if (toRight[i] == 0) {
+                sb.append("L");
+            } else if (toLeft[i] == 0) {
+                sb.append("R");
+            } else {
+                sb.append(toRight[i] < toLeft[i] ? "R" : "L");
+            }
+        }
+
+        return sb.toString();
     }
 }
