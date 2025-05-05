@@ -1,6 +1,34 @@
 class Solution {
     public int minDominoRotations(int[] tops, int[] bottoms) {
-        return mySol3(tops, bottoms);
+        return others_greedy(tops, bottoms);
+    }
+
+    private int others_greedy(int[] tops, int[] bottoms) {
+        int ans = greedy(tops, bottoms, tops[0]);
+
+        if (tops[0] != bottoms[0]) {
+            ans = Math.min(ans, greedy(tops, bottoms, bottoms[0]));
+        }
+
+        return ans == tops.length ? -1 : ans;
+    }
+
+    private int greedy(int[] tops, int[] bottoms, int target) {
+        int n = tops.length;
+
+        int rotateTop = 0;
+        int rotateBottom = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (tops[i] != target && bottoms[i] != target) {
+                return n;
+            }
+
+            if (tops[i] != target) rotateTop++;
+            if (bottoms[i] != target) rotateBottom++;
+        }
+
+        return Math.min(rotateTop, rotateBottom);
     }
 
     public int mySol3(int[] tops, int[] bottoms) {
