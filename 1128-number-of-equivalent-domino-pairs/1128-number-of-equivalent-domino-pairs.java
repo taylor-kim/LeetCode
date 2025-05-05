@@ -1,15 +1,30 @@
 class Solution {
-
     public int numEquivDominoPairs(int[][] dominoes) {
-        int[] num = new int[100];
-        int ret = 0;
+        return mySol(dominoes);
+    }
+
+    public int mySol(int[][] dominoes) {
+        Map<Integer, Integer> map = new HashMap();
+
+        int ans = 0;
+
         for (int[] domino : dominoes) {
-            int val = domino[0] < domino[1]
-                ? domino[0] * 10 + domino[1]
-                : domino[1] * 10 + domino[0];
-            ret += num[val];
-            num[val]++;
+            int key1 = getKey(domino[0], domino[1]);
+
+            ans += map.getOrDefault(key1, 0);
+
+            map.put(key1, map.getOrDefault(key1, 0) + 1);
         }
-        return ret;
+
+        return ans;
+    }
+
+    private int getKey(int a, int b) {
+        if (a < b) {
+            a += b;
+            b = a - b;
+            a -= b;
+        }
+        return a * 10 + b;
     }
 }
