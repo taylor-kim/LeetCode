@@ -7,7 +7,9 @@ class Solution {
         int top = mySol2(tops, bottoms);
         int bot = mySol2(bottoms, tops);
 
-        return top == -1 && bot == -1 ? -1 : Math.min(top, bot);
+        int ans = Math.min(top, bot);
+
+        return ans == tops.length ? -1 : ans;
     }
 
     public int mySol2(int[] tops, int[] bottoms) {
@@ -35,7 +37,7 @@ class Solution {
             }
         }
 
-        return ans == n ? -1 : ans;
+        return ans;
     }
 
     public int mySol_fail(int[] tops, int[] bottoms) {
