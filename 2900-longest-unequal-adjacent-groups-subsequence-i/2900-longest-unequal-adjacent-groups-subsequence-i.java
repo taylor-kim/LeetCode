@@ -1,6 +1,21 @@
 class Solution {
     public List<String> getLongestSubsequence(String[] words, int[] groups) {
-        return mySol(words, groups);
+        return official_greedy(words, groups);
+    }
+
+    public List<String> official_greedy(String[] words, int[] groups) {
+        List<String> ans = new ArrayList();
+
+        int prev = -1;
+
+        for (int i = 0; i < words.length; i++) {
+            if (prev == -1 || groups[prev] != groups[i]) {
+                ans.add(words[i]);
+                prev = i;
+            }
+        }
+
+        return ans;
     }
 
     public List<String> mySol(String[] words, int[] groups) {
