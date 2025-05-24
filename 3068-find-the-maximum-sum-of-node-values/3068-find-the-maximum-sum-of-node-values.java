@@ -4,21 +4,21 @@ class Solution {
     }
 
     public long official_topdown(int[] nums, int k, int[][] edges) {
-        return topdown(nums, 0, 1, k, new Long[nums.length][2]);
+        return topdown(nums, 0, 0, k, new Long[nums.length][2]);
     }
 
-    private long topdown(int[] nums, int index, int isEven, int k, Long[][] memo) {
+    private long topdown(int[] nums, int index, int changeCount, int k, Long[][] memo) {
         if (index >= nums.length) {
-            return isEven == 1 ? 0 : Integer.MIN_VALUE;
+            return changeCount % 2 == 0 ? 0 : Integer.MIN_VALUE;
         }
 
-        if (memo[index][isEven] != null) {
-            return memo[index][isEven];
+        if (memo[index][changeCount % 2] != null) {
+            return memo[index][changeCount % 2];
         }
 
-        long xor = (nums[index] ^ k) + topdown(nums, index + 1, isEven ^ 1, k, memo);
-        long noXor = nums[index] + topdown(nums, index + 1, isEven, k, memo);
+        long xor = (nums[index] ^ k) + topdown(nums, index + 1, changeCount + 1, k, memo);
+        long noXor = nums[index] + topdown(nums, index + 1, changeCount, k, memo);
 
-        return memo[index][isEven] = Math.max(xor, noXor);
+        return memo[index][changeCount % 2] = Math.max(xor, noXor);
     }
 }
