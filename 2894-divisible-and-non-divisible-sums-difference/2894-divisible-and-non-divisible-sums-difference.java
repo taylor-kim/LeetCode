@@ -18,7 +18,9 @@ class Solution {
          */
         int sum1 = (n * (1 + n) / 2) - sum2;
 
-        return sum1 - sum2;
+        // return sum1 - sum2;
+
+        return n * (1 + n) / 2 - k * (1 + k) * m;
     }
 
     public int mySol(int n, int m) {
