@@ -6,7 +6,7 @@ class Solution {
     public int mySol(int[][] board) {
         int n = board.length;
 
-        int roll = 0;
+        int roll = 1;
         int max = n * n;
 
         Queue<Integer> queue = new LinkedList();
@@ -21,10 +21,6 @@ class Solution {
             while (size-- > 0) {
                 int label = queue.poll();
 
-                if (label == max) {
-                    return roll;
-                }
-
                 for (int next = label + 1; next <= Math.min(label + 6, max); next++) {
                     int logicalRow = (next - 1) / n;
 
@@ -37,12 +33,13 @@ class Solution {
                     // System.out.println(String.format("label:%d, next:%d, logicalRow:%d, row:%d, col:%d"
                     //                                 , label, next, logicalRow, row, col));
 
-                    if (board[row][col] != -1 && !visit[board[row][col]]) {
-                        queue.add(board[row][col]);
-                        visit[board[row][col]] = true;
-                    } else if (board[row][col] == -1 && !visit[next]) {
-                        queue.add(next);
-                        visit[next] = true;
+                    int target = board[row][col] != -1 ? board[row][col] : next;
+
+                    if (target == max) return roll;
+
+                    if (!visit[target]) {
+                        queue.add(target);
+                        visit[target] = true;
                     }
                 }
             }
