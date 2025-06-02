@@ -1,6 +1,52 @@
 class Solution {
     public int candy(int[] ratings) {
-        return try_linear(ratings);
+        return try_linear2(ratings);
+    }
+
+    public int try_linear2(int[] ratings) {
+        int n = ratings.length;
+        int[] given = new int[n];
+
+        int ans = 0;
+
+        Stack<Integer> stack = new Stack<>();
+
+        for (int i = 0; i < n; i++) {
+            while (!stack.isEmpty() && ratings[stack.peek()] <= ratings[i]) {
+                int count = 1;
+
+                int index = stack.pop();
+
+                if (index - 1 >= 0 && ratings[index - 1] < ratings[index]) {
+                    count = given[index - 1] + 1;
+                }
+
+                if (index + 1 < n && ratings[index] > ratings[index + 1]) {
+                    count = Math.max(count, given[index + 1] + 1);
+                }
+
+                ans += given[index] = count;
+            }
+
+            stack.push(i);
+        }
+
+        while (!stack.isEmpty()) {
+            int index = stack.pop();
+            int count = 1;
+
+            if (index - 1 >= 0 && ratings[index - 1] < ratings[index]) {
+                count = given[index - 1] + 1;
+            }
+
+            if (index + 1 < n && ratings[index] > ratings[index + 1]) {
+                count = Math.max(count, given[index + 1] + 1);
+            }
+
+            ans += given[index] = count;
+        }
+
+        return ans;
     }
 
     public int try_linear(int[] ratings) {
