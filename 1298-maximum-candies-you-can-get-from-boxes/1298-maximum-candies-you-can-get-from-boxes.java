@@ -1,6 +1,50 @@
 class Solution {
     public int maxCandies(int[] status, int[] candies, int[][] keys, int[][] containedBoxes, int[] initialBoxes) {
-        return mySol2(status, candies, keys, containedBoxes, initialBoxes);
+        return refer_official(status, candies, keys, containedBoxes, initialBoxes);
+    }
+
+    public int refer_official(int[] status, int[] candies, int[][] keys, int[][] containedBoxes, int[] initialBoxes) {
+        Queue<Integer> queue = new LinkedList();
+        boolean[] visitBox = new boolean[status.length];
+
+        int ans = 0;
+
+        for (int init : initialBoxes) {
+            visitBox[init] = true;
+
+            if (status[init] == 1) {
+                queue.add(init);
+                status[init] = 2;
+                ans += candies[init];
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            int box = queue.poll();
+
+            for (int key : keys[box]) {
+                if (status[key] == 2) continue;
+
+                status[key] = 1;
+
+                if (visitBox[key]) {
+                    ans += candies[key];
+                    status[key] = 2;
+                    queue.add(key);
+                }
+            }
+
+            for (int nextBox : containedBoxes[box]) {
+                visitBox[nextBox] = true;
+                if (status[nextBox] == 1) {
+                    status[nextBox] = 2;
+                    queue.add(nextBox);
+                    ans += candies[nextBox];
+                }
+            }
+        }
+
+        return ans;
     }
 
     public int mySol2(int[] status, int[] candies, int[][] keys, int[][] containedBoxes, int[] initialBoxes) {
