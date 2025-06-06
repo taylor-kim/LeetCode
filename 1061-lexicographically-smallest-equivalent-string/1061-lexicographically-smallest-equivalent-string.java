@@ -10,12 +10,6 @@ class Solution {
             int c1 = s1.charAt(i) - 'a';
             int c2 = s2.charAt(i) - 'a';
 
-            // if (c1 < c2) {
-            //     c1 += c2;
-            //     c2 = c1 - c2;
-            //     c1 = c1 - c2;
-            // }
-
             graph.computeIfAbsent(c1, k -> new HashSet()).add(c2);
             graph.computeIfAbsent(c2, k -> new HashSet()).add(c1);
         }
@@ -49,12 +43,6 @@ class Solution {
         // print(shortest);
 
         for (char c : baseStr.toCharArray()) {
-            // int node = c - 'a';
-            // while (shortest[node] < node) {
-            //     node = shortest[node];
-            // }
-            // sb.append((char)(node + 'a'));
-
             int node = c - 'a';
             sb.append((char)(shortest[node] + 'a'));
         }
@@ -76,7 +64,6 @@ class Solution {
             min = Math.min(sub, min);
         }
 
-        // return shortest[start] = shortest[node] = min;
         return min;
     }
 
