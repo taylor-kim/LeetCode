@@ -20,7 +20,7 @@ class Solution {
             graph.computeIfAbsent(c2, k -> new HashSet()).add(c1);
         }
 
-        print(graph);
+        // print(graph);
 
         int[] shortest = new int[26];
 
@@ -34,43 +34,50 @@ class Solution {
 
         boolean[] visit = new boolean[26];
 
-        int[] cache = new int[26];
-
-        Arrays.fill(cache, -1);
+        Stack<Integer> stack = new Stack();
 
         for (char c : baseStr.toCharArray()) {
             int node = c - 'a';
 
-            if (cache[node] == -1) {
-                dfs(node, node, graph, shortest, visit);
+            int min = dfs(node, node, graph, shortest, visit, stack);
 
-                cache[node] = shortest[node];
+            while (!stack.isEmpty()) {
+                shortest[stack.pop()] = min;
             }
-
-            sb.append((char)(cache[node] + 'a'));
         }
 
         // print(shortest);
 
+        for (char c : baseStr.toCharArray()) {
+            // int node = c - 'a';
+            // while (shortest[node] < node) {
+            //     node = shortest[node];
+            // }
+            // sb.append((char)(node + 'a'));
+
+            int node = c - 'a';
+            sb.append((char)(shortest[node] + 'a'));
+        }
+
         return sb.toString();
     }
 
-    private void dfs(int start, int node, Map<Integer, Set<Integer>> graph, int[] shortest, boolean[] visit) {
-        if (visit[node]) return;
+    private int dfs(int start, int node, Map<Integer, Set<Integer>> graph, int[] shortest, boolean[] visit, Stack<Integer> stack) {
+        if (visit[node]) return shortest[node];
+
+        stack.push(node);
 
         visit[node] = true;
 
-        if (shortest[start] > node) {
-            shortest[start] = node;
-        } else if (shortest[node] > start) {
-            shortest[node] = start;
-        }
+        int min = Math.min(start, node);
 
         for (int next : graph.getOrDefault(node, new HashSet<>())) {
-            dfs(start, next, graph, shortest, visit);
+            int sub = dfs(start, next, graph, shortest, visit, stack);
+            min = Math.min(sub, min);
         }
 
-        visit[node] = false;
+        // return shortest[start] = shortest[node] = min;
+        return min;
     }
 
     private void print(int[] shortest) {
