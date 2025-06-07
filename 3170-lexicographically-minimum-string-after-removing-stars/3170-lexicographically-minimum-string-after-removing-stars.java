@@ -1,6 +1,41 @@
 class Solution {
     public String clearStars(String s) {
-        return mySol2(s);
+        return official_good(s);
+    }
+
+    public String official_good(String s) {
+        LinkedList<Integer>[] freq = new LinkedList[26];
+
+        for (int i = 0; i < 26; i++) {
+            freq[i] = new LinkedList();
+        }
+
+        char[] arr = s.toCharArray();
+
+        for (int i = 0; i < arr.length; i++) {
+            char c = arr[i];
+
+            if (c == '*') {
+                for (int j = 0; j < 26; j++) {
+                    if (freq[j].size() > 0) {
+                        arr[freq[j].pollLast()] = '*';
+                        break;
+                    }
+                }
+            } else {
+                freq[c - 'a'].add(i);
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] != '*') {
+                sb.append(arr[i]);
+            }
+        }
+
+        return sb.toString();
     }
 
     public String mySol2(String s) {
