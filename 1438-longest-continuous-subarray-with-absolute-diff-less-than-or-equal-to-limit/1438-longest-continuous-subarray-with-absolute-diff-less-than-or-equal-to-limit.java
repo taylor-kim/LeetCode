@@ -1,6 +1,33 @@
 class Solution {
     public int longestSubarray(int[] nums, int limit) {
-        return try_again_20250615(nums, limit);
+        return official_treemap(nums, limit);
+    }
+
+    public int official_treemap(int[] nums, int limit) {
+        TreeMap<Integer, Integer> treeMap = new TreeMap();
+
+        int left = 0;
+        int ans = 0;
+
+        for (int right = 0; right < nums.length; right++) {
+            int num = nums[right];
+
+            treeMap.put(num, treeMap.getOrDefault(num, 0) + 1);
+
+            while (treeMap.lastKey() - treeMap.firstKey() > limit) {
+                int removeNum = nums[left++];
+
+                treeMap.put(removeNum, treeMap.get(removeNum) - 1);
+
+                if (treeMap.get(removeNum) == 0) {
+                    treeMap.remove(removeNum);
+                }
+            }
+
+            ans = Math.max(ans, right - left + 1);
+        }
+
+        return ans;
     }
 
     public int try_again_20250615(int[] nums, int limit) {
