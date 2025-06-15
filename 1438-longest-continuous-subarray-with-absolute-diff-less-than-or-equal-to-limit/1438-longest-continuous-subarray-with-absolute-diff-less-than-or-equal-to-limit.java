@@ -23,8 +23,7 @@ class Solution {
             maxHeap.add(data);
 
             while (maxHeap.peek()[0] - minHeap.peek()[0] > limit) {
-                left++;
-                // left = Math.min(maxHeap.peek()[1], minHeap.peek()[1]) + 1;
+                left = Math.min(maxHeap.peek()[1], minHeap.peek()[1]) + 1;
 
                 while (maxHeap.peek()[1] < left) maxHeap.poll();
                 while (minHeap.peek()[1] < left) minHeap.poll();
