@@ -1,7 +1,51 @@
 class Solution {
     public int maxDistance(String s, int k) {
-        return others_genious(s, k);
+        return try_20250620(s, k);
     }
+
+    public int try_20250620(String s, int k) {
+        int ans = 0;
+
+        ans = Math.max(ans, goTo(s, k, 'N', 'E'));
+        ans = Math.max(ans, goTo(s, k, 'N', 'W'));
+        ans = Math.max(ans, goTo(s, k, 'S', 'E'));
+        ans = Math.max(ans, goTo(s, k, 'S', 'W'));
+
+        return ans;
+    }
+
+    private int goTo(String s, int k, char h, char v) {
+        int ans = 0;
+
+        int dist = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+
+            if (c == h || c == v) {
+                dist++;
+            } else if (k > 0) {
+                k--;
+                dist++;
+            } else {
+                dist--;
+            }
+
+            ans = Math.max(ans, dist);
+        }
+
+        return ans;
+    }
+
+
+
+
+
+
+
+
+
+
 
     public int others_genious(String str, int k) {
         int[] map = new int[26];
