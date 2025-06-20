@@ -37,16 +37,6 @@ class Solution {
         return ans;
     }
 
-
-
-
-
-
-
-
-
-
-
     public int others_genious(String str, int k) {
         int[] map = new int[26];
 
