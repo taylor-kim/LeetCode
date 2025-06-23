@@ -24,6 +24,7 @@ class Solution {
             }
 
             ans = Math.min(ans, removed);
+            System.out.println(String.format("ans:%d", ans));
         }
 
         return ans;
