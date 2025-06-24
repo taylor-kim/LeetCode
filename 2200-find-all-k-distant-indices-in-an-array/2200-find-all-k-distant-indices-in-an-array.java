@@ -12,10 +12,20 @@ class Solution {
 
         Set<Integer> ans = new LinkedHashSet();
 
+        int last = 0;
+
         for (int j : keyIndices) {
-            for (int i = Math.max(0, j - k); i < Math.min(nums.length, j + k + 1); i++) {
-                ans.add(i);
+            last = Math.max(last, j - k);
+
+            int max = Math.min(nums.length, j + k + 1);
+
+            while (last < max) {
+                ans.add(last++);
             }
+            // for (int i = Math.max(last, j - k); i < Math.min(nums.length, j + k + 1); i++) {
+            //     ans.add(i);
+            //     last = i;
+            // }
         }
 
         return new ArrayList(ans);
