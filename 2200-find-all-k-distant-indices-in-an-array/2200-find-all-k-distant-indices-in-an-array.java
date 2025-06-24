@@ -1,6 +1,6 @@
 class Solution {
     public List<Integer> findKDistantIndices(int[] nums, int key, int k) {
-        return mySol(nums, key, k);
+        return ref_official(nums, key, k);
     }
 
     public List<Integer> ref_official(int[] nums, int key, int k) {
@@ -10,7 +10,7 @@ class Solution {
             if (nums[j] == key) keyIndices.add(j);
         }
 
-        Set<Integer> ans = new LinkedHashSet();
+        List<Integer> ans = new ArrayList();
 
         int last = 0;
 
@@ -22,13 +22,9 @@ class Solution {
             while (last < max) {
                 ans.add(last++);
             }
-            // for (int i = Math.max(last, j - k); i < Math.min(nums.length, j + k + 1); i++) {
-            //     ans.add(i);
-            //     last = i;
-            // }
         }
 
-        return new ArrayList(ans);
+        return ans;
     }
 
     public List<Integer> mySol(int[] nums, int key, int k) {
