@@ -1,32 +1,43 @@
 class Solution {
-
     public String longestSubsequenceRepeatedK(String s, int k) {
+        return official(s, k);
+    }
+
+    public String official(String s, int k) {
         int[] freq = new int[26];
-        for (char ch : s.toCharArray()) {
-            freq[ch - 'a']++;
+
+        for (char c : s.toCharArray()) {
+            freq[c - 'a']++;
         }
-        List<Character> candidate = new ArrayList<>();
+
+        List<Character> candidates = new ArrayList();
+
         for (int i = 25; i >= 0; i--) {
             if (freq[i] >= k) {
-                candidate.add((char) ('a' + i));
+                candidates.add((char)(i + 'a'));
             }
         }
 
-        Queue<String> q = new LinkedList<>();
-        for (char ch : candidate) {
-            q.add(String.valueOf(ch));
+        Queue<String> queue = new LinkedList();
+
+        for (char c : candidates) {
+            queue.add(String.valueOf(c));
         }
+
         String ans = "";
-        while (!q.isEmpty()) {
-            String curr = q.poll();
-            if (curr.length() > ans.length()) {
-                ans = curr;
+
+        while (!queue.isEmpty()) {
+            String cur = queue.poll();
+
+            if (cur.length() > ans.length()) {
+                ans = cur;
             }
-            // generate the next candidate string
-            for (char ch : candidate) {
-                String next = curr + ch;
-                if (isKRepeatedSubsequence(s, next, k)) {
-                    q.add(next);
+
+            for (char c : candidates) {
+                String next = cur + c;
+
+                if (isKRepeatedSubSeq(s, next, k)) {
+                    queue.add(next);
                 }
             }
         }
@@ -34,21 +45,79 @@ class Solution {
         return ans;
     }
 
-    private boolean isKRepeatedSubsequence(String s, String t, int k) {
-        int pos = 0, matched = 0;
-        int m = t.length();
-        for (char ch : s.toCharArray()) {
-            if (ch == t.charAt(pos)) {
-                pos++;
-                if (pos == m) {
-                    pos = 0;
-                    matched++;
-                    if (matched == k) {
-                        return true;
-                    }
+    private boolean isKRepeatedSubSeq(String s, String seq, int k) {
+        int index = 0;
+        int matched = 0;
+
+        for (char c : s.toCharArray()) {
+            if (c == seq.charAt(index)) {
+                index++;
+            }
+
+            if (index == seq.length()) {
+                index = 0;
+                matched++;
+
+                if (matched == k) {
+                    return true;
                 }
             }
         }
+
         return false;
+    }
+
+    public String mySol_fail(String s, int k) {
+        int[] freq = new int[26];
+
+        for (char c : s.toCharArray()) {
+            freq[c - 'a']++;
+        }
+
+        TreeMap<Integer, Integer> treeMap = new TreeMap<>();
+
+        int totalCount = 0;
+
+        for (int i = 0; i < freq.length; i++) {
+            if (freq[i] >= k) {
+                treeMap.put(i, freq[i]);
+                totalCount += freq[i];
+            }
+        }
+
+        Map<Integer, List<Integer>> indices = new HashMap();
+
+        for (int i = 0; i < s.length(); i++) {
+            int c = s.charAt(i) - 'a';
+
+            if (treeMap.containsKey(c)) {
+                indices.computeIfAbsent(c, key -> new ArrayList()).add(i);
+            }
+        }
+
+        System.out.println(indices);
+
+        List<int[]> allIndices = new ArrayList();
+
+        for (int key : indices.keySet()) {
+            for (int index : indices.get(key)) {
+                allIndices.add(new int[] {index, key});
+            }
+        }
+
+        Collections.sort(allIndices, (a, b) -> {
+            return a[0] - b[0];
+        });
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int[] data : allIndices) {
+            System.out.print((char)(data[1] + 'a') + ", ");
+            sb.append((char)(data[1] + 'a'));
+        }
+
+        System.out.println("\n");
+
+        return null;
     }
 }
