@@ -1,6 +1,58 @@
 class Solution {
     public int[] maxSubsequence(int[] nums, int k) {
-        return mySol2(nums, k);
+        return try_minheap_pq(nums, k);
+    }
+
+    public int[] try_minheap_pq(int[] nums, int k) {
+        Queue<int[]> pq = new PriorityQueue<>((a, b) -> {
+            return a[0] - b[0];
+        });
+
+        for (int i = 0; i < nums.length; i++) {
+            pq.add(new int[] {nums[i], i});
+
+            if (pq.size() > k) {
+                pq.poll();
+            }
+        }
+
+        int[] ans = new int[k];
+
+        for (int i = 0; i < k; i++) {
+            ans[i] = pq.poll()[1];
+        }
+
+        Arrays.sort(ans);
+
+        for (int i = 0; i < k; i++) {
+            ans[i] = nums[ans[i]];
+        }
+
+        return ans;
+    }
+
+    public int[] try_minheap_fail(int[] nums, int k) {
+        Deque<int[]> minHeap = new LinkedList();
+
+        for (int i = 0; i < nums.length; i++) {
+            int num = nums[i];
+
+            if (minHeap.isEmpty() || minHeap.peekLast()[0] < num) {
+                minHeap.add(new int[] {num, i});
+            }
+
+            while (minHeap.size() > k) {
+                minHeap.pollFirst();
+            }
+        }
+
+        int[] ans = new int[k];
+
+        for (int i = 0; i < k; i++) {
+            
+        }
+
+        return ans;
     }
 
     public int[] mySol2(int[] nums, int k) {
