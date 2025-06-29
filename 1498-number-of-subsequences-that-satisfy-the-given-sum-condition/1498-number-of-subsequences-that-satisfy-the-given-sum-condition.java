@@ -1,6 +1,6 @@
 class Solution {
     public int numSubseq(int[] nums, int target) {
-        return others(nums, target);
+        return mySol_fail(nums, target);
     }
 
     public int others(int[] nums, int target) {
@@ -67,43 +67,42 @@ class Solution {
 
         for (int i = 0; i < n; i++) {
             int min = arr[i][0];
-
-            if (min * 2 > target) break;
-
-            int add = 1;
-
             int max = target - min;
-            int right = leftmost(arr, i, max + 1);
+            int right = leftmost(arr, i, max);
 
-            if (right > i) add++;
+            if (right < i) break;
 
-            int between = right - i - 1;
+            int between = right - i;
 
-            // System.out.println(String.format("i:%d, right:%d, between:%d", i, right, between));
-
-            if (between > 0) {
-                ans = (ans + (long)Math.pow(2, between)) % mod;
-            }
-
-            ans = (ans + add) % mod;
+            ans = (ans + (long)Math.pow(2, between)) % mod;
         }
 
         return (int)ans;
     }
 
     private int leftmost(int[][] arr, int lo, int target) {
+        int min = lo;
         int hi = arr.length;
+
+        int ans = -1;
 
         while (lo < hi) {
             int mid = lo + (hi - lo) / 2;
 
-            if (arr[mid][0] < target) {
+            if (arr[mid][0] <= target) {
+                ans = mid;
                 lo = mid + 1;
             } else {
                 hi = mid;
             }
         }
 
-        return lo - 1;
+        return ans;
+
+        // if (lo < min || (lo == min && arr[lo][0] == target) || lo == arr.length) {
+        //     return lo - 1;
+        // }
+
+        // return lo;
     }
 }
