@@ -1,6 +1,6 @@
 class Solution {
     public int numSubseq(int[] nums, int target) {
-        return mySol_fail(nums, target);
+        return others(nums, target);
     }
 
     public int others(int[] nums, int target) {
@@ -65,6 +65,13 @@ class Solution {
         long ans = 0;
         int mod = (int)1e9 + 7;
 
+        int[] powers = new int[n + 1];
+        powers[0] = 1;
+
+        for (int i = 1; i <= n; i++) {
+            powers[i] = (powers[i - 1] * 2) % mod;
+        }
+
         for (int i = 0; i < n; i++) {
             int min = arr[i][0];
             int max = target - min;
@@ -74,7 +81,7 @@ class Solution {
 
             int between = right - i;
 
-            ans = (ans + (long)Math.pow(2, between)) % mod;
+            ans = (ans + powers[between]) % mod;
         }
 
         return (int)ans;
