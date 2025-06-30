@@ -19,7 +19,7 @@ class Solution {
             int count = map.get(key);
 
             ans = Math.max(ans, map.getOrDefault(key - 1, -count) + count);
-            ans = Math.max(ans, map.getOrDefault(key + 1, -count) + count);
+            // ans = Math.max(ans, map.getOrDefault(key + 1, -count) + count);
         }
 
         return ans;
