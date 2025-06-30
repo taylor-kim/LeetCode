@@ -1,6 +1,28 @@
 class Solution {
     public int findLHS(int[] nums) {
-        return mySol3(nums);
+        return mySol4(nums);
+    }
+
+    public int mySol4(int[] nums) {
+        Map<Integer, Integer> map = new HashMap();
+
+        for (int num : nums) {
+            map.put(num, map.getOrDefault(num, 0) + 1);
+        }
+
+        int ans = 0;
+
+        for (int key : map.keySet()) {
+            int lower = key - 1;
+            int higher = key + 1;
+
+            int count = map.get(key);
+
+            ans = Math.max(ans, map.getOrDefault(key - 1, -count) + count);
+            ans = Math.max(ans, map.getOrDefault(key + 1, -count) + count);
+        }
+
+        return ans;
     }
 
     public int mySol3(int[] nums) {
