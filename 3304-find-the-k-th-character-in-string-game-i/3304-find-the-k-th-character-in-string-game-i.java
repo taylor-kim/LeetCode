@@ -1,25 +1,23 @@
 class Solution {
     public char kthCharacter(int k) {
-        return mySol(k);
+        return official(k);
     }
 
-    public char mySol(int k) {
-		String s = "a";
+    public char official(int k) {
+        int ans = 0;
 
-		while (s.length() < k) {
-			s = s + next(s);
-		}
+        while (k > 1) {
+            int t = 31 - Integer.numberOfLeadingZeros(k);
 
-		return s.charAt(k - 1);
-	}
+            if ((1 << t) == k) {
+                t--;
+            }
 
-	private String next(String s) {
-		StringBuilder sb = new StringBuilder();
+            k -= (1 << t);
 
-		for (char c : s.toCharArray()) {
-			sb.append(c == 'z' ? 'a' : (char)(c + 1));
-		}
+            ans++;
+        }
 
-		return sb.toString();
-	}
+        return (char)('a' + (ans % 26));
+    }
 }
