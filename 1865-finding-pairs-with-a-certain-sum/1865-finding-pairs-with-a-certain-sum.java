@@ -9,13 +9,11 @@ class FindSumPairs {
         this.nums1 = nums1;
         this.nums2 = nums2;
 
-        map1 = createMap(nums1);
-        map2 = createMap(nums2);
+        map1 = createMap(nums1, new TreeMap());
+        map2 = createMap(nums2, new HashMap());
     }
 
-    private Map<Integer, Integer> createMap(int[] nums) {
-        Map<Integer, Integer> map = new HashMap();
-
+    private Map<Integer, Integer> createMap(int[] nums, Map<Integer, Integer> map) {
         for (int num : nums) {
             map.put(num, map.getOrDefault(num, 0) + 1);
         }
@@ -40,6 +38,8 @@ class FindSumPairs {
         int ret = 0;
 
         for (int a : map1.keySet()) {
+            if (a >= tot) break;
+
             ret += map1.get(a) * map2.getOrDefault(tot - a, 0);
         }
 
