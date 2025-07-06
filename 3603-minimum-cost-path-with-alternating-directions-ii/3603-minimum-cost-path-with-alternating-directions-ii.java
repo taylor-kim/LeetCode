@@ -23,7 +23,7 @@ class Solution {
 
         long ans = 0;
 
-        if (seconds == 1) {
+        if (seconds % 2 == 1) {
             long right = dp(y, x + 1, nextSeconds, m, n, waitCost, memo);
             long down = dp(y + 1, x, nextSeconds, m, n, waitCost, memo);
 
