@@ -1,6 +1,6 @@
 class Solution {
     public long minCost(int m, int n, int[][] waitCost) {
-        return hint(m, n, waitCost);
+        return mySol_tle_after_sol(m, n, waitCost);
     }
 
     public long hint(int m, int n, int[][] waitCost) {
@@ -71,20 +71,34 @@ class Solution {
         return ans != Long.MAX_VALUE ? ans + cost : -1;
     }
 
-    public long mySol_tle(int m, int n, int[][] waitCost) {
+    public long mySol_tle_after_sol(int m, int n, int[][] waitCost) {
         Queue<Data> pq = new PriorityQueue<>((a, b) -> {
             return Long.compare(a.cost, b.cost);
         });
 
-        pq.add(new Data(1, 0, 0, 1));
+        pq.add(new Data(1l, 0, 0, 1));
+
+        long[][] minMatrix = new long[m][n];
+
+        for (long[] row : minMatrix) {
+            Arrays.fill(row, Long.MAX_VALUE);
+        }
 
         int[][] dirs = {
             {0, 1},
             {1, 0}
         };
 
+        minMatrix[0][0] = 1l;
+
         while (!pq.isEmpty()) {
             Data d = pq.poll();
+
+            if (d.cost > minMatrix[d.y][d.x]) continue;
+
+            if (d.y == m - 1 && d.x == n - 1) {
+                return d.cost - waitCost[0][0];
+            }
     
             for (int[] dir : dirs) {
                 int ny = d.y + dir[0];
@@ -92,13 +106,17 @@ class Solution {
 
                 if (ny >= m || nx >= n) continue;
 
-                long nextCost = d.cost + (ny + 1) * (nx + 1);
+                // long wait = (d.seconds + 1) % 2 == 1 ? 0 : waitCost[ny][nx];
+                long wait = waitCost[d.y][d.x];
 
-                int wait = (d.seconds + 1) % 2 == 1 ? 0 : waitCost[ny][nx];
+                long nextCost = (ny + 1l) * (nx + 1) + d.cost + wait;
 
-                if (ny + 1 == m && nx + 1 == n) return nextCost + wait;
+                if (minMatrix[ny][nx] > nextCost) {
+                    minMatrix[ny][nx] = nextCost;
+                    pq.add(new Data(nextCost, ny, nx, d.seconds + 1));
+                }
 
-                pq.add(new Data(wait + nextCost, ny, nx, d.seconds + 1));
+                // if (ny + 1 == m && nx + 1 == n) return nextCost;
             }
         }
 
@@ -117,5 +135,50 @@ class Solution {
             this.x = x;
             this.seconds = seconds;
         }
+    }
+
+    public long others_minCost(int m, int n, int[][] waitCost) {
+        PriorityQueue<long[]> pq = new PriorityQueue<>((a, b) -> Long.compare(a[0], b[0]));
+        pq.offer(new long[]{1, 0, 0}); // {cost, x, y}
+
+        long[][] costMatrix = new long[m][n];
+        for (long[] row : costMatrix)
+            Arrays.fill(row, Long.MAX_VALUE);
+        
+        costMatrix[0][0] = 1;
+
+        while (!pq.isEmpty()) {
+            long[] top = pq.poll();
+            long cost = top[0];
+            int x = (int)top[1];
+            int y = (int)top[2];
+
+            if (cost > costMatrix[x][y]) continue;
+
+            if (x == m - 1 && y == n - 1)
+                return cost - waitCost[0][0];
+
+            // Move Down
+            int nx = x + 1, ny = y;
+            if (nx < m) {
+                long newCost = cost + waitCost[x][y] + (long)(nx + 1) * (ny + 1);
+                if (costMatrix[nx][ny] > newCost) {
+                    costMatrix[nx][ny] = newCost;
+                    pq.offer(new long[]{newCost, nx, ny});
+                }
+            }
+
+            // Move Right
+            nx = x; ny = y + 1;
+            if (ny < n) {
+                long newCost = cost + waitCost[x][y] + (long)(nx + 1) * (ny + 1);
+                if (costMatrix[nx][ny] > newCost) {
+                    costMatrix[nx][ny] = newCost;
+                    pq.offer(new long[]{newCost, nx, ny});
+                }
+            }
+        }
+
+        return -1;
     }
 }
