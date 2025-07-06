@@ -40,12 +40,7 @@ class FindSumPairs {
         int ret = 0;
 
         for (int a : map1.keySet()) {
-            int countA = map1.get(a);
-            if (map2.containsKey(tot - a)) {
-                int countB = map2.get(tot - a);
-
-                ret += countA * countB;
-            }
+            ret += map1.get(a) * map2.getOrDefault(tot - a, 0);
         }
 
         return ret;
