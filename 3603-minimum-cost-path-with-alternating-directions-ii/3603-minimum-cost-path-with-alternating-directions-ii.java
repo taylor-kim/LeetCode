@@ -1,6 +1,6 @@
 class Solution {
     public long minCost(int m, int n, int[][] waitCost) {
-        return mySol_tle_after_sol(m, n, waitCost);
+        return hint(m, n, waitCost);
     }
 
     public long hint(int m, int n, int[][] waitCost) {
@@ -97,7 +97,7 @@ class Solution {
             if (d.cost > minMatrix[d.y][d.x]) continue;
 
             if (d.y == m - 1 && d.x == n - 1) {
-                return d.cost - waitCost[0][0];
+                return d.cost - (d.seconds % 2 == 0 ? waitCost[m - 1][n - 1] : 0);
             }
     
             for (int[] dir : dirs) {
@@ -106,8 +106,7 @@ class Solution {
 
                 if (ny >= m || nx >= n) continue;
 
-                // long wait = (d.seconds + 1) % 2 == 1 ? 0 : waitCost[ny][nx];
-                long wait = waitCost[d.y][d.x];
+                long wait = (d.seconds + 1) % 2 == 1 ? 0 : waitCost[ny][nx];
 
                 long nextCost = (ny + 1l) * (nx + 1) + d.cost + wait;
 
