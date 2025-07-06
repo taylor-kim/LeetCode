@@ -1,6 +1,26 @@
 class Solution {
     public long minCost(int m, int n, int[][] waitCost) {
-        return hint(m, n, waitCost);
+        return try_bottomup(m, n, waitCost);
+    }
+
+    public long try_bottomup(int m, int n, int[][] waitCost) {
+        long[][] dp = new long[m + 1][n + 1];
+
+        for (long[] row : dp) {
+            Arrays.fill(row, (long)1e15);
+        }
+
+        dp[m - 1][n - 1] = (long)(m * n);
+
+        for (int i = m - 1; i >= 0; i--) {
+            for (int j = n - 1; j >= 0; j--) {
+                if (i == m - 1 && j == n - 1) continue;
+
+                dp[i][j] = (i + 1l) * (j + 1) + Math.min(dp[i + 1][j], dp[i][j + 1]) + waitCost[i][j];
+            }
+        }
+
+        return dp[0][0] - waitCost[0][0];
     }
 
     public long hint(int m, int n, int[][] waitCost) {
@@ -97,7 +117,7 @@ class Solution {
             if (d.cost > minMatrix[d.y][d.x]) continue;
 
             if (d.y == m - 1 && d.x == n - 1) {
-                return d.cost - (d.seconds % 2 == 0 ? waitCost[m - 1][n - 1] : 0);
+                return d.cost - waitCost[0][0];
             }
     
             for (int[] dir : dirs) {
@@ -106,9 +126,7 @@ class Solution {
 
                 if (ny >= m || nx >= n) continue;
 
-                long wait = (d.seconds + 1) % 2 == 1 ? 0 : waitCost[ny][nx];
-
-                long nextCost = (ny + 1l) * (nx + 1) + d.cost + wait;
+                long nextCost = (ny + 1l) * (nx + 1) + d.cost + waitCost[d.y][d.x];
 
                 if (minMatrix[ny][nx] > nextCost) {
                     minMatrix[ny][nx] = nextCost;
