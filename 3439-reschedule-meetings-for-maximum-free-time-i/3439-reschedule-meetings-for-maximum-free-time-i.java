@@ -1,7 +1,54 @@
 class Solution {
     public int maxFreeTime(int eventTime, int k, int[] startTime, int[] endTime) {
-        return mySol2(eventTime, k, startTime, endTime);
+        return tryAgain_20250709_fail(eventTime, k, startTime, endTime);
     }
+
+    public int tryAgain_20250709_fail(int eventTime, int k, int[] startTime, int[] endTime) {
+        List<Integer> freeTimes = new ArrayList();
+
+        int n = startTime.length;
+        int prevEnd = 0;
+
+        for (int i = 0; i < n; i++) {
+            int freeTime = startTime[i] - prevEnd;
+
+            freeTimes.add(freeTime);
+
+            prevEnd = endTime[i];
+        }
+
+        freeTimes.add(eventTime - prevEnd);
+
+        int left = 0;
+        int sum = 0;
+        int ans = 0;
+
+        for (int right = 0; right < freeTimes.size(); right++) {
+            sum += freeTimes.get(right);
+
+            if (right - left > k) {
+                sum -= freeTimes.get(left++);
+            }
+
+            ans = Math.max(ans, sum);
+        }
+
+        return ans;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     public int mySol2(int eventTime, int k, int[] startTime, int[] endTime) {
         int n = startTime.length;
