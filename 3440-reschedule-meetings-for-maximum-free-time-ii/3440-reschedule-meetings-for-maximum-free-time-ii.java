@@ -1,6 +1,45 @@
 class Solution {
     public int maxFreeTime(int eventTime, int[] startTime, int[] endTime) {
-        return mySol2(eventTime, startTime, endTime);
+        return try_20250711(eventTime, startTime, endTime);
+    }
+
+    public int try_20250711(int eventTime, int[] startTime, int[] endTime) {
+        int n = startTime.length;
+
+        int[] leftMax = new int[n];
+        int[] rightMax = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            int leftFree = startTime[i] - (i == 0 ? 0 : endTime[i - 1]);
+
+            leftMax[i] = Math.max(leftFree, leftMax[Math.max(i - 1, 0)]);
+
+            int j = n - i - 1;
+            int rightFree = (j == n - 1 ? eventTime : startTime[j + 1]) - endTime[j];
+
+            rightMax[j] = Math.max(rightFree, rightMax[Math.min(j + 1, n - 1)]);
+        }
+
+        int ans = 0;
+
+        for (int i = 0; i < n; i++) {
+            int left = i == 0 ? 0 : endTime[i - 1];
+            int right = i == n - 1 ? eventTime : startTime[i + 1];
+
+            int meetingTime = endTime[i] - startTime[i];
+
+            ans = Math.max(ans, right - left - meetingTime);
+
+            if (i > 0 && meetingTime <= leftMax[i - 1]) {
+                ans = Math.max(ans, right - left);
+            }
+
+            if (i + 1 < n && meetingTime <= rightMax[i + 1]) {
+                ans = Math.max(ans, right - left);
+            }
+        }
+
+        return ans;
     }
 
     public int mySol2(int eventTime, int[] startTime, int[] endTime) {
