@@ -1,7 +1,184 @@
 class Solution {
     public int mostBooked(int n, int[][] meetings) {
-        return official_pq(n, meetings);
+        return gpt(n, meetings);
     }
+
+    public int gpt(int n, int[][] meetings) {
+        Arrays.sort(meetings, Comparator.comparingInt(a -> a[0]));
+
+        PriorityQueue<Integer> freeRooms = new PriorityQueue<>();
+        for (int i = 0; i < n; i++) freeRooms.offer(i);
+
+        // {endTime, roomNumber}
+        PriorityQueue<long[]> usedRooms = new PriorityQueue<>((a, b) -> {
+            if (a[0] != b[0]) return Long.compare(a[0], b[0]);
+            return Long.compare(a[1], b[1]);
+        });
+
+        int[] count = new int[n];
+
+        for (int[] meeting : meetings) {
+            int start = meeting[0], end = meeting[1];
+
+            // 해제된 회의실 되돌리기
+            while (!usedRooms.isEmpty() && usedRooms.peek()[0] <= start) {
+                freeRooms.offer((int)usedRooms.poll()[1]);
+            }
+
+            if (!freeRooms.isEmpty()) {
+                int room = freeRooms.poll();
+                usedRooms.offer(new long[]{end, room});
+                count[room]++;
+            } else {
+                long[] earliest = usedRooms.poll();
+                long delay = earliest[0];
+                int room = (int)earliest[1];
+                usedRooms.offer(new long[]{delay + (end - start), room});
+                count[room]++;
+            }
+        }
+
+        int maxCount = 0, ans = 0;
+        for (int i = 0; i < n; i++) {
+            if (count[i] > maxCount || (count[i] == maxCount && i < ans)) {
+                maxCount = count[i];
+                ans = i;
+            }
+        }
+
+        return ans;
+    }
+
+
+    public int try_20250711_2(int n, int[][] meetings) {
+        Queue<Integer> rooms = new PriorityQueue<>();
+
+        for (int i = 0; i < n; i++) {
+            rooms.add(i);
+        }
+
+        Queue<int[]> usedRooms = new PriorityQueue<>((a, b) -> {
+            return a[0] != b[0] ? a[0] - b[0] : a[1] - b[1];
+        });
+
+        Arrays.sort(meetings, (a, b) -> {
+            return a[0] - b[0];
+        });
+
+        for (int[] meeting : meetings) {
+            System.out.print(Arrays.toString(meeting));
+        }
+
+        System.out.println("\n");
+
+        Map<Integer, Integer> counter = new HashMap();
+
+        for (int time = meetings[0][0], i = 0; i < meetings.length; time++) {
+            int[] meeting = meetings[i];
+
+            while (!usedRooms.isEmpty() && usedRooms.peek()[0] <= time) {
+                rooms.add(usedRooms.poll()[1]);
+            }
+
+            if (time < meeting[0]) continue;
+
+            if (!rooms.isEmpty()) {
+                int delay = Math.max(time - meeting[0], 0);
+                int room = rooms.poll();
+
+                System.out.println(String.format("time:%d, delay:%d, room:%d, end:%d, meeting:%s"
+                , time, delay, room, meeting[1] + delay, Arrays.toString(meeting)));
+
+                usedRooms.add(new int[] {meeting[1] + delay, room});
+                counter.put(room, counter.getOrDefault(room, 0) + 1);
+                i++;
+            }
+        }
+
+        int ans = 0;
+        int max = 0;
+
+        System.out.println(counter);
+
+        for (int room : counter.keySet()) {
+            int count = counter.get(room);
+
+            if (count > max) {
+                max = count;
+                ans = room;
+            } else if (count == max) {
+                ans = Math.min(ans, room);
+            }
+        }
+
+        return ans;
+    }
+
+    public int try_20250711_fail(int n, int[][] meetings) {
+        Queue<Integer> rooms = new PriorityQueue<>();
+
+        for (int i = 0; i < n; i++) {
+            rooms.add(i);
+        }
+
+        Queue<int[]> usedRooms = new PriorityQueue<>((a, b) -> {
+            return a[0] != b[0] ? a[0] - b[0] : a[1] - b[1];
+        });
+
+        Arrays.sort(meetings, (a, b) -> {
+            return a[0] - b[0];
+        });
+
+        Map<Integer, Integer> counter = new HashMap();
+
+        for (int[] meeting : meetings) {
+            int delay = 0;
+
+            if (rooms.isEmpty()) {
+                int newStart = usedRooms.peek()[0];
+                int room = usedRooms.poll()[1];
+
+                delay = Math.max(newStart - meeting[0], 0);
+
+                rooms.add(room);
+            }
+
+            int room = rooms.poll();
+
+            usedRooms.add(new int[] {meeting[1] + delay, room});
+
+            counter.put(room, counter.getOrDefault(room, 0) + 1);
+        }
+
+        int ans = 0;
+        int max = 0;
+
+        // System.out.println(counter);
+
+        for (int room : counter.keySet()) {
+            int count = counter.get(room);
+
+            if (count > max) {
+                max = count;
+                ans = room;
+            } else if (count == max) {
+                ans = Math.min(ans, room);
+            }
+        }
+
+        return ans;
+    }
+
+
+
+
+
+
+
+
+
+
+
     
     public int official_sort_and_loop(int n, int[][] meetings) {
         int[] meetingCount = new int[n];
