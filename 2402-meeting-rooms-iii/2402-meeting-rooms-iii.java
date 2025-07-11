@@ -1,56 +1,71 @@
 class Solution {
     public int mostBooked(int n, int[][] meetings) {
-        return gpt(n, meetings);
+        return try_20250711_3_gpt_help(n, meetings);
     }
 
-    public int gpt(int n, int[][] meetings) {
-        Arrays.sort(meetings, Comparator.comparingInt(a -> a[0]));
+    public int try_20250711_3_gpt_help(int n, int[][] meetings) {
+        Queue<Integer> rooms = new PriorityQueue<>();
 
-        PriorityQueue<Integer> freeRooms = new PriorityQueue<>();
-        for (int i = 0; i < n; i++) freeRooms.offer(i);
+        for (int i = 0; i < n; i++) {
+            rooms.add(i);
+        }
 
-        // {endTime, roomNumber}
-        PriorityQueue<long[]> usedRooms = new PriorityQueue<>((a, b) -> {
-            if (a[0] != b[0]) return Long.compare(a[0], b[0]);
-            return Long.compare(a[1], b[1]);
+        Queue<int[]> usedRooms = new PriorityQueue<>((a, b) -> {
+            return a[0] != b[0] ? a[0] - b[0] : a[1] - b[1];
         });
 
-        int[] count = new int[n];
+        Arrays.sort(meetings, (a, b) -> {
+            return a[0] - b[0];
+        });
+
+        // for (int[] meeting : meetings) {
+        //     System.out.print(Arrays.toString(meeting));
+        // }
+
+        // System.out.println("\n");
+
+        Map<Integer, Integer> counter = new HashMap();
 
         for (int[] meeting : meetings) {
-            int start = meeting[0], end = meeting[1];
-
-            // 해제된 회의실 되돌리기
-            while (!usedRooms.isEmpty() && usedRooms.peek()[0] <= start) {
-                freeRooms.offer((int)usedRooms.poll()[1]);
+            while (!usedRooms.isEmpty() && usedRooms.peek()[0] <= meeting[0]) {
+                rooms.add(usedRooms.poll()[1]);
             }
 
-            if (!freeRooms.isEmpty()) {
-                int room = freeRooms.poll();
-                usedRooms.offer(new long[]{end, room});
-                count[room]++;
+            if (!rooms.isEmpty()) {
+                int room = rooms.poll();
+
+                usedRooms.add(new int[] {meeting[1], room});
+
+                counter.put(room, counter.getOrDefault(room, 0) + 1);
             } else {
-                long[] earliest = usedRooms.poll();
-                long delay = earliest[0];
-                int room = (int)earliest[1];
-                usedRooms.offer(new long[]{delay + (end - start), room});
-                count[room]++;
+                int delay = usedRooms.peek()[0];
+                int room = usedRooms.poll()[1];
+
+                usedRooms.add(new int[] {delay + (meeting[1] - meeting[0]), room});
+                counter.put(room, counter.getOrDefault(room, 0) + 1);
             }
         }
 
-        int maxCount = 0, ans = 0;
-        for (int i = 0; i < n; i++) {
-            if (count[i] > maxCount || (count[i] == maxCount && i < ans)) {
-                maxCount = count[i];
-                ans = i;
+        int ans = 0;
+        int max = 0;
+
+        // System.out.println(counter);
+
+        for (int room : counter.keySet()) {
+            int count = counter.get(room);
+
+            if (count > max) {
+                max = count;
+                ans = room;
+            } else if (count == max) {
+                ans = Math.min(ans, room);
             }
         }
 
         return ans;
     }
 
-
-    public int try_20250711_2(int n, int[][] meetings) {
+    public int try_20250711_2_fail(int n, int[][] meetings) {
         Queue<Integer> rooms = new PriorityQueue<>();
 
         for (int i = 0; i < n; i++) {
