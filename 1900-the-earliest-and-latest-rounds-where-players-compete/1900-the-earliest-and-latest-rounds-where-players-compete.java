@@ -39,7 +39,8 @@ class Solution {
 
                 if (p < 0) {
                     if (-p == f || -p == s) {
-                        return;
+                        // return;
+                        throw new RuntimeException("oh no");
                     }
                 } else {
                     nextList.add(nextList.size() + 1);
@@ -60,42 +61,42 @@ class Solution {
         int leftPlayer = list.get(left - 1);
         int rightPlayer = list.get(right - 1);
 
-        // if (leftPlayer == f || leftPlayer == s) {
-        //     list.set(right - 1, -rightPlayer);
+        if (leftPlayer == f || leftPlayer == s) {
+            list.set(right - 1, -rightPlayer);
 
-        //     bf(originSize, list, f, s, left + 1, round);
+            bf(originSize, list, f, s, left + 1, round);
 
-        //     list.set(right - 1, rightPlayer);
-        // } else if (rightPlayer == f || rightPlayer == s) {
-        //     list.set(left - 1, -leftPlayer);
+            list.set(right - 1, rightPlayer);
+        } else if (rightPlayer == f || rightPlayer == s) {
+            list.set(left - 1, -leftPlayer);
 
-        //     bf(originSize, list, f, s, left + 1, round);
+            bf(originSize, list, f, s, left + 1, round);
 
-        //     list.set(left - 1, leftPlayer);
-        // } else {
-        //     list.set(right - 1, -rightPlayer);
+            list.set(left - 1, leftPlayer);
+        } else {
+            list.set(right - 1, -rightPlayer);
 
-        //     bf(originSize, list, f, s, left + 1, round);
+            bf(originSize, list, f, s, left + 1, round);
 
-        //     list.set(right - 1, rightPlayer);
+            list.set(right - 1, rightPlayer);
 
-        //     list.set(left - 1, -leftPlayer);
+            list.set(left - 1, -leftPlayer);
 
-        //     bf(originSize, list, f, s, left + 1, round);
+            bf(originSize, list, f, s, left + 1, round);
 
-        //     list.set(left - 1, leftPlayer);
-        // }
-        list.set(right - 1, -rightPlayer);
+            list.set(left - 1, leftPlayer);
+        }
+        // list.set(right - 1, -rightPlayer);
 
-        bf(originSize, list, f, s, left + 1, round);
+        // bf(originSize, list, f, s, left + 1, round);
 
-        list.set(right - 1, rightPlayer);
+        // list.set(right - 1, rightPlayer);
 
-        list.set(left - 1, -leftPlayer);
+        // list.set(left - 1, -leftPlayer);
 
-        bf(originSize, list, f, s, left + 1, round);
+        // bf(originSize, list, f, s, left + 1, round);
 
-        list.set(left - 1, leftPlayer);
+        // list.set(left - 1, leftPlayer);
     }
 
     public void topdown_hold(int n, int f, int s, int round) {
