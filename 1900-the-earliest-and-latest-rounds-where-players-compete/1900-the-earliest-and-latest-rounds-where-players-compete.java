@@ -1,10 +1,110 @@
 class Solution {
     public int[] earliestAndLatest(int n, int firstPlayer, int secondPlayer) {
-        return mySol(n, firstPlayer, secondPlayer);
+        return mySol2(n, firstPlayer, secondPlayer);
     }
 
     int min = Integer.MAX_VALUE;
     int max = Integer.MIN_VALUE;
+
+    public int[] mySol2(int n, int f, int s) {
+        int[] array = new int[n];
+
+        for (int i = 1; i <= n; i++) {
+            array[i - 1] = i;
+        }
+
+        bf_with_array(array, f, s, 1, 1);
+
+        return new int[] {min, max};
+    }
+
+    public void bf_with_array(int[] array, int f, int s, int left, int round) {
+        if (f + s == array.length + 1) {
+            min = Math.min(min, round);
+            max = Math.max(max, round);
+
+            return;
+        }
+
+        // left + right == n + 1
+        int right = array.length + 1 - left;
+
+        if (left >= right) {
+            // make a new list and give f and s a new number respectively.
+            // and call bf with new originSize
+            int half = array.length / 2 + (array.length % 2);
+            int[] nextArray = new int[half];
+
+            // 1,2,f,4,5,s,7,8,9
+            int nextF = -1;
+            int nextS = -1;
+            int index = 0;
+
+            for (int i = 0; i < array.length; i++) {
+                int p = array[i];
+
+                if (p < 0) {
+                    if (-p == f || -p == s) {
+                        // return;
+                        throw new RuntimeException("oh no");
+                    }
+                } else {
+                    nextArray[index] = index + 1;
+                    index++;
+
+                    if (nextF < 0 && p == f) {
+                        nextF = index;
+                    } else if (nextS < 0 && p == s) {
+                        nextS = index;
+                    }
+                }
+            }
+
+            bf_with_array(nextArray, nextF, nextS, 1, round + 1);
+
+            return;
+        }
+
+        int leftPlayer = array[left - 1];
+        int rightPlayer = array[right - 1];
+
+        if (leftPlayer == f || leftPlayer == s) {
+            array[right - 1] = -rightPlayer;
+
+            bf_with_array(array, f, s, left + 1, round);
+
+            array[right - 1] = rightPlayer;
+        } else if (rightPlayer == f || rightPlayer == s) {
+            array[left - 1] = -leftPlayer;
+
+            bf_with_array(array, f, s, left + 1, round);
+
+            array[left - 1] = leftPlayer;
+        } else {
+            array[right - 1] = -rightPlayer;
+
+            bf_with_array(array, f, s, left + 1, round);
+
+            array[right - 1] = rightPlayer;
+
+            array[left - 1] = -leftPlayer;
+
+            bf_with_array(array, f, s, left + 1, round);
+
+            array[left - 1] = leftPlayer;
+        }
+        // array[right - 1] = -rightPlayer;
+
+        // bf_with_array(originSize, list, f, s, left + 1, round);
+
+        // array[right - 1] = rightPlayer;
+
+        // array[left - 1] = -leftPlayer;
+
+        // bf_with_array(originSize, list, f, s, left + 1, round);
+
+        // array[left - 1] = leftPlayer;
+    }
 
     public int[] mySol(int n, int f, int s) {
         List<Integer> list = IntStream.rangeClosed(1, n).boxed().collect(Collectors.toList());
