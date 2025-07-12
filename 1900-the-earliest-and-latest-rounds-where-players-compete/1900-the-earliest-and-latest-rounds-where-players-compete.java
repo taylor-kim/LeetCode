@@ -45,8 +45,8 @@ class Solution {
 
                 if (p < 0) {
                     if (-p == f || -p == s) {
-                        // return;
-                        throw new RuntimeException("oh no");
+                        return;
+                        // throw new RuntimeException("oh no");
                     }
                 } else {
                     nextArray[index] = index + 1;
@@ -68,42 +68,43 @@ class Solution {
         int leftPlayer = array[left - 1];
         int rightPlayer = array[right - 1];
 
-        if (leftPlayer == f || leftPlayer == s) {
-            array[right - 1] = -rightPlayer;
+        // if (leftPlayer == f || leftPlayer == s) {
+        //     array[right - 1] = -rightPlayer;
 
-            bf_with_array(array, f, s, left + 1, round);
+        //     bf_with_array(array, f, s, left + 1, round);
 
-            array[right - 1] = rightPlayer;
-        } else if (rightPlayer == f || rightPlayer == s) {
-            array[left - 1] = -leftPlayer;
+        //     array[right - 1] = rightPlayer;
+        // } else if (rightPlayer == f || rightPlayer == s) {
+        //     array[left - 1] = -leftPlayer;
 
-            bf_with_array(array, f, s, left + 1, round);
+        //     bf_with_array(array, f, s, left + 1, round);
 
-            array[left - 1] = leftPlayer;
-        } else {
-            array[right - 1] = -rightPlayer;
+        //     array[left - 1] = leftPlayer;
+        // } else {
+        //     array[right - 1] = -rightPlayer;
 
-            bf_with_array(array, f, s, left + 1, round);
+        //     bf_with_array(array, f, s, left + 1, round);
 
-            array[right - 1] = rightPlayer;
+        //     array[right - 1] = rightPlayer;
 
-            array[left - 1] = -leftPlayer;
+        //     array[left - 1] = -leftPlayer;
 
-            bf_with_array(array, f, s, left + 1, round);
+        //     bf_with_array(array, f, s, left + 1, round);
 
-            array[left - 1] = leftPlayer;
-        }
-        // array[right - 1] = -rightPlayer;
+        //     array[left - 1] = leftPlayer;
+        // }
 
-        // bf_with_array(originSize, list, f, s, left + 1, round);
+        array[right - 1] = -rightPlayer;
 
-        // array[right - 1] = rightPlayer;
+        bf_with_array(array, f, s, left + 1, round);
 
-        // array[left - 1] = -leftPlayer;
+        array[right - 1] = rightPlayer;
 
-        // bf_with_array(originSize, list, f, s, left + 1, round);
+        array[left - 1] = -leftPlayer;
 
-        // array[left - 1] = leftPlayer;
+        bf_with_array(array, f, s, left + 1, round);
+
+        array[left - 1] = leftPlayer;
     }
 
     public int[] mySol(int n, int f, int s) {
