@@ -25,8 +25,6 @@ class Solution {
             }
         }
 
-        // System.out.println(String.format("v:%b, c:%b", vowel, consonant));
-
         return word.length() >= 3 && vowel && consonant;
     }
 }
