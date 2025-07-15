@@ -4,7 +4,7 @@ class Solution {
     }
 
     public boolean mySol(String word) {
-        Set<Character> vowels = Set.of('a', 'e', 'i', 'o', 'u');
+        Set<Character> vowels = Set.of('a', 'e', 'i', 'o', 'u', 'A', 'E', 'I', 'O', 'U');
 
         boolean vowel = false;
         boolean consonant = false;
@@ -24,6 +24,8 @@ class Solution {
                 }
             }
         }
+
+        // System.out.println(String.format("v:%b, c:%b", vowel, consonant));
 
         return word.length() >= 3 && vowel && consonant;
     }
