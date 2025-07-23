@@ -1,7 +1,63 @@
 class Solution {
     public int maximumGain(String s, int x, int y) {
-        return tryAgain_20240812(s, x, y);
+        return tryAgain_20250723(s, x, y);
     }
+
+    public int tryAgain_20250723(String s, int x, int y) {
+        // abab
+        // bbbaba
+
+        char first = x > y ? 'a' : 'b';
+        char second = x > y ? 'b' : 'a';
+
+        Stack<Character> stack = new Stack();
+
+        int ans = 0;
+        int hi = Math.max(x, y);
+        int lo = Math.min(x, y);
+
+        for (char c : s.toCharArray()) {
+            if (c != 'a' && c != 'b') {
+                stack.push(c);
+            } else if (!stack.isEmpty() && stack.peek() == first && c == second) {
+                stack.pop();
+                ans += hi;
+            } else {
+                stack.push(c);
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        while (!stack.isEmpty()) {
+            sb.append(stack.pop());
+        }
+
+        for (char c : sb.reverse().toString().toCharArray()) {
+            if (c != 'a' && c != 'b') {
+                stack.push(c);
+            } else if (!stack.isEmpty() && stack.peek() == second && c == first) {
+                stack.pop();
+                ans += lo;
+            } else {
+                stack.push(c);
+            }
+        }
+
+        return ans;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     public int tryAgain_20240812(String s, int x, int y) {
         int ans = 0;
