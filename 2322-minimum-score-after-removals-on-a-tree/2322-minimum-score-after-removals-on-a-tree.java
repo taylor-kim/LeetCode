@@ -1,6 +1,64 @@
 class Solution {
     public int minimumScore(int[] nums, int[][] edges) {
-        return others_good(nums, edges);
+        return try_official_dfs(nums, edges);
+    }
+
+    int res = Integer.MAX_VALUE;
+
+    public int try_official_dfs(int[] nums, int[][] edges) {
+        int n = nums.length;
+        int sum = 0;
+        List<Integer>[] graph = new ArrayList[n];
+
+        for (int i = 0; i < n; i++) {
+            graph[i] = new ArrayList();
+            sum ^= nums[i];
+        }
+
+        for (int[] edge : edges) {
+            graph[edge[0]].add(edge[1]);
+            graph[edge[1]].add(edge[0]);
+        }
+
+        dfs(0, -1, nums, graph, sum);
+
+        return res;
+    }
+
+    private int dfs(int node, int parent, int[] nums, List<Integer>[] graph, int sum) {
+        int son = nums[node];
+
+        for (int next : graph[node]) {
+            if (next == parent) continue;
+
+            son ^= dfs(next, node, nums, graph, sum);
+        }
+
+        for (int next : graph[node]) {
+            if (next == parent) {
+                dfs2(next, node, son, node, nums, graph, sum);
+            }
+        }
+
+        return son;
+    }
+
+    private int dfs2(int node, int parent, int other, int anc, int[] nums, List<Integer>[] graph, int sum) {
+        int son = nums[node];
+
+        for (int next : graph[node]) {
+            if (next == parent) continue;
+
+            son ^= dfs2(next, node, other, anc, nums, graph, sum);
+        }
+
+        if (parent == anc) return son;
+
+        res = Math.min(res, 
+            Math.max(son, Math.max(other, sum ^ son ^ other)) 
+            - Math.min(son, Math.min(other, sum ^ son ^ other)));
+
+        return son;
     }
 
     public int others_good(int[] nums, int[][] edges) {
