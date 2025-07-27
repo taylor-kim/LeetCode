@@ -20,12 +20,18 @@ class Solution {
             graph[edge[1]].add(edge[0]);
         }
 
-        dfs(0, -1, nums, graph, in, out, counter, sum);
+        int root = 0;
+
+        dfs(root, -1, nums, graph, in, out, counter, sum);
 
         int ans = Integer.MAX_VALUE;
 
-        for (int i = 1; i < n; i++) {
+        for (int i = 0; i < n; i++) {
+            if (i == root) continue;
             for (int j = i + 1; j < n; j++) {
+                if (j == root) continue;
+                // System.out.println(String.format("i:%d, j:%d", i, j));
+
                 // if (in[i] < in[j] && in[j] >= out[i]) {
                 //     System.out.println(String.format("in[%d]:%d, in[%d]:%d, out[%d]:%d, out[%d]:%d"
                 //     , i, in[i], j, in[j], i, out[i], j, out[j]));
@@ -34,19 +40,19 @@ class Solution {
                 // if (in[i] < in[j] && in[j] < out[i]) {
                 if (in[i] < in[j] && out[j] <= out[i]) {
                     ans = Math.min(ans, 
-                        Math.max(sum[i] ^ sum[j], Math.max(sum[j], sum[0] ^ sum[i]))
-                        - Math.min(sum[i] ^ sum[j], Math.min(sum[j], sum[0] ^ sum[i]))
+                        Math.max(sum[i] ^ sum[j], Math.max(sum[j], sum[root] ^ sum[i]))
+                        - Math.min(sum[i] ^ sum[j], Math.min(sum[j], sum[root] ^ sum[i]))
                         );
                 // } else if (in[j] < in[i] && in[i] < out[j]) {
                 } else if (in[j] < in[i] && out[i] <= out[j]) {
                     ans = Math.min(ans, 
-                        Math.max(sum[i] ^ sum[j], Math.max(sum[i], sum[0] ^ sum[j]))
-                        - Math.min(sum[i] ^ sum[j], Math.min(sum[i], sum[0] ^ sum[j]))
+                        Math.max(sum[i] ^ sum[j], Math.max(sum[i], sum[root] ^ sum[j]))
+                        - Math.min(sum[i] ^ sum[j], Math.min(sum[i], sum[root] ^ sum[j]))
                         );
                 } else {
                     ans = Math.min(ans, 
-                        Math.max(sum[i], Math.max(sum[j], sum[0] ^ sum[i] ^ sum[j]))
-                        - Math.min(sum[i], Math.min(sum[j], sum[0] ^ sum[i] ^ sum[j]))
+                        Math.max(sum[i], Math.max(sum[j], sum[root] ^ sum[i] ^ sum[j]))
+                        - Math.min(sum[i], Math.min(sum[j], sum[root] ^ sum[i] ^ sum[j]))
                         );
                 }
             }
