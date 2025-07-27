@@ -25,24 +25,22 @@ class Solution {
         long ans = 0;
 
         long[] delCount = new long[n + 1];
-        // int ri = n;
-        // int right2 = Integer.MAX_VALUE;
-        int ri1 = n;
+        int right1 = n + 1;
         int right2 = n + 1;
 
         for (int left = n; left > 0; left--) {
-            if (rightMin1[left] < rightMin1[ri1]) {
-                right2 = Math.min(right2, rightMin1[ri1]);
-                ri1 = left;
+            if (rightMin1[left] < right1) {
+                right2 = Math.min(right2, Math.min(rightMin2[left], right1));
+                right1 = rightMin1[left];
             } else if (rightMin1[left] < right2) {
                 right2 = rightMin1[left];
             }
 
-            ans += Math.min(rightMin1[ri1], n + 1) - left;
+            ans += right1 - left;
 
-            delCount[ri1] += 
-                Math.min(Math.min(right2, rightMin2[ri1]), n + 1)
-                - Math.min(rightMin1[ri1], n + 1);
+            if (right1 <= n) {
+                delCount[right1] += right2 - right1;
+            }
 
             // if (rightMin1[ri] > rightMin1[left]) {
             //     right2 = Math.min(right2, rightMin1[ri]);
