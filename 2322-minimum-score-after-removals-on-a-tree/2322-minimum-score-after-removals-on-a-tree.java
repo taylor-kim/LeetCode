@@ -1,11 +1,72 @@
 class Solution {
     public int minimumScore(int[] nums, int[][] edges) {
-        return try_official_dfs(nums, edges);
+        return official_enumerate(nums, edges);
+    }
+
+    public int official_enumerate(int[] nums, int[][] edges) {
+        int n = nums.length;
+        int[] counter = {0};
+        int[] in = new int[n];
+        int[] out = new int[n];
+        int[] sum = new int[n];
+        List<Integer>[] graph = new ArrayList[n];
+
+        for (int i = 0; i < n; i++) {
+            graph[i] = new ArrayList();
+        }
+
+        for (int[] edge : edges) {
+            graph[edge[0]].add(edge[1]);
+            graph[edge[1]].add(edge[0]);
+        }
+
+        dfs(0, -1, nums, graph, in, out, counter, sum);
+
+        int ans = Integer.MAX_VALUE;
+
+        for (int i = 1; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (in[i] < in[j] && in[j] < out[i]) {
+                    ans = Math.min(ans, 
+                        Math.max(sum[i] ^ sum[j], Math.max(sum[j], sum[0] ^ sum[i]))
+                        - Math.min(sum[i] ^ sum[j], Math.min(sum[j], sum[0] ^ sum[i]))
+                        );
+                } else if (in[j] < in[i] && in[i] < out[j]) {
+                    ans = Math.min(ans, 
+                        Math.max(sum[i] ^ sum[j], Math.max(sum[i], sum[0] ^ sum[j]))
+                        - Math.min(sum[i] ^ sum[j], Math.min(sum[i], sum[0] ^ sum[j]))
+                        );
+                } else {
+                    ans = Math.min(ans, 
+                        Math.max(sum[i], Math.max(sum[j], sum[0] ^ sum[i] ^ sum[j]))
+                        - Math.min(sum[i], Math.min(sum[j], sum[0] ^ sum[i] ^ sum[j]))
+                        );
+                }
+            }
+        }
+
+        return ans;
+    }
+
+    private int dfs(int node, int parent, int[] nums, List<Integer>[] graph, int[] in, int[] out, int[] counter, int[] sum) {
+        in[node] = counter[0]++;
+
+        sum[node] = nums[node];
+
+        for (int next : graph[node]) {
+            if (next == parent) continue;
+
+            sum[node] ^= dfs(next, node, nums, graph, in, out, counter, sum);
+        }
+
+        out[node] = counter[0];
+
+        return sum[node];
     }
 
     int res = Integer.MAX_VALUE;
 
-    public int try_official_dfs(int[] nums, int[][] edges) {
+    public int try_official_double_dfs(int[] nums, int[][] edges) {
         int n = nums.length;
         int sum = 0;
         List<Integer>[] graph = new ArrayList[n];
