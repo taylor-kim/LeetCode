@@ -20,7 +20,7 @@ class Solution {
             graph[edge[1]].add(edge[0]);
         }
 
-        int root = 0;
+        int root = 1;
 
         dfs(root, -1, nums, graph, in, out, counter, sum);
 
