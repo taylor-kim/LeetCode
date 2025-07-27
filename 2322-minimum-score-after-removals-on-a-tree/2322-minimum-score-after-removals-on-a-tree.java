@@ -25,6 +25,8 @@ class Solution {
 
         int ans = Integer.MAX_VALUE;
 
+        // System.out.println(totalXor + ", " + Arrays.toString(subtreeXor));
+
         for (int i = 1; i < n; i++) {
             for (int j = i + 1; j < n; j++) {
                 int x, y, z;
