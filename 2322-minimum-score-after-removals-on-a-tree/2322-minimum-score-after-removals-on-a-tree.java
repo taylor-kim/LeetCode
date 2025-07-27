@@ -26,12 +26,19 @@ class Solution {
 
         for (int i = 1; i < n; i++) {
             for (int j = i + 1; j < n; j++) {
-                if (in[i] < in[j] && in[j] < out[i]) {
+                // if (in[i] < in[j] && in[j] >= out[i]) {
+                //     System.out.println(String.format("in[%d]:%d, in[%d]:%d, out[%d]:%d, out[%d]:%d"
+                //     , i, in[i], j, in[j], i, out[i], j, out[j]));
+                // }
+
+                // if (in[i] < in[j] && in[j] < out[i]) {
+                if (in[i] < in[j] && out[j] < out[i]) {
                     ans = Math.min(ans, 
                         Math.max(sum[i] ^ sum[j], Math.max(sum[j], sum[0] ^ sum[i]))
                         - Math.min(sum[i] ^ sum[j], Math.min(sum[j], sum[0] ^ sum[i]))
                         );
-                } else if (in[j] < in[i] && in[i] < out[j]) {
+                // } else if (in[j] < in[i] && in[i] < out[j]) {
+                } else if (in[j] < in[i] && out[i] < out[j]) {
                     ans = Math.min(ans, 
                         Math.max(sum[i] ^ sum[j], Math.max(sum[i], sum[0] ^ sum[j]))
                         - Math.min(sum[i] ^ sum[j], Math.min(sum[i], sum[0] ^ sum[j]))
@@ -59,7 +66,7 @@ class Solution {
             sum[node] ^= dfs(next, node, nums, graph, in, out, counter, sum);
         }
 
-        out[node] = counter[0];
+        out[node] = counter[0]++;
 
         return sum[node];
     }
