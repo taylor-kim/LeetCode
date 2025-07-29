@@ -1,6 +1,36 @@
 class Solution {
     public int[] smallestSubarrays(int[] nums) {
-        return mySol3(nums);
+        return official(nums);
+    }
+
+    public int[] official(int[] nums) {
+        int n = nums.length;
+        int[] bits = new int[32];
+        Arrays.fill(bits, -1);
+
+        int[] ans = new int[n];
+
+        for (int i = n - 1; i >= 0; i--) {
+            int num = nums[i];
+
+            int j = i;
+
+            for (int b = 0; b < bits.length; b++) {
+                int bit = 1 << b;
+
+                if ((num & bit) == 0) {
+                    if (bits[b] != -1) {
+                        j = Math.max(j, bits[b]);
+                    }
+                } else {
+                    bits[b] = i;
+                }
+            }
+
+            ans[i] = j - i + 1;
+        }
+
+        return ans;
     }
 
     public int[] mySol3(int[] nums) {
@@ -31,10 +61,6 @@ class Solution {
                 left++;
             }
         }
-
-        // while (left < n) {
-        //     System.out.println(String.format("left:%d", left++));
-        // }
 
         return ans;
     }
