@@ -16,15 +16,26 @@ class Solution {
 
             and &= num;
 
-            if (and < max || max < num) {
+            // if (and < max || max < num) {
+            //     if (max < num) {
+            //         ans = 1;
+            //     }
+            //     max = Math.max(max, num);
+            //     left = right;
+            //     and = num;
+            // } else if (and == max) {
+            //     ans = Math.max(ans, right - left + 1);
+            // }
+
+            if (and == num && and == max) {
+                ans = Math.max(ans, right - left + 1);
+            } else {
                 if (max < num) {
+                    max = num;
                     ans = 1;
                 }
-                max = Math.max(max, num);
-                left = right;
                 and = num;
-            } else if (and == max) {
-                ans = Math.max(ans, right - left + 1);
+                left = right;
             }
         }
 
