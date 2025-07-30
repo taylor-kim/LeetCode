@@ -42,20 +42,6 @@ class Solution {
         return ans;
     }
 
-    private int getNumer(int[] bits) {
-        int num = 0;
-
-        for (int i = 0; i < bits.length; i++) {
-            int bit = 1 << i;
-
-            if (bits[bit] != 0) {
-                num |= bit;
-            }
-        }
-
-        return num;
-    }
-
     public int official_oneway(int[] nums) {
         int ans = 0;
         int max = 0;
