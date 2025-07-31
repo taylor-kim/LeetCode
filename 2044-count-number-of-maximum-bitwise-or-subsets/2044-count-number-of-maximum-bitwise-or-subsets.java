@@ -1,6 +1,24 @@
 class Solution {
     public int countMaxOrSubsets(int[] nums) {
-        return official_bit_20250731(nums);
+        return official_bit_dp_20250731(nums);
+    }
+
+    public int official_bit_dp_20250731(int[] nums) {
+        int max = 0;
+        for (int num : nums) max |= num;
+        // int[] dp = new int[max + 1];
+        int[] dp = new int[(int)1e6 - 1];
+        dp[0] = 1;
+        max = 0;
+
+        for (int num : nums) {
+            for (int i = max; i >= 0; i--) {
+                dp[i | num] += dp[i];
+            }
+            max |= num;
+        }
+
+        return dp[max];
     }
 
     public int official_bit_20250731(int[] nums) {
