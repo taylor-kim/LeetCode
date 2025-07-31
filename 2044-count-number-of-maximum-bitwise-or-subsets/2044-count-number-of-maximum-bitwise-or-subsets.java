@@ -1,7 +1,33 @@
 class Solution {
     public int countMaxOrSubsets(int[] nums) {
-        return official_bit_dp(nums);
+        return try_20250731(nums);
     }
+
+    public int try_20250731(int[] nums) {
+        int max = 0;
+
+        for (int num : nums) max |= num;
+
+        return topdown(0, 0, nums, max);
+    }
+
+    private int topdown(int index, int or, int[] nums, int max) {
+        if (index >= nums.length) return 0;
+
+        int ans = 0;
+
+        if ((or | nums[index]) == max) ans++;
+
+        int include = topdown(index + 1, or | nums[index], nums, max);
+        int exclude = topdown(index + 1, or, nums, max);
+
+        return ans + include + exclude;
+    }
+
+
+
+
+
 
     public int official_bit_dp(int[] nums) {
         int max = 0;
