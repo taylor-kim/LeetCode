@@ -1,6 +1,32 @@
 class Solution {
     public int countMaxOrSubsets(int[] nums) {
-        return try_20250731(nums);
+        return official_bit_20250731(nums);
+    }
+
+    public int official_bit_20250731(int[] nums) {
+        int n = nums.length;
+        int sizeOfAllCases = 1 << n;
+        int ans = 0;
+        int max = 0;
+
+        for (int num : nums) max |= num;
+
+        for (int used = 1; used < sizeOfAllCases; used++) {
+            int or = 0;
+            for (int i = 0; i < n; i++) {
+                int bit = 1 << i;
+
+                if ((used & bit) != 0) {
+                    or |= nums[i];
+                }
+            }
+
+            if (or == max) {
+                ans++;
+            }
+        }
+
+        return ans;
     }
 
     public int try_20250731(int[] nums) {
@@ -23,11 +49,6 @@ class Solution {
 
         return ans + include + exclude;
     }
-
-
-
-
-
 
     public int official_bit_dp(int[] nums) {
         int max = 0;
