@@ -1,11 +1,13 @@
 class Solution {
     public long minCost(int[] basket1, int[] basket2) {
-        return mySol(basket1, basket2);
+        return mySol_fail(basket1, basket2);
     }
 
-    public long mySol(int[] basket1, int[] basket2) {
+    public long mySol_fail(int[] basket1, int[] basket2) {
+        Arrays.sort(basket1);
+        Arrays.sort(basket2);
+
         int n = basket1.length;
-        int min = Integer.MAX_VALUE;
 
         Map<Integer, Integer> map1 = new HashMap();
         Map<Integer, Integer> map2 = new HashMap();
@@ -13,15 +15,13 @@ class Solution {
         for (int i = 0; i < n; i++) {
             map1.put(basket1[i], map1.getOrDefault(basket1[i], 0) + 1);
             map2.put(basket2[i], map2.getOrDefault(basket2[i], 0) + 1);
-
-            min = Math.min(min, Math.min(basket1[i], basket2[i]));
         }
 
         for (int key : map1.keySet()) {
-            int smaller = Math.min(map1.get(key), map2.getOrDefault(key, 0));
+            int min = Math.min(map1.get(key), map2.getOrDefault(key, 0));
 
-            map1.put(key, map1.get(key) - smaller);
-            map2.put(key, map2.getOrDefault(key, 0) - smaller);
+            map1.put(key, map1.get(key) - min);
+            map2.put(key, map2.getOrDefault(key, 0) - min);
         }
 
         List<int[]> list1 = new ArrayList();
@@ -47,29 +47,14 @@ class Solution {
             }
         }
 
+        int min = Math.min(basket1[0], basket2[0]);
+
         int left1 = 0;
-        int left2 = list2.size() - 1;
+        int left2 = 0;
 
         long ans = 0;
 
-        // Collections.sort(list1, (a, b) -> {
-        //     return a[0] - b[0];
-        // });
-        // Collections.sort(list2, (a, b) -> {
-        //     return a[0] - b[0];
-        // });
-
-        // Collections.shuffle(list2);
-
-        int prev = -1;
-
-        for (int[] data : list2) {
-            if (prev > data[0]) throw new RuntimeException(String.format("prev:%d, num:%d", prev, data[0]));
-
-            prev = data[0];
-        }
-
-        while (left1 < list1.size() && left2 >= 0) {
+        while (left1 < list1.size() && left2 < list2.size()) {
             int[] data1 = list1.get(left1);
             int cost1 = data1[0];
             int count1 = data1[1];
@@ -77,8 +62,6 @@ class Solution {
             int[] data2 = list2.get(left2);
             int cost2 = data2[0];
             int count2 = data2[1];
-
-            // System.out.println(String.format("d1:%s, d2:%s", Arrays.toString(data1), Arrays.toString(data2)));
             
             int small = Math.min(count1, count2);
 
@@ -97,7 +80,7 @@ class Solution {
             }
 
             if (data2[1] == 0) {
-                left2--;
+                left2++;
             }
         }
 
