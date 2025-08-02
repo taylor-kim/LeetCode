@@ -1,9 +1,9 @@
 class Solution {
     public long minCost(int[] basket1, int[] basket2) {
-        return mySol_fail(basket1, basket2);
+        return mySol(basket1, basket2);
     }
 
-    public long mySol_fail(int[] basket1, int[] basket2) {
+    public long mySol(int[] basket1, int[] basket2) {
         int n = basket1.length;
         int min = Integer.MAX_VALUE;
 
@@ -52,12 +52,12 @@ class Solution {
 
         long ans = 0;
 
-        // Collections.sort(list1, (a, b) -> {
-        //     return a[0] - b[0];
-        // });
-        // Collections.sort(list2, (a, b) -> {
-        //     return a[0] - b[0];
-        // });
+        Collections.sort(list1, (a, b) -> {
+            return a[0] - b[0];
+        });
+        Collections.sort(list2, (a, b) -> {
+            return a[0] - b[0];
+        });
 
         while (left1 < list1.size() && left2 >= 0) {
             int[] data1 = list1.get(left1);
