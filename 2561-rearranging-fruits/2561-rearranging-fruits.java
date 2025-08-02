@@ -54,12 +54,12 @@ class Solution {
 
         long ans = 0;
 
-        Collections.sort(list1, (a, b) -> {
-            return a[0] - b[0];
-        });
-        Collections.sort(list2, (a, b) -> {
-            return a[0] - b[0];
-        });
+        // Collections.sort(list1, (a, b) -> {
+        //     return a[0] - b[0];
+        // });
+        // Collections.sort(list2, (a, b) -> {
+        //     return a[0] - b[0];
+        // });
 
         while (left1 < list1.size() && left2 >= 0) {
             int[] data1 = list1.get(left1);
