@@ -50,11 +50,18 @@ class Solution {
         int min = Math.min(basket1[0], basket2[0]);
 
         int left1 = 0;
-        int left2 = 0;
+        int left2 = list2.size() - 1;
 
         long ans = 0;
 
-        while (left1 < list1.size() && left2 < list2.size()) {
+        Collections.sort(list1, (a, b) -> {
+            return a[0] - b[0];
+        });
+        Collections.sort(list2, (a, b) -> {
+            return a[0] - b[0];
+        });
+
+        while (left1 < list1.size() && left2 >= 0) {
             int[] data1 = list1.get(left1);
             int cost1 = data1[0];
             int count1 = data1[1];
@@ -80,7 +87,7 @@ class Solution {
             }
 
             if (data2[1] == 0) {
-                left2++;
+                left2--;
             }
         }
 
