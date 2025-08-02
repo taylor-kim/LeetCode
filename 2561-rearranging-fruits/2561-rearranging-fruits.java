@@ -52,12 +52,22 @@ class Solution {
 
         long ans = 0;
 
-        Collections.sort(list1, (a, b) -> {
-            return a[0] - b[0];
-        });
-        Collections.sort(list2, (a, b) -> {
-            return a[0] - b[0];
-        });
+        // Collections.sort(list1, (a, b) -> {
+        //     return a[0] - b[0];
+        // });
+        // Collections.sort(list2, (a, b) -> {
+        //     return a[0] - b[0];
+        // });
+
+        // Collections.shuffle(list2);
+
+        int prev = -1;
+
+        for (int[] data : list2) {
+            if (prev > data[0]) throw new RuntimeException(String.format("prev:%d, num:%d", prev, data[0]));
+
+            prev = data[0];
+        }
 
         while (left1 < list1.size() && left2 >= 0) {
             int[] data1 = list1.get(left1);
@@ -67,6 +77,8 @@ class Solution {
             int[] data2 = list2.get(left2);
             int cost2 = data2[0];
             int count2 = data2[1];
+
+            // System.out.println(String.format("d1:%s, d2:%s", Arrays.toString(data1), Arrays.toString(data2)));
             
             int small = Math.min(count1, count2);
 
