@@ -1,6 +1,35 @@
 class Solution {
     public int totalFruit(int[] fruits) {
-        return mySol(fruits);
+        return others_better(fruits);
+    }
+
+    public int others_better(int[] fruits) {
+        int ans = 0;
+
+        int leftFruit = -1;
+        int rightFruit = -1;
+        int count = 0;
+        int rightFruitCount = 0;
+        
+        for (int f : fruits) {
+            if (f == leftFruit || f == rightFruit) {
+                count++;
+            } else {
+                count = rightFruitCount + 1;
+            }
+
+            if (f == rightFruit) {
+                rightFruitCount++;
+            } else {
+                leftFruit = rightFruit;
+                rightFruit = f;
+                rightFruitCount = 1;
+            }
+
+            ans = Math.max(ans, count);
+        }
+
+        return ans;
     }
 
     public int mySol(int[] fruits) {
@@ -24,7 +53,8 @@ class Solution {
 
             baskets.put(f, baskets.getOrDefault(f, 0) + 1);
 
-            int localSum = baskets.values().stream().mapToInt(Integer::intValue).sum();
+            // int localSum = baskets.values().stream().mapToInt(Integer::intValue).sum();
+            int localSum = right - left + 1;
 
             ans = Math.max(ans, localSum);
         }
