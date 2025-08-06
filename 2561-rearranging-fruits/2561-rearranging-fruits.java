@@ -1,6 +1,43 @@
 class Solution {
     public long minCost(int[] basket1, int[] basket2) {
-        return mySol(basket1, basket2);
+        return official(basket1, basket2);
+    }
+
+    public long official(int[] basket1, int[] basket2) {
+        int n = basket1.length;
+
+        Map<Integer, Integer> freq = new HashMap();
+
+        int min = Integer.MAX_VALUE;
+
+        for (int i = 0; i < n; i++) {
+            freq.put(basket1[i], freq.getOrDefault(basket1[i], 0) + 1);
+            freq.put(basket2[i], freq.getOrDefault(basket2[i], 0) - 1);
+
+            min = Math.min(min, Math.min(basket1[i], basket2[i]));
+        }
+
+        List<Integer> list = new ArrayList();
+
+        for (int cost : freq.keySet()) {
+            int count = freq.get(cost);
+
+            if (count % 2 == 1) return -1;
+
+            for (int i = 0; i < Math.abs(count) / 2; i++) {
+                list.add(cost);
+            }
+        }
+
+        Collections.sort(list);
+
+        long ans = 0;
+
+        for (int i = 0; i < list.size() / 2; i++) {
+            ans += Math.min(2l * min, list.get(i));
+        }
+
+        return ans;
     }
 
     public long mySol(int[] basket1, int[] basket2) {
