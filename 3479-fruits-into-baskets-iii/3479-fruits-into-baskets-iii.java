@@ -17,31 +17,29 @@ class Solution {
         int ans = 0;
 
         for (int i = 0; i < n; i++) {
-            int count = 1;
+            int unset = 1;
             for (int s = 0; s < section; s++) {
                 if (sections[s] < fruits[i]) continue;
 
-                int max = 0;
+                sections[s] = 0;
 
                 for (int j = 0; j < m; j++) {
                     int index = s * m + j;
 
                     if (index < n) {
-                        if (baskets[index] >= fruits[i] && count == 1) {
+                        if (baskets[index] >= fruits[i] && unset == 1) {
                             baskets[index] = 0;
-                            count = 0;
+                            unset = 0;
                         }
 
-                        max = Math.max(max, baskets[index]);
+                        sections[s] = Math.max(sections[s], baskets[index]);
                     }
                 }
 
-                sections[s] = max;
-
-                if (count == 0) break;
+                break;
             }
 
-            ans += count;
+            ans += unset;
         }
 
         return ans;
