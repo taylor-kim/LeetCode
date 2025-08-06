@@ -20,7 +20,7 @@ class Solution {
             while (lo <= hi) {
                 int mid = lo + (hi - lo) / 2;
 
-                if (segmentTree.query(1, 0, n - 1, lo, mid) >= fruits[i]) {
+                if (segmentTree.query(1, 0, n - 1, 0, mid) >= fruits[i]) {
                     index = mid;
                     hi = mid - 1;
                 } else {
