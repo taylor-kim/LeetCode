@@ -1,9 +1,11 @@
 class Solution {
     public double soupServings(int n) {
-        return trick(n);
+        return official_topdown(n);
     }
 
     public double official_topdown(int n) {
+        if (n == 0) return 0.5;
+
         int m = (int)Math.ceil(n / 25.0);
 
         Map<Integer, Map<Integer, Double>> memo = new HashMap();
@@ -14,7 +16,8 @@ class Solution {
             }
         }
 
-        return official_topdown(m, m, memo);
+        // return official_topdown(m, m, memo);
+        return memo.get(m).get(m);
     }
 
     public double official_topdown(int a, int b, Map<Integer, Map<Integer, Double>> memo) {
@@ -51,12 +54,12 @@ class Solution {
 
         if (memo[a][b] != null) return memo[a][b];
 
-        double r1 = 0.25 * topdown2(a - 100, b - 0, memo);
-        double r2 = 0.25 * topdown2(a - 75, b - 25, memo);
-        double r3 = 0.25 * topdown2(a - 50, b - 50, memo);
-        double r4 = 0.25 * topdown2(a - 25, b - 75, memo);
+        double r1 = topdown2(a - 100, b - 0, memo);
+        double r2 = topdown2(a - 75, b - 25, memo);
+        double r3 = topdown2(a - 50, b - 50, memo);
+        double r4 = topdown2(a - 25, b - 75, memo);
 
-        return memo[a][b] = r1 + r2 + r3 + r4;
+        return memo[a][b] = 0.25 * (r1 + r2 + r3 + r4);
     }
 
     public double mySol_fail(int n) {
