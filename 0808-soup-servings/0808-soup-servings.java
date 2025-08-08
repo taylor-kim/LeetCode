@@ -1,6 +1,37 @@
 class Solution {
     public double soupServings(int n) {
-        return trick(n);
+        return official_topdown(n);
+    }
+
+    public double official_topdown(int n) {
+        int m = (int)Math.ceil(n / 25.0);
+
+        Map<Integer, Map<Integer, Double>> memo = new HashMap();
+
+        for (int k = 1; k <= m; k++) {
+            if (official_topdown(k, k, memo) > 1 - (1e-5)) {
+                return 1.0;
+            }
+        }
+
+        return official_topdown(m, m, memo);
+    }
+
+    public double official_topdown(int a, int b, Map<Integer, Map<Integer, Double>> memo) {
+        if (a <= 0 && b > 0) return 1;
+        if (a <= 0 && b <= 0) return 0.5;
+        if (a > 0 && b <= 0) return 0;
+
+        if (memo.containsKey(a) && memo.get(a).containsKey(b)) return memo.get(a).get(b);
+
+        double r1 = 0.25 * official_topdown(a - 4, b - 0, memo);
+        double r2 = 0.25 * official_topdown(a - 3, b - 1, memo);
+        double r3 = 0.25 * official_topdown(a - 2, b - 2, memo);
+        double r4 = 0.25 * official_topdown(a - 1, b - 3, memo);
+
+        memo.computeIfAbsent(a, k -> new HashMap()).put(b, r1 + r2 + r3 + r4);
+
+        return memo.get(a).get(b);
     }
 
     public double trick(int n) {
