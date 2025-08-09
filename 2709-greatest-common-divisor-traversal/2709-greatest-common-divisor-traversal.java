@@ -12,6 +12,7 @@ class Solution {
         Map<Integer, Integer> seen = new HashMap();
 
         Map<Integer, List<Integer>> graph = new HashMap();
+        UnionFind uf = new UnionFind(n);
 
         for (int i = 0; i < n; i++) {
             int num = nums[i];
@@ -20,31 +21,74 @@ class Solution {
 
             List<Integer> primes = map.computeIfAbsent(num, k -> getPrimeFactors(num));
 
-            // System.out.println(primes);
-
             for (int p : primes) {
                 if (seen.containsKey(p)) {
                     int j = seen.get(p);
 
-                    graph.computeIfAbsent(i, k -> new ArrayList()).add(j);
-                    graph.computeIfAbsent(j, k -> new ArrayList()).add(i);
+                    // graph.computeIfAbsent(i, k -> new ArrayList()).add(j);
+                    // graph.computeIfAbsent(j, k -> new ArrayList()).add(i);
+
+                    uf.merge(i, j);
                 } else {
                     seen.put(p, i);
                 }
             }
         }
 
-        // System.out.println(graph);
+        // boolean[] visit = new boolean[n];
 
-        boolean[] visit = new boolean[n];
+        // dfs(0, graph, visit);
 
-        dfs(0, graph, visit);
+        // for (boolean b : visit) {
+        //     if (!b) return false;
+        // }
 
-        for (boolean b : visit) {
-            if (!b) return false;
+        // return true;
+
+        return uf.isConnected();
+    }
+
+    private class UnionFind {
+        int[] parents;
+        int[] ranks;
+
+        public UnionFind(int n) {
+            parents = new int[n];
+            ranks = new int[n];
+
+            for (int i = 0; i < n; i++) {
+                parents[i] = i;
+                ranks[i] = 1;
+            }
         }
 
-        return true;
+        public int find(int a) {
+            if (parents[a] != a) {
+                parents[a] = find(parents[a]);
+            }
+
+            return parents[a];
+        }
+
+        public void merge(int a, int b) {
+            a = find(a);
+            b = find(b);
+
+            if (a == b) return;
+
+            if (ranks[a] < ranks[b]) {
+                a += b;
+                b = a - b;
+                a = a - b;
+            }
+
+            parents[b] = a;
+            ranks[a] += ranks[b];
+        }
+
+        private boolean isConnected() {
+            return ranks[find(0)] == ranks.length;
+        }
     }
 
     private void dfs(int node, Map<Integer, List<Integer>> graph, boolean[] visit) {
