@@ -11,7 +11,7 @@ class Solution {
         Map<Integer, List<Integer>> map = new HashMap();
         Map<Integer, Integer> seen = new HashMap();
 
-        Map<Integer, List<Integer>> graph = new HashMap();
+        Map<Integer, Set<Integer>> graph = new HashMap();
         UnionFind uf = new UnionFind(n);
 
         for (int i = 0; i < n; i++) {
@@ -25,8 +25,8 @@ class Solution {
                 if (seen.containsKey(p)) {
                     int j = seen.get(p);
 
-                    // graph.computeIfAbsent(i, k -> new ArrayList()).add(j);
-                    // graph.computeIfAbsent(j, k -> new ArrayList()).add(i);
+                    graph.computeIfAbsent(i, k -> new HashSet()).add(j);
+                    graph.computeIfAbsent(j, k -> new HashSet()).add(i);
 
                     uf.merge(i, j);
                 } else {
@@ -35,17 +35,17 @@ class Solution {
             }
         }
 
-        // boolean[] visit = new boolean[n];
+        boolean[] visit = new boolean[n];
 
-        // dfs(0, graph, visit);
+        dfs(0, graph, visit);
 
-        // for (boolean b : visit) {
-        //     if (!b) return false;
-        // }
+        for (boolean b : visit) {
+            if (!b) return false;
+        }
 
-        // return true;
+        return true;
 
-        return uf.isConnected();
+        // return uf.isConnected();
     }
 
     private class UnionFind {
@@ -91,7 +91,7 @@ class Solution {
         }
     }
 
-    private void dfs(int node, Map<Integer, List<Integer>> graph, boolean[] visit) {
+    private void dfs(int node, Map<Integer, Set<Integer>> graph, boolean[] visit) {
         if (visit[node]) return;
 
         visit[node] = true;
