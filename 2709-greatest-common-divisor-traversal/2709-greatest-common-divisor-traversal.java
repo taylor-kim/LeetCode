@@ -12,7 +12,7 @@ class Solution {
         Map<Integer, Integer> seen = new HashMap();
 
         Map<Integer, Set<Integer>> graph = new HashMap();
-        UnionFind uf = new UnionFind(n);
+        // UnionFind uf = new UnionFind(n);
 
         for (int i = 0; i < n; i++) {
             int num = nums[i];
@@ -28,7 +28,7 @@ class Solution {
                     graph.computeIfAbsent(i, k -> new HashSet()).add(j);
                     graph.computeIfAbsent(j, k -> new HashSet()).add(i);
 
-                    uf.merge(i, j);
+                    // uf.merge(i, j);
                 } else {
                     seen.put(p, i);
                 }
