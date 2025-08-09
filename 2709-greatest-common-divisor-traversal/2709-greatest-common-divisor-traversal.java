@@ -1,9 +1,106 @@
 class Solution {
     public boolean canTraverseAllPairs(int[] nums) {
-        return try_20250809(nums);
+        return practice_20250809(nums);
     }
 
-    public boolean try_20250809(int[] nums) {
+    public boolean practice_20250809(int[] nums) {
+        int n = nums.length;
+
+        if (n == 1) return true;
+
+        Map<Integer, List<Integer>> map = new HashMap();
+        Map<Integer, Integer> seen = new HashMap();
+
+        Map<Integer, List<Integer>> graph = new HashMap();
+
+        for (int i = 0; i < n; i++) {
+            int num = nums[i];
+
+            if (num == 1) return false;
+
+            List<Integer> primes = map.computeIfAbsent(num, k -> getPrimeFactors(num));
+
+            // System.out.println(primes);
+
+            for (int p : primes) {
+                if (seen.containsKey(p)) {
+                    int j = seen.get(p);
+
+                    graph.computeIfAbsent(i, k -> new ArrayList()).add(j);
+                    graph.computeIfAbsent(j, k -> new ArrayList()).add(i);
+                } else {
+                    seen.put(p, i);
+                }
+            }
+        }
+
+        // System.out.println(graph);
+
+        boolean[] visit = new boolean[n];
+
+        dfs(0, graph, visit);
+
+        for (boolean b : visit) {
+            if (!b) return false;
+        }
+
+        return true;
+    }
+
+    private void dfs(int node, Map<Integer, List<Integer>> graph, boolean[] visit) {
+        if (visit[node]) return;
+
+        visit[node] = true;
+
+        if (!graph.containsKey(node)) return;
+
+        for (int next : graph.get(node)) {
+            dfs(next, graph, visit);
+        }
+    }
+
+    private List<Integer> getPrimeFactors(int x) {
+        List<Integer> primeFactors = new ArrayList();
+
+        for (int i = 2; i * i <= x; i++) {
+            if (x % i == 0) {
+                primeFactors.add(i);
+
+                while (x % i == 0) {
+                    x /= i;
+                }
+            }
+        }
+        if (x != 1) {
+            primeFactors.add(x);
+        }
+
+        return primeFactors;
+    }
+
+    private List<Integer> getPrimes(int n) {
+        boolean[] primes = new boolean[n + 1];
+        Arrays.fill(primes, true);
+        primes[0] = primes[1] = false;
+
+        for (int i = 2; i <= n; i++) {
+            if (!primes[i]) continue;
+
+            for (int j = i * 2; j <= n; j += i) {
+                primes[j] = false;
+            }
+        }
+
+        List<Integer> result = new ArrayList();
+
+        for (int i = 2; i <= n; i++) {
+            if (primes[i]) result.add(i);
+        }
+
+        return result;
+    }
+
+    public boolean try_20250809_tle(int[] nums) {
         Set<Integer> set = new HashSet();
         for (int num : nums) set.add(num);
 
@@ -12,7 +109,7 @@ class Solution {
         List<Integer> list = new ArrayList(set);
         Collections.sort(list);
 
-        Set<Integer> added = new HashSet();
+        int max = list.get(list.size() - 1);
 
         Map<Integer, Set<Integer>> graph = new HashMap();
 
