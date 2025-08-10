@@ -4,19 +4,15 @@ class Solution {
     }
 
     public boolean mySol(int n) {
-        List<int[]> powerOfTwos = new ArrayList();
-
-        for (int i = 0; i < 32; i++) {
-            powerOfTwos.add(getFreq(1 << i));
-        }
-
         int[] freq = getFreq(n);
 
-        for (int[] powerOfTwo : powerOfTwos) {
+        for (int i = 0; i < 32; i++) {
+            int[] powerOfTwo = getFreq(1 << i);
+
             boolean ans = true;
 
-            for (int i = 0; i < powerOfTwo.length; i++) {
-                if (freq[i] != powerOfTwo[i]) {
+            for (int j = 0; j < powerOfTwo.length; j++) {
+                if (freq[j] != powerOfTwo[j]) {
                     ans = false;
                     break;
                 }
