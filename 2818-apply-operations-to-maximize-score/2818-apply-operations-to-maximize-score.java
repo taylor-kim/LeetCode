@@ -6,7 +6,7 @@ class Solution {
     public int mySol(List<Integer> nums, int k) {
         Integer max = nums.stream().mapToInt(n -> n).max().getAsInt();
 
-        List<Integer> primes = getPrimes(max);
+        // List<Integer> primes = getPrimes(max);
 
         int n = nums.size();
 
