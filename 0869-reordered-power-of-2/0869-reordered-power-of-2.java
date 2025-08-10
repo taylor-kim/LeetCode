@@ -13,9 +13,6 @@ class Solution {
         int[] freq = getFreq(n);
 
         for (int[] powerOfTwo : powerOfTwos) {
-            // System.out.println(Arrays.toString(freq));
-            // System.out.println(Arrays.toString(powerOfTwo));
-
             boolean ans = true;
 
             for (int i = 0; i < powerOfTwo.length; i++) {
