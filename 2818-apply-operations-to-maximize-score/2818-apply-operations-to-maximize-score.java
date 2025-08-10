@@ -93,7 +93,8 @@ class Solution {
                 // print(String.format("index:%d, num:%d, right:%d, left:%d, count:%d, k:%d"
                 //                     , index, num, right, left, count, k));
 
-                long multi = power2(num, count, mod);
+                // long multi = power(num, count, mod);
+                long multi = (long)(Math.pow((long)num, count)) % mod;
 
                 ans = (ans * multi) % mod;
 
@@ -206,7 +207,10 @@ class Solution {
         return lo;
     }
 
-    private long power(int base, int count, int mod) {
+    /**
+        TLE
+     */
+    private long power(int base, long count, int mod) {
         long ans = 1l;
 
         while (count-- > 0) {
