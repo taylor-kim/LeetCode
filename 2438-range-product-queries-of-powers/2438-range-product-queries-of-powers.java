@@ -8,8 +8,6 @@ class Solution {
         SegmentTree st = new SegmentTree(powers);
         st.init(1, 0, powers.size() - 1);
 
-        // System.out.println(Arrays.toString(st.data));
-
         int[] ans = new int[queries.length];
 
         for (int i = 0; i < queries.length; i++) {
@@ -72,9 +70,6 @@ class Solution {
 
             long lv = (long)query(node * 2, left, mid, qLeft, qRight);
             long rv = (long)query(node * 2 + 1, mid + 1, right, qLeft, qRight);
-
-            // System.out.println(String.format("node:%d, left:%d, right:%d, qLeft:%d, qRight:%d",
-            //                     node, left, right, qLeft, qRight));
 
             return (int)((lv * rv) % mod);
         }
