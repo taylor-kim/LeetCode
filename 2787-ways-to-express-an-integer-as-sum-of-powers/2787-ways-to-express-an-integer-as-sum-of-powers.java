@@ -1,6 +1,24 @@
 class Solution {
     public int numberOfWays(int n, int x) {
-        return official_bottomup(n, x);
+        return try_space_opt(n, x);
+    }
+
+    public int try_space_opt(int n, int x) {
+        int[] dp = new int[n + 1];
+        dp[0] = 1;
+        int mod = (int)1e9 + 7;
+
+        for (int i = 1; i <= n; i++) {
+            int power = (int)Math.pow(i, x);
+
+            for (int j = n; j >= 0; j--) {
+                if (j >= power) {
+                    dp[j] = (dp[j] + dp[j - power]) % mod;
+                }
+            }
+        }
+
+        return dp[n];
     }
 
     public int official_bottomup(int n, int x) {
