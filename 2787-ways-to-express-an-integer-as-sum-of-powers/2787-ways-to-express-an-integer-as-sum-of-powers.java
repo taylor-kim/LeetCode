@@ -10,11 +10,10 @@ class Solution {
 
         for (int i = 1; i <= n; i++) {
             int power = (int)Math.pow(i, x);
+            if (power > n) break;
 
-            for (int j = n; j >= 0; j--) {
-                if (j >= power) {
-                    dp[j] = (dp[j] + dp[j - power]) % mod;
-                }
+            for (int j = n; j >= power; j--) {
+                dp[j] = (dp[j] + dp[j - power]) % mod;
             }
         }
 
