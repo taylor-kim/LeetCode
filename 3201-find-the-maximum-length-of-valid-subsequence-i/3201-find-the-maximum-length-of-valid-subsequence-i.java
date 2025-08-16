@@ -6,8 +6,8 @@ class Solution {
     public int try_20250816_2(int[] nums) {
         int zeros = 0;
         int ones = 0;
-        int pingPong = 1;
-        int prev = 0;
+        int pingPong = 0;
+        int prevMod = -1;
 
         for (int i = 0; i < nums.length; i++) {
             int num = nums[i];
@@ -19,9 +19,9 @@ class Solution {
                 ones++;
             }
 
-            if (nums[prev] % 2 != mod) {
+            if (prevMod != mod) {
                 pingPong++;
-                prev = i;
+                prevMod = mod;
             }
         }
 
