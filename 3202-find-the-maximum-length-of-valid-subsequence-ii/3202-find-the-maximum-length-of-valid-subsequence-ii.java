@@ -1,6 +1,6 @@
 class Solution {
     public int maximumLength(int[] nums, int k) {
-        return official_dp(nums, k);
+        return mySol(nums, k);
     }
 
     public int official_dp(int[] nums, int k) {
@@ -37,17 +37,20 @@ class Solution {
             for (int mod = 0; mod < k; mod++) {
                 int a = (mod - b + k) % k;
 
-                if (dp[mod][a] > 0) {
-                    dp[mod][b] = Math.max(dp[mod][b], dp[mod][a] + 1);
-                    ans = Math.max(ans, dp[mod][b]);
-                }
+                // if (dp[mod][a] > 0) {
+                //     dp[mod][b] = Math.max(dp[mod][b], dp[mod][a] + 1);
+                //     ans = Math.max(ans, dp[mod][b]);
+                // }
+
+                dp[mod][b] = Math.max(dp[mod][b], dp[mod][a] + 1);
+                ans = Math.max(ans, dp[mod][b]);
             }
 
-            for (int mod = 0; mod < k; mod++) {
-                if (dp[mod][b] == 0) {
-                    dp[mod][b] = 1;
-                }
-            }
+            // for (int mod = 0; mod < k; mod++) {
+            //     if (dp[mod][b] == 0) {
+            //         dp[mod][b] = 1;
+            //     }
+            // }
         }
 
         return ans;
