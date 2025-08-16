@@ -13,8 +13,6 @@ class Solution {
         // 1,0,1,0,1
         //
         int[][] dp = new int[k][k];
-        int[] same = new int[k];
-        int[] set = new int[k];
 
         int ans = 0;
 
@@ -35,14 +33,6 @@ class Solution {
                     dp[mod][b] = 1;
                 }
             }
-            
-            same[b]++;
-
-            // System.out.println("\n");
-        }
-
-        for (int i = 0; i < k; i++) {
-            // ans = Math.max(ans, same[i]);
         }
 
         return ans;
