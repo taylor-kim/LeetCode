@@ -11,7 +11,7 @@ class Solution {
         for (int right = 0; right < nums.length; right++) {
             sum += nums[right];
 
-            while (left <= right && sum > 0) {
+            while (left <= right && sum != 0) {
                 sum -= nums[left++];
             }
 
