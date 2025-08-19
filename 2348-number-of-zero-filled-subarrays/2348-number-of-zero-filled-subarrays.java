@@ -1,6 +1,19 @@
 class Solution {
     public long zeroFilledSubarray(int[] nums) {
-        return mySol2(nums);
+        return others(nums);
+    }
+
+    public long others(int[] nums) {
+        long ans = 0;
+        long count = 0;
+
+        for (int num : nums) {
+            count = num == 0 ? count + 1 : 0;
+
+            ans += count;
+        }
+
+        return ans;
     }
 
     public long mySol2(int[] nums) {
