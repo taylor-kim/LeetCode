@@ -1,6 +1,13 @@
 class Solution {
     public long flowerGame(int n, int m) {
-        return editorial(n, m);
+        return try_math(n, m);
+    }
+
+    public long try_math(int n, int m) {
+        long a = (long)((n + 1) / 2) * (m / 2);
+        long b = (long)(n / 2) * ((m + 1) / 2);
+
+        return a + b;
     }
 
     public long editorial(int n, int m) {
