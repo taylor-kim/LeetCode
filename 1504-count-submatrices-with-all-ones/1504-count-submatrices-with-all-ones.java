@@ -1,6 +1,36 @@
 class Solution {
     public int numSubmat(int[][] mat) {
-        return others_stack(mat);
+        return official_iter(mat);
+    }
+
+    public int official_iter(int[][] mat) {
+        int m = mat.length;
+        int n = mat[0].length;
+        int[][] row = new int[m][n];
+
+        int ans = 0;
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (j == 0) {
+                    row[i][j] = mat[i][j];
+                } else {
+                    row[i][j] = mat[i][j] == 0 ? 0 : row[i][j - 1] + 1;
+                }
+
+                int width = Integer.MAX_VALUE;
+
+                for (int r = i; r >= 0; r--) {
+                    width = Math.min(width, row[r][j]);
+
+                    if (width == 0) break;
+
+                    ans += width;
+                }
+            }
+        }
+
+        return ans;
     }
 
     public int others_stack(int[][] mat) {
