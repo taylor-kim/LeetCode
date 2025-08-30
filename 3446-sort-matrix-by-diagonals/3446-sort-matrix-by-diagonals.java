@@ -15,10 +15,8 @@ class Solution {
 
             Collections.sort(list, Comparator.reverseOrder());
 
-            int index = 0;
-
             for (int j = 0; i + j < n; j++) {
-                grid[i + j][j] = list.get(index++);
+                grid[i + j][j] = list.get(j);
             }
         }
 
@@ -31,10 +29,8 @@ class Solution {
 
             Collections.sort(list);
 
-            int index = 0;
-
             for (int j = 0; i + j < n; j++) {
-                grid[j][i + j] = list.get(index++);
+                grid[j][i + j] = list.get(j);
             }
         }
 
