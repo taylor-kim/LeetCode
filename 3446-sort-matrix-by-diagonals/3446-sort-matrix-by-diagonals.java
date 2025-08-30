@@ -1,6 +1,44 @@
 class Solution {
     public int[][] sortMatrix(int[][] grid) {
-        return mySol(grid);
+        return official(grid);
+    }
+
+    public int[][] official(int[][] grid) {
+        int n = grid.length;
+
+        for (int i = 0; i < n; i++) {
+            List<Integer> list = new ArrayList();
+
+            for (int j = 0; i + j < n; j++) {
+                list.add(grid[i + j][j]);
+            }
+
+            Collections.sort(list, Comparator.reverseOrder());
+
+            int index = 0;
+
+            for (int j = 0; i + j < n; j++) {
+                grid[i + j][j] = list.get(index++);
+            }
+        }
+
+        for (int i = 1; i < n; i++) {
+            List<Integer> list = new ArrayList();
+
+            for (int j = 0; i + j < n; j++) {
+                list.add(grid[j][i + j]);
+            }
+
+            Collections.sort(list);
+
+            int index = 0;
+
+            for (int j = 0; i + j < n; j++) {
+                grid[j][i + j] = list.get(index++);
+            }
+        }
+
+        return grid;
     }
 
     public int[][] mySol(int[][] grid) {
