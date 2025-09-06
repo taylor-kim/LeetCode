@@ -13,7 +13,7 @@ class Solution {
 
         for (int[] each : classes) pq.add(each);
 
-        if (pq.peek()[0] == pq.peek()[1]) return classes.length / (double)extra;
+        // if (pq.peek()[0] == pq.peek()[1]) return classes.length / (double)extra;
 
         double ans = 0.0;
 
