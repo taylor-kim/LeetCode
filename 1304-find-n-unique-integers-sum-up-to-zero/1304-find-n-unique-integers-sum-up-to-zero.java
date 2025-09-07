@@ -1,6 +1,18 @@
 class Solution {
     public int[] sumZero(int n) {
-        return mySol(n);
+        return others_math(n);
+    }
+
+    public int[] others_math(int n) {
+        int[] ans = new int[n];
+
+        for (int i = 1; i < n; i++) {
+            ans[i] = i;
+        }
+
+        ans[0] = -((n - 1) * (1 + n - 1) / 2);
+
+        return ans;
     }
 
     public int[] mySol(int n) {
