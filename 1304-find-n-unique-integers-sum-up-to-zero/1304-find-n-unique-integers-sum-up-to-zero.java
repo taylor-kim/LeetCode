@@ -10,7 +10,8 @@ class Solution {
             ans[i] = i;
         }
 
-        ans[0] = -((n - 1) * (1 + n - 1) / 2);
+        // ans[0] = -((n - 1) * (1 + n - 1) / 2);
+        ans[0] = (n - 1) * -n >> 1;
 
         return ans;
     }
