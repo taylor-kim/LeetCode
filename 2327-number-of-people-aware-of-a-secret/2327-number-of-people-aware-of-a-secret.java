@@ -13,25 +13,35 @@ class Solution {
         long ans = 1;
         int mod = (int)1e9 + 7;
 
+        long shareCount = 0;
+
         while (day <= n) {
             while (!discover.isEmpty() && discover.peek()[0] + delay == day) {
-                sharing.add(discover.poll());
+                int[] data = discover.poll();
+                sharing.add(data);
+                shareCount = (shareCount + data[1]) % mod;
             }
 
             while (!sharing.isEmpty() && sharing.peek()[0] + forget == day) {
-                ans = (ans - sharing.poll()[1] + mod) % mod;
+                ans = (ans - sharing.peek()[1] + mod) % mod;
+
+                shareCount = (shareCount - sharing.poll()[1] + mod) % mod;
             }
 
             if (!sharing.isEmpty()) {
-                long known = 0;
+                // long known = 0;
 
-                for (int[] data : sharing) {
-                    known = (known + data[1]) % mod;
-                }
+                // for (int[] data : sharing) {
+                //     known = (known + data[1]) % mod;
+                // }
 
-                ans = (ans + known) % mod;
+                // ans = (ans + known) % mod;
 
-                discover.add(new int[] {day, (int)known});
+                // discover.add(new int[] {day, (int)known});
+
+                ans = (ans + shareCount) % mod;
+
+                discover.add(new int[] {day, (int)shareCount});
             }
 
             // System.out.println(String.format("day:%d, ans:%d, discover:%d, sharing:%d", day, ans, discover.size(), sharing.size()));
