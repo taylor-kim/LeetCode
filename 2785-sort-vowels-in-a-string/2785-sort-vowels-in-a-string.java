@@ -1,6 +1,39 @@
 class Solution {
     public String sortVowels(String s) {
-        return mySol(s);
+        return official(s);
+    }
+
+    public String official(String s) {
+        int[] freq = new int[128];
+
+        for (char c : s.toCharArray()) {
+            if (isVowel(c)) {
+                freq[c - 'A']++;
+            }
+        }
+
+        String sortedVowel = "AEIOUaeiou";
+        StringBuilder sb = new StringBuilder();
+        int vowelIndex = 0;
+
+        for (char c : s.toCharArray()) {
+            if (isVowel(c)) {
+                while (freq[sortedVowel.charAt(vowelIndex) - 'A'] == 0) {
+                    vowelIndex++;
+                }
+                sb.append(sortedVowel.charAt(vowelIndex));
+                freq[sortedVowel.charAt(vowelIndex) - 'A']--;
+            } else {
+                sb.append(c);
+            }
+        }
+
+        return sb.toString();
+    }
+
+    private boolean isVowel(char c) {
+        return c == 'a' || c == 'e' || c == 'o'|| c == 'u'|| c == 'i'
+                || c == 'A' || c == 'E' || c == 'O'|| c == 'U'|| c == 'I';
     }
 
     public String mySol(String s) {
