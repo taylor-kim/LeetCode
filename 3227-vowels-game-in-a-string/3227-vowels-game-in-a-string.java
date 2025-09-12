@@ -1,9 +1,9 @@
 class Solution {
     public boolean doesAliceWin(String s) {
-        return mySol(s);
+        return mySol_by_hint(s);
     }
 
-    public boolean mySol(String s) {
+    public boolean mySol_by_hint(String s) {
         int total = 0;
 
         for (int i = 0; i < s.length(); i++) {
