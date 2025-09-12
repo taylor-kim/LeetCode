@@ -11,7 +11,6 @@ class Solution {
         }
 
         if (total == 0) return false;
-        if (total % 2 == 1) return true;
 
         return true;
     }
