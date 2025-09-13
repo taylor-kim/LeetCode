@@ -1,32 +1,55 @@
 class Solution {
-
     public int minimumTeachings(int n, int[][] languages, int[][] friendships) {
-        Set<Integer> cncon = new HashSet<>();
-        for (int[] friendship : friendships) {
-            Map<Integer, Integer> mp = new HashMap<>();
-            boolean conm = false;
-            for (int lan : languages[friendship[0] - 1]) {
-                mp.put(lan, 1);
+        return mySol(n, languages, friendships);
+    }
+
+    public int mySol(int n, int[][] languages, int[][] friendships) {
+        int ans = languages.length;
+
+        Set<Integer>[] langs = new Set[languages.length];
+        Set<Integer>[] peopleCanSpeak = new Set[n + 1];
+
+
+        for (int i = 0; i < languages.length; i++) {
+            langs[i] = new HashSet();
+
+            for (int lang : languages[i]) {
+                langs[i].add(lang);
+
+                if (peopleCanSpeak[lang] == null) {
+                    peopleCanSpeak[lang] = new HashSet();
+                }
+                peopleCanSpeak[lang].add(i);
             }
-            for (int lan : languages[friendship[1] - 1]) {
-                if (mp.containsKey(lan)) {
-                    conm = true;
-                    break;
+        }
+
+        for (int i = 1; i <= n; i++) {
+            Set<Integer> teach = new HashSet();
+            for (int[] friend : friendships) {
+                int a = friend[0] - 1;
+                int b = friend[1] - 1;
+
+                boolean ok = false;
+
+                for (int lang : languages[a]) {
+                    if (peopleCanSpeak[lang].contains(b)) {
+                        ok = true;
+                        break;
+                    }
+                }
+
+                if (ok) continue;
+
+                if (!langs[a].contains(i)) {
+                    teach.add(a);
+                }
+                if (!langs[b].contains(i)) {
+                    teach.add(b);
                 }
             }
-            if (!conm) {
-                cncon.add(friendship[0] - 1);
-                cncon.add(friendship[1] - 1);
-            }
+            ans = Math.min(ans, teach.size());
         }
-        int max_cnt = 0;
-        int[] cnt = new int[n + 1];
-        for (int friendship : cncon) {
-            for (int lan : languages[friendship]) {
-                cnt[lan]++;
-                max_cnt = Math.max(max_cnt, cnt[lan]);
-            }
-        }
-        return cncon.size() - max_cnt;
+
+        return ans;
     }
 }
