@@ -4,37 +4,37 @@ class Solution {
     }
 
     public int official(int n, int[][] languages, int[][] friendships) {
-        Map<Integer, Set<Integer>> needToTeach = new HashMap();
+        Set<Integer> needToTeach = new HashSet();
 
         for (int[] friend : friendships) {
-            Map<Integer, Integer> map = new HashMap();
+            Set<Integer> set = new HashSet();
 
             int a = friend[0] - 1;
             int b = friend[1] - 1;
 
             for (int lang : languages[a]) {
-                map.put(lang, 1);
+                set.add(lang);
             }
 
             boolean canComm = false;
 
             for (int lang : languages[b]) {
-                if (map.containsKey(lang)) {
+                if (set.contains(lang)) {
                     canComm = true;
                     break;
                 }
             }
 
             if (!canComm) {
-                needToTeach.computeIfAbsent(a, k -> new HashSet()).add(b);
-                needToTeach.computeIfAbsent(b, k -> new HashSet()).add(a);
+                needToTeach.add(a);
+                needToTeach.add(b);
             }
         }
 
         int[] count = new int[n + 1];
         int mostKnownLangCount = 0;
 
-        for (int user : needToTeach.keySet()) {
+        for (int user : needToTeach) {
             for (int lang : languages[user]) {
                 count[lang]++;
                 mostKnownLangCount = Math.max(mostKnownLangCount, count[lang]);
