@@ -1,6 +1,47 @@
 class Solution {
     public int minimumTeachings(int n, int[][] languages, int[][] friendships) {
-        return mySol_improve(n, languages, friendships);
+        return official(n, languages, friendships);
+    }
+
+    public int official(int n, int[][] languages, int[][] friendships) {
+        Map<Integer, Set<Integer>> needToTeach = new HashMap();
+
+        for (int[] friend : friendships) {
+            Map<Integer, Integer> map = new HashMap();
+
+            int a = friend[0] - 1;
+            int b = friend[1] - 1;
+
+            for (int lang : languages[a]) {
+                map.put(lang, 1);
+            }
+
+            boolean canComm = false;
+
+            for (int lang : languages[b]) {
+                if (map.containsKey(lang)) {
+                    canComm = true;
+                    break;
+                }
+            }
+
+            if (!canComm) {
+                needToTeach.computeIfAbsent(a, k -> new HashSet()).add(b);
+                needToTeach.computeIfAbsent(b, k -> new HashSet()).add(a);
+            }
+        }
+
+        int[] count = new int[n + 1];
+        int mostKnownLangCount = 0;
+
+        for (int user : needToTeach.keySet()) {
+            for (int lang : languages[user]) {
+                count[lang]++;
+                mostKnownLangCount = Math.max(mostKnownLangCount, count[lang]);
+            }
+        }
+
+        return needToTeach.size() - mostKnownLangCount;
     }
 
     public int mySol_improve(int n, int[][] languages, int[][] friendships) {
