@@ -1,53 +1,54 @@
 class FoodRatings {
-
-    private Map<String, TreeSet<Food>> foodSet;
-    private Map<String, Integer> foodRate;
-    private Map<String, String> foodCuisine;
+    private Map<String, Data> dataMap = new HashMap();
+    private Map<String, RatingManager> ratingManangerMap = new HashMap();
 
     public FoodRatings(String[] foods, String[] cuisines, int[] ratings) {
-        foodSet = new HashMap();
-        foodRate = new HashMap();
-        foodCuisine = new HashMap();
-
         for (int i = 0; i < foods.length; i++) {
-            Food food = new Food(foods[i], ratings[i]);
-            foodSet.computeIfAbsent(cuisines[i], k -> new TreeSet()).add(food);
-            foodRate.put(food.name, food.rate);
-            foodCuisine.put(food.name, cuisines[i]);
+            Data d = new Data();
+            d.food = foods[i];
+            d.cuisine = cuisines[i];
+            d.rating = ratings[i];
+
+            dataMap.put(d.food, d);
+
+            ratingManangerMap.computeIfAbsent(d.cuisine, k -> new RatingManager()).add(d);
         }
     }
     
     public void changeRating(String food, int newRating) {
-        TreeSet<Food> treeSet = foodSet.get(foodCuisine.get(food));
-
-        Food old = new Food(food, foodRate.get(food));
-        treeSet.remove(old);
-
-        foodRate.put(food, newRating);
-        Food updated = new Food(food, newRating);
-
-        treeSet.add(updated);
+        ratingManangerMap.get(dataMap.get(food).cuisine).changeRating(food, newRating);
     }
     
     public String highestRated(String cuisine) {
-        return foodSet.get(cuisine).first().name;
+        return ratingManangerMap.get(cuisine).getHighest();
     }
 
-    class Food implements Comparable<Food> {
-        private int rate;
-        private String name;
+    class Data {
+        String food;
+        String cuisine;
+        int rating;
+    }
 
-        public Food(String name, int rate) {
-            this.name = name;
-            this.rate = rate;
+    class RatingManager {
+        TreeSet<Data> set = new TreeSet<>((a, b) -> {
+            return a.rating != b.rating ? b.rating - a.rating : a.food.compareTo(b.food);
+        });
+
+        void add(Data d) {
+            set.add(d);
         }
 
-        public int compareTo(Food food) {
-            if (this.rate != food.rate) {
-                return food.rate - this.rate;
-            } else {
-                return this.name.compareTo(food.name);
-            }
+        String getHighest() {
+            return set.first().food;
+        }
+
+        void changeRating(String food, int rating) {
+            Data d = dataMap.get(food);
+            set.remove(d);
+
+            d.rating = rating;
+            
+            add(d);
         }
     }
 }
