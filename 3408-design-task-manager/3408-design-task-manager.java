@@ -1,55 +1,66 @@
 class TaskManager {
-    private TreeMap<List<Integer>, List<Integer>> map = new TreeMap<>((a, b) -> {
-        return !b.get(2).equals(a.get(2)) ? b.get(2) - a.get(2) : b.get(1) - a.get(1);
+    Map<Integer, Data> taskData = new HashMap();
+
+    TreeSet<Data> set = new TreeSet<>((a, b) -> {
+        return a.priority != b.priority ? b.priority - a.priority : b.taskId - a.taskId;
     });
 
-    private Map<Integer, List<Integer>> taskMap = new HashMap();
-
     public TaskManager(List<List<Integer>> tasks) {
-        for (List<Integer> task : tasks) {
-            this.add(task);
+        for (List<Integer> each : tasks) {
+            Data d = new Data(each);
+
+            add(d);
         }
     }
     
     public void add(int userId, int taskId, int priority) {
-        List<Integer> task = new ArrayList();
-        task.add(userId);
-        task.add(taskId);
-        task.add(priority);
-        
-        this.add(task);
+        Data d = new Data(userId, taskId, priority);
+
+        add(d);
     }
 
-    private void add(List<Integer> task) {
-        map.put(task, task);
-
-        taskMap.put(task.get(1), task);
+    private void add(Data d) {
+        taskData.put(d.taskId, d);
+        set.add(d);
     }
     
     public void edit(int taskId, int newPriority) {
-        List<Integer> removed = taskMap.remove(taskId);
-        map.remove(removed);
-
-        removed.set(2, newPriority);
-
-        taskMap.put(taskId, removed);
-        map.put(removed, removed);
+        Data d = taskData.get(taskId);
+        set.remove(d);
+        d.priority = newPriority;
+        set.add(d);
     }
     
     public void rmv(int taskId) {
-        List<Integer> removed = taskMap.remove(taskId);
-        map.remove(removed);
+        Data d = taskData.remove(taskId);
+        set.remove(d);
     }
     
     public int execTop() {
-        if (map.size() == 0) return -1;
+        if (set.isEmpty()) return -1;
 
-        List<Integer> pop = map.firstKey();
+        Data d = set.first();
 
-        map.remove(pop);
-        taskMap.remove(pop.get(1));
+        set.remove(d);
+        taskData.remove(d.taskId);
 
-        return pop.get(0);
+        return d.user;
+    }
+
+    class Data {
+        int user;
+        int taskId;
+        int priority;
+
+        public Data(List<Integer> list) {
+            this(list.get(0), list.get(1), list.get(2));
+        }
+
+        public Data(int u, int t, int p) {
+            this.user = u;
+            this.taskId = t;
+            this.priority = p;
+        }
     }
 }
 
