@@ -1,4 +1,4 @@
-<h2><a href="https://leetcode.com/problems/design-task-manager/">3408. Design Task Manager</a></h2><h3>Medium</h3><hr><p>There is a task management system that allows users to manage their tasks, each associated with a priority. The system should efficiently handle adding, modifying, executing, and removing tasks.</p>
+<h2><a href="https://leetcode.com/problems/design-task-manager">3408. Design Task Manager</a></h2><h3>Medium</h3><hr><p>There is a task management system that allows users to manage their tasks, each associated with a priority. The system should efficiently handle adding, modifying, executing, and removing tasks.</p>
 
 <p>Implement the <code>TaskManager</code> class:</p>
 
@@ -52,4 +52,5 @@ taskManager.execTop(); // return 5. Executes task 105 for User 5.</div>
 	<li><code>0 &lt;= priority &lt;= 10<sup>9</sup></code></li>
 	<li><code>0 &lt;= newPriority &lt;= 10<sup>9</sup></code></li>
 	<li>At most <code>2 * 10<sup>5</sup></code> calls will be made in <strong>total</strong> to <code>add</code>, <code>edit</code>, <code>rmv</code>, and <code>execTop</code> methods.</li>
+	<li>The input is generated such that <code>taskId</code> will be valid.</li>
 </ul>
