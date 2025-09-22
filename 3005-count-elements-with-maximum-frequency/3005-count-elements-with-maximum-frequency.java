@@ -1,6 +1,25 @@
 class Solution {
     public int maxFrequencyElements(int[] nums) {
-        return mySol(nums);
+        return study_one_pass(nums);
+    }
+
+    public int study_one_pass(int[] nums) {
+        int[] freq = new int[101];
+
+        int max = 0;
+        int totalCount = 0;
+
+        for (int num : nums) {
+            freq[num]++;
+
+            if (max < freq[num]) {
+                totalCount = max = freq[num];
+            } else if (max == freq[num]) {
+                totalCount += max;
+            }
+        }
+
+        return totalCount;
     }
 
     public int mySol(int[] nums) {
