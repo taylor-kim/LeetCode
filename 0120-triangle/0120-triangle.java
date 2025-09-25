@@ -1,39 +1,44 @@
 class Solution {
     public int minimumTotal(List<List<Integer>> triangle) {
-        return recursive(triangle);
+        return mySol2(triangle);
     }
 
-    public int recursive(List<List<Integer>> triangle) {
-        int leng = triangle.size();
-        int sumOfItems = leng * (1 + leng) / 2;
+    public int mySol2(List<List<Integer>> triangle) {
+        int r = triangle.size();
+        int c = triangle.get(r - 1).size();
 
-        int[][] memo = new int[leng][sumOfItems];
+        int[][] dp = new int[r + 1][c + 1];
 
-        for (int[] row : memo) {
-            Arrays.fill(row, -1);
+        // dp[i][j] = Math.min(dp[i + 1][j], dp[i + 1][j + 1]);
+
+        for (int i = r - 1; i >= 0; i--) {
+            for (int j = i; j >= 0; j--) {
+                dp[i][j] = triangle.get(i).get(j) + Math.min(dp[i + 1][j], dp[i + 1][j + 1]);
+            }
         }
 
-        return recursive(triangle, 0, 0, memo);
+        return dp[0][0];
     }
 
-    public int recursive(List<List<Integer>> triangle, int level, int index, int[][] memo) {
-        if (level >= triangle.size()) {
-            return 0;
-        }
+    public int mySol(List<List<Integer>> triangle) {
+        int r = triangle.size();
+        int c = triangle.get(r - 1).size();
+        
+        return topdown(0, 0, triangle, new Integer[r][c]);
+    }
 
-        List<Integer> items = triangle.get(level);
+    public int topdown(int row, int col, List<List<Integer>> triangle, Integer[][] memo) {
+        if (row >= triangle.size()) return 0;
 
-        if (index >= items.size()) {
-            return 0;
-        }
+        List<Integer> list = triangle.get(row);
 
-        if (memo[level][index] != -1) {
-            return memo[level][index];
-        }
+        if (col >= list.size()) return (int)1e4 + 1;
 
-        int a = recursive(triangle, level + 1, index, memo);
-        int b = recursive(triangle, level + 1, index + 1, memo);
+        if (memo[row][col] != null) return memo[row][col];
 
-        return memo[level][index] = items.get(index) + Math.min(a, b);
+        int a = topdown(row + 1, col, triangle, memo);
+        int b = topdown(row + 1, col + 1, triangle, memo);
+
+        return memo[row][col] = list.get(col) + Math.min(a, b);
     }
 }
