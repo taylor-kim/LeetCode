@@ -13,10 +13,10 @@ class Solution {
         int ans = 0;
 
         for (int i = 0; i < n - 2; i++) {
-            if (nums[i] == 0) continue;
+            // if (nums[i] == 0) continue;
             int k = i + 2;
             for (int j = i + 1; j < n - 1; j++) {
-                if (nums[j] == 0) continue;
+                // if (nums[j] == 0) continue;
                 int sum = nums[i] + nums[j];
 
                 // k = rightmost(nums, k, n, sum - 1);
