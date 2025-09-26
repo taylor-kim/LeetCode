@@ -1,6 +1,31 @@
 class Solution {
     public int triangleNumber(int[] nums) {
-        return mySol2(nums);
+        return try_bs(nums);
+    }
+
+    public int try_bs(int[] nums) {
+        int n = nums.length;
+
+        if (n < 3) return 0;
+
+        Arrays.sort(nums);
+
+        int ans = 0;
+
+        for (int i = 0; i < n - 2; i++) {
+            if (nums[i] == 0) continue;
+            int k = i + 2;
+            for (int j = i + 1; j < n - 1; j++) {
+                if (nums[j] == 0) continue;
+                int sum = nums[i] + nums[j];
+
+                k = rightmost(nums, k, n, sum - 1);
+
+                ans += k - j - 1;
+            }
+        }
+
+        return ans;
     }
 
     public int mySol2(int[] nums) {
@@ -28,33 +53,42 @@ class Solution {
         return ans;
     }
 
-    public int mySol_holding(int[] nums) {
+    public int mySol_holding_fail(int[] nums) {
         int n = nums.length;
 
         if (n < 3) return 0;
 
         Arrays.sort(nums);
 
-        for (int i = n - 2; i >= 1; i--) {
-            int sum = nums[i] + nums[i + 1];
+        int ans = 0;
 
-            int index = rightmost(nums, 0, i, sum - 1);
-        }
+        for (int i = n - 1; i >= 2; i--) {
+            for (int j = i - 1; j >= 1; j--) {
+                int sum = nums[i] + nums[j];
 
-        return 0;
-    }
+                int index = rightmost(nums, 0, j, sum - 1);
 
-    private int rightmost(int[] nums, int lo, int hi, int target) {
-        while (lo < hi) {
-            int mid = lo + (hi - lo) / 2;
-
-            if (target < nums[mid]) {
-                hi = mid;
-            } else {
-                lo = mid + 1;
+                ans += index + 1;
             }
         }
 
-        return lo - 1;
+        return ans;
+    }
+
+    private int rightmost(int[] nums, int lo, int hi, int target) {
+        // String s = String.format("lo:%d, hi:%d", lo, hi);
+        while (lo < hi) {
+            int mid = lo + (hi - lo) / 2;
+
+            if (nums[mid] <= target) {
+                lo = mid + 1;
+            } else {
+                hi = mid;
+            }
+        }
+
+        // System.out.println(String.format("%s, target:%d, index:%d", s, target, lo));
+
+        return lo;
     }
 }
