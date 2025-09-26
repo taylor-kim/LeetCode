@@ -3,6 +3,31 @@ class Solution {
         return try_bs(nums);
     }
 
+    public int official_nxn(int[] nums) {
+        int n = nums.length;
+
+        Arrays.sort(nums);
+
+        int ans = 0;
+
+        for (int i = 0; i < n - 2; i++) {
+            int k = i + 2;
+            for (int j = i + 1; j < n - 1; j++) {
+                int sum = nums[i] + nums[j];
+
+                k = rightmost(nums, k, n, sum - 1);
+
+                ans += k - j - 1;
+
+                // int index = rightmost(nums, j + 1, n, sum - 1);
+
+                // ans += index - j - 1;
+            }
+        }
+
+        return ans;
+    }
+
     public int try_bs(int[] nums) {
         int n = nums.length;
 
@@ -15,17 +40,17 @@ class Solution {
         for (int i = 0; i < n - 2; i++) {
             // if (nums[i] == 0) continue;
             int k = i + 2;
-            for (int j = i + 1; j < n - 1; j++) {
+            for (int j = i + 1; j < n - 1 && nums[i] != 0; j++) {
                 // if (nums[j] == 0) continue;
                 int sum = nums[i] + nums[j];
 
-                // k = rightmost(nums, k, n, sum - 1);
+                k = rightmost(nums, k, n, sum - 1);
 
-                // ans += k - j - 1;
+                ans += k - j - 1;
 
-                int index = rightmost(nums, j + 1, n, sum - 1);
+                // int index = rightmost(nums, j + 1, n, sum - 1);
 
-                ans += index - j - 1;
+                // ans += index - j - 1;
             }
         }
 
