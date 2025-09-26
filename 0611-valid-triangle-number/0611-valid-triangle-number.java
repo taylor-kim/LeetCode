@@ -19,9 +19,13 @@ class Solution {
                 if (nums[j] == 0) continue;
                 int sum = nums[i] + nums[j];
 
-                k = rightmost(nums, k, n, sum - 1);
+                // k = rightmost(nums, k, n, sum - 1);
 
-                ans += k - j - 1;
+                // ans += k - j - 1;
+
+                int index = rightmost(nums, j + 1, n, sum - 1);
+
+                ans += index - j - 1;
             }
         }
 
