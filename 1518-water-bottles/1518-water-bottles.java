@@ -1,15 +1,20 @@
 class Solution {
     public int numWaterBottles(int numBottles, int numExchange) {
-        int ans = numBottles;
-        
+        return mySol(numBottles, numExchange);
+    }
+
+    public int mySol(int numBottles, int numExchange) {
+        int ans = 0;
+
         while (numBottles >= numExchange) {
+            int exchanged = numBottles / numExchange;
             int odd = numBottles % numExchange;
-             numBottles /= numExchange;
-            ans += numBottles;
-            
-            numBottles += odd;
-            
-}
-         return ans;
+
+            numBottles = exchanged + odd;
+
+            ans += exchanged * numExchange;
+        }
+
+        return ans + numBottles;
     }
 }
