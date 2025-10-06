@@ -18,13 +18,13 @@ class Solution {
 
     public int topdown(int[][] grid, int y, int x, int t, Integer[][][] memo) {
         // System.out.println(String.format("y:%d, x:%d, t:%d", y, x, t));
+        t = Math.max(grid[y][x], t);
+
         if (x == grid.length - 1 && y == grid.length - 1) return t;
 
         // if (grid[y][x] < 0) return Integer.MAX_VALUE;
 
         if (memo[y][x][t] != null) return memo[y][x][t];
-
-        t = Math.max(grid[y][x], t);
 
         grid[y][x] = -(grid[y][x] + 1);
 
@@ -36,7 +36,9 @@ class Solution {
 
             if (!isValid(grid, ny, nx) || grid[ny][nx] < 0) continue;
 
-            int sub = topdown(grid, ny, nx, Math.max(grid[ny][nx], t), memo);
+            // int sub = topdown(grid, ny, nx, Math.max(grid[ny][nx], t), memo);
+
+            int sub = topdown(grid, ny, nx, t, memo);
 
             ans = Math.min(ans, sub);
         }
