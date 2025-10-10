@@ -1,6 +1,21 @@
 class Solution {
     public int maximumEnergy(int[] energy, int k) {
-        return mySol3(energy, k);
+        return official_reverse_traversal(energy, k);
+    }
+
+    public int official_reverse_traversal(int[] energy, int k) {
+        int n = energy.length;
+        int ans = Integer.MIN_VALUE;
+
+        for (int i = n - k; i < n; i++) {
+            int sum = 0;
+            for (int j = i; j >= 0; j -= k) {
+                sum += energy[j];
+                ans = Math.max(ans, sum);
+            }
+        }
+
+        return ans;
     }
 
     public int mySol3(int[] energy, int k) {
