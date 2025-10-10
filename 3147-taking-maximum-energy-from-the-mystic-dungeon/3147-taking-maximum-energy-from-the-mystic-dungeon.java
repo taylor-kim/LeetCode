@@ -1,6 +1,23 @@
 class Solution {
     public int maximumEnergy(int[] energy, int k) {
-        return mySol2(energy, k);
+        return mySol3(energy, k);
+    }
+
+    public int mySol3(int[] energy, int k) {
+        int n = energy.length;
+        int[] dp = new int[n + k];
+
+        for (int i = 0; i < n; i++) {
+            dp[i + k] = Math.max(energy[i], energy[i] + dp[i]);
+        }
+
+        int ans = Integer.MIN_VALUE;
+
+        for (int i = n; i < n + k; i++) {
+            ans = Math.max(ans, dp[i]);
+        }
+
+        return ans;
     }
 
     public int mySol2(int[] energy, int k) {
