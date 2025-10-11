@@ -1,13 +1,30 @@
 class Solution {
     public int maximumEnergy(int[] energy, int k) {
-        return official_reverse_traversal(energy, k);
+        return mySol4_try_one_pass(energy, k);
+    }
+
+    public int mySol4_try_one_pass(int[] energy, int k) {
+        int n = energy.length;
+        int[] dp = new int[n + k];
+
+        int ans = Integer.MIN_VALUE;
+
+        for (int i = 0; i < n; i++) {
+            dp[i + k] = Math.max(energy[i], energy[i] + dp[i]);
+
+            if (i + k >= n) {
+                ans = Math.max(ans, dp[i + k]);
+            }
+        }
+
+        return ans;
     }
 
     public int official_reverse_traversal(int[] energy, int k) {
         int n = energy.length;
         int ans = Integer.MIN_VALUE;
 
-        for (int i = n - k; i < n; i++) {
+        for (int i = n - 1; i + k >= n; i--) {
             int sum = 0;
             for (int j = i; j >= 0; j -= k) {
                 sum += energy[j];
