@@ -1,9 +1,9 @@
 class Solution {
     public long maximumTotalDamage(int[] power) {
-        return mySol6_after_official(power);
+        return official(power);
     }
 
-    public long mySol6_after_official(int[] power) {
+    public long official(int[] power) {
         Map<Integer, Integer> map = new HashMap();
 
         for (int i = 0; i < power.length; i++) {
@@ -29,12 +29,18 @@ class Solution {
 
         for (int i = 0; i < arr.length; i++) {
             while (j < i && arr[j][0] + 2 < arr[i][0]) {
-                max = Math.max(max, dp[j++]);
+                // max = Math.max(max, dp[j++]);
+                dp[j] = Math.max(dp[j], dp[Math.max(j - 1, 0)]);
+                j++;
             }
-            dp[i] = max + ((long)arr[i][0] * arr[i][1]);
+            // dp[i] = max + ((long)arr[i][0] * arr[i][1]);
+            dp[i] = (j - 1 >= 0 ? dp[j - 1] : 0) + ((long)arr[i][0] * arr[i][1]);
 
             ans = Math.max(ans, dp[i]);
         }
+
+        // j = 0, i = 0, dp[0] = 1
+        // j = 0, i = 1, dp[i] = 
 
         return ans;
     }
