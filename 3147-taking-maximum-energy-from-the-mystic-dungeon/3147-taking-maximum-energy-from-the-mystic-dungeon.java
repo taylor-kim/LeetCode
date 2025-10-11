@@ -1,6 +1,23 @@
 class Solution {
     public int maximumEnergy(int[] energy, int k) {
-        return mySol4_try_one_pass(energy, k);
+        return improve_space_one_pass(energy, k);
+    }
+
+    public int improve_space_one_pass(int[] energy, int k) {
+        int n = energy.length;
+        int[] dp = new int[k];
+
+        int ans = Integer.MIN_VALUE;
+
+        for (int i = 0; i < n; i++) {
+            dp[i % k] = Math.max(energy[i], energy[i] + dp[i % k]);
+
+            if (i + k >= n) {
+                ans = Math.max(ans, dp[i % k]);
+            }
+        }
+
+        return ans;
     }
 
     public int mySol4_try_one_pass(int[] energy, int k) {
