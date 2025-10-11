@@ -39,8 +39,13 @@ class Solution {
             ans = Math.max(ans, dp[i]);
         }
 
-        // j = 0, i = 0, dp[0] = 1
-        // j = 0, i = 1, dp[i] = 
+        // invalid case
+        // j = 0, i = 0, dp[0] = dp[0] + 1 = 1
+        // j = 0, i = 1, dp[1] = dp[0] + 3 = 4
+        // j = 0, i = 2, dp[0] = 1
+        // j = 1, i = 2, dp[1] = 4
+        // j = 2, i = 2, dp[2] = 4 + 6
+        // j = 2, i = 3, dp[3] = 4 + 7
 
         return ans;
     }
