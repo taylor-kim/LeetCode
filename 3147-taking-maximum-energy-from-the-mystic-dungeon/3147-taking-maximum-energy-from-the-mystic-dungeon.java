@@ -10,10 +10,11 @@ class Solution {
         int ans = Integer.MIN_VALUE;
 
         for (int i = 0; i < n; i++) {
-            dp[i % k] = Math.max(energy[i], energy[i] + dp[i % k]);
+            int index = i % k;
+            dp[index] = Math.max(energy[i], energy[i] + dp[index]);
 
             if (i + k >= n) {
-                ans = Math.max(ans, dp[i % k]);
+                ans = Math.max(ans, dp[index]);
             }
         }
 
