@@ -5,23 +5,21 @@ class Solution {
 
     public int mySol2_with_bs(List<Integer> nums) {
         int n = nums.size();
-        int max = n / 2;
+        int max = n / 2 + 1;
         int lo = 1;
         int hi = max;
-        int ans = 0;
 
-        while (lo <= hi) {
+        while (lo < hi) {
             int mid = lo + (hi - lo) / 2;
 
             if (mySol2(nums, mid)) {
                 lo = mid + 1;
-                ans = mid;
             } else {
-                hi = mid - 1;
+                hi = mid;
             }
         }
 
-        return ans;
+        return lo - 1;
     }
 
     public boolean mySol2(List<Integer> nums, int k) {
