@@ -1,6 +1,26 @@
 class Solution {
     public boolean hasIncreasingSubarrays(List<Integer> nums, int k) {
-        return mySol2(nums, k);
+        return official(nums, k);
+    }
+
+    public boolean official(List<Integer> nums, int k) {
+        int ans = 0;
+        int count = 1;
+        int prevCount = 0;
+
+        for (int i = 1; i < nums.size(); i++) {
+            if (nums.get(i - 1) < nums.get(i)) {
+                count++;
+            } else {
+                prevCount = count;
+                count = 1;
+            }
+
+            ans = Math.max(ans, Math.min(prevCount, count));
+            ans = Math.max(ans, count / 2);
+        }
+
+        return ans >= k;
     }
 
     public boolean mySol2(List<Integer> nums, int k) {
