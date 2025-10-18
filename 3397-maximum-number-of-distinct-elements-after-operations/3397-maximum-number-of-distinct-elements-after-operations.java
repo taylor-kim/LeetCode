@@ -16,6 +16,8 @@ class Solution {
                 ans++;
             }
 
+            if (prev > current) throw new RuntimeException("wtf");
+
             prev = current;
         }
 
