@@ -14,11 +14,8 @@ class Solution {
 
             if (prev < current) {
                 ans++;
+                prev = current;
             }
-
-            if (prev > current) throw new RuntimeException("wtf");
-
-            prev = current;
         }
 
         return ans;
