@@ -35,17 +35,23 @@ class Solution {
 
             int count = map.get(num);
 
-            while (count-- > 0 && delta <= k) {
-                int change = num + delta;
+            // while (count-- > 0 && delta <= k) {
+            //     int change = num + delta;
 
-                // System.out.println(change);
+            //     // System.out.println(change);
 
-                // set.add(change);
-                ans++;
+            //     // set.add(change);
+            //     ans++;
 
-                prev = change;
-                delta++;
-            }
+            //     prev = change;
+            //     delta++;
+            // }
+
+            int changes = Math.min(k - delta + 1, count);
+
+            ans += changes;
+
+            prev = num + delta + changes - 1;
         }
 
         // System.out.println(set);
