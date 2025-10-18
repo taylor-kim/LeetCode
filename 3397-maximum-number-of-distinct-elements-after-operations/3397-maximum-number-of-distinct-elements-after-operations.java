@@ -1,6 +1,25 @@
 class Solution {
     public int maxDistinctElements(int[] nums, int k) {
-        return mySol(nums, k);
+        return official(nums, k);
+    }
+
+    public int official(int[] nums, int k) {
+        Arrays.sort(nums);
+
+        int ans = 0;
+        int prev = Integer.MIN_VALUE;
+
+        for (int num : nums) {
+            int current = Math.min(Math.max(prev + 1, num - k), num + k);
+
+            if (prev < current) {
+                ans++;
+            }
+
+            prev = current;
+        }
+
+        return ans;
     }
 
     public int mySol(int[] nums, int k) {
