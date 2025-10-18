@@ -40,7 +40,8 @@ class Solution {
 
                 // System.out.println(change);
 
-                set.add(change);
+                // set.add(change);
+                ans++;
 
                 prev = change;
                 delta++;
@@ -49,6 +50,6 @@ class Solution {
 
         // System.out.println(set);
 
-        return set.size();
+        return ans;
     }
 }
