@@ -1,7 +1,45 @@
 class Solution {
     public int maxFrequency(int[] nums, int k, int numOperations) {
-        return others_prefixSum(nums, k, numOperations);
+        return try_20251021(nums, k, numOperations);
     }
+
+    public int try_20251021(int[] nums, int k, int numOperations) {
+        Arrays.sort(nums);
+
+        int ans = 1;
+
+        for (int i = 0; i < nums.length; i++) {
+            int num = nums[i];
+
+            int right = rightmost(nums, num);
+            int left = leftmost(nums, num - (2 * k));
+
+            int leftSide = Math.min(right - left + 1, numOperations);
+
+            left = leftmost(nums, num);
+            right = rightmost(nums, num + (2 * k));
+
+            int rightSide = Math.min(right - left + 1, numOperations);
+
+            int same = rightmost(nums, num) - leftmost(nums, num) + 1;
+
+            left = leftmost(nums, num - k);
+            right = rightmost(nums, num + k);
+
+            int bothSides = Math.min(right - left + 1 - same, numOperations) + same;
+
+            ans = Math.max(ans, Math.max(bothSides, Math.max(leftSide, rightSide)));
+        }
+
+        return ans;
+    }
+
+
+
+
+
+
+
 
     public int others_prefixSum(int[] nums, int k, int op) {
         int max = 0;
@@ -19,13 +57,18 @@ class Solution {
             pSum[i + 1] = pSum[i] + freq[i];
         }
 
+        // System.out.println(Arrays.toString(freq));
+        // System.out.println(Arrays.toString(pSum));
+
         int ans = 0;
 
-        for (int i = 0; i <= n; i++) {
+        for (int i = 0; i <= max; i++) {
             int left = Math.max(0, i - k);
             int right = Math.min(n, i + k);
 
             int total = pSum[right + 1] - pSum[left];
+
+            // System.out.println(String.format("left:%d, right:%d, pSum[right + 1]:%d, pSum[left]:%d", left, right, pSum[right + 1], pSum[left]));
 
             ans = Math.max(ans, freq[i] + Math.min(total - freq[i], op));
         }
