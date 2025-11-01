@@ -4,15 +4,11 @@ class Solution {
     }
 
     public int mySol3(int[] target) {
-        int stack = -1;
+        int stack = 0;
         int ans = 0;
 
         for (int i = 0; i < target.length; i++) {
-            if (stack != -1 && target[stack] <= target[i]) {
-                stack = -1;
-            }
-
-            if (stack != -1 && target[stack] > target[i]) {
+            if (target[stack] > target[i]) {
                 ans += target[stack] - target[i];
             }
 
