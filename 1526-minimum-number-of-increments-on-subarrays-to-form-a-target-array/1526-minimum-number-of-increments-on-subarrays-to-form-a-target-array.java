@@ -1,9 +1,30 @@
 class Solution {
     public int minNumberOperations(int[] target) {
-        return mySol2(target);
+        return mySol3(target);
     }
 
-    public int mySol2(int[] target) {
+    public int mySol3(int[] target) {
+        int stack = -1;
+        int ans = 0;
+
+        for (int i = 0; i < target.length; i++) {
+            if (stack != -1 && target[stack] <= target[i]) {
+                stack = -1;
+            }
+
+            if (stack != -1 && target[stack] > target[i]) {
+                ans += target[stack] - target[i];
+            }
+
+            stack = i;
+        }
+
+        ans += target[stack];
+
+        return ans;
+    }
+
+    public int mySol2_by_topic(int[] target) {
         Stack<Integer> stack = new Stack();
         int ans = 0;
 
