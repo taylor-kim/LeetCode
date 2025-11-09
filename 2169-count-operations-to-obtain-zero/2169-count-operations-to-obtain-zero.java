@@ -1,6 +1,21 @@
 class Solution {
     public int countOperations(int num1, int num2) {
-        return mySol(num1, num2);
+        return mySol2(num1, num2);
+    }
+
+    public int mySol2(int num1, int num2) {
+        int ans = 0;
+
+        while (num1 > 0 && num2 > 0) {
+            if (num1 >= num2) {
+                num1 -= num2;
+            } else {
+                num2 -= num1;
+            }
+            ans++;
+        }
+
+        return ans;
     }
 
     public int mySol(int num1, int num2) {
