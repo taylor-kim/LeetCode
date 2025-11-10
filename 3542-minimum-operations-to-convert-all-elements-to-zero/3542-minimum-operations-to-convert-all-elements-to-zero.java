@@ -1,6 +1,39 @@
 class Solution {
     public int minOperations(int[] nums) {
-        return mySol2(nums);
+        return degenerated(nums);
+    }
+
+    public int degenerated(int[] nums) {
+        Stack<Integer> stack = new Stack();
+        int ans = 0;
+
+        for (int num : nums) {
+            while (!stack.isEmpty() && stack.peek() > num) {
+                stack.pop();
+            }
+
+            if (num != 0 && (stack.isEmpty() || stack.peek() < num)) {
+                stack.push(num);
+                ans++;
+            }
+        }
+
+        return ans;
+    }
+
+    public int mySol_202511_fail(int[] nums) {
+        int ans = 0;
+        
+        TreeMap<Integer, List<Integer>> treeMap = new TreeMap<>();
+        
+        for (int i = 0; i < nums.length; i++) {
+            int num = nums[i];
+            treeMap.computeIfAbsent(num, k -> new ArrayList()).add(i);
+        }
+
+        
+
+        return ans;
     }
 
     public int mySol2(int[] nums) {
@@ -10,15 +43,17 @@ class Solution {
         for (int i = 0; i < nums.length; i++) {
             while (!stack.isEmpty() && nums[stack.peek()] > nums[i]) {
                 stack.pop();
-                ans++;
+                // ans++;
             }
 
             if (nums[i] != 0 && (stack.isEmpty() || nums[stack.peek()] < nums[i])) {
                 stack.push(i);
+                ans++;
             }
         }
 
-        return ans + stack.size();
+        // return ans + stack.size();
+        return ans;
     }
 
     public int mySol_fail(int[] nums) {
