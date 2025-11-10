@@ -1,9 +1,9 @@
 class Solution {
     public int minOperations(int[] nums) {
-        return degenerated(nums);
+        return regressed(nums);
     }
 
-    public int degenerated(int[] nums) {
+    public int regressed(int[] nums) {
         Stack<Integer> stack = new Stack();
         int ans = 0;
 
