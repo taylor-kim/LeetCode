@@ -1,6 +1,22 @@
 class Solution {
     public int numSub(String s) {
-        return mySol(s);
+        return others(s);
+    }
+
+    public int others(String s) {
+        int mod = (int)1e9 + 7;
+        int ans = 0;
+        int streak = 0;
+
+        for (char c : s.toCharArray()) {
+            if (c == '1') {
+                ans = (ans + ++streak) % mod;
+            } else {
+                streak = 0;
+            }
+        }
+
+        return ans;
     }
 
     public int mySol(String s) {
