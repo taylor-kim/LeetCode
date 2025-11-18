@@ -1,6 +1,16 @@
 class Solution {
     public boolean isOneBitCharacter(int[] bits) {
-        return after_sol(bits);
+        return editorial(bits);
+    }
+
+    public boolean editorial(int[] bits) {
+        int i = 0;
+
+        while (i < bits.length - 1) {
+            i += bits[i] + 1;
+        }
+
+        return i == bits.length - 1;
     }
 
     public boolean after_sol(int[] bits) {
