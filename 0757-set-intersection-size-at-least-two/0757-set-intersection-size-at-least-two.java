@@ -1,6 +1,29 @@
 class Solution {
     public int intersectionSizeTwo(int[][] intervals) {
-        return others(intervals);
+        return do_understood(intervals);
+    }
+
+    public int do_understood(int[][] intervals) {
+        Arrays.sort(intervals, (a, b) -> {
+            return a[1] != b[1] ? a[1] - b[1] : b[0] - a[0];
+        });
+
+        int ans = 0;
+        int[] prev = {-1, -1};
+
+        for (int[] interval : intervals) {
+            if (prev[1] < interval[0]) {
+                ans += 2;
+                prev[0] = interval[1] - 1;
+                prev[1] = interval[1];
+            } else if (prev[0] < interval[0]) {
+                prev[0] = prev[1];
+                prev[1] = interval[1];
+                ans++;
+            }
+        }
+
+        return ans;
     }
 
     public int others(int[][] intervals) {
