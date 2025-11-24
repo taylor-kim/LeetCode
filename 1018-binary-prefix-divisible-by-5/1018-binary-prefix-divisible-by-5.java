@@ -9,11 +9,9 @@ class Solution {
         int x = 0;
 
         for (int num : nums) {
-            x = (x << 1) | num;
+            x = ((x << 1) | num) % 5;
 
-            ans.add(x % 5 == 0);
-
-            x %= 5;
+            ans.add(x == 0);
         }
 
         return ans;
