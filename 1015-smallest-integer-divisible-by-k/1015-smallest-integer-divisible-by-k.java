@@ -1,14 +1,18 @@
 class Solution {
     public int smallestRepunitDivByK(int k) {
-        return mySol_improved(k);
+        return editorial(k);
     }
 
     public int editorial(int k) {
-        for (int odd = 1; odd < k; odd++) {
-            // odd = 
+        int remainder = 0;
+        for (int length = 1; length <= k; length++) {
+            remainder = (remainder * 10 + 1) % k;
+            if (remainder % k == 0) {
+                return length;
+            }
         }
 
-        return 0;
+        return -1;
     }
 
     public int mySol_improved(int k) {
