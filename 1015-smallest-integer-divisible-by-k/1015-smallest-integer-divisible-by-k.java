@@ -7,7 +7,7 @@ class Solution {
         int n = 1;
         int ans = 1;
 
-        if (k % 2 == 0) return -1;
+        // if (k % 2 == 0) return -1;
 
         Set<Integer> visit = new HashSet();
         visit.add(n);
