@@ -1,6 +1,6 @@
 class Solution {
     public int maxKDivisibleComponents(int n, int[][] edges, int[] values, int k) {
-        return editorial_topology(n, edges, values, k);
+        return editorial_bfs(n, edges, values, k);
     }
 
     public int editorial_topology(int n, int[][] edges, int[] values, int k) {
@@ -115,11 +115,13 @@ class Solution {
     }
 
     public int editorial_dfs(int n, int[][] edges, int[] values, int k) {
-        Map<Integer, List<Integer>> graph = new HashMap();
+        List<List<Integer>> graph = new ArrayList();
+
+        for (int i = 0; i < n; i++) graph.add(new ArrayList());
 
         for (int[] edge : edges) {
-            graph.computeIfAbsent(edge[0], key -> new ArrayList()).add(edge[1]);
-            graph.computeIfAbsent(edge[1], key -> new ArrayList()).add(edge[0]);
+            graph.get(edge[0]).add(edge[1]);
+            graph.get(edge[1]).add(edge[0]);
         }
 
         int[] ans = new int[1];
@@ -129,10 +131,10 @@ class Solution {
         return ans[0];
     }
 
-    private int dfs(Map<Integer, List<Integer>> graph, int parent, int node, int[] values, int k, int[] ans) {
+    private int dfs(List<List<Integer>> graph, int parent, int node, int[] values, int k, int[] ans) {
         int sum = 0;
 
-        for (int next : graph.getOrDefault(node, new ArrayList<>())) {
+        for (int next : graph.get(node)) {
             if (next != parent) {
                 sum += dfs(graph, node, next, values, k, ans);
             }
