@@ -1,39 +1,43 @@
 class Solution {
     public int minSubarray(int[] nums, int p) {
-        return try_20251130(nums, p);
+        return try_20251130_it_is_close_to_success(nums, p);
     }
 
-    public int try_20251130(int[] nums, int p) {
+    public int try_20251130_it_is_close_to_success(int[] nums, int p) {
         int n = nums.length;
 
         Map<Integer, Integer> map = new HashMap();
         map.put(0, -1);
 
+        long sum = Arrays.stream(nums).mapToLong(i -> i).sum();
 
-        long sum = 0;
-
-        for (int num : nums) sum += num;
-
-        if (sum < (long)p) return -1;
+        if (sum < p) return -1;
 
         int odd = (int)(sum % p);
 
         if (odd == 0) return 0;
 
         int modSum = 0;
-        int ans = Integer.MAX_VALUE;
+        int ans = n;
+
+        // p = 7
+        // target = 4
+        // 5, - (2 + 7), 4
+        // 1, - (5 + 7), 11 % 7 => 4
 
         for (int i = 0; i < n; i++) {
-            modSum = (modSum + nums[i]) % odd;
+            modSum = (modSum + nums[i]) % p;
 
-            if (map.containsKey(modSum)) {
-                ans = Math.min(ans, i - map.get(modSum));
+            int need = (modSum + p - odd) % p;
+
+            if (map.containsKey(need)) {
+                ans = Math.min(ans, i - map.get(need));
             }
 
             map.put(modSum, i);
         }
         
-        return ans == Integer.MAX_VALUE ? -1 : ans;
+        return ans == n ? -1 : ans;
     }
 
     public int official_prefixsum(int[] nums, int p) {
