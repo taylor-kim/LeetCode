@@ -1,9 +1,9 @@
 class Solution {
     public int minSubarray(int[] nums, int p) {
-        return try_20251130_it_is_close_to_success(nums, p);
+        return try_20251130_it_is_close_to_succeeding(nums, p);
     }
 
-    public int try_20251130_it_is_close_to_success(int[] nums, int p) {
+    public int try_20251130_it_is_close_to_succeeding(int[] nums, int p) {
         int n = nums.length;
 
         Map<Integer, Integer> map = new HashMap();
