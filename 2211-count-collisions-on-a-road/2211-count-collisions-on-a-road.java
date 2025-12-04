@@ -11,20 +11,12 @@ class Solution {
         int left = 0;
         int right = arr.length - 1;
 
-        while (left < arr.length) {
-            if (arr[left] == 'L') {
-                left++;
-            } else {
-                break;
-            }
+        while (left < arr.length && arr[left] == 'L') {
+            left++;
         }
 
-        while (right >= 0) {
-            if (arr[right] == 'R') {
-                right--;
-            } else {
-                break;
-            }
+        while (right >= 0 && arr[right] == 'R') {
+            right--;
         }
 
         for (int i = left; i <= right; i++) {
