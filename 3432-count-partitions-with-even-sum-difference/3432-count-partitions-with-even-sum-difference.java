@@ -1,6 +1,14 @@
 class Solution {
     public int countPartitions(int[] nums) {
-        return mySol(nums);
+        return editorial(nums);
+    }
+
+    public int editorial(int[] nums) {
+        int sum = 0;
+
+        for (int num : nums) sum += num;
+
+        return sum % 2 == 0 ? nums.length - 1 : 0;
     }
 
     public int mySol(int[] nums) {
