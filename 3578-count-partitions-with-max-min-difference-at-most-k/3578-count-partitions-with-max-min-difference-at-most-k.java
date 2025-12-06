@@ -1,6 +1,47 @@
 class Solution {
     public int countPartitions(int[] nums, int k) {
-        return editorial(nums, k);
+        return editorial2(nums, k);
+    }
+
+    public int editorial2(int[] nums, int k) {
+        int n = nums.length;
+        int mod = (int)1e9 + 7;
+        long[] dp = new long[n + 1];
+        long[] pSum = new long[n + 1];
+        dp[0] = 1;
+        pSum[0] = 1;
+
+        Deque<Integer> minHeap = new LinkedList();
+        Deque<Integer> maxHeap = new LinkedList();
+
+        for (int i = 0, j = 0; i < n; i++) {
+            while (!minHeap.isEmpty() && nums[minHeap.peekLast()] > nums[i]) {
+                minHeap.pollLast();
+            }
+
+            while (!maxHeap.isEmpty() && nums[maxHeap.peekLast()] < nums[i]) {
+                maxHeap.pollLast();
+            }
+
+            minHeap.add(i);
+            maxHeap.add(i);
+
+            while (j <= i && nums[maxHeap.peekFirst()] - nums[minHeap.peekFirst()] > k) {
+                if (maxHeap.peekFirst() == j) {
+                    maxHeap.pollFirst();
+                }
+
+                if (minHeap.peekFirst() == j) {
+                    minHeap.pollFirst();
+                }
+                j++;
+            }
+
+            dp[i + 1] = (pSum[i] - (j > 0 ? pSum[j - 1] : 0) + mod) % mod;
+            pSum[i + 1] = (pSum[i] + dp[i + 1]) % mod;
+        }
+
+        return (int)dp[n];
     }
 
     public int editorial(int[] nums, int k) {
