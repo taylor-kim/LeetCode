@@ -1,29 +1,23 @@
 class Solution {
     public int countTriples(int n) {
-        return editorial(n);
+        return mySol2(n);
     }
 
-    public int editorial(int n) {
-        int res = 0;
-        // enumerate a and b
-        for (int a = 1; a <= n; ++a) {
-            for (int b = 1; b <= n; ++b) {
-                // determine if it meets the requirements
-                int c = (int) Math.sqrt(a * a + b * b + 1.0);
-                if (c <= n && c * c == a * a + b * b) {
-                    ++res;
-                }
-            }
-        }
-        return res;
-    }
-
-    public int mySol_fail(int n) {
+    public int mySol2(int n) {
         int ans = 0;
 
-        for (int a = 1; a * a <= n; a++) {
-            for (int b = 1; b * b <= n; b++) {
-                if (a * a + b * b <= n) ans++;
+        for (int a = 1; a <= n; a++) {
+            for (int b = 1; b <= n; b++) {
+                int square = a * a + b * b;
+
+                double c = Math.sqrt(square);
+                double odd = c - ((int)c);
+
+                // System.out.println("a:%d, b:%d, sq:%d, c:%f, int c:%d, odd:%f".formatted(a, b, square, c, (int)c, odd));
+
+                if (odd > 0) continue;
+
+                if (c <= n) ans++;
             }
         }
 
