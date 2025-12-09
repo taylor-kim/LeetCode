@@ -28,6 +28,8 @@ class Solution {
                 int leftCount = indexOfK + 1;
                 int rightCount = ikList.size() - leftCount;
 
+                if (num == 0) leftCount--;
+
                 ans = (int)((ans + (long)leftCount * rightCount) % mod);
             }
         }
