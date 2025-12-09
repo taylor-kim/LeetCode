@@ -3,6 +3,38 @@ class Solution {
         return editorial(nums);
     }
 
+    public int try_editorial_bs(int[] nums) {
+        int n = nums.length;
+
+        Map<Integer, List<Integer>> freq = new HashMap();
+        
+        for (int i = 0; i < n; i++) {
+            freq.computeIfAbsent(nums[i], k -> new ArrayList()).add(i);
+        }
+
+        int ans = 0;
+        int mod = (int)1e9 + 7;
+
+        for (int j = 1; j < n - 1; j++) {
+            int num = nums[j];
+
+            int target = num * 2;
+
+            List<Integer> ikList = freq.get(target);
+
+            if (ikList != null && ikList.size() > 1 && ikList.get(0) < j) {
+                int indexOfK = leftmost(ikList, j + 1);
+
+                int leftCount = indexOfK + 1;
+                int rightCount = ikList.size() - leftCount;
+
+                ans = (int)((ans + (long)leftCount * rightCount) % mod);
+            }
+        }
+
+        return ans;
+    }
+
     public int editorial(int[] nums) {
         int mod = (int)1e9 + 7;
         Map<Integer, Integer> currentCounter = new HashMap();
