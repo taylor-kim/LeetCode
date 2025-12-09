@@ -1,9 +1,65 @@
 class Solution {
     public int specialTriplets(int[] nums) {
-        return mySol(nums);
+        return editorial(nums);
     }
 
-    public int mySol(int[] nums) {
+    public int editorial(int[] nums) {
+        int mod = (int)1e9 + 7;
+        Map<Integer, Integer> currentCounter = new HashMap();
+        Map<Integer, Integer> totalCounter = new HashMap();
+
+        for (int num : nums) {
+            totalCounter.put(num, totalCounter.getOrDefault(num, 0) + 1);
+        }
+
+        long ans = 0;
+
+        for (int num : nums) {
+            int target = num * 2;
+
+            int leftCount = currentCounter.getOrDefault(target, 0);
+
+            currentCounter.put(num, currentCounter.getOrDefault(num, 0) + 1);
+
+            int rightCount = totalCounter.getOrDefault(target, 0) - currentCounter.getOrDefault(target, 0);
+
+            ans = (ans + (long)leftCount * rightCount) % mod;
+        }
+
+        return (int)ans;
+    }
+
+    public int hint_fail(int[] nums) {
+        int n = nums.length;
+
+        Map<Integer, Integer> freqPrev = new HashMap();
+        Map<Integer, Integer> freqNext = new HashMap();
+
+        for (int i = 0; i < n; i++) {
+            int num = nums[i];
+
+            freqPrev.put(num, 0);
+            freqPrev.put(num * 2, freqPrev.getOrDefault(num * 2, 0) + 1);
+
+            int j = n - i - 1;
+
+            int num2 = nums[j];
+
+            freqNext.put(num2, 0);
+            freqNext.put(num2 * 2, freqNext.getOrDefault(num2 * 2, 0) + 1);
+        }
+
+        int ans = 0;
+        int mod = (int)1e9 + 7;
+
+        for (int num : nums) {
+
+        }
+
+        return ans;
+    }
+
+    public int mySol_fail(int[] nums) {
         int n = nums.length;
 
         Map<Integer, List<Integer>> freq = new HashMap();
@@ -17,44 +73,25 @@ class Solution {
 
         for (int i = 0; i < n; i++) {
             int num = nums[i];
-
             List<Integer> ikList = freq.get(num);
 
-            int lastK = ikList.getLast();
+            int rightK = ikList.getLast();
 
-            if (lastK - i <= 1) continue;
+            if (rightK - i <= 1) continue;
 
-            int indexOfK = leftmost(ikList, i + 1);
+            int half = num / 2;
 
-            if (indexOfK >= nums.length) continue;
+            List<Integer> jList = freq.getOrDefault(half, Collections.emptyList());
 
-            while (indexOfK < ikList.size()) {
-                int k = ikList.get(indexOfK);
+            int startJ = leftmost(jList, i + 1);
+            int endJ = leftmost(jList, rightK);
 
-                // System.out.println("ikList:%s, i:%d, k:%d, num:%d".formatted(ikList, i, k, num));
+            int leftK = leftmost(ikList, endJ + 1);
 
-                if (k - i <= 1) {
-                    indexOfK++;
-                    continue;
-                }
+            System.out.println("jList:%s, startJ:%d, endJ:%d".formatted(jList, startJ, endJ));
+            System.out.println("ikList:%s, leftK:%d, rightK:%d".formatted(ikList, leftK, rightK));
 
-                int half = num / 2;
-
-                List<Integer> jList = freq.get(half);
-
-                // System.out.println("wtf!!! jList:%s".formatted(jList));
-
-                if (jList == null) continue;
-
-                int startJ = leftmost(jList, i + 1);
-                int endJ = leftmost(jList, k);
-
-                // System.out.println("list:%s, startJ:%d, endJ:%d". formatted(jList, startJ, endJ));
-
-                ans = (ans + (endJ - startJ)) % mod;
-
-                indexOfK++;
-            }
+            ans = (ans + (endJ - startJ) * (rightK - leftK + 1)) % mod;
         }
 
         return ans;
