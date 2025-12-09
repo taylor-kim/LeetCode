@@ -1,6 +1,6 @@
 class Solution {
     public int specialTriplets(int[] nums) {
-        return editorial(nums);
+        return try_editorial_bs(nums);
     }
 
     public int try_editorial_bs(int[] nums) {
@@ -25,8 +25,10 @@ class Solution {
             if (ikList != null && ikList.size() > 1 && ikList.get(0) < j) {
                 int indexOfK = leftmost(ikList, j + 1);
 
-                int leftCount = indexOfK + 1;
+                int leftCount = indexOfK;
                 int rightCount = ikList.size() - leftCount;
+
+                // System.out.println("ikList:%s, j:%d, indexOfK:%d, lc:%d, rc:%d".formatted(ikList, j, indexOfK, leftCount, rightCount));
 
                 if (num == 0) leftCount--;
 
