@@ -1,6 +1,52 @@
 class Solution {
     public int[] countMentions(int numberOfUsers, List<List<String>> events) {
-        return mySol(numberOfUsers, events);
+        return editorial(numberOfUsers, events);
+    }
+
+    public int[] editorial(int numberOfUsers, List<List<String>> events) {
+        int[] nextOnlineTime = new int[numberOfUsers];
+
+        Collections.sort(events, (a, b) -> {
+            int numA = Integer.parseInt(a.get(1));
+            int numB = Integer.parseInt(b.get(1));
+
+            return numA != numB ? numA - numB : a.get(0).equals("OFFLINE") ? -1 : 1;
+        });
+
+        int all = 0;
+        int[] ans = new int[numberOfUsers];
+
+        for (List<String> event : events) {
+            int timestamp = Integer.parseInt(event.get(1));
+
+            String type = event.get(0);
+
+            if (type.equals("MESSAGE")) {
+                String data = event.get(2);
+
+                if (data.equals("ALL")) {
+                    all++;
+                } else if (data.equals("HERE")) {
+                    for (int i = 0; i < numberOfUsers; i++) {
+                        if (nextOnlineTime[i] <= timestamp) {
+                            ans[i]++;
+                        }
+                    }
+                } else {
+                    int[] ids = getIds(data);
+
+                    for (int id : ids) ans[id]++;
+                }
+            } else {
+                nextOnlineTime[Integer.parseInt(event.get(2))] = timestamp + 60;
+            }
+        }
+
+        for (int i = 0; i < ans.length; i++) {
+            ans[i] += all;
+        }
+
+        return ans;
     }
 
     public int[] mySol(int numberOfUsers, List<List<String>> events) {
