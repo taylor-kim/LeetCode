@@ -33,9 +33,11 @@ class Solution {
                         }
                     }
                 } else {
-                    int[] ids = getIds(data);
-
-                    for (int id : ids) ans[id]++;
+                    String[] users = data.split(" ");
+                    for (String user : users) {
+                        int idx = Integer.parseInt(user.substring(2));
+                        ans[idx]++;
+                    }
                 }
             } else {
                 nextOnlineTime[Integer.parseInt(event.get(2))] = timestamp + 60;
