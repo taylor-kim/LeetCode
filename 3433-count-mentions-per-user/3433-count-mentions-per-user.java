@@ -15,7 +15,7 @@ class Solution {
             int numA = Integer.parseInt(a.get(1));
             int numB = Integer.parseInt(b.get(1));
 
-            return numA - numB;
+            return numA != numB ? numA - numB : a.get(0).equals("OFFLINE") ? -1 : 1;
         });
 
         Map<Integer, Integer> mentioned = new HashMap();
