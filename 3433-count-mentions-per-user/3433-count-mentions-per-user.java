@@ -1,6 +1,6 @@
 class Solution {
     public int[] countMentions(int numberOfUsers, List<List<String>> events) {
-        return editorial(numberOfUsers, events);
+        return mySol(numberOfUsers, events);
     }
 
     public int[] editorial(int numberOfUsers, List<List<String>> events) {
@@ -87,9 +87,14 @@ class Solution {
                 } else if (data.equals("HERE")) {
                     for (int online : onlines) ans[online]++;
                 } else {
-                    int[] ids = getIds(data);
+                    // int[] ids = getIds(data);
 
-                    for (int id : ids) ans[id]++;
+                    // for (int id : ids) ans[id]++;
+                    String[] users = data.split(" ");
+                    for (String user : users) {
+                        int idx = Integer.parseInt(user.substring(2));
+                        ans[idx]++;
+                    }
                 }
             } else {
                 int offId = Integer.parseInt(event.get(2));
