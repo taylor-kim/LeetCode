@@ -4,53 +4,61 @@ class Solution {
         int[][] meetings,
         int firstPerson
     ) {
-        // For every person, we store the meeting time and label of the person met.
-        Map<Integer, List<int[]>> graph = new HashMap<>();
+        // Sort meetings in increasing order of time
+        Arrays.sort(meetings, (a, b) -> a[2] - b[2]);
+
+        // Group Meetings in increasing order of time
+        Map<Integer, List<int[]>> sameTimeMeetings = new TreeMap<>();
         for (int[] meeting : meetings) {
             int x = meeting[0], y = meeting[1], t = meeting[2];
-            graph
-                .computeIfAbsent(x, k -> new ArrayList<>())
-                .add(new int[] { t, y });
-            graph
-                .computeIfAbsent(y, k -> new ArrayList<>())
-                .add(new int[] { t, x });
+            sameTimeMeetings
+                .computeIfAbsent(t, k -> new ArrayList<>())
+                .add(new int[] { x, y });
         }
 
-        // Priority Queue for BFS. It will store (time of knowing the secret, person)
-        // We will pop the person with the minimum time of knowing the secret.
-        PriorityQueue<int[]> pq = new PriorityQueue<>((a, b) -> a[0] - b[0]);
-        pq.offer(new int[] { 0, 0 });
-        pq.offer(new int[] { 0, firstPerson });
+        // Boolean Array to mark if a person knows the secret or not
+        boolean[] knowsSecret = new boolean[n];
+        knowsSecret[0] = true;
+        knowsSecret[firstPerson] = true;
 
-        // Visited array to mark if a person is visited or not.
-        // We will mark a person as visited after it is dequeued
-        // from the queue.
-        boolean[] visited = new boolean[n];
+        // Process in increasing order of time
+        for (int t : sameTimeMeetings.keySet()) {
+            // For each person, save all the people whom he/she meets at time t
+            Map<Integer, List<Integer>> meet = new HashMap<>();
+            Set<Integer> start = new HashSet<>();
+            for (int[] meeting : sameTimeMeetings.get(t)) {
+                int x = meeting[0], y = meeting[1];
+                meet.computeIfAbsent(x, k -> new ArrayList<>()).add(y);
+                meet.computeIfAbsent(y, k -> new ArrayList<>()).add(x);
 
-        // Do BFS, but pop minimum.
-        while (!pq.isEmpty()) {
-            int[] timePerson = pq.poll();
-            int time = timePerson[0], person = timePerson[1];
-            if (visited[person]) {
-                continue;
+                if (knowsSecret[x]) {
+                    start.add(x);
+                }
+                if (knowsSecret[y]) {
+                    start.add(y);
+                }
             }
-            visited[person] = true;
-            for (int[] nextPersonTime : graph.getOrDefault(
-                person,
-                new ArrayList<>()
-            )) {
-                int t = nextPersonTime[0], nextPerson = nextPersonTime[1];
-                if (!visited[nextPerson] && t >= time) {
-                    pq.offer(new int[] { t, nextPerson });
+
+            // Do BFS
+            Queue<Integer> q = new LinkedList<>(start);
+            while (!q.isEmpty()) {
+                int person = q.poll();
+                for (int nextPerson : meet.getOrDefault(
+                    person,
+                    new ArrayList<>()
+                )) {
+                    if (!knowsSecret[nextPerson]) {
+                        knowsSecret[nextPerson] = true;
+                        q.offer(nextPerson);
+                    }
                 }
             }
         }
 
-        // Since we visited only those people who know the secret
-        // we need to return indices of all visited people.
+        // List of people who know the secret
         List<Integer> ans = new ArrayList<>();
         for (int i = 0; i < n; ++i) {
-            if (visited[i]) {
+            if (knowsSecret[i]) {
                 ans.add(i);
             }
         }
