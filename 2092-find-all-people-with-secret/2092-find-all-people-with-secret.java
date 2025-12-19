@@ -26,6 +26,8 @@ class Solution {
                 int a = meetingAt[0];
                 int b = meetingAt[1];
 
+                if (ans.contains(a) && ans.contains(b)) continue;
+
                 graph.computeIfAbsent(a, k -> new HashSet()).add(b);
                 graph.computeIfAbsent(b, k -> new HashSet()).add(a);
                 
