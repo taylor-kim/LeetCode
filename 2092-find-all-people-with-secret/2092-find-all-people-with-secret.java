@@ -1,6 +1,55 @@
 class Solution {
     public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
-        return mySol3_by_read_past_sol(n, meetings, firstPerson);
+        return mySol_fail_improved(n, meetings, firstPerson);
+    }
+
+    public List<Integer> mySol_fail_improved(int n, int[][] meetings, int firstPerson) {
+        Set<Integer> ans = new HashSet();
+
+        ans.add(0);
+        ans.add(firstPerson);
+
+        Map<Integer, List<int[]>> map = new TreeMap();
+
+        for (int[] meeting : meetings) {
+            map.computeIfAbsent(meeting[2], k -> new ArrayList()).add(meeting);
+        }
+
+        for (int key : map.keySet()) {
+            List<int[]> meetingsAt = map.get(key);
+
+            Queue<Integer> queue = new LinkedList();
+            Set<Integer> visit = new HashSet();
+            Map<Integer, Set<Integer>> graph = new HashMap();
+
+            for (int[] meetingAt : meetingsAt) {
+                int a = meetingAt[0];
+                int b = meetingAt[1];
+
+                graph.computeIfAbsent(a, k -> new HashSet()).add(b);
+                graph.computeIfAbsent(b, k -> new HashSet()).add(a);
+                
+                if (ans.contains(a) && visit.add(a)) {
+                    queue.add(a);
+                }
+
+                if (ans.contains(b) && visit.add(b)) {
+                    queue.add(b);
+                }
+            }
+
+            while (!queue.isEmpty()) {
+                int person = queue.poll();
+
+                for (int next : graph.getOrDefault(person, new HashSet<>())) {
+                    if (ans.add(next) && visit.add(next)) {
+                        queue.add(next);
+                    }
+                }
+            }
+        }
+
+        return new ArrayList(ans);
     }
 
     public List<Integer> mySol3_by_read_past_sol(int n, int[][] meetings, int firstPerson) {
