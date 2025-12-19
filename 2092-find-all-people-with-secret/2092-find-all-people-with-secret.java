@@ -1,6 +1,6 @@
 class Solution {
     public List<Integer> findAllPeople(int n, int[][] meetings, int firstPerson) {
-        return mySol_fail_improved(n, meetings, firstPerson);
+        return mySol3_by_read_past_sol(n, meetings, firstPerson);
     }
 
     public List<Integer> mySol_fail_improved(int n, int[][] meetings, int firstPerson) {
