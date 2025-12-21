@@ -1,6 +1,28 @@
 class Solution {
     public int minDeletionSize(String[] strs) {
-        return editorial1(strs);
+        return editorial2(strs);
+    }
+
+    public int editorial2(String[] strs) {
+        int ans = 0;
+        boolean[] cuts = new boolean[strs.length - 1];
+
+        out: for (int c = 0; c < strs[0].length(); c++) {
+            for (int r = 0; r < strs.length - 1; r++) {
+                if (!cuts[r] && strs[r].charAt(c) > strs[r + 1].charAt(c)) {
+                    ans++;
+                    continue out;
+                }
+            }
+
+            for (int r = 0; r < strs.length - 1; r++) {
+                if (strs[r].charAt(c) < strs[r + 1].charAt(c)) {
+                    cuts[r] = true;
+                }
+            }
+        }
+
+        return ans;
     }
 
     public int editorial1(String[] strs) {
