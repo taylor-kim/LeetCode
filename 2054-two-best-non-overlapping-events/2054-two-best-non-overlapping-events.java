@@ -1,9 +1,9 @@
 class Solution {
     public int maxTwoEvents(int[][] events) {
-        return try_topdown(events);
+        return try_20251223_fail_seen_my_past_sol(events);
     }
 
-    public int try_20251223(int[][] events) {
+    public int try_20251223_fail_seen_my_past_sol(int[][] events) {
         Arrays.sort(events, (a, b) -> {
             return a[0] != b[0] ? a[0] - b[0] : a[1] - b[1];
         });
@@ -16,15 +16,9 @@ class Solution {
 
         if (memo[index][count] != null) return memo[index][count];
 
-        int include = events[index][2];
-
         int next = leftmost2(events, events[index][1] + 1);
 
-        for (int i = next; i < events.length; i++) {
-            int sub = events[index][2] + topdown2(events, i, count + 1, memo);
-
-            include = Math.max(include, sub);
-        }
+        int include = events[index][2] + topdown2(events, next, count + 1, memo);
 
         int exclude = topdown2(events, index + 1, count, memo);
 
