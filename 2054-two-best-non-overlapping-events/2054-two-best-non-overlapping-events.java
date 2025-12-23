@@ -1,6 +1,51 @@
 class Solution {
     public int maxTwoEvents(int[][] events) {
-        return editorial_pq(events);
+        return try_topdown(events);
+    }
+
+    public int try_20251223(int[][] events) {
+        Arrays.sort(events, (a, b) -> {
+            return a[0] != b[0] ? a[0] - b[0] : a[1] - b[1];
+        });
+
+        return topdown2(events, 0, 0, new Integer[events.length][2]);
+    }
+
+    private int topdown2(int[][] events, int index, int count, Integer[][] memo) {
+        if (count == 2 || index >= events.length) return 0;
+
+        if (memo[index][count] != null) return memo[index][count];
+
+        int include = events[index][2];
+
+        int next = leftmost2(events, events[index][1] + 1);
+
+        for (int i = next; i < events.length; i++) {
+            int sub = events[index][2] + topdown2(events, i, count + 1, memo);
+
+            include = Math.max(include, sub);
+        }
+
+        int exclude = topdown2(events, index + 1, count, memo);
+
+        return memo[index][count] = Math.max(include, exclude);
+    }
+
+    private int leftmost2(int[][] events, int target) {
+        int lo = 0;
+        int hi = events.length;
+
+        while (lo < hi) {
+            int mid = lo + (hi - lo) / 2;
+
+            if (target <= events[mid][0]) {
+                hi = mid;
+            } else {
+                lo = mid + 1;
+            }
+        }
+
+        return lo;
     }
 
     public int official_greedy(int[][] events) {
