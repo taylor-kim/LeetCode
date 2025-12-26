@@ -1,69 +1,45 @@
 class Solution {
     public int bestClosingTime(String customers) {
-        return others2(customers);
+        return mySol(customers);
     }
 
-    public int others(String s) {
-        int max = 0;
-        int score = 0;
-        int ans = -1;
+    public int mySol(String customers) {
+        int n = customers.length();
+        int ans = n;
+        int yes = 0;
+        int no = 0;
+        int penalty = n;
 
-        for (int i = 0; i < s.length(); i++) {
-            score += s.charAt(i) == 'Y' ? 1 : -1;
-
-            if (score > max) {
-                max = score;
-                ans = i;
+        for (int i = 0; i < n; i++) {
+            if (customers.charAt(i) == 'Y') {
+                yes++;
+            } else {
+                no++;
             }
         }
 
-        return ans + 1;
-    }
+        // if (yes == 0) return 0;
+        // if (no == 0) return n;
 
-    public int others2(String s) {
-        int n = s.length();
-        int[] ltr = new int[n + 1];
-        int[] rtl = new int[n + 1];
+        int currentY = 0;
+        int currentN = 0;
 
-        for (int i = 1; i <= n; i++) {
-            ltr[i] = ltr[i - 1] + (s.charAt(i - 1) == 'N' ? 1 : 0);
-            rtl[n - i] = rtl[n - i + 1] + (s.charAt(n - i) == 'Y' ? 1 : 0);
-        }
-
-        int min = Integer.MAX_VALUE;
-        int ans = 0;
-
-        for (int i = 0; i <= n; i++) {
-            if (ltr[i] + rtl[i] < min) {
-                min = ltr[i] + rtl[i];
+        for (int i = 0; i < n; i++) {
+            if (penalty > currentN + (yes - currentY)) {
+                penalty = currentN + (yes - currentY);
                 ans = i;
+            }
+
+            if (customers.charAt(i) == 'Y') {
+                currentY++;
+            } else {
+                currentN++;
             }
         }
 
-        return ans;
-    }
-
-    public int fail(String s) {
-        int n = s.length();
-        int[] ltr = new int[n + 1];
-        int[] rtl = new int[n + 1];
-
-        for (int i = 1; i <= n; i++) {
-            ltr[i] = ltr[i - 1] + (s.charAt(i - 1) == 'Y' ? 1 : -1);
-            rtl[n - i] = rtl[n - i + 1] + (s.charAt(n - i) == 'Y' ? 1 : -1);
-        }
-
-        System.out.println(Arrays.toString(ltr));
-        System.out.println(Arrays.toString(rtl));
-
-        int max = Integer.MIN_VALUE;
-        int ans = 0;
-
-        for (int i = 1; i < n; i++) {
-            if (ltr[i] + rtl[i] > max) {
-                max = ltr[i] + rtl[i];
-                ans = i;
-            }
+        if (penalty > currentN + (yes - currentY)) {
+            penalty = currentN + (yes - currentY);
+            ans = n;
         }
 
         return ans;
