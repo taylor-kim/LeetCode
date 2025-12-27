@@ -47,8 +47,6 @@ class Solution {
         int max = 0;
         int ans = 0;
 
-        System.out.println(Arrays.toString(counter));
-
         for (int i = 0; i < n; i++) {
             if (max < counter[i]) {
                 max = counter[i];
