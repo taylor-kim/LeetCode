@@ -28,7 +28,8 @@ class Solution {
         while (!remains.isEmpty()) {
             int[] meeting = remains.poll();
 
-            time = Math.max(time, meeting[0]);
+            // time = Math.max(time, meeting[0]);
+            time = meeting[0];
 
             while (!progresses.isEmpty() && progresses.peek()[0] <= time) {
                 int room = (int)progresses.poll()[1];
@@ -37,7 +38,7 @@ class Solution {
             }
 
             if (availables.isEmpty()) {
-                time = Math.max(time, progresses.peek()[0]);
+                time = progresses.peek()[0];
                 int room = (int)progresses.poll()[1];
 
                 availables.add(room);
