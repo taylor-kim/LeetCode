@@ -1,6 +1,49 @@
 class Solution {
     public int maxTwoEvents(int[][] events) {
-        return try_20251223_fail_seen_my_past_sol(events);
+        return try_dp(events);
+    }
+
+    public int try_dp(int[][] events) {
+        int n = events.length;
+        TreeMap<Integer, Integer> dp = new TreeMap();
+        dp.put(0, 0);
+
+        Arrays.sort(events, (a, b) -> {
+            return a[1] - b[1];
+        });
+
+        int ans = 0;
+
+        for (int[] event : events) {
+            int prevMax = dp.get(dp.lowerKey(event[0]));
+
+            ans = Math.max(ans, prevMax + event[2]);
+
+            dp.put(event[1], Math.max(dp.get(dp.floorKey(event[1])), event[2]));
+        }
+
+        return ans;
+    }
+
+    public int practice_myOldSol(int[][] events) {
+        TreeMap<Integer, Integer> dp = new TreeMap();
+        dp.put(0, 0);
+
+        Arrays.sort(events, (a, b) -> {
+            return a[1] - b[1];
+        });
+
+        int ans = 0;
+
+        for (int[] event : events) {
+            int prevMax = dp.get(dp.lowerKey(event[0]));
+
+            ans = Math.max(ans, prevMax + event[2]);
+
+            dp.put(event[1], Math.max(event[2], dp.get(dp.floorKey(event[1]))));
+        }
+
+        return ans;
     }
 
     public int try_20251223_fail_seen_my_past_sol(int[][] events) {
