@@ -4,13 +4,9 @@ class Solution {
     }
 
     public int mySol(int n, int[][] meetings) {
-        Queue<int[]> remains = new PriorityQueue<>((a, b) -> {
+        Arrays.sort(meetings, (a, b) -> {
             return a[0] - b[0];
         });
-
-        for (int[] meeting : meetings) {
-            remains.add(meeting);
-        }
 
         Queue<Integer> availables = new PriorityQueue();
         
@@ -23,37 +19,29 @@ class Solution {
         });
 
         int[] counter = new int[n];
-        long time = 0;
 
-        while (!remains.isEmpty()) {
-            int[] meeting = remains.poll();
-
-            // time = Math.max(time, meeting[0]);
-            time = meeting[0];
-
-            while (!progresses.isEmpty() && progresses.peek()[0] <= time) {
+        for (int[] meeting : meetings) {
+            while (!progresses.isEmpty() && progresses.peek()[0] <= meeting[0]) {
                 int room = (int)progresses.poll()[1];
 
                 availables.add(room);
             }
 
+            long delayed = 0;
+
             if (availables.isEmpty()) {
-                time = progresses.peek()[0];
+                delayed = progresses.peek()[0] - meeting[0];
                 int room = (int)progresses.poll()[1];
 
                 availables.add(room);
             }
 
             int room = availables.poll();
-            long delayed = Math.max(time - meeting[0], 0);
-            long startTime = meeting[0] + delayed;
             long endTime = meeting[1] + delayed;
 
             progresses.add(new long[] {endTime, room});
 
             counter[room]++;
-
-            // System.out.println("room:%d, start:%d, end:%d, time:%d".formatted(room, startTime, endTime, time));
         }
 
         int max = 0;
