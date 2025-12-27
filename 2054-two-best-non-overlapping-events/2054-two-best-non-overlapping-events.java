@@ -1,6 +1,32 @@
 class Solution {
     public int maxTwoEvents(int[][] events) {
-        return try_pq(events);
+        return try_greedy(events);
+    }
+
+    public int try_greedy(int[][] events) {
+        List<int[]> datas = new ArrayList();
+
+        for (int[] event : events) {
+            datas.add(new int[] {event[0], 1, event[2]});
+            datas.add(new int[] {event[1] + 1, 0, event[2]});
+        }
+
+        Collections.sort(datas, (a, b) -> {
+            return a[0] != b[0] ? a[0] - b[0] : a[1] - b[1];
+        });
+
+        int prevMax = 0;
+        int ans = 0;
+
+        for (int[] data : datas) {
+            if (data[1] == 0) {
+                prevMax = Math.max(prevMax, data[2]);
+            } else {
+                ans = Math.max(ans, prevMax + data[2]);
+            }
+        }
+
+        return ans;
     }
 
     public int try_pq(int[][] events) {
