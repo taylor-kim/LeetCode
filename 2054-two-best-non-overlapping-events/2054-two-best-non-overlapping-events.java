@@ -1,6 +1,6 @@
 class Solution {
     public int maxTwoEvents(int[][] events) {
-        return try_greedy(events);
+        return try_dp(events);
     }
 
     public int try_greedy(int[][] events) {
