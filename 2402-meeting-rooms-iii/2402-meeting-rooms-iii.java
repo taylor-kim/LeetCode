@@ -1,9 +1,9 @@
 class Solution {
     public int mostBooked(int n, int[][] meetings) {
-        return mySol(n, meetings);
+        return mySol_by_past_sol(n, meetings);
     }
 
-    public int mySol(int n, int[][] meetings) {
+    public int mySol_by_past_sol(int n, int[][] meetings) {
         Arrays.sort(meetings, (a, b) -> {
             return a[0] - b[0];
         });
