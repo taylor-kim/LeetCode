@@ -1,6 +1,31 @@
 class Solution {
     public int maxTwoEvents(int[][] events) {
-        return try_dp(events);
+        return try_pq(events);
+    }
+
+    public int try_pq(int[][] events) {
+        Arrays.sort(events, (a, b) -> {
+            return a[0] - b[0];
+        });
+
+        Queue<int[]> pq = new PriorityQueue<>((a, b) -> {
+            return a[1] - b[1];
+        });
+
+        int prevMax = 0;
+        int ans = 0;
+
+        for (int[] event : events) {
+            while (!pq.isEmpty() && pq.peek()[1] < event[0]) {
+                prevMax = Math.max(prevMax, pq.poll()[2]);
+            }
+
+            ans = Math.max(ans, prevMax + event[2]);
+
+            pq.add(event);
+        }
+
+        return ans;
     }
 
     public int try_dp(int[][] events) {
