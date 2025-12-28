@@ -12,6 +12,26 @@ class Solution {
         int j = 0;
 
         while (i >= 0 && j < n) {
+            if (grid[i][j] < 0) {
+                ans += n - j;
+                i--;
+            } else {
+                j++;
+            }
+        }
+
+        return ans;
+    }
+
+    public int my_others_better(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+
+        int ans = 0;
+        int i = m - 1;
+        int j = 0;
+
+        while (i >= 0 && j < n) {
             int col = n - 1;
             while (col >= j && grid[i][col] < 0) {
                 col--;
