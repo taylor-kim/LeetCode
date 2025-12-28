@@ -1,6 +1,27 @@
 class Solution {
     public int countNegatives(int[][] grid) {
-        return mySol(grid);
+        return others_better(grid);
+    }
+
+    public int others_better(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+
+        int ans = 0;
+        int i = m - 1;
+        int j = 0;
+
+        while (i >= 0 && j < n) {
+            int col = n - 1;
+            while (col >= j && grid[i][col] < 0) {
+                col--;
+            }
+            ans += n - col - 1;
+            j = col + 1;
+            i--;
+        }
+
+        return ans;
     }
 
     public int mySol(int[][] grid) {
