@@ -1,53 +1,57 @@
 class Solution {
+
     public boolean pyramidTransition(String bottom, List<String> allowed) {
-        return mySol_fail(bottom, allowed);
+        return mySol(bottom, allowed);
     }
 
-    public boolean mySol2WithTopics(String bottom, List<String> allowed) {
-        return false;
+    public boolean mySol(String bottom, List<String> allowed) {
+        Map<String, Boolean> memo = new HashMap<>();
+        return dfs(bottom, allowed, memo);
     }
 
-    public boolean mySol_fail(String bottom, List<String> allowed) {
-        List<StringBuilder> pyramid = new ArrayList();
-
-        for (int i = 0; i < bottom.length(); i++) {
-            pyramid.add(new StringBuilder());
+    private boolean dfs(String cur, List<String> allowed, Map<String, Boolean> memo) {
+        if (cur.length() == 1) {
+            return true;
         }
 
-        pyramid.get(0).append(bottom);
-
-        Map<String, List<Character>> map = new HashMap();
-
-        for (String allow : allowed) {
-            map.computeIfAbsent(allow.substring(0, 2), k -> new ArrayList()).add(allow.charAt(2));
+        if (memo.containsKey(cur)) {
+            return memo.get(cur);
         }
 
-        return topdown(1, 0, map, pyramid);
-    }
+        List<String> nextRows = new ArrayList<>();
+        buildNextRows(cur, 0, new StringBuilder(), allowed, nextRows);
 
-    public boolean topdown(int row, int col, Map<String, List<Character>> map, List<StringBuilder> pyramid) {
-        if (row == pyramid.size()) return true;
-
-        if (col == pyramid.size() - row) {
-            return topdown(row + 1, 0, map, pyramid);
-        }
-
-        StringBuilder bottom = pyramid.get(row - 1);
-
-        String prefix = bottom.substring(col, col + 2);
-
-        boolean ans = false;
-
-        for (char next : map.getOrDefault(prefix, new ArrayList<>())) {
-            pyramid.get(row).append(next);
-
-            if (topdown(row, col + 1, map, pyramid)) {
+        for (String next : nextRows) {
+            if (dfs(next, allowed, memo)) {
+                memo.put(cur, true);
                 return true;
             }
-
-            pyramid.get(row).deleteCharAt(col);
         }
 
+        memo.put(cur, false);
         return false;
+    }
+
+    private void buildNextRows(
+        String cur,
+        int idx,
+        StringBuilder sb,
+        List<String> allowed,
+        List<String> nextRows
+    ) {
+        if (idx == cur.length() - 1) {
+            nextRows.add(sb.toString());
+            return;
+        }
+
+        String prefix = cur.substring(idx, idx + 2);
+
+        for (String a : allowed) {
+            if (a.startsWith(prefix)) {
+                sb.append(a.charAt(2));
+                buildNextRows(cur, idx + 1, sb, allowed, nextRows);
+                sb.deleteCharAt(sb.length() - 1);
+            }
+        }
     }
 }
