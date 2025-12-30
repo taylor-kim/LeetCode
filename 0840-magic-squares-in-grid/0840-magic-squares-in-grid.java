@@ -12,6 +12,10 @@ class Solution {
         int[][] pSumRows = new int[m][n + 1];
         int[][] pSumCols = new int[n][m + 1];
 
+        int magicValues = 1 << 10;
+        magicValues--;
+        magicValues &= (~1);
+
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 pSumRows[i][j + 1] = pSumRows[i][j] + grid[i][j];
@@ -21,6 +25,10 @@ class Solution {
 
         for (int i = 0; i < m - 2; i++) {
             for (int j = 0; j < n - 2; j++) {
+                if (magicValues != getValues(grid, i, j)) {
+                    continue;
+                }
+
                 int row1 = pSumRows[i][j + 3] - pSumRows[i][j];
                 int row2 = pSumRows[i + 1][j + 3] - pSumRows[i + 1][j];
                 int row3 = pSumRows[i + 2][j + 3] - pSumRows[i + 2][j];
@@ -46,5 +54,17 @@ class Solution {
         }
 
         return ans;
+    }
+
+    private int getValues(int[][] grid, int row, int col) {
+        int value = 0;
+
+        for (int i = row; i < row + 3; i++) {
+            for (int j = col; j < col + 3; j++) {
+                value |= 1 << grid[i][j];
+            }
+        }
+
+        return value;
     }
 }
