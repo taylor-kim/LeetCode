@@ -1,6 +1,6 @@
 class Solution {
     public int bestClosingTime(String customers) {
-        return fail(customers);
+        return others2(customers);
     }
 
     public int others(String s) {
@@ -25,9 +25,14 @@ class Solution {
         int[] ltr = new int[n + 1];
         int[] rtl = new int[n + 1];
 
-        for (int i = 1; i <= n; i++) {
-            ltr[i] = ltr[i - 1] + (s.charAt(i - 1) == 'N' ? 1 : 0);
-            rtl[n - i] = rtl[n - i + 1] + (s.charAt(n - i) == 'Y' ? 1 : 0);
+        // for (int i = 1; i <= n; i++) {
+        //     ltr[i] = ltr[i - 1] + (s.charAt(i - 1) == 'N' ? 1 : 0);
+        //     rtl[n - i] = rtl[n - i + 1] + (s.charAt(n - i) == 'Y' ? 1 : 0);
+        // }
+
+        for (int i = 0; i < n; i++) {
+            ltr[i + 1] = ltr[i] + (s.charAt(i) == 'N' ? 1 : 0);
+            rtl[n - i - 1] = rtl[n - i] + (s.charAt(n - i - 1) == 'Y' ? 1 : 0);
         }
 
         int min = Integer.MAX_VALUE;
