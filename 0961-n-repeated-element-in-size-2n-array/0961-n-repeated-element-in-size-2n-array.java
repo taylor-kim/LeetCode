@@ -1,6 +1,40 @@
 class Solution {
     public int repeatedNTimes(int[] nums) {
-        return bf(nums);
+        return others_probability(nums);
+    }
+
+    public int others_probability(int[] nums) {
+        int n = nums.length;
+        Random random = new Random();
+
+        while (true) {
+            int i1 = random.nextInt(n);
+            int i2 = random.nextInt(n);
+
+            if (i1 != i2 && nums[i1] == nums[i2]) return nums[i1];
+        }
+    }
+
+    public int try_probability_fail(int[] nums) {
+        int n = nums.length;
+
+        Random random = new Random();
+        int count = 50;
+        int num = -1;
+        int matched = 0;
+
+        while (count-- > 0) {
+            int cand = nums[random.nextInt(n)];
+
+            if (cand != num) {
+                num = cand;
+                matched = 0;
+            } else if (++matched > 1) {
+                return num;
+            }
+        }
+
+        return -1;
     }
 
     public int bf(int[] nums) {
