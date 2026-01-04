@@ -1,6 +1,6 @@
 class Solution {
     public int sumFourDivisors(int[] nums) {
-        return after_hint(nums);
+        return mySol2_fail(nums);
     }
 
     public int after_hint(int[] nums) {
@@ -37,7 +37,7 @@ class Solution {
         return ans;
     }
 
-    public int mySol2(int[] nums) {
+    public int mySol2_fail(int[] nums) {
         int max = 0;
         for (int num : nums) max = Math.max(max, num);
 
@@ -76,8 +76,10 @@ class Solution {
 
                 int quotient = num / divisor;
 
-                if (divisor < quotient && set.add(quotient) && set.add(divisor)) {
-                    // sum = quotient + divisor;
+                if (divisor < quotient 
+                    && set.add(quotient) && set.add(divisor) 
+                    && (primes[quotient] || divisor * divisor == quotient)) {
+                    sum = quotient + divisor;
                 } else {
                     success = false;
                     break;
@@ -85,11 +87,8 @@ class Solution {
             }
 
             if (set.size() == 2 && success) {
-                // ans += 1 + num + sum;
-                for (int val : set) {
-                    ans += val;
-                }
-                ans += 1 + num;
+                // System.out.println("sum:%d, num:%d".formatted(sum, num));
+                ans += 1 + num + sum;
             }
         }
 
