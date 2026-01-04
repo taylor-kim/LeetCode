@@ -1,6 +1,6 @@
 class Solution {
     public int sumFourDivisors(int[] nums) {
-        return mySol2_fail(nums);
+        return mySol2_fail_helped_by_gpt(nums);
     }
 
     public int after_hint(int[] nums) {
@@ -37,7 +37,7 @@ class Solution {
         return ans;
     }
 
-    public int mySol2_fail(int[] nums) {
+    public int mySol2_fail_helped_by_gpt(int[] nums) {
         int max = 0;
         for (int num : nums) max = Math.max(max, num);
 
@@ -78,7 +78,8 @@ class Solution {
 
                 if (divisor < quotient 
                     && set.add(quotient) && set.add(divisor) 
-                    && (primes[quotient] || divisor * divisor == quotient)) {
+                    && (primes[quotient] || divisor * divisor == quotient)
+                    ) {
                     sum = quotient + divisor;
                 } else {
                     success = false;
