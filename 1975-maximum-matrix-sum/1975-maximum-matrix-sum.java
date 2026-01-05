@@ -1,6 +1,66 @@
 class Solution {
     public long maxMatrixSum(int[][] matrix) {
-        return editorial(matrix);
+        return try_20260105_2(matrix);
+    }
+
+    public long try_20260105_2(int[][] matrix) {
+        long ans = 0;
+
+        int maxNeg = Integer.MIN_VALUE;
+        int countNeg = 0;
+        boolean hasZero = false;
+
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                if (matrix[i][j] < 0) {
+                    maxNeg = Math.max(maxNeg, matrix[i][j]);
+                    matrix[i][j] = -matrix[i][j];
+                    countNeg++;
+                } else if (matrix[i][j] == 0) {
+                    hasZero = true;
+                }
+
+                ans += matrix[i][j];
+            }
+        }
+
+        // System.out.println("ans:%d, maxNeg:%d, countNeg:%d".formatted(ans, maxNeg, countNeg));
+
+        if (countNeg % 2 == 1 && !hasZero) {
+            ans += maxNeg * 2;
+        }
+
+        return ans;
+    }
+
+    private int[][] dirs = {
+        {0, 1},
+        {0, -1},
+        {1, 0},
+        {-1, 0}
+    };
+
+    public long try_20260105_fail(int[][] matrix) {
+        return topdown(matrix, 0, 0, 1, new boolean[matrix.length][matrix.length]);
+    }
+
+    public long topdown(int[][] matrix, int r, int c, int sign, boolean[][] visit) {
+        if (r < 0 || r >= matrix.length || c < 0 || c >= matrix[0].length || visit[r][c]) return 0;
+
+        visit[r][c] = true;
+
+        long nonChange = 0;
+        long change = 0;
+
+        for (int[] dir : dirs) {
+            int nr = r + dir[0];
+            int nc = c + dir[1];
+
+            nonChange = Math.max(nonChange, sign * matrix[r][c] + topdown(matrix, nr, nc, sign, visit));
+            change = Math.max(change, -sign * matrix[r][c] + topdown(matrix, nr, nc, -sign, visit));
+        }
+
+        return Math.max(nonChange, change);
     }
     
     public long editorial(int[][] matrix) {
