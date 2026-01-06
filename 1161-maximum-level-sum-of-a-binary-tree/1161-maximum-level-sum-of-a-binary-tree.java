@@ -15,7 +15,41 @@
  */
 class Solution {
     public int maxLevelSum(TreeNode root) {
-        return mySol(root);
+        return mySol_bfs(root);
+    }
+
+    public int mySol_bfs(TreeNode root) {
+        int max = Integer.MIN_VALUE;
+        int ans = 0;
+
+        Queue<TreeNode> queue = new LinkedList();
+        queue.add(root);
+
+        int level = 1;
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+
+            int levelSum = 0;
+
+            while (size-- > 0) {
+                TreeNode node = queue.poll();
+
+                levelSum += node.val;
+
+                if (node.left != null) queue.add(node.left);
+                if (node.right != null) queue.add(node.right);
+            }
+
+            if (max < levelSum) {
+                max = levelSum;
+                ans = level;
+            }
+
+            level++;
+        }
+
+        return ans;
     }
 
     public int mySol(TreeNode root) {
