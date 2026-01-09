@@ -38,16 +38,6 @@ class Solution {
                 max = ld;
                 ans = root;
             }
-        } else if (ld > rd) {
-            if (max < ld) {
-                max = ld;
-                ans = root.left;
-            }
-        } else {
-            if (max < rd) {
-                max = rd;
-                ans = root.right;
-            }
         }
 
         return Math.max(ld, rd);
