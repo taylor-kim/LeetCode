@@ -8,6 +8,12 @@ class Solution {
         char[] c2 = s2.toCharArray();
         int[][] dp = new int[c1.length + 1][c2.length + 1];
 
+        for (int[] row : dp) {
+            Arrays.fill(row, 1000 * ((int)'z' + 1));
+        }
+
+        dp[c1.length][c2.length] = 0;
+
         for (int i1 = c1.length; i1 >= 0; i1--) {
             for (int i2 = c2.length; i2 >= 0; i2--) {
                 if (i1 >= c1.length && i2 >= c2.length) {
