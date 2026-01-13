@@ -8,14 +8,14 @@ class Solution {
             return a[1] - b[1];
         });
 
-        double sum = 0;
+        double max = Double.MIN_VALUE;
 
         for (int[] square : squares) {
-            sum += square[2] * square[2];
+            max = Math.max(max, square[1] + square[2]);
         }
 
         double lo = 0;
-        double hi = Double.MAX_VALUE;
+        double hi = max + 1;
         double ans = Double.MAX_VALUE;
 
         while (lo < hi) {
@@ -27,14 +27,13 @@ class Solution {
             //     .formatted(lo, hi, mid, sumOfTopAndBot[0], sumOfTopAndBot[1]));
 
             if (sumOfTopAndBot[0] <= sumOfTopAndBot[1]) {
-                hi = mid - 0.000001d;;
-                ans = mid;
+                hi = mid - 0.000001d;
             } else {
                 lo = mid + 0.000001d;
             }
         }
 
-        return ans;
+        return lo;
     }
 
     private double[] getSumOfTopAndBot(int[][] squares, double y) {
