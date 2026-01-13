@@ -15,7 +15,7 @@ class Solution {
         }
 
         double lo = 0;
-        double hi = max;
+        double hi = max + 1;
         double ans = Double.MAX_VALUE;
 
         while (lo < hi) {
