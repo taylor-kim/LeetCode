@@ -8,14 +8,14 @@ class Solution {
             return a[1] - b[1];
         });
 
-        double sum = 0;
+        double max = Double.MIN_VALUE;
 
         for (int[] square : squares) {
-            sum += square[2] * square[2];
+            max = Math.max(max, square[1] + square[2]);
         }
 
         double lo = 0;
-        double hi = Double.MAX_VALUE;
+        double hi = max;
         double ans = Double.MAX_VALUE;
 
         while (lo < hi) {
