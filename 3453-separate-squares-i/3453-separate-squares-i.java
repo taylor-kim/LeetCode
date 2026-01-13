@@ -28,13 +28,13 @@ class Solution {
 
             if (sumOfTopAndBot[0] <= sumOfTopAndBot[1]) {
                 hi = mid - 0.000001d;;
-                ans = mid;
+                // ans = mid;
             } else {
                 lo = mid + 0.000001d;
             }
         }
 
-        return ans;
+        return hi;
     }
 
     private double[] getSumOfTopAndBot(int[][] squares, double y) {
