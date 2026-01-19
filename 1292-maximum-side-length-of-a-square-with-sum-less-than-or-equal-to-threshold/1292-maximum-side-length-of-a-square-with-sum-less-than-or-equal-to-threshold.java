@@ -3,6 +3,10 @@ class Solution {
         return mySol_fail(mat, threshold);
     }
 
+    public int try_editorial_2dpsum_and_bs(int[][] mat, int threshold) {
+        return 0;
+    }
+
     public int mySol_gpt(int[][] mat, int threshold) {
         int m = mat.length;
         int n = mat[0].length;
@@ -68,10 +72,8 @@ class Solution {
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 long sum = 0;
-                int limit = Math.min(m, n);
-                int maxPossibleLen = Math.min(m - i, n - j);
 
-                for (int length = 1; length <= maxPossibleLen; length++) {
+                for (int length = 1; i + length <= m && j + length <= n; length++) {
                     long r = rowSum[i + length - 1][j + length] - rowSum[i + length - 1][j];
                     long c = colSum[i + length][j + length - 1] - colSum[i][j + length - 1];
 
