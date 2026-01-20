@@ -1,6 +1,27 @@
 class Solution {
     public int[] minBitwiseArray(List<Integer> nums) {
-        return mySol2(nums);
+        return editorial(nums);
+    }
+
+    public int[] editorial(List<Integer> nums) {
+        int n = nums.size();
+
+        int[] ans = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            int num = nums.get(i);
+            int cand = -1;
+            int x = 1;
+            
+            while ((num & x) != 0) {
+                cand = num - x;
+                x <<= 1;
+            }
+
+            ans[i] = cand;
+        }
+
+        return ans;
     }
 
     public int[] mySol2(List<Integer> nums) {
