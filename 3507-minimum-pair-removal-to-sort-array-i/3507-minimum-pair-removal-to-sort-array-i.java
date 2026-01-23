@@ -1,39 +1,53 @@
 class Solution {
-
     public int minimumPairRemoval(int[] nums) {
-        List<Integer> list = new ArrayList<>();
-        for (int num : nums) {
-            list.add(num);
-        }
-        var count = 0;
+        return mySol(nums);
+    }
 
-        while (list.size() > 1) {
-            var isAscending = true;
-            var minSum = Integer.MAX_VALUE;
-            var targetIndex = -1;
+    public int mySol(int[] nums) {
+        int n = nums.length;
+        List<Integer> list = new ArrayList();
 
-            for (var i = 0; i < list.size() - 1; i++) {
-                var sum = list.get(i) + list.get(i + 1);
+        for (int num : nums) list.add(num);
+        
+        int ans = 0;
 
-                if (list.get(i) > list.get(i + 1)) {
-                    isAscending = false;
-                }
+        while (!isSorted(list)) {
+            int minIndex = -1;
+            int minSum = Integer.MAX_VALUE;
 
-                if (sum < minSum) {
-                    minSum = sum;
-                    targetIndex = i;
+            for (int i = 0; i < list.size() - 1; i++) {
+                int a = list.get(i);
+                int b = list.get(i + 1);
+
+                if (minSum > a + b) {
+                    minSum = a + b;
+                    minIndex = i;
                 }
             }
 
-            if (isAscending) {
-                break;
-            }
+            list.remove(minIndex);
+            list.remove(minIndex);
+            list.add(minIndex, minSum);
 
-            count++;
-            list.set(targetIndex, minSum);
-            list.remove(targetIndex + 1);
+            ans++;
         }
 
-        return count;
+        return ans;
+    }
+
+    private boolean isSorted(List<Integer> list) {
+        if (list.isEmpty()) return true;
+
+        int prev = list.get(0);
+
+        for (int i = 1; i < list.size(); i++) {
+            int num = list.get(i);
+
+            if (prev > num) return false;
+
+            prev = num;
+        }
+
+        return true;
     }
 }
