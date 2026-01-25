@@ -23,18 +23,18 @@ class Solution {
         });
 
         double areaSoFar = 0.0;
-        int prevY = 0;
-        int sumOfWidthSoFar = 0;
+        double prevY = 0;
+        double sumOfWidthSoFar = 0;
 
         for (int[] line : lines) {
             int y = line[0];
             int l = line[1];
 
-            int hight = y - prevY;
+            int hight = y - (int)prevY;
 
-            int area = sumOfWidthSoFar * hight;
+            double area = sumOfWidthSoFar * hight;
 
-            if (2l * (areaSoFar + (area)) >= totalArea) {
+            if (2l * (areaSoFar + area) >= totalArea) {
                 return (totalArea / 2.0d - areaSoFar) / sumOfWidthSoFar + prevY;
             }
 
