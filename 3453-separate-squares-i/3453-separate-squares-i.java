@@ -34,7 +34,7 @@ class Solution {
             }
         }
 
-        return hi;
+        return lo;
     }
 
     private double[] getSumOfTopAndBot(int[][] squares, double y) {
