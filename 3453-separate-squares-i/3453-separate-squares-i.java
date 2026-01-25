@@ -1,7 +1,56 @@
 class Solution {
     public double separateSquares(int[][] squares) {
-        return mySol(squares);
+        return editorial_line_sweep(squares);
     }
+
+    public double editorial_line_sweep(int[][] squares) {
+        List<int[]> lines = new ArrayList();
+
+        long totalArea = 0;
+
+        for (int[] square : squares) {
+            int y = square[1];
+            int l = square[2];
+
+            lines.add(new int[] {y, l, 1});
+            lines.add(new int[] {y + l, l, -1});
+
+            totalArea += 1l * l * l;
+        }
+
+        Collections.sort(lines, (a, b) -> {
+            return a[0] - b[0];
+        });
+
+        double areaSoFar = 0.0;
+        int prevY = 0;
+        int sumOfWidthSoFar = 0;
+
+        for (int[] line : lines) {
+            int y = line[0];
+            int l = line[1];
+
+            int hight = y - prevY;
+
+            int area = sumOfWidthSoFar * hight;
+
+            if (2l * (areaSoFar + (area)) >= totalArea) {
+                return (totalArea / 2.0d - areaSoFar) / sumOfWidthSoFar + prevY;
+            }
+
+            sumOfWidthSoFar += l * line[2];
+            areaSoFar += area;
+            prevY = y;
+        }
+
+        return 0.0;
+    }
+
+    /**
+    area + x == t / 2;
+    x = width + delta
+    delta = t / 2 - erea - width
+     */
 
     public double mySol(int[][] squares) {
         Arrays.sort(squares, (a, b) -> {
@@ -27,7 +76,7 @@ class Solution {
             //     .formatted(lo, hi, mid, sumOfTopAndBot[0], sumOfTopAndBot[1]));
 
             if (sumOfTopAndBot[0] <= sumOfTopAndBot[1]) {
-                hi = mid - 0.000001d;;
+                hi = mid - 0.000001d;
                 // ans = mid;
             } else {
                 lo = mid + 0.000001d;
