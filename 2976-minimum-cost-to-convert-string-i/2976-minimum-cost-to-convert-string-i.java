@@ -1,6 +1,49 @@
 class Solution {
     public long minimumCost(String source, String target, char[] original, char[] changed, int[] cost) {
-        return try_dijkstra_20260129(source, target, original, changed, cost);
+        return try_floyd_20260129(source, target, original, changed, cost);
+    }
+
+    public long try_floyd_20260129(String source, String target, char[] original, char[] changed, int[] cost) {
+        long[][] costs = new long[26][26];
+
+        long max = (long)1e7;
+
+        for (long[] row : costs) {
+            Arrays.fill(row, max);
+        }
+
+        for (int i = 0; i < costs.length; i++) {
+            costs[i][i] = 0;
+        }
+
+        for (int i = 0; i < original.length; i++) {
+            costs[original[i] - 'a'][changed[i] - 'a'] = Math.min(costs[original[i] - 'a'][changed[i] - 'a'], cost[i]);
+        }
+
+        for (int k = 0; k < costs.length; k++) {
+            for (int i = 0; i < costs.length; i++) {
+                for (int j = 0; j < costs.length; j++) {
+                    if (i == j) continue;
+
+                    costs[i][j] = Math.min(costs[i][j], costs[i][k] + costs[k][j]);
+                }
+            }
+        }
+
+        long ans = 0;
+
+        for (int i = 0; i < source.length(); i++) {
+            int a = source.charAt(i) - 'a';
+            int b = target.charAt(i) - 'a';
+
+            long minCost = costs[a][b];
+
+            if (minCost == max) return -1;
+
+            ans += minCost;
+        }
+
+        return ans;
     }
 
     public long try_dijkstra_20260129(String source, String target, char[] original, char[] changed, int[] cost) {
