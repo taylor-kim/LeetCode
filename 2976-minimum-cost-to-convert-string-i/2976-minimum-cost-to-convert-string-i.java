@@ -1,6 +1,6 @@
 class Solution {
     public long minimumCost(String source, String target, char[] original, char[] changed, int[] cost) {
-        return try_floyd_20260129(source, target, original, changed, cost);
+        return try_dijkstra_20260129(source, target, original, changed, cost);
     }
 
     public long try_floyd_20260129(String source, String target, char[] original, char[] changed, int[] cost) {
@@ -60,22 +60,15 @@ class Solution {
 
         long[][] costs = new long[26][26];
 
+        long max = (long)1e7;
+
         for (long[] row : costs) {
-            Arrays.fill(row, -1);
+            Arrays.fill(row, max);
         }
 
         for (int i = 0; i < costs.length; i++) {
             costs[i][i] = 0;
-        }
-
-        for (int i = 0; i < costs.length; i++) {
-            for (int j = 0; j < costs.length; j++) {
-                if (i == j) continue;
-
-                long minCost = findMinCost(graph, i, j, costs.length);
-
-                costs[i][j] = minCost;
-            }
+            findMinCost(graph, i, costs);
         }
 
         for (int i = 0; i < source.length(); i++) {
@@ -84,7 +77,7 @@ class Solution {
 
             long minCost = costs[start][end];
 
-            if (minCost < 0) return -1;
+            if (minCost == max) return -1;
 
             ans += minCost;
         }
@@ -92,26 +85,16 @@ class Solution {
         return ans;
     }
 
-    private long findMinCost(Map<Integer, List<long[]>> graph, int start, int end, int n) {
-        if (start == end) return 0;
-
+    private void findMinCost(Map<Integer, List<long[]>> graph, int start, long[][] costs) {
         Queue<long[]> pq = new PriorityQueue<>((a, b) -> {
             return Long.compare(a[0], b[0]);
         });
 
         pq.add(new long[] {0, start});
 
-        long[] minCost = new long[n];
-        Arrays.fill(minCost, Long.MAX_VALUE);
-        minCost[start] = 0;
-
         while (!pq.isEmpty()) {
             long cost = pq.peek()[0];
             int node = (int)pq.poll()[1];
-
-            if (node == end) {
-                return cost;
-            }
 
             if (!graph.containsKey(node)) continue;
 
@@ -119,15 +102,13 @@ class Solution {
                 int nextNode = (int)next[0];
                 long nextCost = cost + next[1];
 
-                if (minCost[nextNode] > nextCost) {
-                    minCost[nextNode] = nextCost;
+                if (costs[start][nextNode] > nextCost) {
+                    costs[start][nextNode] = nextCost;
 
                     pq.add(new long[] {nextCost, nextNode});
                 }
             }
         }
-
-        return -1;
     }
 
     public long try_dijkstra(String source, String target, char[] original, char[] changed, int[] cost) {
