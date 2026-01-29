@@ -1,6 +1,70 @@
 class Solution {
     public long minimumCost(String source, String target, char[] original, char[] changed, int[] cost) {
-        return try_dijkstra(source, target, original, changed, cost);
+        return try_dijkstra_20260129(source, target, original, changed, cost);
+    }
+
+    public long try_dijkstra_20260129(String source, String target, char[] original, char[] changed, int[] cost) {
+        Map<Integer, List<long[]>> graph = new HashMap();
+
+        for (int i = 0; i < original.length; i++) {
+            int o = original[i] - 'a';
+            int c = changed[i] - 'a';
+
+            graph.computeIfAbsent(o, k -> new ArrayList()).add(new long[] {c, cost[i]});
+        }
+
+        long ans = 0;
+
+        for (int i = 0; i < source.length(); i++) {
+            int start = source.charAt(i) - 'a';
+            int end = target.charAt(i) - 'a';
+
+            long minCost = findMinCost(graph, start, end, 26);
+
+            if (minCost < 0) return -1;
+
+            ans += minCost;
+        }
+
+        return ans;
+    }
+
+    private long findMinCost(Map<Integer, List<long[]>> graph, int start, int end, int n) {
+        if (start == end) return 0;
+
+        Queue<long[]> pq = new PriorityQueue<>((a, b) -> {
+            return Long.compare(a[0], b[0]);
+        });
+
+        pq.add(new long[] {0, start});
+
+        long[] minCost = new long[n];
+        Arrays.fill(minCost, Long.MAX_VALUE);
+        minCost[start] = 0;
+
+        while (!pq.isEmpty()) {
+            long cost = pq.peek()[0];
+            int node = (int)pq.poll()[1];
+
+            if (node == end) {
+                return cost;
+            }
+
+            if (!graph.containsKey(node)) continue;
+
+            for (long[] next : graph.get(node)) {
+                int nextNode = (int)next[0];
+                long nextCost = cost + next[1];
+
+                if (minCost[nextNode] > nextCost) {
+                    minCost[nextNode] = nextCost;
+
+                    pq.add(new long[] {nextCost, nextNode});
+                }
+            }
+        }
+
+        return -1;
     }
 
     public long try_dijkstra(String source, String target, char[] original, char[] changed, int[] cost) {
