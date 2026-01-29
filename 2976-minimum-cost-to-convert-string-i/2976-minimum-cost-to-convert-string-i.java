@@ -15,11 +15,31 @@ class Solution {
 
         long ans = 0;
 
+        long[][] costs = new long[26][26];
+
+        for (long[] row : costs) {
+            Arrays.fill(row, -1);
+        }
+
+        for (int i = 0; i < costs.length; i++) {
+            costs[i][i] = 0;
+        }
+
+        for (int i = 0; i < costs.length; i++) {
+            for (int j = 0; j < costs.length; j++) {
+                if (i == j) continue;
+
+                long minCost = findMinCost(graph, i, j, costs.length);
+
+                costs[i][j] = minCost;
+            }
+        }
+
         for (int i = 0; i < source.length(); i++) {
             int start = source.charAt(i) - 'a';
             int end = target.charAt(i) - 'a';
 
-            long minCost = findMinCost(graph, start, end, 26);
+            long minCost = costs[start][end];
 
             if (minCost < 0) return -1;
 
