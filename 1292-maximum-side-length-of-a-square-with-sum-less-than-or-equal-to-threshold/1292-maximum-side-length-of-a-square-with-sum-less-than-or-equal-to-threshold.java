@@ -25,6 +25,61 @@ class Solution {
             }
         }
 
+        int lo = 1;
+        int hi = Math.min(m, n) + 1;
+
+        while (lo < hi) {
+            int length = lo + (hi - lo) / 2;
+            boolean found = false;
+
+            check : for (int i = 0; i + length <= m; i++) {
+                for (int j = 0; j + length <= n; j++) {
+                    int top = i + 1;
+                    int left = j + 1;
+                    int bot = i + length;
+                    int right = j + length;
+
+                    int sum = pSum[bot][right] - pSum[top - 1][right] - pSum[bot][left - 1] + pSum[top - 1][left - 1];
+
+                    if (sum <= threshold) {
+                        found = true;
+                        break check;
+                    }
+                }
+            }
+
+            if (found) {
+                lo = length + 1;
+            } else {
+                hi = length;
+            }
+        }
+
+        return lo - 1;
+    }
+
+    public int try_editorial_2dpsum(int[][] mat, int threshold) {
+        /**
+        pSum[i][j] = mat[i][j] + pSum[i - 1][j] + pSum[i][j - 1] - pSum[i - 1][j - 1];
+         */
+        /**
+        topLeft = 2,2
+        botRight = 5,5
+
+        squareSum = pSum[bot][right] - pSum[top - 1][right] - pSum[bot][left - 1] + pSum[top -1][left - 1];
+        */
+
+        int m = mat.length;
+        int n = mat[0].length;
+
+        int[][] pSum = new int[m + 1][n + 1];
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                pSum[i + 1][j + 1] = mat[i][j] + pSum[i][j + 1] + pSum[i + 1][j] - pSum[i][j];
+            }
+        }
+
         for (int length = Math.min(m, n); length > 0; length--) {
             for (int i = 0; i + length <= m; i++) {
                 for (int j = 0; j + length <= n; j++) {
