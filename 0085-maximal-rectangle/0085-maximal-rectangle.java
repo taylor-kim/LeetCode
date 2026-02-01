@@ -1,113 +1,128 @@
 class Solution {
     public int maximalRectangle(char[][] matrix) {
-        return others_nice_sol(matrix);
+        return try_20260131_after_read(matrix);
     }
 
-    public int others_nice_sol(char[][] matrix) {
+    /**
+    [
+        ["0","0","1","0"]
+        ["0","0","1","0"]
+        ["0","0","1","0"]
+        ["0","0","1","1"]
+        ["0","1","1","1"]
+        ["0","1","1","1"]
+        ["1","1","1","1"]
+    ]
+        1,3,7,4
+     */
+
+    public int try_20260131_after_read(char[][] matrix) {
         int m = matrix.length;
         int n = matrix[0].length;
 
-        int[] heights = new int[n];
+        int[] hights = new int[n];
+
         int ans = 0;
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (matrix[i][j] == '0') {
-                    heights[j] = 0;
+                    hights[j] = 0;
                 } else {
-                    heights[j]++;
+                    hights[j]++;
                 }
             }
 
-            ans = Math.max(ans, calcMaxRec(heights));
+            Stack<Integer> stack = new Stack();
+
+            for (int j = 0; j <= n; j++) {
+                while (!stack.isEmpty() && (j == n || hights[stack.peek()] >= hights[j])) {
+                    int h = hights[stack.pop()];
+                    int left = stack.isEmpty() ? -1 : stack.peek();
+
+                    ans = Math.max(ans, h * (j - left - 1));
+                }
+
+                stack.push(j);
+            }
         }
 
         return ans;
     }
 
-    public int calcMaxRec(int[] heights) {
-        int n = heights.length;
-        int max = 0;
-        Stack<Integer> stack = new Stack();
-
-        for (int i = 0; i <= n; i++) {
-            while (!stack.isEmpty() && (i == n || heights[stack.peek()] >= heights[i])) {
-                int h = heights[stack.pop()];
-                int w = stack.isEmpty() ? i : i - stack.peek() - 1;
-
-                max = Math.max(max, h * w);
-            }
-
-            stack.push(i);
-        }
-
-        return max;
-    }
-
-    public int test(char[][] matrix) {
-        int[] h = {1,2,3,4,5};
-        largestRectangleArea(h);
-
-        return 0;
-    }
-
-    public int largestRectangleArea(int[] heights) {
-        Stack<Integer> stack = new Stack<>();
-        int maxArea = 0;
-        int n = heights.length;
-        for (int i = 0; i <= n; i++) {
-            while (!stack.isEmpty() && (i == n || heights[stack.peek()] >= heights[i])) {
-                System.out.println(stack);
-
-                int height = heights[stack.pop()];
-                int width = stack.isEmpty() ? i : i - stack.peek() - 1;
-
-                System.out.println(String.format("h:%d, w:%d", height, width));
-
-                maxArea = Math.max(maxArea, width * height);
-            }
-            stack.push(i);
-        }
-        return maxArea;
-    }
-
-    private void dfs(int startR, int startC, int r, int c, char[][] matrix, int[] ans) {
-        if (r >= matrix.length || r < startR || c >= matrix[0].length || c < startC) return;
-
-        if (matrix[r][c] == '1') {
-            for (int i = startR; i < r; i++) {
-
-            }
-        }
-    }
-
-    public int mySol_hold(char[][] matrix) {
+    public int try_20260131_fail(char[][] matrix) {
         int m = matrix.length;
         int n = matrix[0].length;
 
-        int[][] rowSum = new int[m][n + 1];
-        int[][] colSum = new int[n][m + 1];
+        int[] hights = new int[n];
+
+        int ans = 0;
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (matrix[i][j] == 0) {
-                    rowSum[i][j + 1] = 0;
-                    colSum[j][i + 1] = 0;
+                if (matrix[i][j] == '0') {
+                    hights[j] = 0;
                 } else {
-                    rowSum[i][j + 1] = rowSum[i][j] + matrix[i][j];
-                    colSum[j][i + 1] = colSum[j][i] + matrix[i][j];
+                    hights[j]++;
                 }
             }
+
+            Stack<Integer> stack = new Stack();
+
+            Stack<Integer> incStack = new Stack();
+
+            for (int j = 0; j < n; j++) {
+                if (hights[j] == 0) {
+                    while (!stack.isEmpty()) {
+                        int width = stack.size();
+
+                        ans = Math.max(ans, width * hights[stack.pop()]);
+                    }
+
+                    int width = 1;
+
+                    while (!incStack.isEmpty()) {
+                        ans = Math.max(ans, width++ * (hights[incStack.pop()]));
+                    }
+
+                    continue;
+                }
+
+                if (!stack.isEmpty() && hights[stack.peek()] < hights[j]) {
+                    ans = Math.max(ans, hights[stack.peek()] * (stack.size() + 1));
+
+                    while (!stack.isEmpty()) {
+                        int width = stack.size();
+
+                        ans = Math.max(ans, width * hights[stack.pop()]);
+                    }
+                }
+
+                if (!incStack.isEmpty() && hights[incStack.peek()] >= hights[j]) {
+                    while (!incStack.isEmpty()) {
+                        int left = incStack.pop();
+
+                        ans = Math.max(ans, (j - left + 1) * hights[j]);
+                    }
+                }
+
+                stack.push(j);
+                incStack.push(j);
+            }
+
+            while (!stack.isEmpty()) {
+                int width = stack.size();
+
+                ans = Math.max(ans, width * hights[stack.pop()]);
+            }
+
+            int width = 1;
+
+            // while (!incStack.isEmpty()) {
+            //     ans = Math.max(ans, width * hights[incStack.pop()]);
+            // }
         }
 
-        return 0;
-    }
-
-    private int dfs_hold(int r, int c, int[][] pSum, char[][] matrix) {
-        if (r >= matrix.length || r < 0 || c >= matrix[0].length || c < 0) return 0;
-
-        if (matrix[r][c] == '0') return 0;
-
-        return 0;
+        return ans;
     }
 }
