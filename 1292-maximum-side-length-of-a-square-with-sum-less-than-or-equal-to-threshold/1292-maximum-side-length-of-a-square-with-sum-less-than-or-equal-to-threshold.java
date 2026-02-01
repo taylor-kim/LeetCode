@@ -1,9 +1,47 @@
 class Solution {
     public int maxSideLength(int[][] mat, int threshold) {
-        return mySol_fail(mat, threshold);
+        return try_editorial_2dpsum_and_bs(mat, threshold);
     }
 
     public int try_editorial_2dpsum_and_bs(int[][] mat, int threshold) {
+        /**
+        pSum[i][j] = mat[i][j] + pSum[i - 1][j] + pSum[i][j - 1] - pSum[i - 1][j - 1];
+         */
+        /**
+        topLeft = 2,2
+        botRight = 5,5
+
+        squareSum = pSum[bot][right] - pSum[top - 1][right] - pSum[bot][left - 1] + pSum[top -1][left - 1];
+        */
+
+        int m = mat.length;
+        int n = mat[0].length;
+
+        int[][] pSum = new int[m + 1][n + 1];
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                pSum[i + 1][j + 1] = mat[i][j] + pSum[i][j + 1] + pSum[i + 1][j] - pSum[i][j];
+            }
+        }
+
+        for (int length = Math.min(m, n); length > 0; length--) {
+            for (int i = 0; i + length <= m; i++) {
+                for (int j = 0; j + length <= n; j++) {
+                    int top = i + 1;
+                    int left = j + 1;
+                    int bot = i + length;
+                    int right = j + length;
+
+                    int sum = pSum[bot][right] - pSum[top - 1][right] - pSum[bot][left - 1] + pSum[top - 1][left - 1];
+
+                    if (sum <= threshold) {
+                        return length;
+                    }
+                }
+            }
+        }
+
         return 0;
     }
 
