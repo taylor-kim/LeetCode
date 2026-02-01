@@ -1,6 +1,34 @@
 class Solution {
     public int longestSubsequence(int[] nums) {
-        return godtin(nums);
+        return improved(nums);
+    }
+
+    public int improved(int[] nums) {
+        int ans = 0;
+
+        for (int i = 0; i < 32; i++) {
+            int bit = 1 << i;
+
+            List<Integer> lis = new ArrayList();
+
+            for (int num : nums) {
+                if ((num & bit) != 0) {
+                    int index = Collections.binarySearch(lis, num);
+
+                    if (index < 0) index = -(index + 1);
+
+                    if (index == lis.size()) {
+                        lis.add(num);
+                    } else {
+                        lis.set(index, num);
+                    }
+                }
+            }
+
+            ans = Math.max(ans, lis.size());
+        }
+
+        return ans;
     }
 
     public int godtin(int[] nums) {
