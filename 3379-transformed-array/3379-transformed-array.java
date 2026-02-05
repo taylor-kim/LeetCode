@@ -8,9 +8,7 @@ class Solution {
         int[] ans = new int[n];
 
         for (int i = 0; i < n; i++) {
-            int num = nums[i];
-            int move = ((num % n) + n) % n;
-		    ans[i] = nums[(i + move) % n];
+		    ans[i] = nums[(((i + nums[i]) % n) + n) % n];
         }
 
         return ans;
