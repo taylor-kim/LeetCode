@@ -1,6 +1,6 @@
 class Solution {
     public int minRemoval(int[] nums, int k) {
-        return byHint(nums, k);
+        return others_sw(nums, k);
     }
 
     public int byHint(int[] nums, int k) {
@@ -32,7 +32,7 @@ class Solution {
         int max = 0;
 
         for (int right = 0; right < n; right++) {
-            while (left < right && (long)nums[left] * k < (long)nums[right]) {
+            if (left < right && (long)nums[left] * k < (long)nums[right]) {
                 left++;
             }
 
