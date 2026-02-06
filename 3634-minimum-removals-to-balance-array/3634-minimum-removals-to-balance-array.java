@@ -32,7 +32,7 @@ class Solution {
         int max = 0;
 
         for (int right = 0; right < n; right++) {
-            if (left < right && (long)nums[left] * k < (long)nums[right]) {
+            while (left < right && (long)nums[left] * k < (long)nums[right]) {
                 left++;
             }
 
