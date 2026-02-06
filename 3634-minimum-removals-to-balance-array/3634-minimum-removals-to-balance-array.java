@@ -39,7 +39,7 @@ class Solution {
             max = Math.max(max, right - left + 1);
         }
 
-        return left;
+        return n - max;
     }
 
     public int others_bs(int[] nums, int k) {
