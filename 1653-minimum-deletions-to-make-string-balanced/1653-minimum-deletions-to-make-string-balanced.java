@@ -1,9 +1,45 @@
 class Solution {
     public int minimumDeletions(String s) {
-        return try_20260207_2(s);
+        return editorial(s);
+    }
+
+    public int editorial(String s) {
+        int n = s.length();
+        int[] dpA = new int[n];
+        int[] dpB = new int[n];
+
+        int countA = 0;
+        int countB = 0;
+
+        for (int i = 0; i < n; i++) {
+            dpB[i] = countB;
+            
+            if (s.charAt(i) == 'b') {
+                countB++;
+            }
+
+            int j = n - i - 1;
+
+            dpA[j] = countA;
+
+            if (s.charAt(j) == 'a') {
+                countA++;
+            }
+        }
+
+        // System.out.println(Arrays.toString(dpB));
+        // System.out.println(Arrays.toString(dpA));
+
+        int ans = Integer.MAX_VALUE;
+
+        for (int i = 0; i < n; i++) {
+            ans = Math.min(ans, dpA[i] + dpB[i]);
+        }
+
+        return ans;
     }
     
-    public int try_20260207_2(String s) {
+    public int try_20260207_2_fail(String s) {
         int n = s.length();
         int ans = 0;
 
