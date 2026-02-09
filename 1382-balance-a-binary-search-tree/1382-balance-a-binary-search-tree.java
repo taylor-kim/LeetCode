@@ -15,34 +15,61 @@
  */
 class Solution {
     public TreeNode balanceBST(TreeNode root) {
-        return mySol(root);
+        return try_20260209(root);
     }
 
-    public TreeNode mySol(TreeNode root) {
-        List<Integer> list = new ArrayList();
-
+    public TreeNode try_20260209(TreeNode root) {
+        List<TreeNode> list = new ArrayList();
         inorder(root, list);
-
-        return make(list, 0, list.size() - 1);
+        return makeBalanced(list, 0, list.size() - 1);
     }
 
-    private void inorder(TreeNode root, List<Integer> list) {
+    private void inorder_20260209(TreeNode root, List<TreeNode> list) {
         if (root == null) return;
 
-        inorder(root.left, list);
-        list.add(root.val);
-        inorder(root.right, list);
+        inorder_20260209(root.left, list);
+        list.add(root);
+        inorder_20260209(root.right, list);
     }
 
-    private TreeNode make(List<Integer> list, int lo, int hi) {
+    private TreeNode makeBalanced(List<TreeNode> list, int lo, int hi) {
         if (lo > hi) return null;
 
         int mid = lo + (hi - lo) / 2;
 
-        return new TreeNode(
-            list.get(mid)
-            , make(list, lo, mid - 1)
-            , make(list, mid + 1, hi)
-        );
+        TreeNode node = list.get(mid);
+
+        node.left = makeBalanced(list, lo, mid - 1);
+        node.right = makeBalanced(list, mid + 1, hi);
+
+        return node;
+    }
+
+    public TreeNode mySol(TreeNode root) {
+        List<TreeNode> list = new ArrayList();
+        inorder(root, list);
+
+        return buildTree(list, 0, list.size() - 1);
+    }
+
+    private void inorder(TreeNode root, List<TreeNode> list) {
+        if (root == null) return;
+
+        inorder(root.left, list);
+        list.add(root);
+        inorder(root.right, list);
+    }
+
+    private TreeNode buildTree(List<TreeNode> list, int lo, int hi) {
+        if (lo > hi) return null;
+
+        int mid = lo + (hi - lo) / 2;
+
+        TreeNode root = list.get(mid);
+
+        root.left = buildTree(list, lo, mid - 1);
+        root.right = buildTree(list, mid + 1, hi);
+
+        return root;
     }
 }
