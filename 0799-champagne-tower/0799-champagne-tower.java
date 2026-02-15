@@ -14,12 +14,18 @@ class Solution {
     public void topdown(int i, double[][] dp) {
         if (i >= dp.length) return;
 
+        double fall = 0;
+
         for (int j = 0; j < dp[i].length; j++) {
             dp[i][j] += j == 0 ? 0 : Math.max(0, dp[i - 1][j - 1] - 1) / 2;
             dp[i][j] += Math.max(0, dp[i - 1][j] - 1) / 2;
+
+            fall += dp[i][j];
         }
 
-        topdown(i + 1, dp);
+        if (fall > 0) {
+            topdown(i + 1, dp);
+        }
     }
 
     public double mySol_hold(int poured, int row, int glass) {
