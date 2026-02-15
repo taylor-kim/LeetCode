@@ -1,9 +1,26 @@
 class Solution {
     public double champagneTower(int poured, int query_row, int query_glass) {
-        return mySol_topdown_tle(poured, query_row, query_glass);
+        return mySol_iter(poured, query_row, query_glass);
     }
 
-    public double mySol_topdown_tle(int poured, int row, int glass) {
+    public double mySol_iter(int poured, int row, int glass) {
+        double[][] dp = new double[row + 1][row + 1];
+        dp[0][0] = (double)poured;
+
+        int i = 1;
+
+        while (i <= row) {
+            for (int j = 0; j <= i; j++) {
+                dp[i][j] += j == 0 ? 0 : Math.max(0, dp[i - 1][j - 1] - 1) / 2;
+                dp[i][j] += Math.max(0, dp[i - 1][j] - 1) / 2;
+            }
+            i++;
+        }
+
+        return Math.min(1, dp[row][glass]);
+    }
+
+    public double mySol_topdown(int poured, int row, int glass) {
         double[][] dp = new double[row + 1][row + 1];
         dp[0][0] = (double)poured;
         topdown(1, dp);
