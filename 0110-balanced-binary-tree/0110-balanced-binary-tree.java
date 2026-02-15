@@ -15,7 +15,24 @@
  */
 class Solution {
     public boolean isBalanced(TreeNode root) {
-        return mySol(root);
+        return try_others(root);
+    }
+
+    public boolean try_others(TreeNode root) {
+        return topdown(root) >= 0;
+    }
+
+    private int topdown(TreeNode node) {
+        if (node == null) return 0;
+
+        int left = topdown(node.left);
+        int right = topdown(node.right);
+
+        if (left >= 0 && right >= 0) {
+            return Math.abs(left - right) <= 1 ? Math.max(left, right) + 1: -1;
+        } else {
+            return -1;
+        }
     }
 
     boolean ans = true;
