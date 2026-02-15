@@ -1,6 +1,23 @@
 class Solution {
     public double champagneTower(int poured, int query_row, int query_glass) {
-        return mySol_iter(poured, query_row, query_glass);
+        return mySol_iter_space_opt(poured, query_row, query_glass);
+    }
+
+    public double mySol_iter_space_opt(int poured, int row, int glass) {
+        double[] dp = new double[row + 1];
+        dp[0] = (double)poured;
+
+        int i = 1;
+
+        while (i <= row) {
+            for (int j = i; j >= 0; j--) {
+                dp[j] = Math.max(0, dp[j] - 1) / 2;
+                dp[j] += j == 0 ? 0 : Math.max(0, dp[j - 1] - 1) / 2;
+            }
+            i++;
+        }
+
+        return Math.min(1, dp[glass]);
     }
 
     public double mySol_iter(int poured, int row, int glass) {
