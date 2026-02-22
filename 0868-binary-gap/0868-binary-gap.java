@@ -1,6 +1,25 @@
 class Solution {
     public int binaryGap(int n) {
-        return mySol(n);
+        return mySol2(n);
+    }
+
+    public int mySol2(int n) {
+        int ans = 0;
+
+        int left = 31 - Integer.numberOfLeadingZeros(n);
+
+        for (int right = left - 1; right >= 0; right--) {
+            while (right >= 0 && (n & (1 << right)) == 0) {
+                right--;
+            }
+
+            if (right >= 0 && (n & (1 << right)) != 0) {
+                ans = Math.max(ans, left - right);
+                left = right;
+            }
+        }
+
+        return ans;
     }
 
     public int mySol(int n) {
