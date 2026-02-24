@@ -15,11 +15,39 @@
  */
 class Solution {
     public int sumRootToLeaf(TreeNode root) {
-        return mySol(root);
+        return bfs(root);
     }
 
     public int mySol(TreeNode root) {
         return topdown(root, 0, 0);
+    }
+
+    public int bfs(TreeNode root) {
+        int sum = 0;
+
+        Queue<Object[]> queue = new LinkedList();
+        queue.add(new Object[] {root, 0});
+
+        while (!queue.isEmpty()) {
+            TreeNode node = (TreeNode)queue.peek()[0];
+            int val = (int)queue.poll()[1];
+
+            int next = (val << 1) | node.val;
+
+            if (node.left == null && node.right == null) {
+                sum += next;
+            }
+
+            if (node.left != null) {
+                queue.add(new Object[] {node.left, next});
+            }
+
+            if (node.right != null) {
+                queue.add(new Object[] {node.right, next});
+            }
+        }
+
+        return sum;
     }
 
     public int topdown(TreeNode root, int val, int depth) {
