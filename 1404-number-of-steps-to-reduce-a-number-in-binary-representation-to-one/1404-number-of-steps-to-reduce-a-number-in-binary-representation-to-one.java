@@ -1,6 +1,24 @@
 class Solution {
     public int numSteps(String s) {
-        return try_20260226_bf(s);
+        return greedy(s);
+    }
+
+    public int greedy(String s) {
+        int ans = 0;
+        int carry = 0;
+
+        for (int i = s.length() - 1; i > 0; i--) {
+            int digit = (int)(s.charAt(i) - '0') + carry;
+
+            if (digit % 2 == 0) {
+                ans++;
+            } else {
+                ans += 2;
+                carry = 1;
+            }
+        }
+
+        return ans + carry;
     }
 
     public int try_20260226_bf(String s) {
