@@ -1,6 +1,39 @@
 class Solution {
     public int numSteps(String s) {
-        return official_greedy(s);
+        return try_20260226_bf(s);
+    }
+
+    public int try_20260226_bf(String s) {
+        char[] arr = s.toCharArray();
+
+        int ans = 0;
+
+        int i = arr.length - 1;
+
+        while (i > 0) {
+            if (arr[i] == '0') {
+                ans++;
+                i--;
+            } else {
+                arr[i] = '0';
+                ans++;
+                int j = i - 1;
+
+                while (j >= 0 && arr[j] == '1') {
+                    arr[j] = '0';
+                    j--;
+                }
+
+                if (j >= 0) {
+                    arr[j] = '1';
+                }
+
+                ans += i - j;
+                i = j;
+            }
+        }
+
+        return ans;
     }
 
     public int official_greedy(String s) {
