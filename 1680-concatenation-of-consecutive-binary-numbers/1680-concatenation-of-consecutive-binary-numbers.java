@@ -1,6 +1,24 @@
 class Solution {
     public int concatenatedBinary(int n) {
-        return helped_by_gpt(n);
+        return mySol_giveup_improved(n);
+    }
+
+    public int mySol_giveup_improved(int n) {
+        long concated = 0;
+        int size = 0;
+        int mod = (int)1e9 + 7;
+        int maxLength = getBinaryLength(mod);
+
+        long ans = 0;
+
+        for (long bin = 1; bin <= n; bin++) {
+            int length = getBinaryLength(bin);
+
+            ans <<= length;
+            ans = (ans + bin) % mod;
+        }
+
+        return (int)ans;
     }
 
     public int helped_by_gpt(int n) {
