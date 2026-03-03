@@ -1,6 +1,31 @@
 class Solution {
     public char findKthBit(int n, int k) {
-        return official_bit(n, k);
+        return try_20260303(n, k);
+    }
+
+    public char try_20260303(int n, int k) {
+        return topdown(new StringBuilder().append("0"), n - 1, k);
+    }
+
+    private char topdown(StringBuilder sb, int n, int k) {
+        if (n == 0 || k - 1 < sb.length()) {
+            // System.out.println(sb.toString());
+            return sb.charAt(k - 1);
+        }
+
+        StringBuilder formed = new StringBuilder(sb.toString());
+        formed.append("1").append(invert(sb).reverse());
+
+        return topdown(formed, n - 1, k);
+    }
+
+    private StringBuilder invert(StringBuilder sb) {
+        for (int i = 0; i < sb.length(); i++) {
+            int flip = (int)(sb.charAt(i) - '0' + 1) % 2;
+            sb.setCharAt(i, (char)(flip + '0'));
+        }
+
+        return sb;
     }
 
     public char official_bit(int n, int k) {
