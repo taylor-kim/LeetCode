@@ -1,6 +1,40 @@
 class Solution {
     public int minFlips(String s) {
-        return mySol3_hint(s);
+        return mySol3_improved(s);
+    }
+
+    public int mySol3_improved(String s) {
+        int k = s.length();
+
+        int left = 0;
+        int zeroOne = 0;
+        int ans = Integer.MAX_VALUE;
+
+        for (int right = 0; right < k * 2 - 1; right++) {
+            int digit = s.charAt(right % k) - '0';
+
+            if (right % 2 == 0) {
+                zeroOne += digit;
+            } else {
+                zeroOne += digit == 0 ? 1 : 0;
+            }
+
+            if (right - left + 1 == k) {                
+                ans = Math.min(ans, Math.min(zeroOne, k - zeroOne));
+
+                int removeDigit = s.charAt(left) - '0';
+
+                if (left % 2 == 0) {
+                    zeroOne -= removeDigit;
+                } else {
+                    zeroOne -= removeDigit == 0 ? 1 : 0;
+                }
+
+                left++;
+            }
+        }
+
+        return ans;
     }
 
     public int mySol3_hint(String s) {
