@@ -1,6 +1,27 @@
 class Solution {
     public String findDifferentBinaryString(String[] nums) {
-        return try_20260308(nums);
+        return others_pigeonhole(nums);
+    }
+
+    public String others_pigeonhole(String[] nums) {
+        int n = nums.length;
+        int max = n + 1;
+
+        Set<Integer> set = new HashSet();
+
+        for (String num : nums) {
+            set.add(Integer.parseInt(num, 2));
+        }
+
+        for (int i = 0; i <= max; i++) {
+            if (!set.contains(i)) {
+                String bs = Integer.toBinaryString(i);
+
+                return bs.length() == n ? bs : "0".repeat(n - bs.length()) + bs;
+            }
+        }
+
+        return "";
     }
 
     public String try_20260308(String[] nums) {
