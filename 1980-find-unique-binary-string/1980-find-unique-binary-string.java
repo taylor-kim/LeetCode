@@ -5,7 +5,7 @@ class Solution {
 
     public String others_pigeonhole(String[] nums) {
         int n = nums.length;
-        int max = n + 1;
+        int max = n;
 
         Set<Integer> set = new HashSet();
 
