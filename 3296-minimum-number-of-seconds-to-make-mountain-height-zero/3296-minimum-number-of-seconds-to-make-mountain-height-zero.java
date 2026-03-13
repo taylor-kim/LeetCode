@@ -4,7 +4,7 @@ class Solution {
     }
 
     public long mySol(int height, int[] times) {
-        // t * 1 + t * 2 + t * 3... t * n => t * (1 + 2 + 3 + ... + n) => t * (n * (1 + n) / 2) == ans
+        // t * 1 + t * 2 + t * 3... t * n => t * (1 + 2 + 3 + ... + n) => t * (n * (1 + n) / 2) <= ans
 
         // ans / t * 2 == n + n^2 == some. => n * (1 + n) == some
 
@@ -50,17 +50,20 @@ class Solution {
 
     private int getReducedAmount(int time, long seconds) {
         int lo = 1;
-        int hi = Integer.MAX_VALUE;
+        // int hi = Integer.MAX_VALUE;
+        int hi = (int)1e5 + 1;
 
         // time * (h * (1 + h) / 2)
         // (n * (1 + n)) <= ans / t * 2
 
-        long target = (seconds * 2) / time;
+        // long target = (seconds * 2) / time;
+        long target = (seconds * 2);
 
         while (lo < hi) {
             int mid = lo + (hi - lo) / 2;
 
-            long x = mid * (1l + mid);
+            // long x = mid * (1l + mid);
+            long x = mid * (1l + mid) * time;
 
             if (x <= target) {
                 lo = mid + 1;
