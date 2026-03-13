@@ -50,8 +50,8 @@ class Solution {
 
     private int getReducedAmount(int time, long seconds) {
         int lo = 1;
-        int hi = Integer.MAX_VALUE;
-        // int hi = (int)1e5 + 1;
+        // int hi = Integer.MAX_VALUE;
+        int hi = (int)1e5 + 1;
 
         // time * (h * (1 + h) / 2)
         // (n * (1 + n)) <= ans / t * 2
