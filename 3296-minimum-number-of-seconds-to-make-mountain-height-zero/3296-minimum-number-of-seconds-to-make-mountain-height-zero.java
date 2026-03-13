@@ -50,20 +50,20 @@ class Solution {
 
     private int getReducedAmount(int time, long seconds) {
         int lo = 1;
-        // int hi = Integer.MAX_VALUE;
-        int hi = (int)1e5 + 1;
+        int hi = Integer.MAX_VALUE;
+        // int hi = (int)1e5 + 1;
 
         // time * (h * (1 + h) / 2)
         // (n * (1 + n)) <= ans / t * 2
 
-        // long target = (seconds * 2) / time;
-        long target = (seconds * 2);
+        long target = (seconds * 2) / time;
+        // long target = (seconds * 2);
 
         while (lo < hi) {
             int mid = lo + (hi - lo) / 2;
 
-            // long x = mid * (1l + mid);
-            long x = mid * (1l + mid) * time;
+            long x = mid * (1l + mid);
+            // long x = mid * (1l + mid) * time;
 
             if (x <= target) {
                 lo = mid + 1;
