@@ -1,6 +1,37 @@
 class Solution {
     public String getHappyString(int n, int k) {
-        return mySol(n, k);
+        return try_20260314(n, k);
+    }
+
+    public String try_20260314(int n, int k) {
+        Map<Character, List<Character>> map = Map.of(
+            ' ', List.of('a', 'b', 'c'),
+            'a', List.of('b', 'c'),
+            'b', List.of('a', 'c'),
+            'c', List.of('a', 'b')
+        );
+
+        return topdown(n, k, new int[1], new StringBuilder(), map);
+    }
+
+    private String topdown(int n, int k, int[] counter, StringBuilder sb, Map<Character, List<Character>> map) {
+        if (sb.length() == n) {
+            return ++counter[0] == k ? sb.toString() : "";
+        }
+
+        char prev = sb.length() == 0 ? ' ' : sb.charAt(sb.length() - 1);
+
+        for (char next : map.get(prev)) {
+            sb.append(next);
+
+            String s = topdown(n, k, counter, sb, map);
+
+            if (s.length() > 0) return s;
+
+            sb.setLength(sb.length() - 1);
+        }
+
+        return "";
     }
 
     public String mySol(int n, int k) {
