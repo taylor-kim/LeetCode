@@ -1,1 +1,0 @@
-<h2><a href="https://leetcode.cn/problems/get-biggest-three-rhombus-sums-in-a-grid">1990. undefined</a></h2><h3>undefined</h3><hr>undefined
