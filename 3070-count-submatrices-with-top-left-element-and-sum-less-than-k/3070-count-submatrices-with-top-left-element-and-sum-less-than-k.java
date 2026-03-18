@@ -1,6 +1,30 @@
 class Solution {
     public int countSubmatrices(int[][] grid, int k) {
-        return mySol(grid, k);
+        return official_good(grid, k);
+    }
+
+    public int official_good(int[][] grid, int k) {
+        int ans = 0;
+
+        int m = grid.length;
+        int n = grid[0].length;
+
+        int[] cols = new int[n];
+
+        for (int i = 0; i < m; i++) {
+            int rows = 0;
+            for (int j = 0; j < n; j++) {
+                cols[j] += grid[i][j];
+
+                rows += cols[j];
+
+                if (rows <= k) {
+                    ans++;
+                }
+            }
+        }
+        
+        return ans;
     }
 
     public int mySol(int[][] grid, int k) {
