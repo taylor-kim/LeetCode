@@ -21,8 +21,8 @@ class Solution {
                 for (int k = 0; k < counters.length; k++) {
                     int[] counter = counters[k];
 
-                    counter[j + 1] = counter[j + 1] + counter[j] - topLeft[i];
                     nextTopLeft[k] = counter[j + 1];
+                    counter[j + 1] = counter[j + 1] + counter[j] - topLeft[k];
                 }
 
                 if (c == 'X') {
