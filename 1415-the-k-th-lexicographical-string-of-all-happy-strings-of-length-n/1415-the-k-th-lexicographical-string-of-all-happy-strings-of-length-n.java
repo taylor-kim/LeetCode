@@ -1,6 +1,64 @@
 class Solution {
     public String getHappyString(int n, int k) {
-        return try_20260314(n, k);
+        return official_combinatoric(n, k);
+    }
+
+    public String official_combinatoric(int n, int k) {
+        int total = 3 * (int)Math.pow(2, n - 1);
+
+        if (k > total) return "";
+
+        Map<Character, Character> nextSmallest = Map.of('a', 'b', 'b', 'a', 'c', 'a');
+        Map<Character, Character> nextGreatest = Map.of('a', 'c', 'b', 'c', 'c', 'b');
+
+        StringBuilder sb = new StringBuilder();
+
+        int sizeOfGroup = (int)Math.pow(2, n - 1);
+
+        int aGroup = sizeOfGroup;
+        int bGroup = 2 * sizeOfGroup;
+        int cGroup = 3 * sizeOfGroup;
+
+        if (k <= sizeOfGroup) {
+            sb.append('a');
+        } else if (k <= 2 * sizeOfGroup) {
+            k -= sizeOfGroup;
+            sb.append('b');
+        } else {
+            k -= 2 * sizeOfGroup;
+            sb.append('c');
+        }
+
+        topdown(sb, k, n, nextSmallest, nextGreatest);
+
+        return sb.toString();
+    }
+
+    private void topdown(StringBuilder sb, int k, int n,
+        Map<Character, Character> nextSmallest, Map<Character, Character> nextGreatest) {
+
+        // n == 2, k == 5
+        // ab, ac, ba, bc, ca, cb
+        // groupSize = 2
+        // 1~2, 3~4, 5~6 => k belongs to 3rd group
+        // sb.append('c'), k -= (2 * groupSize), k = 1
+
+        if (sb.length() == n) return;
+
+        int total = (int)Math.pow(2, n - sb.length());
+        
+        int sizeOfGroup = (int)Math.pow(2, n - (sb.length() + 1));
+
+        char prev = sb.charAt(sb.length() - 1);
+
+        if (k <= sizeOfGroup) {
+            sb.append(nextSmallest.get(prev));
+        } else {
+            k -= sizeOfGroup;
+            sb.append(nextGreatest.get(prev));
+        }
+
+        topdown(sb, k, n, nextSmallest, nextGreatest);
     }
 
     public String try_20260314(int n, int k) {
