@@ -1,6 +1,38 @@
 class Solution {
     public boolean findRotation(int[][] mat, int[][] target) {
-        return mySol(mat, target);
+        return official(mat, target);
+    }
+
+    public boolean official(int[][] mat, int[][] target) {
+        int n = mat.length;
+
+        for (int k = 0; k < 4; k++) {
+            for (int i = 0; i < n / 2; i++) {
+                for (int j = 0; j < (n + 1) / 2; j++) {
+                    int temp = mat[i][j];
+                    mat[i][j] = mat[n - 1 - j][i];
+                    mat[n - 1 - j][i] = mat[n - 1 - i][n - 1 - j];
+                    mat[n - 1 - i][n - 1 - j] = mat[i + j][n - i - 1];
+                    mat[i + j][n - i - 1] = temp;
+                }
+            }
+
+            if (isEquals(mat, target)) return true;
+        }
+
+        return false;
+    }
+
+    private boolean isEquals(int[][] mat, int[][] target) {
+        int n = mat.length;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (mat[i][j] != target[i][j]) return false;
+            }
+        }
+
+        return true;
     }
 
     public boolean mySol(int[][] mat, int[][] target) {
