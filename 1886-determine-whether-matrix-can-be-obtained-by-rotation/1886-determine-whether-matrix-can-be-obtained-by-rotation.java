@@ -10,12 +10,22 @@ class Solution {
             for (int i = 0; i < n / 2; i++) {
                 for (int j = 0; j < (n + 1) / 2; j++) {
                     int temp = mat[i][j];
+
                     mat[i][j] = mat[n - 1 - j][i];
+
                     mat[n - 1 - j][i] = mat[n - 1 - i][n - 1 - j];
-                    mat[n - 1 - i][n - 1 - j] = mat[i + j][n - i - 1];
-                    mat[i + j][n - i - 1] = temp;
+
+                    mat[n - 1 - i][n - 1 - j] = mat[j][n - 1 - i];
+                    
+                    mat[j][n - 1 - i] = temp;
                 }
             }
+
+            // [0,1,1,0,1]
+            // [1,0,0,1,2]
+            // [0,1,0,1,1]
+            // [0,0,1,0,1]
+            // [0,0,1,0,1]
 
             if (isEquals(mat, target)) return true;
         }
