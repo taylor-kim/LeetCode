@@ -38,7 +38,7 @@ class Solution {
     private boolean isCyclical(int n, int k, Map<Integer, List<Integer>> map, boolean asc) {
         for (List<Integer> indices : map.values()) {
             if (!asc) {
-                Collections.reverse(indices);
+                // Collections.reverse(indices);
             }
 
             Set<Integer> set = new HashSet(indices);
