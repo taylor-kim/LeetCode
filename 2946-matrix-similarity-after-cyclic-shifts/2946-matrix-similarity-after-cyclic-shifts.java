@@ -1,6 +1,23 @@
 class Solution {
     public boolean areSimilar(int[][] mat, int k) {
-        return mySol(mat, k);
+        return mySol2(mat, k);
+    }
+
+    public boolean mySol2(int[][] mat, int k) {
+        int n = mat.length;
+        int m = mat[0].length;
+
+        k %= m;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                int shiftedIndex = (j + k) % m;
+
+                if (mat[i][j] != mat[i][shiftedIndex]) return false;
+            }
+        }
+
+        return true;
     }
     
     public boolean mySol(int[][] mat, int k) {
