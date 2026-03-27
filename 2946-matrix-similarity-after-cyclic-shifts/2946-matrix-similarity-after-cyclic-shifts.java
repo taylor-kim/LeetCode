@@ -16,7 +16,7 @@ class Solution {
                 map.computeIfAbsent(mat[i][j], key -> new ArrayList()).add(j);
             }
 
-            if (map.size() != 1 && !isCyclical(m, k, map, i % 2 == 0)) return false;
+            if (map.size() != 1 && !isCyclical(m, k, map)) return false;
         }
 
         // k == 3
@@ -35,12 +35,8 @@ class Solution {
 
     // 0,2,0,2,0,2
 
-    private boolean isCyclical(int n, int k, Map<Integer, List<Integer>> map, boolean asc) {
+    private boolean isCyclical(int n, int k, Map<Integer, List<Integer>> map) {
         for (List<Integer> indices : map.values()) {
-            if (!asc) {
-                // Collections.reverse(indices);
-            }
-
             Set<Integer> set = new HashSet(indices);
 
             for (int i = 0; i < indices.size(); i++) {
