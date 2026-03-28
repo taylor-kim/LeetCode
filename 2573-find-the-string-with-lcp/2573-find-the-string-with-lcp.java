@@ -13,7 +13,7 @@ class Solution {
         for (int i = 0; i < n; i++) {
             if (words[i] == 0) {
                 if (current > 'z') return "";
-                
+
                 words[i] = current;
                 for (int j = i + 1; j < n; j++) {
                     if (lcp[i][j] > 0) {
@@ -25,28 +25,42 @@ class Solution {
             // System.out.println("current:%c, words:%s".formatted(current, Arrays.toString(words)));
         }
 
-        int[][] myLcp = new int[n][n];
-
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (i == j) {
-                    myLcp[i][j] = n - i;
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = n - 1; j >= 0; j--) {
+                if (words[i] != words[j]) {
+                    if (lcp[i][j] > 0) return "";
                 } else {
-                    int count = 0;
-
-                    while (Math.max(i, j) + count < n && words[i + count] == words[j + count]) {
-                        myLcp[i][j]++;
-                        count++;
+                    if (i == n - 1 || j == n - 1) {
+                        if (lcp[i][j] != 1) return "";
+                    } else {
+                        if (lcp[i][j] != lcp[i + 1][j + 1] + 1) return "";
                     }
                 }
             }
         }
 
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if (lcp[i][j] != myLcp[i][j]) return "";
-            }
-        }
+        // int[][] myLcp = new int[n][n];
+
+        // for (int i = 0; i < n; i++) {
+        //     for (int j = 0; j < n; j++) {
+        //         if (i == j) {
+        //             myLcp[i][j] = n - i;
+        //         } else {
+        //             int count = 0;
+
+        //             while (Math.max(i, j) + count < n && words[i + count] == words[j + count]) {
+        //                 myLcp[i][j]++;
+        //                 count++;
+        //             }
+        //         }
+        //     }
+        // }
+
+        // for (int i = 0; i < n; i++) {
+        //     for (int j = 0; j < n; j++) {
+        //         if (lcp[i][j] != myLcp[i][j]) return "";
+        //     }
+        // }
 
         return new String(words);
     }
