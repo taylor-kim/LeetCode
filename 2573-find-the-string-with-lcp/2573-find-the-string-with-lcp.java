@@ -11,17 +11,17 @@ class Solution {
         char current = 'a';
 
         for (int i = 0; i < n; i++) {
-            if (current > 'z') return "";
-
             if (words[i] == 0) {
+                if (current > 'z') return "";
+                
                 words[i] = current;
-            }
-            for (int j = i + 1; j < n; j++) {
-                if (lcp[i][j] > 0) {
-                    words[j] = words[i];
+                for (int j = i + 1; j < n; j++) {
+                    if (lcp[i][j] > 0) {
+                        words[j] = words[i];
+                    }
                 }
+                current++;
             }
-            current++;
             // System.out.println("current:%c, words:%s".formatted(current, Arrays.toString(words)));
         }
 
