@@ -1,57 +1,61 @@
 class Solution {
+    public List<Integer> survivedRobotsHealths(int[] positions, int[] healths, String directions) {
+        return mySol(positions, healths, directions);
+    }
 
-    public List<Integer> survivedRobotsHealths(
-        int[] positions,
-        int[] healths,
-        String directions
-    ) {
+    public List<Integer> mySol(int[] positions, int[] healths, String directions) {
         int n = positions.length;
-        Integer[] indices = new Integer[n];
-        List<Integer> result = new ArrayList<>();
-        Stack<Integer> stack = new Stack<>();
+        Integer[][] datas = new Integer[n][4];
 
-        for (int index = 0; index < n; ++index) {
-            indices[index] = index;
+        for (int i = 0; i < n; i++) {
+            datas[i][0] = i;
+            datas[i][1] = positions[i];
+            datas[i][2] = healths[i];
+            datas[i][3] = directions.charAt(i) == 'L' ? 0 : 1;
         }
 
-        Arrays.sort(
-            indices,
-            (lhs, rhs) -> Integer.compare(positions[lhs], positions[rhs])
-        );
+        Arrays.sort(datas, (a, b) -> {
+            return a[1] - b[1];
+        });
 
-        for (int currentIndex : indices) {
-            // Add right-moving robots to the stack
-            if (directions.charAt(currentIndex) == 'R') {
-                stack.push(currentIndex);
+        List<Integer> list = new ArrayList();
+        Stack<Integer> stack = new Stack();
+
+        for (int i = 0; i < n; i++) {
+            boolean isR = datas[i][3] == 1;
+
+            if (isR) {
+                stack.push(i);
             } else {
-                while (!stack.isEmpty() && healths[currentIndex] > 0) {
-                    // Pop the top robot from the stack for collision check
-                    int topIndex = stack.pop();
+                boolean survived = true;
 
-                    // Top robot survives, current robot is destroyed
-                    if (healths[topIndex] > healths[currentIndex]) {
-                        healths[topIndex] -= 1;
-                        healths[currentIndex] = 0;
-                        stack.push(topIndex);
-                    } else if (healths[topIndex] < healths[currentIndex]) {
-                        // Current robot survives, top robot is destroyed
-                        healths[currentIndex] -= 1;
-                        healths[topIndex] = 0;
+                while (!stack.isEmpty()) {
+                    if ((int)datas[stack.peek()][2] == (int)datas[i][2]) {
+                        stack.pop();
+                        survived = false;
+                        break;
+                    } else if (datas[stack.peek()][2] > datas[i][2]) {
+                        datas[stack.peek()][2]--;
+                        survived = false;
+                        break;
                     } else {
-                        // Both robots are destroyed
-                        healths[currentIndex] = 0;
-                        healths[topIndex] = 0;
+                        stack.pop();
+                        datas[i][2]--;
                     }
+                }
+
+                if (survived) {
+                    list.add(i);
                 }
             }
         }
 
-        // Collect surviving robots
-        for (int index = 0; index < n; ++index) {
-            if (healths[index] > 0) {
-                result.add(healths[index]);
-            }
-        }
-        return result;
+        list.addAll(stack);
+
+        Collections.sort(list, (a, b) -> {
+            return datas[a][0] - datas[b][0];
+        });
+
+        return list.stream().map(i -> datas[i][2]).toList();
     }
 }
