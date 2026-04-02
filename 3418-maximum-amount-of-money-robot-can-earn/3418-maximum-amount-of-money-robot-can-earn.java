@@ -22,26 +22,26 @@ class Solution {
 
         int down = topdown(coins, i + 1, j, pass, memo);
 
-        if (down >= min) {
+        if (down > min) {
             ans = Math.max(ans, m + down);
         }
 
         int right = topdown(coins, i, j + 1, pass, memo);
 
-        if (right >= min) {
+        if (right > min) {
             ans = Math.max(ans, m + right);
         }
 
         if (m < 0 && pass > 0) {
             down = topdown(coins, i + 1, j, pass - 1, memo);
 
-            if (down >= min) {
+            if (down > min) {
                 ans = Math.max(ans, down);
             }
 
             right = topdown(coins, i, j + 1, pass - 1, memo);
 
-            if (right >= min) {
+            if (right > min) {
                 ans = Math.max(ans, right);
             }
         }
