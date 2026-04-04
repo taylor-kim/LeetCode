@@ -1,6 +1,25 @@
 class Solution {
     public String decodeCiphertext(String encodedText, int rows) {
-        return mySol2(encodedText, rows);
+        return mySol2_simplified(encodedText, rows);
+    }
+
+    public String mySol2_simplified(String encodedText, int rows) {
+        int n = encodedText.length();
+        int cols = n / rows;
+
+        StringBuilder ans = new StringBuilder();
+
+        for (int startCol = 0; startCol < cols; startCol++) {
+            int j = startCol;
+
+            for (int i = 0; i < rows && j < cols; i++) {
+                int index = i * cols + j++;
+
+                ans.append(encodedText.charAt(index));
+            }
+        }
+
+        return ans.toString().replaceAll("\\s*$", "");
     }
 
     public String mySol2(String encodedText, int rows) {
