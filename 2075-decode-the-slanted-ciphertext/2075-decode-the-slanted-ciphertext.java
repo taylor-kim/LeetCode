@@ -19,7 +19,15 @@ class Solution {
             }
         }
 
-        return ans.toString().replaceAll("\\s*$", "");
+        int last = ans.length() - 1;
+
+        while (last >= 0 && ans.charAt(last) == ' ') {
+            last--;
+        }
+
+        ans.setLength(last + 1);
+
+        return ans.toString();
     }
 
     public String mySol2(String encodedText, int rows) {
