@@ -1,6 +1,6 @@
 class Solution {
     public int xorAfterQueries(int[] nums, int[][] queries) {
-        return mySol_bf(nums, queries);
+        return mySol_try_segtree(nums, queries);
     }
 
     public int mySol_bf(int[] nums, int[][] queries) {
@@ -25,12 +25,15 @@ class Solution {
 
     public int mySol_try_segtree(int[] nums, int[][] queries) {
         SegTree st = new SegTree(nums);
+        st.init(1, 0, nums.length - 1);
 
         for (int[] q : queries) {
             st.update(1, 0, nums.length - 1, q[0], q[1], q[0], q[2], q[3]);
         }
 
-        return st.data[1];
+        // System.out.println(Arrays.toString(st.data));
+
+        return st.query(1, 0, nums.length - 1, 0, nums.length - 1);
     }
 
     class SegTree {
@@ -48,14 +51,42 @@ class Solution {
                 return data[node] = nums[left];
             }
 
-            if (left > right) return 0;
+            if (left > right) return -1;
 
             int mid = left + (right - left) / 2;
 
             int lv = init(node * 2, left, mid);
             int rv = init(node * 2 + 1, mid + 1, right);
 
-            return this.data[node] = lv ^ rv;
+            // if (lv >= 0) {
+            //     this.data[node] ^= lv;
+            // }
+
+            // if (rv >= 0) {
+            //     this.data[node] ^= rv;
+            // }
+
+            return this.data[node];
+        }
+
+        private int query(int node, int left, int right, int qLeft, int qRight) {
+            if (qRight < left || right < qLeft) return -1;
+
+            if (left == right) {
+                return data[node];
+            } else {
+                int mid = left + (right - left) / 2;
+
+                int lv = query(node * 2, left, mid, qLeft, qRight);
+                int rv = query(node * 2 + 1, mid + 1, right, qLeft, qRight);
+
+                int ans = 0;
+
+                if (lv >= 0) ans ^= lv;
+                if (rv >= 0) ans ^= rv;
+
+                return ans;
+            }
         }
 
         int update(int node, int left, int right, int qLeft, int qRight, int index, int k, int v) {
@@ -73,13 +104,13 @@ class Solution {
                 int lv = update(node * 2, left, mid, qLeft, qRight, index, k, v);
                 int rv = update(node * 2 + 1, mid + 1, right, qLeft, qRight, index, k, v);
 
-                if (lv >= 0) {
-                    data[node] ^= lv;
-                }
+                // if (lv >= 0) {
+                //     data[node] ^= lv;
+                // }
 
-                if (rv >= 0) {
-                    data[node] ^= rv;
-                }
+                // if (rv >= 0) {
+                //     data[node] ^= rv;
+                // }
 
                 return data[node];
             }
