@@ -14,10 +14,10 @@ class Solution {
 
         for (List<Integer> indices : map.values()) {
             for (int i = 0; i < indices.size() - 2; i++) {
-                ans = Math.min(ans, (indices.get(i + 2) - indices.get(i)) * 2);
+                ans = Math.min(ans, indices.get(i + 2) - indices.get(i));
             }
         }
 
-        return ans == Integer.MAX_VALUE ? -1 : ans;
+        return ans == Integer.MAX_VALUE ? -1 : ans * 2;
     }
 }
