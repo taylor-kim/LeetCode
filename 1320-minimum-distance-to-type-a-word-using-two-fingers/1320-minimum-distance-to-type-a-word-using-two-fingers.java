@@ -32,8 +32,8 @@ class Solution {
     private int topdown(String word, int index, char f1, char f2, Map<Character, int[]> keyboard, Integer[][][] memo) {
         if (index >= word.length()) return 0;
 
-        if (memo[index][f1 - 65][f2 - 65] != null) {
-            return memo[index][f1 - 65][f2 - 65];
+        if (memo[index][f1 - 'A'][f2 - 'A'] != null) {
+            return memo[index][f1 - 'A'][f2 - 'A'];
         }
 
         char c = word.charAt(index);
@@ -43,7 +43,7 @@ class Solution {
 
         // System.out.println("index:%d, f1:%c, f2:%c, c:%c, cost1:%d, cost2:%d".formatted(index, f1, f2, c, cost1, cost2));
 
-        return memo[index][f1 - 65][f2 - 65] = Math.min(cost1, cost2);
+        return memo[index][f1 - 'A'][f2 - 'A'] = Math.min(cost1, cost2);
     }
 
     private int getCost(Map<Character, int[]> keyboard, char c1, char c2) {
