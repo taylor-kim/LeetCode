@@ -3,6 +3,16 @@ class Solution {
         return official_one_pass(words, target, startIndex);
     }
 
+    /**
+    [0,1,2,3,4,5,6,7,8,9]
+
+    int dist = x;
+    int left = a;
+    int right = b;
+    dist + left + right == n - 1
+    left + right + 1 == n - dist
+     */
+
     public int official_one_pass(String[] words, String target, int startIndex) {
         int n = words.length;
         int ans = n;
