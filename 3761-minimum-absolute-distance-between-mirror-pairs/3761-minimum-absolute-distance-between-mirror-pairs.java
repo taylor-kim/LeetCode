@@ -1,6 +1,24 @@
 class Solution {
     public int minMirrorPairDistance(int[] nums) {
-        return mySol(nums);
+        return official_prefixMap(nums);
+    }
+
+    public int official_prefixMap(int[] nums) {
+        int n = nums.length;
+        Map<Integer, Integer> map = new HashMap();
+        int ans = n;
+
+        for (int i = 0; i < n; i++) {
+            int num = nums[i];
+
+            if (map.containsKey(num)) {
+                ans = Math.min(ans, i - map.get(num));
+            }
+
+            map.put(reverse(num), i);
+        }
+
+        return ans == n ? -1 : ans;
     }
 
     public int mySol(int[] nums) {
