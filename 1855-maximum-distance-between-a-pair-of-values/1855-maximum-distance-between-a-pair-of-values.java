@@ -1,6 +1,19 @@
 class Solution {
     public int maxDistance(int[] nums1, int[] nums2) {
-        return mySol2(nums1, nums2);
+        return others_simple(nums1, nums2);
+    }
+
+    public int others_simple(int[] nums1, int[] nums2) {
+        int i = 0;
+        int j = 0;
+
+        while (i < nums1.length && j < nums2.length) {
+            if (nums1[i] > nums2[j++]) {
+                i++;
+            }
+        }
+
+        return Math.max(0, j - i - 1);
     }
 
     public int mySol2(int[] nums1, int[] nums2) {
