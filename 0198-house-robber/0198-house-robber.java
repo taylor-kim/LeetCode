@@ -1,20 +1,18 @@
 class Solution {
     public int rob(int[] nums) {
-        return tryAgain_20250315(nums);
-    }
-
-    public int tryAgain_20250315(int[] nums) {
-        int current = 0;
-        int prevAdj = 0;
-        int prev = 0;
-        
-        for (int i = 0; i < nums.length; i++) {
-            current = Math.max(nums[i] + prev, prevAdj);
-
-            prev = prevAdj;
-            prevAdj = current;
+        if (nums == null || nums.length == 0) {
+            return 0;
         }
-
-        return current;
+        int length = nums.length;
+        if (length == 1) {
+            return nums[0];
+        }
+        int first = nums[0], second = Math.max(nums[0], nums[1]);
+        for (int i = 2; i < length; i++) {
+            int temp = second;
+            second = Math.max(first + nums[i], second);
+            first = temp;
+        }
+        return second;
     }
 }
