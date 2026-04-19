@@ -1,47 +1,38 @@
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- *     int val;
- *     TreeNode left;
- *     TreeNode right;
- *     TreeNode() {}
- *     TreeNode(int val) { this.val = val; }
- *     TreeNode(int val, TreeNode left, TreeNode right) {
- *         this.val = val;
- *         this.left = left;
- *         this.right = right;
- *     }
- * }
- */
 class Solution {
     public List<Integer> rightSideView(TreeNode root) {
-        List<Integer> ans = new ArrayList();
+        Map<Integer, Integer> rightmostValueAtDepth = new HashMap<Integer, Integer>();
+        int max_depth = -1;
 
-        if (root == null) return ans;
+        Deque<TreeNode> nodeStack = new LinkedList<TreeNode>();
+        Deque<Integer> depthStack = new LinkedList<Integer>();
+        nodeStack.push(root);
+        depthStack.push(0);
 
-        Queue<TreeNode> queue = new LinkedList();
-        queue.add(root);
+        while (!nodeStack.isEmpty()) {
+            TreeNode node = nodeStack.pop();
+            int depth = depthStack.pop();
 
-        while (!queue.isEmpty()) {
-            int size = queue.size();
+            if (node != null) {
+            	// 维护二叉树的最大深度
+                max_depth = Math.max(max_depth, depth);
 
-            TreeNode node = null;
-
-            while (size-- > 0) {
-                node = queue.poll();
-
-                if (node.left != null) {
-                    queue.add(node.left);
+                // 如果不存在对应深度的节点我们才插入
+                if (!rightmostValueAtDepth.containsKey(depth)) {
+                    rightmostValueAtDepth.put(depth, node.val);
                 }
 
-                if (node.right != null) {
-                    queue.add(node.right);
-                }
+                nodeStack.push(node.left);
+                nodeStack.push(node.right);
+                depthStack.push(depth + 1);
+                depthStack.push(depth + 1);
             }
-
-            ans.add(node.val);
         }
 
-        return ans;
+        List<Integer> rightView = new ArrayList<Integer>();
+        for (int depth = 0; depth <= max_depth; depth++) {
+            rightView.add(rightmostValueAtDepth.get(depth));
+        }
+
+        return rightView;
     }
 }
