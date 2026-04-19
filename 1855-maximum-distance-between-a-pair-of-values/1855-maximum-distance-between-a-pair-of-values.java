@@ -1,6 +1,6 @@
 class Solution {
     public int maxDistance(int[] nums1, int[] nums2) {
-        return mySol(nums1, nums2);
+        return mySol2(nums1, nums2);
     }
 
     public int mySol2(int[] nums1, int[] nums2) {
