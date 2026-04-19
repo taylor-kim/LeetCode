@@ -3,6 +3,25 @@ class Solution {
         return mySol(nums1, nums2);
     }
 
+    public int mySol2(int[] nums1, int[] nums2) {
+        int ans = 0;
+
+        int start = 0;
+        int end = 0;
+
+        while (start < nums1.length && end < nums2.length) {
+            if (nums1[start] <= nums2[end]) {
+                ans = Math.max(ans, end++ - start);
+            } else {
+                if (++start > end) {
+                    end = start;
+                }
+            }
+        }
+
+        return ans;
+    }
+
     public int mySol(int[] nums1, int[] nums2) {
         int ans = 0;
 
