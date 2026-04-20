@@ -11,6 +11,7 @@ class Solution {
             for (int j = n - 1; j > i; j--) {
                 if (colors[i] != colors[j]) {
                     ans = Math.max(ans, j - i);
+                    break;
                 }
             }
         }
