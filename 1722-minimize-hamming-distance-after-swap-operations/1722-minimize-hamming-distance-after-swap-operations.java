@@ -58,15 +58,15 @@ class Solution {
 
     public class UnionFind {
         int[] parents;
-        int[] orders;
+        int[] ranks;
 
         public UnionFind(int n) {
             parents = new int[n];
-            orders = new int[n];
+            ranks = new int[n];
 
             for (int i = 0; i < n; i++) {
                 parents[i] = i;
-                orders[i] = 0;
+                ranks[i] = 0;
             }
         }
 
@@ -84,15 +84,13 @@ class Solution {
 
             if (a == b) return;
 
-            if (orders[a] > orders[b]) {
+            if (ranks[a] > ranks[b]) {
                 parents[b] = a;
-                orders[a] += orders[b];
-            } else if (orders[a] < orders[b]) {
+            } else if (ranks[a] < ranks[b]) {
                 parents[a] = b;
-                orders[b] += orders[a];
             } else {
                 parents[a] = b;
-                orders[a]++;
+                ranks[a]++;
             }
         }
     }
