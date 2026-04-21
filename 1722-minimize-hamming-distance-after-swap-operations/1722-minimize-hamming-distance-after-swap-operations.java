@@ -89,7 +89,7 @@ class Solution {
             } else if (ranks[a] < ranks[b]) {
                 parents[a] = b;
             } else {
-                parents[a] = b;
+                parents[b] = a;
                 ranks[a]++;
             }
         }
