@@ -4,30 +4,29 @@ class Solution {
     }
 
     public int mySol(int[][] grid, int x) {
-        int m = grid.length;
-        int n = grid[0].length;
+        int n = grid.length;
+        int m = grid[0].length;
+        int[] arr = new int[n * m];
 
-        int[] datas = new int[m * n];
-
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                datas[(i * n + j)] = grid[i][j];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                arr[i * m + j] = grid[i][j];
             }
         }
 
-        Arrays.sort(datas);
+        Arrays.sort(arr);
 
-        int mid = datas.length / 2 - (datas.length % 2 == 0 ? 1 : 0);
-
+        int mid = arr.length / 2;
         int ans = 0;
 
-        for (int i = 0; i <= mid; i++) {
-            if ((datas[mid] - datas[i]) % x != 0) return -1;
+        for (int i = 0; i < arr.length; i++) {
+            int diff = Math.abs(arr[mid] - arr[i]);
 
-            if ((datas[datas.length - i - 1] - datas[mid]) % x != 0) return -1;
+            if (diff == 0) continue;
 
-            ans += (datas[mid] - datas[i]) / x;
-            ans += (datas[datas.length - i - 1] - datas[mid]) / x;
+            if (diff % x != 0) return -1;
+
+            ans += diff / x;
         }
 
         return ans;
