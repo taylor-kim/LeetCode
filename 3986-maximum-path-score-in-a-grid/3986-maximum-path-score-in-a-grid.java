@@ -3,15 +3,6 @@ class Solution {
         return mySol(grid, k);
     }
 
-    /**
-    [
-        [0, 2, 2],
-        [1, 1, 1],
-        [0, 0, 2]
-    ]
-    
-     */
-
     public int mySol(int[][] grid, int k) {
         return topdown(grid, 0, 0, k, new Integer[grid.length][grid[0].length][k + 1]);
     }
