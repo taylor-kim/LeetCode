@@ -5,12 +5,9 @@ class Solution {
 
     public int mySol3(int[] nums) {
         int n = nums.length;
-
-        int[] pSum = new int[n + 1];
         int total = 0;
 
         for (int i = 0; i < n; i++) {
-            pSum[i + 1] = nums[i] + pSum[i];
             total += nums[i];
         }
 
@@ -25,11 +22,9 @@ class Solution {
 
         for (int i = 0; i < n - 1; i++) {
             int deduct = total - nums[i];
-            int nextSum = sum - deduct;
-            nextSum += nums[i] * (n - 1);
+            sum = sum - deduct + (nums[i] * (n - 1));
 
-            ans = Math.max(ans, nextSum);
-            sum = nextSum;
+            ans = Math.max(ans, sum);
         }
 
         return ans;
