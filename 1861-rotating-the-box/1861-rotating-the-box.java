@@ -1,6 +1,40 @@
 class Solution {
     public char[][] rotateTheBox(char[][] box) {
-        return try_20260506(box);
+        return try_20260506_improved(box);
+    }
+
+    public char[][] try_20260506_improved(char[][] box) {
+        int m = box.length;
+        int n = box[0].length;
+
+        char[][] ans = new char[n][m];
+
+        for (int i = 0; i < m; i++) {
+            int stone = 0;
+            for (int j = 0; j < n; j++) {
+                if (box[i][j] == '*') {
+                    for (int k = j - 1; stone > 0; k--) {
+                        box[i][k] = '#';
+                        stone--;
+                    }
+                } else {
+                    stone += box[i][j] == '#' ? 1 : 0;
+                    box[i][j] = '.';
+                }
+            }
+
+            int k = n - 1;
+
+            while (stone-- > 0) {
+                box[i][k--] = '#';
+            }
+
+            for (int j = 0; j < n; j++) {
+                ans[j][m - i - 1] = box[i][j];
+            }
+        }
+
+        return ans;
     }
 
     public char[][] try_20260506(char[][] box) {
