@@ -74,7 +74,7 @@ class Solution {
 
             int next = node + 1;
 
-            if (next >= 0 && visit.add(next)) {
+            if (visit.add(next)) {
                 pq.add(new int[] {next, count + 1});
             }
         }
