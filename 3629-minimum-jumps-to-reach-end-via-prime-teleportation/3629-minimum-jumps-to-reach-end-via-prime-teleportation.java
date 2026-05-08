@@ -6,10 +6,6 @@ class Solution {
     public int mySol3_after_read_editorial(int[] nums) {
         int n = nums.length;
 
-        if (n >= 3 && nums[0] == 7 && nums[n - 2] == 7 && nums[n - 1] == 8) {
-            return 2;
-        }
-
         int max = 0;
         for (int num : nums) max = Math.max(max, num);
         boolean[] primes = getPrimes(max);
