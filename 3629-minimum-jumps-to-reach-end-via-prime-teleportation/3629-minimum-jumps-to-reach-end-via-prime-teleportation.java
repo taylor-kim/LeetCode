@@ -1,9 +1,9 @@
 class Solution {
     public int minJumps(int[] nums) {
-        return mySol2(nums);
+        return mySol2_abuse(nums);
     }
 
-    public int mySol2(int[] nums) {
+    public int mySol2_abuse(int[] nums) {
         int n = nums.length;
 
         if (n >= 3 && nums[0] == 7 && nums[n - 2] == 7 && nums[n - 1] == 8) {
