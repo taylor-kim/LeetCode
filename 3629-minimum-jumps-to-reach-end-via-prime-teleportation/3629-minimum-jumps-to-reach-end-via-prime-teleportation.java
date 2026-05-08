@@ -3,6 +3,77 @@ class Solution {
         return mySol2_abuse(nums);
     }
 
+    public int mySol3_after_read_editorial(int[] nums) {
+        int n = nums.length;
+
+        int max = 0;
+        for (int num : nums) max = Math.max(max, num);
+        boolean[] primes = getPrimes(max);
+
+        // println(Arrays.toString(primes));
+
+        Map<Integer, List<Integer>> teleports = new HashMap();
+
+        for (int i = 0; i < n; i++) {
+            if (primes[nums[i]]) {
+                teleports.computeIfAbsent(nums[i], k -> new ArrayList()).add(i);
+            } else {
+                int num = nums[i];
+                for (int p = 2; p * p <= num; p++) {
+                    if (num % p != 0) continue;
+
+                    teleports.computeIfAbsent(p, k -> new ArrayList()).add(i);
+
+                    while (num % p == 0) {
+                        num /= p;
+                    }
+                }
+
+                if (num > 1) {
+                    teleports.computeIfAbsent(num, k -> new ArrayList()).add(i);
+                }
+            }
+        }
+
+        Queue<int[]> pq = new PriorityQueue<>((a, b) -> {
+            return a[1] - b[1];
+        });
+
+        pq.add(new int[] {n - 1, 0});
+
+        int ans = 0;
+
+        Set<Integer> visit = new HashSet();
+        visit.add(n - 1);
+
+        while (!pq.isEmpty()) {
+            int node = pq.peek()[0];
+            int count = pq.poll()[1];
+
+            if (node == 0) return count;
+
+            for (int jump : teleports.getOrDefault(nums[node], new ArrayList<>())) {
+                if (visit.add(jump)) {
+                    pq.add(new int[] {jump, count + 1});
+                }
+            }
+
+            int prev = node - 1;
+
+            if (prev >= 0 && visit.add(prev)) {
+                pq.add(new int[] {prev, count + 1});
+            }
+
+            int next = node + 1;
+
+            if (next < n && visit.add(next)) {
+                pq.add(new int[] {next, count + 1});
+            }
+        }
+
+        return ans;
+    }
+
     public int mySol2_abuse(int[] nums) {
         int n = nums.length;
 
