@@ -1,6 +1,23 @@
 class Solution {
     public int maximumJumps(int[] nums, int target) {
-        return mySol(nums, target);
+        return try_bottomup(nums, target);
+    }
+
+    public int try_bottomup(int[] nums, int target) {
+        int n = nums.length;
+        int[] dp = new int[n];
+        Arrays.fill(dp, Integer.MIN_VALUE);
+        dp[0] = 0;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (Math.abs(nums[j] - nums[i]) <= target) {
+                    dp[j] = Math.max(dp[j], dp[i] + 1);
+                }
+            }
+        }
+
+        return dp[n - 1] < 0 ? -1 : dp[n - 1];
     }
 
     public int mySol(int[] nums, int target) {
@@ -34,19 +51,11 @@ class Solution {
 
     //fail
     public int topdown(int[] nums, int target, int prev, int index) {
-        if (index == nums.length - 1) {
-            if (nums[prev] - target <= nums[index] && nums[index] <= target + nums[prev]) {
-                return 0;
-            } else {
-                return -1;
-            }
-        }
-
-        if (index >= nums.length) return -1;
+        if (index == nums.length - 1) return 0;
 
         int ans = -1;
 
-        if (nums[prev] - target <= nums[index] && nums[index] <= target + nums[prev]) {
+        if ((long)nums[prev] - target <= nums[index] && nums[index] <= (long)target + nums[prev]) {
             int include = topdown(nums, target, index, index + 1);
 
             if (include >= 0) {
