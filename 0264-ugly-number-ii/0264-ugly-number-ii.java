@@ -1,24 +1,21 @@
 class Solution {
     public int nthUglyNumber(int n) {
-        return others(n);
-    }
-
-    public int others(int n) {
-        int[] arr = new int[n];
-        arr[0] = 1;
-
-        int t2 = 0;
-        int t3 = 0;
-        int t5 = 0;
-
-        for (int i = 1; i < n; i++) {
-            arr[i] = Math.min(arr[t2] * 2, Math.min(arr[t3] * 3, arr[t5] * 5));
-
-            if (arr[i] == arr[t2] * 2) t2++;
-            if (arr[i] == arr[t3] * 3) t3++;
-            if (arr[i] == arr[t5] * 5) t5++;
+        int[] factors = {2, 3, 5};
+        Set<Long> seen = new HashSet<Long>();
+        PriorityQueue<Long> heap = new PriorityQueue<Long>();
+        seen.add(1L);
+        heap.offer(1L);
+        int ugly = 0;
+        for (int i = 0; i < n; i++) {
+            long curr = heap.poll();
+            ugly = (int) curr;
+            for (int factor : factors) {
+                long next = curr * factor;
+                if (seen.add(next)) {
+                    heap.offer(next);
+                }
+            }
         }
-
-        return arr[n - 1];
+        return ugly;
     }
 }
