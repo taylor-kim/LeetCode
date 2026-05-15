@@ -13,7 +13,7 @@ class Solution {
         while (lo < hi) {
             int mid = lo + (hi - lo) / 2;
 
-            if (nums[lo] <= nums[mid] && nums[mid] < nums[hi]) {
+            if (nums[lo] < nums[hi]) {
                 // nums[lo] < nums[hi]
                 hi = mid - 1;
             } else {
