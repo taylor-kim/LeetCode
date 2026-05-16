@@ -1,6 +1,33 @@
 class Solution {
     public boolean containsCycle(char[][] grid) {
-        return try_uf(grid);
+        return editorial(grid);
+    }
+
+    public boolean editorial(char[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+
+        UnionFind uf = new UnionFind(m * n);
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                int current = i * n + j;
+
+                if (i > 0 && grid[i - 1][j] == grid[i][j]) {
+                    int top = (i - 1) * n + j;
+                    uf.merge(top, current);
+                }
+
+                if (j > 0 && grid[i][j - 1] == grid[i][j]) {
+                    int left = i * n + j - 1;
+                    if (!uf.merge(left, current)) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     public boolean try_uf(char[][] grid) {
@@ -62,11 +89,11 @@ class Solution {
             return parents[a];
         }
 
-        private void merge(int a, int b) {
+        private boolean merge(int a, int b) {
             a = find(a);
             b = find(b);
 
-            if (a == b) return;
+            if (a == b) return false;
 
             if (ranks[a] > ranks[b]) {
                 parents[b] = a;
@@ -76,6 +103,8 @@ class Solution {
                 parents[b] = a;
                 ranks[a]++;
             }
+
+            return true;
         }
     }
 
