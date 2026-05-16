@@ -1,9 +1,35 @@
 class Solution {
     public int findMin(int[] nums) {
-        return mySol(nums);
+        return others_better(nums);
     }
 
-    public int mySol(int[] nums) {
+    public int others_better(int[] nums) {
+        int n = nums.length;
+        int lo = 0;
+        int hi = n - 1;
+
+        while (lo < hi) {
+            while (lo < hi && nums[lo] == nums[hi]) {
+                lo++;
+            }
+
+            int mid = lo + (hi - lo) / 2;
+
+            if (nums[lo] <= nums[hi]) {
+                hi = mid;
+            } else {
+                if (nums[mid] > nums[hi]) {
+                    lo = mid + 1;
+                } else {
+                    hi = mid;
+                }
+            }
+        }
+
+        return nums[lo];
+    }
+
+    public int mySol_fail(int[] nums) {
         int n = nums.length;
         int lo = 0;
         int hi = n - 1;
