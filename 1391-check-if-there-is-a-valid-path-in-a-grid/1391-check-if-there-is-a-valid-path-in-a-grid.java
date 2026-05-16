@@ -1,108 +1,97 @@
 class Solution {
     public boolean hasValidPath(int[][] grid) {
-        return mySol2(grid);
+        return try_again(grid);
     }
+    
+    public boolean try_again(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
 
-    public boolean mySol2(int[][] grid) {
-        Set<Integer> visited = new HashSet();
+        UnionFind uf = new UnionFind(m * n);
 
-        return topdown(grid, 0, 0);
-    }
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i > 0 && canJoinTop(grid[i][j], grid[i - 1][j])) {
+                    uf.merge(i * n + j, (i - 1) * n + j);
+                }
 
-    private boolean topdown(int[][] grid, int r, int c) {
-        // System.out.println("r:%d, c:%d, val:%d".formatted(r, c, grid[r][c]));
-
-        if (r == grid.length - 1 && c == grid[0].length - 1) return true;
-
-        if (grid[r][c] < 0) return false;
-
-        int current = grid[r][c];
-
-        grid[r][c] -= grid[r][c];
-
-        for (int i = 0; i < dirs.length; i++) {
-            int nextR = r + dirs[i][0];
-            int nextC = c + dirs[i][1];
-
-            if (nextR < 0 || nextR >= grid.length || nextC < 0 || nextC >= grid[0].length) continue;
-
-            int next = grid[nextR][nextC];
-
-            // System.out.println("\ti:%d, nextR:%d, nextC:%d".formatted(i, nextR, nextC));
-
-            if (nextMoves.get(i).getOrDefault(current, new HashSet<>()).contains(next)) {
-                // System.out.println("\t\tok!! nextR:%d, nextC:%d".formatted(nextR, nextC));
-                if (topdown(grid, nextR, nextC)) return true;
-            }
-        }
-
-        return false;
-    }
-
-    int[][] dirs = {
-        {0, 1},
-        {0, -1},
-        {1, 0},
-        {-1, 0}
-    };
-
-    List<Map<Integer, Set<Integer>>> nextMoves = List.of(
-        Map.of(1, Set.of(1, 3, 5), 4, Set.of(1, 3, 5), 6, Set.of(1, 3, 5)),
-        Map.of(1, Set.of(1, 4, 6), 3, Set.of(1, 4, 6), 5, Set.of(1, 4, 6)),
-        Map.of(2, Set.of(2, 5, 6), 3, Set.of(2, 5, 6), 4, Set.of(2, 5, 6)),
-        Map.of(2, Set.of(2, 3, 4), 5, Set.of(2, 3, 4), 6, Set.of(2, 3, 4))
-    );
-
-    public boolean mySol_miss(int[][] grid) {
-        int n = grid.length;
-        int m = grid[0].length;
-        int max = m * n;
-
-        Map<Integer, List<Integer>> graph = new HashMap();
-
-        for (int i = 0; i < n; i++) {
-            for (int j = 0; j < m; j++) {
-                int index = i * m + j;
-
-                switch (grid[i][j]) {
-                    case 1 : add(graph, index, index - 1, index + 1, max); break;
-                    case 2 : add(graph, index, index - m, index + m, max); break;
-                    case 3 : add(graph, index, index - 1, index + m, max); break;
-                    case 4 : add(graph, index, index + 1, index + m, max); break;
-                    case 5 : add(graph, index, index - 1, index - m, max); break;
-                    case 6 : add(graph, index, index + 1, index - m, max); break;
+                if (j > 0 && canJoinLeft(grid[i][j], grid[i][j - 1])) {
+                    uf.merge(i * n + j, i * n + j - 1);
                 }
             }
         }
 
-        System.out.println(graph);
-
-        return dfs(graph, 0, max - 1, new HashSet());
+        return uf.find(0) == uf.find(m * n - 1);
     }
 
-    private void add(Map<Integer, List<Integer>> graph, int index, int next1, int next2, int max) {
-        if (!graph.containsKey(index)) {
-            graph.put(index, new ArrayList());
-        }
-
-        if (next1 >= 0 && next1 < max) {
-            graph.get(index).add(next1);
-        }
-
-        if (next2 >= 0 && next2 < max) {
-            graph.get(index).add(next2);
+    private boolean canJoinTop(int current, int prev) {
+        if (current == 1) {
+            return false;
+        } else if (current == 2) {
+            return prev == 2 || prev == 3 || prev == 4;
+        } else if (current == 3) {
+            return false;
+        } else if (current == 4) {
+            return false;
+        } else if (current == 5) {
+            return prev == 2 || prev == 3 || prev == 4;
+        } else {
+            return prev == 2 || prev == 3 || prev == 4;
         }
     }
 
-    public boolean dfs(Map<Integer, List<Integer>> graph, int node, int dest, Set<Integer> visited) {
-        if (node == dest) return true;
+    private boolean canJoinLeft(int current, int prev) {
+        if (current == 1) {
+            return prev == 1 || prev == 4 || prev == 6;
+        } else if (current == 2) {
+            return false;
+        } else if (current == 3) {
+            return prev == 1 || prev == 4 || prev == 6;
+        } else if (current == 4) {
+            return false;
+        } else if (current == 5) {
+            return prev == 1 || prev == 4 || prev == 6;
+        } else {
+            return false;
+        }
+    }
 
-        if (!visited.add(node)) return false;
+    class UnionFind {
+        private int[] parents;
+        private int[] ranks;
 
-        for (int next : graph.getOrDefault(node, new ArrayList<>())) {
-            if (dfs(graph, next, dest, visited)) return true;
+        public UnionFind(int n) {
+            parents = new int[n];
+            ranks = new int[n];
+
+            for (int i = 0; i < n; i++) {
+                parents[i] = i;
+                ranks[i] = 0;
+            }
         }
 
-        return false;
+        private int find(int a) {
+            if (parents[a] != a) {
+                parents[a] = find(parents[a]);
+            }
+
+            return parents[a];
+        }
+
+        private void merge(int a, int b) {
+            a = find(a);
+            b = find(b);
+
+            if (a == b) return;
+
+            if (ranks[a] > ranks[b]) {
+                parents[b] = a;
+            } else if (ranks[a] < ranks[b]) {
+                parents[a] = b;
+            } else {
+                parents[b] = a;
+                ranks[a]++;
+            }
+        }
     }
 }
