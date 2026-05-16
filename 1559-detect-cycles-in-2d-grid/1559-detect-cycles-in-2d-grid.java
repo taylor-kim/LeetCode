@@ -1,6 +1,82 @@
 class Solution {
     public boolean containsCycle(char[][] grid) {
-        return mySol(grid);
+        return try_uf(grid);
+    }
+
+    public boolean try_uf(char[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+
+        List<UnionFind> ufs = new ArrayList();
+
+        for (int i = 0; i < 26; i++) {
+            ufs.add(new UnionFind(m * n));
+        }
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                UnionFind uf = ufs.get(grid[i][j] - 'a');
+
+                int current = i * n + j;
+                int parentOfTop = -1;
+                int parentOfLeft = -2;
+
+                if (i > 0 && grid[i - 1][j] == grid[i][j]) {
+                    int top = (i - 1) * n + j;
+                    parentOfTop = uf.find(top);
+                    uf.merge(top, current);
+                }
+
+                if (j > 0 && grid[i][j - 1] == grid[i][j]) {
+                    int left = i * n + j - 1;
+                    parentOfLeft = uf.find(left);
+                    uf.merge(left, current);
+                }
+
+                if (parentOfTop == parentOfLeft) return true;
+            }
+        }
+
+        return false;
+    }
+
+    class UnionFind {
+        private int[] parents;
+        private int[] ranks;
+
+        public UnionFind(int n) {
+            parents = new int[n];
+            ranks = new int[n];
+
+            for (int i = 0; i < n; i++) {
+                parents[i] = i;
+                ranks[i] = 0;
+            }
+        }
+
+        private int find(int a) {
+            if (parents[a] != a) {
+                parents[a] = find(parents[a]);
+            }
+
+            return parents[a];
+        }
+
+        private void merge(int a, int b) {
+            a = find(a);
+            b = find(b);
+
+            if (a == b) return;
+
+            if (ranks[a] > ranks[b]) {
+                parents[b] = a;
+            } else if (ranks[a] < ranks[b]) {
+                parents[a] = b;
+            } else {
+                parents[b] = a;
+                ranks[a]++;
+            }
+        }
     }
 
     public boolean mySol(char[][] grid) {
