@@ -1,6 +1,6 @@
 class Solution {
     public int findMin(int[] nums) {
-        return others_better(nums);
+        return editorial(nums);
     }
 
     public int editorial(int[] nums) {
