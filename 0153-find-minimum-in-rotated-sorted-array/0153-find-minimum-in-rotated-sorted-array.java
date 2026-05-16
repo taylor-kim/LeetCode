@@ -1,44 +1,13 @@
 class Solution {
     public int findMin(int[] nums) {
-        return mySol(nums);
-    }
-
-    public int mySol(int[] nums) {
-        int n = nums.length;
-        int lo = 0;
-        int hi = n - 1;
-
-        // 5,6,7,1,2,3,4
-
-        while (lo < hi) {
-            int mid = lo + (hi - lo) / 2;
-
-            if (nums[lo] < nums[hi]) {
-                // nums[lo] < nums[hi]
-                hi = mid - 1;
-            } else {
-                if (nums[mid] < nums[hi]) {
-                    hi = mid;
-                } else {
-                    lo = mid + 1;
-                }
-            }
+        int low = 0, high = nums.length - 1;
+        while(low < high) {
+            int mid = (low + high) / 2;
+            if(nums[mid] > nums[high])
+                low = mid + 1;
+            else
+                high = mid;
         }
-
-        // while (lo < hi) {
-        //     int mid = lo + (hi - lo) / 2;
-
-        //     if (nums[lo] < nums[mid] && nums[mid] < nums[hi]) {
-        //         hi = mid - 1;
-        //     } else {
-        //         if (nums[mid] > nums[hi]) {
-        //             lo = mid + 1;
-        //         } else {
-        //             hi = mid;
-        //         }
-        //     }
-        // }
-
-        return nums[lo];
+        return nums[low];
     }
 }
