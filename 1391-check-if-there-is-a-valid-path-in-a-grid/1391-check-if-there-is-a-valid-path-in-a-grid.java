@@ -1,9 +1,9 @@
 class Solution {
     public boolean hasValidPath(int[][] grid) {
-        return try_again(grid);
+        return try_uf(grid);
     }
     
-    public boolean try_again(int[][] grid) {
+    public boolean try_uf(int[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
 
