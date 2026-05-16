@@ -1,6 +1,6 @@
 class Solution {
     public int findMin(int[] nums) {
-        return editorial(nums);
+        return others_better(nums);
     }
 
     public int editorial(int[] nums) {
@@ -30,7 +30,8 @@ class Solution {
 
         while (lo < hi) {
             while (lo < hi && nums[lo] == nums[hi]) {
-                lo++;
+                // lo++;
+                hi--;
             }
 
             int mid = lo + (hi - lo) / 2;
