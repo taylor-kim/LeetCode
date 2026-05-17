@@ -1,22 +1,32 @@
 class Solution {
     public int findDuplicate(int[] nums) {
+        return try_20260517(nums);
+    }
+    
+    public int try_20260517(int[] nums) {
         int n = nums.length;
-        int l = 1, r = n - 1, ans = -1;
-        while (l <= r) {
-            int mid = (l + r) >> 1;
-            int cnt = 0;
-            for (int i = 0; i < n; ++i) {
+
+        int lo = 1;
+        int hi = n - 1;
+
+        while (lo < hi) {
+            int mid = lo + (hi - lo) / 2;
+
+            int count = 0;
+
+            for (int i = 0; i < n; i++) {
                 if (nums[i] <= mid) {
-                    cnt++;
+                    count++;
                 }
             }
-            if (cnt <= mid) {
-                l = mid + 1;
+
+            if (count <= mid) {
+                lo = mid + 1;
             } else {
-                r = mid - 1;
-                ans = mid;
+                hi = mid;
             }
         }
-        return ans;
+
+        return lo;
     }
 }
