@@ -12,7 +12,7 @@ class Solution {
 
         if (arr[index] == 0) return true;
 
-        if (memo[index] != null) return memo[index];
+        // if (memo[index] != null) return memo[index];
 
         if (!visit.add(index)) return false;
 
