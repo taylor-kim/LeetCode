@@ -1,6 +1,24 @@
 class Solution {
     public int[] findThePrefixCommonArray(int[] A, int[] B) {
-        return official_freq(A, B);
+        return try_20260520(A, B);
+    }
+
+    public int[] try_20260520(int[] A, int[] B) {
+        int n = A.length;
+        int[] ans = new int[n];
+
+        Set<Integer> set = new HashSet();
+        int same = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (!set.add(A[i])) same++;
+
+            if (!set.add(B[i])) same++;
+
+            ans[i] = same;
+        }
+
+        return ans;
     }
 
     public int[] official_freq(int[] a, int[] b) {
