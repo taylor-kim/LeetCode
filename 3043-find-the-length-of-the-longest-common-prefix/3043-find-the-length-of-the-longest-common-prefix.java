@@ -41,7 +41,7 @@ class Solution {
 
             int length = 0;
 
-            for (Trie t = this; t != null && length < s.length() ; length++) {
+            for (Trie t = this; length < s.length(); length++) {
                 char c = s.charAt(length);
 
                 if (t.arr[c - '0'] == null) {
