@@ -4,46 +4,56 @@ class Solution {
     }
 
     public int mySol(int[] arr1, int[] arr2) {
+        if (arr1.length > arr2.length) return mySol(arr2, arr1);
+
         Trie root = new Trie();
 
-        for (int num : arr1) root.build(num);
+        for (int num : arr1) {
+            root.add(num);
+        }
 
         int ans = 0;
 
-        for (int num : arr2) ans = Math.max(ans, root.find(num));
+        for (int num : arr2) {
+            ans = Math.max(ans, root.find(num));
+        }
 
         return ans;
     }
 
-    private class Trie {
-        private Trie[] children = new Trie[10];
-        
-        private void build(int num) {
+    class Trie {
+        private Trie[] arr = new Trie[10];
+
+        public void add(int n) {
+            String s = String.valueOf(n);
+
             Trie t = this;
 
-            char[] arr = String.valueOf(num).toCharArray();
-
-            for (char c : arr) {
-                if (t.children[c - '0'] == null) {
-                    t.children[c - '0'] = new Trie();
+            for (char c : s.toCharArray()) {
+                if (t.arr[c - '0'] == null) {
+                    t.arr[c - '0'] = new Trie();
                 }
 
-                t = t.children[c - '0'];
+                t = t.arr[c - '0'];
             }
         }
 
-        private int find(int num) {
-            Trie t = this;
-            char[] arr = String.valueOf(num).toCharArray();
+        public int find(int n) {
+            String s = String.valueOf(n);
 
-            for (int i = 0; i < arr.length; i++) {
-                char c = arr[i];
-                if (t.children[c - '0'] == null) return i;
+            int length = 0;
 
-                t = t.children[c - '0'];
+            for (Trie t = this; t != null && length < s.length() ; length++) {
+                char c = s.charAt(length);
+
+                if (t.arr[c - '0'] == null) {
+                    return length;
+                }
+
+                t = t.arr[c - '0'];
             }
 
-            return arr.length;
+            return length;
         }
     }
 }
