@@ -1,6 +1,25 @@
 class Solution {
     public boolean check(int[] nums) {
-        return official_linear(nums);
+        return try_20260523(nums);
+    }
+
+    public boolean try_20260523(int[] nums) {
+        int n = nums.length;
+
+        int rotated = 0;
+        int first = nums[0];
+
+        for (int i = 1; i < n; i++) {
+            if (nums[i - 1] > nums[i]) {
+                if (++rotated > 1) return false;
+            }
+
+            if (rotated == 1) {
+                if (first < nums[i]) return false;
+            }
+        }
+
+        return true;
     }
 
     public boolean official_linear(int[] nums) {
