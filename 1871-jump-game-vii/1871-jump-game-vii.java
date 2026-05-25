@@ -1,6 +1,40 @@
 class Solution {
     public boolean canReach(String s, int minJump, int maxJump) {
-        return editorial(s, minJump, maxJump);
+        return others_bfs(s, minJump, maxJump);
+    }
+
+    public boolean others_bfs(String s, int minJump, int maxJump) {
+        int n = s.length();
+
+        if (s.charAt(n - 1) == '1') return false;
+
+        Queue<Integer> queue = new LinkedList();
+        queue.add(0);
+
+        Set<Integer> visit = new HashSet();
+        visit.add(0);
+        int farthest = 0;
+
+        while (!queue.isEmpty()) {
+            int index = queue.poll();
+
+            int left = Math.max(index + minJump, farthest);
+            int right = Math.min(index + maxJump, n - 1);
+
+            farthest = right;
+
+            for (int next = left; next <= right; next++) {
+                if (s.charAt(next) == '1') continue;
+
+                if (next == n - 1) return true;
+
+                if (visit.add(next)) {
+                    queue.add(next);
+                }
+            }
+        }
+
+        return false;
     }
 
     public boolean editorial(String s, int minJump, int maxJump) {
