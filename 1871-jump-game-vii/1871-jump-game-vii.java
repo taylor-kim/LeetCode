@@ -1,6 +1,6 @@
 class Solution {
     public boolean canReach(String s, int minJump, int maxJump) {
-        return editorial(s, minJump, maxJump);
+        return after_sol_fail(s, minJump, maxJump);
     }
 
     public boolean editorial(String s, int minJump, int maxJump) {
@@ -34,8 +34,13 @@ class Solution {
         int[] pSum = new int[n + 1];
         boolean[] dp = new boolean[n];
         dp[0] = true;
+        pSum[1] = 1;
 
-        for (int i = 0; i < n; i++) {
+        for (int i = 1; i <= minJump; i++) {
+            pSum[i] = 1;
+        }
+
+        for (int i = minJump; i < n; i++) {
             pSum[i + 1] = pSum[i] + (s.charAt(i) == '0' ? 1 : 0);
         }
 
