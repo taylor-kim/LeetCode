@@ -1,6 +1,6 @@
 class Solution {
     public boolean canReach(String s, int minJump, int maxJump) {
-        return after_sol_fail(s, minJump, maxJump);
+        return editorial(s, minJump, maxJump);
     }
 
     public boolean editorial(String s, int minJump, int maxJump) {
