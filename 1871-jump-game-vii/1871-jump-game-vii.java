@@ -10,7 +10,8 @@ class Solution {
         dp[0] = 1;
 
         for (int i = 0; i < minJump; i++) {
-            pSum[i] = 1;
+            // pSum[i] = 1;
+            pSum[i] = (i == 0 ? 0 : pSum[i - 1]) + dp[i];
         }
 
         for (int i = minJump; i < n; i++) {
@@ -18,9 +19,9 @@ class Solution {
             int right = i - minJump;
 
             if (s.charAt(i) == '0') {
-                int zeros = pSum[right] - (left <= 0 ? 0 : pSum[left - 1]);
+                int reachableCount = pSum[right] - (left <= 0 ? 0 : pSum[left - 1]);
 
-                dp[i] = zeros > 0 ? 1 : 0;
+                dp[i] = reachableCount > 0 ? 1 : 0;
             }
 
             pSum[i] = pSum[i - 1] + dp[i];
