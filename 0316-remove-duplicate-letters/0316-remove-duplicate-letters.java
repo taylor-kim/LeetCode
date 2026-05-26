@@ -1,71 +1,28 @@
 class Solution {
     public String removeDuplicateLetters(String s) {
-        return tryAgain_20240929_faster(s);
-    }
-
-    public String tryAgain_20240929_faster(String s) {
-        int[] last = new int[26];
-        boolean[] seen = new boolean[26];
-        Stack<Integer> stack = new Stack();
-
+        boolean[] vis = new boolean[26];
+        int[] num = new int[26];
         for (int i = 0; i < s.length(); i++) {
-            last[s.charAt(i) - 'a'] = i;
+            num[s.charAt(i) - 'a']++;
         }
 
+        StringBuffer sb = new StringBuffer();
         for (int i = 0; i < s.length(); i++) {
-            int val = s.charAt(i) - 'a';
-
-            if (seen[val]) continue;
-
-            while (!stack.isEmpty() && stack.peek() > val && last[stack.peek()] > i) {
-                seen[stack.pop()] = false;
+            char ch = s.charAt(i);
+            if (!vis[ch - 'a']) {
+                while (sb.length() > 0 && sb.charAt(sb.length() - 1) > ch) {
+                    if (num[sb.charAt(sb.length() - 1) - 'a'] > 0) {
+                        vis[sb.charAt(sb.length() - 1) - 'a'] = false;
+                        sb.deleteCharAt(sb.length() - 1);
+                    } else {
+                        break;
+                    }
+                }
+                vis[ch - 'a'] = true;
+                sb.append(ch);
             }
-
-            stack.push(val);
-            seen[val] = true;
+            num[ch - 'a'] -= 1;
         }
-
-        StringBuilder sb = new StringBuilder();
-
-        while (!stack.isEmpty()) {
-            sb.append((char)(stack.pop() + 'a'));
-        }
-
-        return sb.reverse().toString();
-    }
-
-    public String tryAgain_20240929(String s) {
-        int[] last = new int[26];
-
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            last[c - 'a'] = i;
-        }
-
-        Set<Character> set = new HashSet();
-
-        Stack<Integer> stack = new Stack();
-
-        for (int i = 0; i < s.length(); i++) {
-            while (!stack.isEmpty() 
-                && s.charAt(stack.peek()) >= s.charAt(i) 
-                && last[s.charAt(stack.peek()) - 'a'] > i
-                && !set.contains(s.charAt(i))) {
-                    // System.out.println(String.format("pop:%c", s.charAt(stack.peek())));
-                    set.remove(s.charAt(stack.pop()));
-            }
-
-            if (set.add(s.charAt(i))) {
-                stack.push(i);
-            }
-        }
-
-        StringBuilder sb = new StringBuilder();
-
-        while (!stack.isEmpty()) {
-            sb.append(s.charAt(stack.pop()));
-        }
-
-        return sb.reverse().toString();
+        return sb.toString();
     }
 }
