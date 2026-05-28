@@ -1,6 +1,74 @@
 class Solution {
     public int[] stringIndices(String[] wordsContainer, String[] wordsQuery) {
-        return mySol(wordsContainer, wordsQuery);
+        return editorial(wordsContainer, wordsQuery);
+    }
+
+    public int[] editorial(String[] wordsContainer, String[] wordsQuery) {
+        int n = wordsContainer.length;
+
+        Trie2 root = new Trie2();
+
+        for (int i = 0; i < n; i++) {
+            String s = wordsContainer[i];
+            String reversed = new StringBuilder(s).reverse().toString();
+
+            root.build(reversed, i);
+        }
+
+        int[] ans = new int[wordsQuery.length];
+
+        for (int i = 0; i < wordsQuery.length; i++) {
+            String q = wordsQuery[i];
+            String reversed = new StringBuilder(q).reverse().toString();
+
+            ans[i] = root.find(reversed);
+        }
+
+        return ans;
+    }
+
+    class Trie2 {
+        Trie2[] children = new Trie2[26];
+        private int length = Integer.MAX_VALUE;
+        private int index = Integer.MAX_VALUE;
+
+        private void build(String s, int index) {
+            Trie2 t = this;
+
+            int length = s.length();
+
+            if (t.length > length) {
+                t.length = length;
+                t.index = index;
+            }
+
+            for (char c : s.toCharArray()) {
+                if (t.children[c - 'a'] == null) {
+                    t.children[c - 'a'] = new Trie2();
+                }
+
+                t = t.children[c - 'a'];
+
+                if (t.length > length) {
+                    t.length = length;
+                    t.index = index;
+                }
+            }
+        }
+
+        private int find(String s) {
+            Trie2 t = this;
+
+            for (char c : s.toCharArray()) {
+                if (t.children[c - 'a'] == null) {
+                    break;
+                }
+
+                t = t.children[c - 'a'];
+            }
+
+            return t.index == Integer.MAX_VALUE ? -1 : t.index;
+        }
     }
 
     public int[] mySol(String[] wordsContainer, String[] wordsQuery) {
