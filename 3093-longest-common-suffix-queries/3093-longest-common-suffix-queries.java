@@ -15,7 +15,7 @@ class Solution {
             }
         }
 
-        System.out.println("index:%d".formatted(index));
+        // System.out.println("index:%d".formatted(index));
 
         Trie root = new Trie();
 
