@@ -1,5 +1,9 @@
 class Solution {
     public int minElement(int[] nums) {
+        return mySol(nums);
+    }
+
+    public int mySol(int[] nums) {
         int ans = Integer.MAX_VALUE;
 
         for (int num : nums) {
