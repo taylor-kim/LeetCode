@@ -8,7 +8,7 @@ class Solution {
         List<Boolean> ans = new ArrayList();
         TreeSet<Integer> obstacles = new TreeSet<>();
         obstacles.add(0);
-        obstacles.add(max);
+        obstacles.add(max + 1);
 
         OthersSeg seg = new OthersSeg((max + 1) * 4);
         seg.update(1, 0, max, max, max);
@@ -18,8 +18,8 @@ class Solution {
             int x = query[1];
 
             if (type == 1) {
-                int prev = obstacles.floor(x);
-                int next = obstacles.ceiling(x);
+                int prev = obstacles.lower(x);
+                int next = obstacles.higher(x);
                 obstacles.add(x);
 
                 seg.update(1, 0, max, x, x - prev);
