@@ -1,9 +1,24 @@
 class Solution {
     public int earliestFinishTime(int[] landStartTime, int[] landDuration, int[] waterStartTime, int[] waterDuration) {
         return Math.min(
-            mySol(landStartTime, landDuration, waterStartTime, waterDuration),
-            mySol(waterStartTime, waterDuration, landStartTime, landDuration)
+            official(landStartTime, landDuration, waterStartTime, waterDuration),
+            official(waterStartTime, waterDuration, landStartTime, landDuration)
         );
+    }
+
+    public int official(int[] lst, int[] ld, int[] wst, int[] wd) {
+        int ans = Integer.MAX_VALUE;
+        int endTime = Integer.MAX_VALUE;
+
+        for (int i = 0; i < lst.length; i++) {
+            endTime = Math.min(endTime, lst[i] + ld[i]);
+        }
+
+        for (int j = 0; j < wst.length; j++) {
+            ans = Math.min(ans, Math.max(endTime, wst[j]) + wd[j]);
+        }
+
+        return ans;
     }
 
     public int mySol(int[] lst, int[] ld, int[] wst, int[] wd) {
