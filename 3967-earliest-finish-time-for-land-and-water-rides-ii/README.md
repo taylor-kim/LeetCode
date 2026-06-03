@@ -1,0 +1,1 @@
+<h2><a href="https://leetcode.cn/problems/earliest-finish-time-for-land-and-water-rides-ii/solutions/?envType=daily-question&envId=2026-06-03">3967. undefined</a></h2><h3>undefined</h3><hr>undefined
