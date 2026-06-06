@@ -1,28 +1,31 @@
 class Solution {
     public int[] intersection(int[] nums1, int[] nums2) {
-        return mySol(nums1, nums2);
+        Set<Integer> set1 = new HashSet<Integer>();
+        Set<Integer> set2 = new HashSet<Integer>();
+        for (int num : nums1) {
+            set1.add(num);
+        }
+        for (int num : nums2) {
+            set2.add(num);
+        }
+        return getIntersection(set1, set2);
     }
 
-    public int[] mySol(int[] nums1, int[] nums2) {
-        List<Integer> list = new ArrayList();
-        Set<Integer> set = new HashSet();
-
-        for (int num : nums1) {
-            set.add(num);
+    public int[] getIntersection(Set<Integer> set1, Set<Integer> set2) {
+        if (set1.size() > set2.size()) {
+            return getIntersection(set2, set1);
         }
-
-        for (int num : nums2) {
-            if (set.remove(num)) {
-                list.add(num);
+        Set<Integer> intersectionSet = new HashSet<Integer>();
+        for (int num : set1) {
+            if (set2.contains(num)) {
+                intersectionSet.add(num);
             }
         }
-
-        int[] ans = new int[list.size()];
-
-        for (int i = 0; i < ans.length; i++) {
-            ans[i] = list.get(i);
+        int[] intersection = new int[intersectionSet.size()];
+        int index = 0;
+        for (int num : intersectionSet) {
+            intersection[index++] = num;
         }
-
-        return ans;
+        return intersection;
     }
 }
