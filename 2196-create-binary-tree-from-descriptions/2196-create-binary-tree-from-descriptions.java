@@ -15,7 +15,33 @@
  */
 class Solution {
     public TreeNode createBinaryTree(int[][] descriptions) {
-        return mySol(descriptions);
+        return try_20260607(descriptions);
+    }
+
+    public TreeNode try_20260607(int[][] descriptions) {
+        Map<Integer, TreeNode> nodes = new HashMap();
+        Map<Integer, Integer> indegrees = new HashMap();
+
+        for (int[] desc : descriptions) {
+            TreeNode p = nodes.computeIfAbsent(desc[0], k -> new TreeNode(k));
+            TreeNode c = nodes.computeIfAbsent(desc[1], k -> new TreeNode(k));
+
+            if (desc[2] == 1) {
+                p.left = c;
+            } else {
+                p.right = c;
+            }
+
+            indegrees.put(c.val, 1);
+        }
+
+        for (int key : nodes.keySet()) {
+            if (indegrees.get(key) == null) {
+                return nodes.get(key);
+            }
+        }
+
+        return null;
     }
 
     public TreeNode mySol2(int[][] descriptions) {
