@@ -5,20 +5,20 @@ class Solution {
 
     public int[] try_20260608(int[] nums, int pivot) {
         int n = nums.length;
-        int lo = 0;
         int[] ans = new int[n];
+
+        int lo = 0;
+        int hi = n - 1;
 
         for (int i = 0; i < n; i++) {
             if (nums[i] < pivot) {
                 ans[lo++] = nums[i];
             }
-        }
 
-        int hi = n - 1;
+            int j = n - 1 - i;
 
-        for (int i = n - 1; i >= 0; i--) {
-            if (nums[i] > pivot) {
-                ans[hi--] = nums[i];
+            if (nums[j] > pivot) {
+                ans[hi--] = nums[j];
             }
         }
 
