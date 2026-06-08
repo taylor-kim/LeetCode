@@ -1,6 +1,32 @@
 class Solution {
     public int[] pivotArray(int[] nums, int pivot) {
-        return official_two_pointers(nums, pivot);
+        return try_20260608(nums, pivot);
+    }
+
+    public int[] try_20260608(int[] nums, int pivot) {
+        int n = nums.length;
+        int lo = 0;
+        int[] ans = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            if (nums[i] < pivot) {
+                ans[lo++] = nums[i];
+            }
+        }
+
+        int hi = n - 1;
+
+        for (int i = n - 1; i >= 0; i--) {
+            if (nums[i] > pivot) {
+                ans[hi--] = nums[i];
+            }
+        }
+
+        for (int i = lo; i <= hi; i++) {
+            ans[i] = pivot;
+        }
+
+        return ans;
     }
 
     public int[] official_two_pointers(int[] nums, int pivot) {
