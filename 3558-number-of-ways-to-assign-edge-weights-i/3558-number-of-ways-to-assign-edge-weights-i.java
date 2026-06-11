@@ -8,7 +8,28 @@ class Solution {
 
         int max = getMax(graph, 1, 0);
 
-        return topdown2(max);
+        // return topdown2(max);
+        // return (int)(Math.pow(2, max - 1) % mod);
+        
+        return qpow(2, max - 1);
+    }
+
+    private int qpow(int x, int y) {
+        long res = 1;
+        long base = x;
+        int mod = (int)1e9 + 7;
+
+        while (y > 0) {
+            if ((y & 1) == 1) {
+                res = (res * base) % mod;
+            }
+
+            base = (base * base) % mod;
+
+            y >>= 1;
+        }
+
+        return (int)res;
     }
 
     private int topdown2(int depth) {
