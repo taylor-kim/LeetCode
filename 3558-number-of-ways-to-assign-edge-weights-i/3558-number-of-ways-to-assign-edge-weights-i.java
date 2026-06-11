@@ -8,7 +8,17 @@ class Solution {
 
         int max = getMax(graph, 1, 0);
 
-        return topdown(max)[0];
+        return topdown2(max);
+    }
+
+    private int topdown2(int depth) {
+        if (depth == 1) return 1;
+
+        int ret = topdown2(depth - 1);
+
+        int mod = (int)1e9 + 7;
+
+        return (ret + ret) % mod;
     }
 
     private int[] topdown(int depth) {
