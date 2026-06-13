@@ -15,34 +15,34 @@
  */
 class Solution {
     public TreeNode lcaDeepestLeaves(TreeNode root) {
-        Result result = mySol(null, root, 0);
-
-        return result.ans;
+        return try_20260613(root);
     }
 
-    public Result mySol(TreeNode parent, TreeNode root, int depth) {
-        if (root == null) {
-            return new Result(parent, depth - 1);
-        }
+    public TreeNode try_20260613(TreeNode root) {
+        return search(root, root, 0).node;
+    }
 
-        Result left = mySol(root, root.left, depth + 1);
-        Result right = mySol(root, root.right, depth + 1);
+    public TreeWithDepth search(TreeNode parent, TreeNode node, int depth) {
+        if (node == null) return new TreeWithDepth(parent, depth);
 
-        if (left.depth == right.depth) {
-            return new Result(root, left.depth);
-        } else if (left.depth > right.depth) {
+        TreeWithDepth left = search(node, node.left, depth + 1);
+        TreeWithDepth right = search(node, node.right, depth + 1);
+
+        if (left.depth > right.depth) {
             return left;
-        } else {
+        } else if (left.depth < right.depth) {
             return right;
+        } else {
+            return new TreeWithDepth(node, left.depth);
         }
     }
 
-    class Result {
-        TreeNode ans;
+    public class TreeWithDepth {
+        TreeNode node;
         int depth;
 
-        Result(TreeNode ans, int depth) {
-            this.ans = ans;
+        public TreeWithDepth(TreeNode node, int depth) {
+            this.node = node;
             this.depth = depth;
         }
     }
