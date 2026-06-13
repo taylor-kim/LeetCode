@@ -23,7 +23,7 @@ class Solution {
     }
 
     public TreeWithDepth search(TreeNode parent, TreeNode node, int depth) {
-        if (node == null) return new TreeWithDepth(parent, depth);
+        if (node == null) return new TreeWithDepth(parent, depth - 1);
 
         TreeWithDepth left = search(node, node.left, depth + 1);
         TreeWithDepth right = search(node, node.right, depth + 1);
