@@ -1,30 +1,31 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        List<TreeNode> path_p = getPath(root, p);
-        List<TreeNode> path_q = getPath(root, q);
-        TreeNode ancestor = null;
-        for (int i = 0; i < path_p.size() && i < path_q.size(); ++i) {
-            if (path_p.get(i) == path_q.get(i)) {
-                ancestor = path_p.get(i);
-            } else {
-                break;
-            }
-        }
-        return ancestor;
+        return try_20260613(root, p, q);
     }
 
-    public List<TreeNode> getPath(TreeNode root, TreeNode target) {
-        List<TreeNode> path = new ArrayList<TreeNode>();
-        TreeNode node = root;
-        while (node != target) {
-            path.add(node);
-            if (target.val < node.val) {
-                node = node.left;
-            } else {
-                node = node.right;
-            }
+    public TreeNode try_20260613(TreeNode root, TreeNode p, TreeNode q) {
+        if (p.val > q.val) {
+            return search(root, root, q, p);
+        } else {
+            return search(root, root, p, q);
         }
-        path.add(node);
-        return path;
+    }
+
+    public TreeNode search(TreeNode parent, TreeNode node, TreeNode p, TreeNode q) {
+        if (q.val < node.val) return try_20260613(node.left, p, q);
+
+        if (node.val < p.val) return try_20260613(node.right, p, q);
+
+        return node;
     }
 }
