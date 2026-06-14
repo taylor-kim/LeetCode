@@ -10,7 +10,34 @@
  */
 class Solution {
     public int pairSum(ListNode head) {
-        return mySol(head);
+        return others(head);
+    }
+
+    public int others(ListNode head) {
+        ListNode node = head;
+        ListNode fast = head;
+
+        ListNode prev = null;
+
+        while (fast != null && fast.next != null) {
+            fast = fast.next.next;
+            
+            ListNode temp = node;
+            node = node.next;
+            temp.next = prev;
+            prev = temp;
+        }
+
+        int max = 0;
+
+        while (node != null) {
+            max = Math.max(max, prev.val + node.val);
+
+            node = node.next;
+            prev = prev.next;
+        }
+
+        return max;
     }
 
     public int mySol(ListNode head) {
