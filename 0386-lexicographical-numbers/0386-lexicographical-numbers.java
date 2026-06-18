@@ -1,46 +1,18 @@
 class Solution {
     public List<Integer> lexicalOrder(int n) {
-        return official_no_extra_space(n);
-    }
-
-    public List<Integer> official_no_extra_space(int n) {
-        List<Integer> ans = new ArrayList();
-
-        int num = 1;
-
+        List<Integer> ret = new ArrayList<Integer>();
+        int number = 1;
         for (int i = 0; i < n; i++) {
-            ans.add(num);
-
-            if (num * 10 <= n) {
-                num *= 10;
+            ret.add(number);
+            if (number * 10 <= n) {
+                number *= 10;
             } else {
-                while (num % 10 == 9 || num >= n) {
-                    num /= 10;
+                while (number % 10 == 9 || number + 1 > n) {
+                    number /= 10;
                 }
-
-                num++;
+                number++;
             }
         }
-
-        return ans;
-    }
-
-    public List<Integer> mySol(int n) {
-        List<Integer> ans = new ArrayList();
-
-        topdown(1, n, ans);
-
-        return ans;
-    }
-
-    private void topdown(int start, int n, List<Integer> ans) {
-        if (start > n) return;
-
-        ans.add(start);
-        topdown(start * 10, n, ans);
-
-        if (start % 10 < 9) {
-            topdown(start + 1, n, ans);
-        }
+        return ret;
     }
 }
