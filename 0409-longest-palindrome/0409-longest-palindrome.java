@@ -1,27 +1,19 @@
 class Solution {
     public int longestPalindrome(String s) {
-        return mySol(s);
-    }
-
-    public int mySol(String s) {
-        int[] freq = new int[128];
-
-        for (char c : s.toCharArray()) {
-            freq[c - 'A']++;
+        int[] count = new int[128];
+        int length = s.length();
+        for (int i = 0; i < length; ++i) {
+            char c = s.charAt(i);
+            count[c]++;
         }
 
         int ans = 0;
-        boolean odd = false;
-
-        for (int f : freq) {
-            if (f % 2 == 0) {
-                ans += f;
-            } else {
-                odd = true;
-                ans += (f - 1) % 2;
+        for (int v: count) {
+            ans += v / 2 * 2;
+            if (v % 2 == 1 && ans % 2 == 0) {
+                ans++;
             }
         }
-
-        return ans + (odd ? 1 : 0);
+        return ans;
     }
 }
