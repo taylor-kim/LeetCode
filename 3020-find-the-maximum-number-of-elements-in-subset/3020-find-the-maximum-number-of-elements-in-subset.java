@@ -21,17 +21,13 @@ class Solution {
         for (int x : map.keySet()) {
             int length = 0;
 
-            while (map.containsKey(x) && map.get(x) >= 1) {
-                int count = map.get(x);
-
-                length++;
-
-                if (count == 1) break;
+            while (map.containsKey(x) && map.get(x) > 1) {
+                length += 2;
 
                 x = x * x;
             }
 
-            ans = Math.max(ans, (length - 1) * 2 + 1);
+            ans = Math.max(ans, length + (map.containsKey(x) ? 1 : -1));
         }
 
         return ans;
