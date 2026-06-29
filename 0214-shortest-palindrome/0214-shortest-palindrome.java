@@ -3,6 +3,31 @@ class Solution {
         return mySol_tuned(s);
     }
 
+    public String official_rollinghash(String s) {
+        long hashBase = 29;
+        long mod = (long) 1e9 + 7;
+        long forwardHash = 0;
+        long reverseHash = 0;
+        long power = 1;
+        int endIndex = -1;
+
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+
+            forwardHash = (forwardHash * hashBase + (c - 'a' + 1)) % mod;
+
+            reverseHash = (reverseHash + (c - 'a' + 1) * power) % mod;
+
+            power = (power * hashBase) % mod;
+
+            if (forwardHash == reverseHash) {
+                endIndex = i;
+            }
+        }
+
+        return new StringBuilder(s.substring(endIndex + 1)).reverse().append(s).toString();
+    }
+
     public String official_two_pointer(String s) {
         int n = s.length();
 
@@ -57,6 +82,7 @@ class Solution {
                 // max = Math.max(max, matching);
                 if (begin + matching == rev.length()) {
                     max = matching;
+                    break;
                 }
             } else {
                 if (matching == 0) {
