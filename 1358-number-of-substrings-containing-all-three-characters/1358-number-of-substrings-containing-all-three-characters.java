@@ -1,6 +1,33 @@
 class Solution {
     public int numberOfSubstrings(String s) {
-        return official_track_last_pos(s);
+        return mySol_20260630(s);
+    }
+
+    public int mySol_20260630(String s) {
+        int ans = 0;
+
+        Map<Character, Integer> map = new HashMap();
+
+        int left = 0;
+
+        for (int right = 0; right < s.length(); right++) {
+            char c = s.charAt(right);
+            map.put(c, map.getOrDefault(c, 0) + 1);
+
+            while (map.size() == 3) {
+                ans += s.length() - right;
+
+                char r = s.charAt(left++);
+
+                map.put(r, map.get(r) - 1);
+
+                if (map.get(r) == 0) {
+                    map.remove(r);
+                }
+            }
+        }
+
+        return ans;
     }
 
     public int official_track_last_pos(String s) {
