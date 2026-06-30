@@ -1,6 +1,6 @@
 class Solution {
     public int numberOfSubstrings(String s) {
-        return mySol_20260630(s);
+        return mySol(s);
     }
 
     public int mySol_20260630(String s) {
