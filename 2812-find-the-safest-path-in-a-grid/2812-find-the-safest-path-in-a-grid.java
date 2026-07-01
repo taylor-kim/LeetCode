@@ -51,38 +51,33 @@ class Solution {
             return 0;
         }
 
-        int ans = Integer.MAX_VALUE;
-
         Queue<int[]> pq = new PriorityQueue<>((a, b) -> {
-            return grid.get(b[0]).get(b[1]) - grid.get(a[0]).get(a[1]);
+            return b[2] - a[2];
         });
 
-        pq.add(new int[] {0, 0});
+        pq.add(new int[] {0, 0, grid.get(0).get(0)});
         boolean[][] visit = new boolean[n][n];
         visit[0][0] = true;
 
         while (!pq.isEmpty()) {
-            int r = pq.peek()[0];
-            int c = pq.poll()[1];
+            int[] cur = pq.poll();
 
-            ans = Math.min(ans, grid.get(r).get(c));
-
-            if (r == n - 1 && c == n - 1) {
-                return ans;
+            if (cur[0] == n - 1 && cur[1] == n - 1) {
+                return cur[2];
             }
 
             for (int[] d : dirs) {
-                int nr = r + d[0];
-                int nc = c + d[1];
+                int nr = cur[0] + d[0];
+                int nc = cur[1] + d[1];
 
                 if (isValidCell(n, nr, nc) && !visit[nr][nc]) {
                     visit[nr][nc] = true;
-                    pq.add(new int[] {nr, nc});
+                    pq.add(new int[] {nr, nc, Math.min(grid.get(nr).get(nc), cur[2])});
                 }
             }
         }
 
-        return ans;
+        return -1;
     }
 
     public int official_bfs_bs(List<List<Integer>> grid) {
