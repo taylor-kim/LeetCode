@@ -28,9 +28,9 @@ class Solution {
             int x = data[1];
             int cost = costs[y][x];
 
-            if (cost >= health) {
-                return false;
-            }
+            // if (cost >= health) {
+            //     return false;
+            // }
 
             if (y == m - 1 && x == n - 1) return true;
 
