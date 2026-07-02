@@ -16,7 +16,7 @@ class Solution {
         costs[0][0] = grid.get(0).get(0);
 
         Deque<int[]> deque = new ArrayDeque<>();
-        deque.offerFirst(new int[] {costs[0][0], 0, 0});
+        deque.offerFirst(new int[] {0, 0});
 
         int[][] dirs = {
             {0, 1}, {0, -1}, {1, 0}, {-1 , 0}
@@ -24,9 +24,9 @@ class Solution {
 
         while (!deque.isEmpty()) {
             int[] data = deque.pollFirst();
-            int cost = data[0];
-            int y = data[1];
-            int x = data[2];
+            int y = data[0];
+            int x = data[1];
+            int cost = costs[y][x];
 
             if (cost >= health) {
                 return false;
@@ -41,14 +41,14 @@ class Solution {
                 if (ny >= 0 && ny < m && nx >= 0 && nx < n) {
                     int nextCost = cost + grid.get(ny).get(nx);
 
-                    if (costs[ny][nx] <= nextCost) continue;
+                    if (costs[ny][nx] <= nextCost || health <= nextCost) continue;
 
                     costs[ny][nx] = nextCost;
 
                     if (nextCost - cost == 0) {
-                        deque.offerFirst(new int[] {nextCost, ny, nx});
+                        deque.offerFirst(new int[] {ny, nx});
                     } else {
-                        deque.offerLast(new int[] {nextCost, ny, nx});
+                        deque.offerLast(new int[] {ny, nx});
                     }
                 }
             }
