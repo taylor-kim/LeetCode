@@ -1,6 +1,51 @@
 class Solution {
     public int minScore(int n, int[][] roads) {
-        return mySol(n, roads);
+        return othersUf(n, roads);
+    }
+
+    public int othersUf(int n, int[][] roads) {
+        UnionFind uf = new UnionFind(n + 1);
+        
+        for (int[] road : roads) {
+            uf.merge(road[0], road[1]);
+        }
+
+        int ans = Integer.MAX_VALUE;
+
+        for (int[] road : roads) {
+            if (uf.find(road[0]) == uf.find(n)) {
+                ans = Math.min(ans, road[2]);
+            }
+        }
+
+        return ans;
+    }
+
+    public class UnionFind {
+        int[] parents;
+
+        public UnionFind(int n) {
+            parents = new int[n];
+
+            for (int i = 0; i < n; i++) {
+                parents[i] = i;
+            }
+        }
+
+        public int find(int a) {
+            if (parents[a] != a) {
+                parents[a] = find(parents[a]);
+            }
+
+            return parents[a];
+        }
+
+        public void merge(int a, int b) {
+            a = find(a);
+            b = find(b);
+
+            parents[a] = b;
+        }
     }
 
     public int mySol(int n, int[][] roads) {
