@@ -1,6 +1,6 @@
 class Solution {
     public int minScore(int n, int[][] roads) {
-        return othersUf(n, roads);
+        return mySol(n, roads);
     }
 
     public int othersUf(int n, int[][] roads) {
@@ -96,11 +96,8 @@ class Solution {
 
         int ans = Integer.MAX_VALUE;
 
-        // int[] costs = new int[n + 1];
-        // Arrays.fill(costs, Integer.MAX_VALUE);
-
-        Set<Integer> visit = new HashSet();
-        visit.add(1);
+        int[] costs = new int[n + 1];
+        Arrays.fill(costs, Integer.MAX_VALUE);
 
         while (!queue.isEmpty()) {
             int node = queue.poll();
@@ -111,11 +108,9 @@ class Solution {
                 int nextNode = next[0];
                 int nextCost = next[1];
 
-                if (!visit.add(nextNode)) continue;
+                if (costs[nextNode] <= nextCost) continue;
 
-                // if (costs[nextNode] <= nextCost) continue;
-
-                // costs[nextNode] = nextCost;
+                costs[nextNode] = nextCost;
 
                 ans = Math.min(ans, nextCost);
 
