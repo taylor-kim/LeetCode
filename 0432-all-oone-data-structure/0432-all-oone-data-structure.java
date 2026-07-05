@@ -1,135 +1,92 @@
 class AllOne {
-    MyList head;
-    MyList tail;
-    Map<String, MyList> map;
-
-    //test
+    Node root;
+    Map<String, Node> nodes;
 
     public AllOne() {
-        head = new MyList(0);
-        tail = new MyList(0);
-
-        head.next = tail;
-        tail.prev = head;
-
-        map = new HashMap();
+        root = new Node();
+        root.prev = root;
+        root.next = root;  // 初始化链表哨兵，下面判断节点的 next 若为 root，则表示 next 为空（prev 同理）
+        nodes = new HashMap<String, Node>();
     }
     
     public void inc(String key) {
-        if (map.containsKey(key)) {
-            MyList node = map.get(key);
-            int freq = node.freq;
-            node.keys.remove(key);
-
-            MyList nextNode = node.next;
-
-            if (nextNode == tail || nextNode.freq != freq + 1) {
-                MyList newNode = new MyList(freq + 1);
-
-                newNode.prev = node;
-                node.next = newNode;
-                newNode.next = nextNode;
-                nextNode.prev = newNode;
-
-                newNode.keys.add(key);
-                map.put(key, newNode);
+        if (nodes.containsKey(key)) {
+            Node cur = nodes.get(key);
+            Node nxt = cur.next;
+            if (nxt == root || nxt.count > cur.count + 1) {
+                nodes.put(key, cur.insert(new Node(key, cur.count + 1)));
             } else {
-                nextNode.keys.add(key);
-                map.put(key, nextNode);
+                nxt.keys.add(key);
+                nodes.put(key, nxt);
             }
-
-            removeNodeIfNeed(node);
-        } else {
-            MyList node = head.next;
-
-            if (node == tail || node.freq != 1) {
-                MyList newNode = new MyList(1);
-                newNode.keys.add(key);
-
-                newNode.prev = node.prev;
-                node.prev = newNode;
-
-                newNode.prev.next = newNode;
-                newNode.next = node;
-
-                map.put(key, newNode);
+            cur.keys.remove(key);
+            if (cur.keys.isEmpty()) {
+                cur.remove();
+            }
+        } else {  // key 不在链表中
+            if (root.next == root || root.next.count > 1) {
+                nodes.put(key, root.insert(new Node(key, 1)));
             } else {
-                node.keys.add(key);
-                map.put(key, node);
+                root.next.keys.add(key);
+                nodes.put(key, root.next);
             }
         }
     }
     
     public void dec(String key) {
-        if (!map.containsKey(key)) return;
-
-        MyList node = map.get(key);
-        node.keys.remove(key);
-        int freq = node.freq;
-
-        if (freq == 1) {
-            map.remove(key);
+        Node cur = nodes.get(key);
+        if (cur.count == 1) {  // key 仅出现一次，将其移出 nodes
+            nodes.remove(key);
         } else {
-            MyList prevNode = node.prev;
-
-            if (prevNode == head || prevNode.freq != freq - 1) {
-                MyList newNode = new MyList(freq - 1);
-
-                newNode.prev = prevNode;
-                prevNode.next = newNode;
-                newNode.next = node;
-                node.prev = newNode;
-
-                newNode.keys.add(key);
-                map.put(key, newNode);
+            Node pre = cur.prev;
+            if (pre == root || pre.count < cur.count - 1) {
+                nodes.put(key, cur.prev.insert(new Node(key, cur.count - 1)));
             } else {
-                prevNode.keys.add(key);
-                map.put(key, prevNode);
+                pre.keys.add(key);
+                nodes.put(key, pre);
             }
         }
-
-        removeNodeIfNeed(node);
+        cur.keys.remove(key);
+        if (cur.keys.isEmpty()) {
+            cur.remove();
+        }
     }
     
     public String getMaxKey() {
-        if (tail.prev == head) return "";
-
-        return tail.prev.keys.iterator().next();
+        return root.prev != null ? root.prev.keys.iterator().next() : "";
     }
     
     public String getMinKey() {
-        if (head.next == tail) return "";
-
-        return head.next.keys.iterator().next();
-    }
-
-    private void removeNodeIfNeed(MyList node) {
-        if (node.keys.size() == 0) {
-            MyList prev = node.prev;
-            MyList next = node.next;
-
-            prev.next = next;
-            next.prev = prev;
-        }
-    }
-
-    class MyList {
-        int freq = 0;
-        MyList prev;
-        MyList next;
-        Set<String> keys = new HashSet();
-
-        public MyList(int freq) {
-            this.freq = freq;
-        }
+        return root.next != null ? root.next.keys.iterator().next() : "";
     }
 }
 
-/**
- * Your AllOne object will be instantiated and called as such:
- * AllOne obj = new AllOne();
- * obj.inc(key);
- * obj.dec(key);
- * String param_3 = obj.getMaxKey();
- * String param_4 = obj.getMinKey();
- */
+class Node {
+    Node prev;
+    Node next;
+    Set<String> keys;
+    int count;
+
+    public Node() {
+        this("", 0);
+    }
+
+    public Node(String key, int count) {
+        this.count = count;
+        keys = new HashSet<String>();
+        keys.add(key);
+    }
+
+    public Node insert(Node node) {  // 在 this 后插入 node
+        node.prev = this;
+        node.next = this.next;
+        node.prev.next = node;
+        node.next.prev = node;
+        return node;
+    }
+
+    public void remove() {
+        this.prev.next = this.next;
+        this.next.prev = this.prev;
+    }
+}
