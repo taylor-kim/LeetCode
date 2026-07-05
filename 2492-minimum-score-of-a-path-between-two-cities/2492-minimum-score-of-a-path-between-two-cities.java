@@ -49,7 +49,7 @@ class Solution {
     }
 
     public int mySol(int n, int[][] roads) {
-        return dfs(n, roads);
+        return bfs(n, roads);
     }
 
     public int dfs(int n, int[][] roads) {
@@ -96,8 +96,11 @@ class Solution {
 
         int ans = Integer.MAX_VALUE;
 
-        int[] costs = new int[n + 1];
-        Arrays.fill(costs, Integer.MAX_VALUE);
+        // int[] costs = new int[n + 1];
+        // Arrays.fill(costs, Integer.MAX_VALUE);
+
+        Set<Integer> visit = new HashSet();
+        visit.add(1);
 
         while (!queue.isEmpty()) {
             int node = queue.poll();
@@ -108,9 +111,11 @@ class Solution {
                 int nextNode = next[0];
                 int nextCost = next[1];
 
-                if (costs[nextNode] <= nextCost) continue;
+                if (!visit.add(nextNode)) continue;
 
-                costs[nextNode] = nextCost;
+                // if (costs[nextNode] <= nextCost) continue;
+
+                // costs[nextNode] = nextCost;
 
                 ans = Math.min(ans, nextCost);
 
