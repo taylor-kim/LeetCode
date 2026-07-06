@@ -1,9 +1,27 @@
 class Solution {
     public int removeCoveredIntervals(int[][] intervals) {
-        return mySol2(intervals);
+        return others_good(intervals);
     }
 
-    public int mySol2(int[][] intervals) {
+    public int others_good(int[][] intervals) {
+        Arrays.sort(intervals, (a, b) -> {
+            return a[0] != b[0] ? a[0] - b[0] : b[1] - a[1];
+        });
+
+        int ans = 0;
+        int lastEnd = 0;
+
+        for (int[] interval : intervals) {
+            if (lastEnd < interval[1]) {
+                lastEnd = interval[1];
+                ans++;
+            }
+        }
+
+        return ans;
+    }
+
+    public int bf(int[][] intervals) {
         int ans = 0;
         int n = intervals.length;
 
