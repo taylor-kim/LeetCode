@@ -24,7 +24,7 @@ class Solution {
 
             if (digit > 0) {
                 // xSum[i + 1] = (xSum[i] * 10 + digit) % mod;
-                xSum[i + 1] = ((xSum[i] * 10) % mod) + (digit);
+                xSum[i + 1] = (((xSum[i] * 10) % mod) + (digit % mod)) % mod;
                 count[i + 1] = count[i] + 1;
             } else {
                 xSum[i + 1] = xSum[i];
