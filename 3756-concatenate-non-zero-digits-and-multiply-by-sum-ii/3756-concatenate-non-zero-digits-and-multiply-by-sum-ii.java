@@ -4,18 +4,17 @@ class Solution {
     }
 
     public int[] official(String s, int[][] queries) {
-        int maxN = 100001;
         int n = s.length();
         long[] xSum = new long[n + 1];
         int[] pSum = new int[n + 1];
         int[] count = new int[n + 1];
-        long[] pow10 = new long[maxN];
+        long[] pow10 = new long[n + 1];
 
         int mod = (int)1e9 + 7;
 
         pow10[0] = 1;
 
-        for (int i = 1; i < maxN; i++) {
+        for (int i = 1; i < n; i++) {
             pow10[i] = (pow10[i - 1] * 10) % mod;
         }
 
