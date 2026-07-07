@@ -23,7 +23,8 @@ class Solution {
             int digit = c - '0';
 
             if (digit > 0) {
-                xSum[i + 1] = (xSum[i] * 10 + digit) % mod;
+                // xSum[i + 1] = (xSum[i] * 10 + digit) % mod;
+                xSum[i + 1] = ((xSum[i] * 10) % mod) + (digit);
                 count[i + 1] = count[i] + 1;
             } else {
                 xSum[i + 1] = xSum[i];
