@@ -18,16 +18,15 @@ class Solution {
         }
 
         int ans = -1;
-        hi++;
 
-        while (lo < hi) {
+        while (lo <= hi) {
             int mid = lo + (hi - lo) / 2;
 
             if (find(graph, online.length, k, mid)) {
                 ans = mid;
                 lo = mid + 1;
             } else {
-                hi = mid;
+                hi = mid - 1;
             }
         }
 
