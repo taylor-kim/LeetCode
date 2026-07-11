@@ -17,16 +17,6 @@ class Solution {
             }
         }
 
-        for (List<int[]> list : graph.values()) {
-            Collections.sort(list, (a, b) -> {
-                return a[1] - b[1];
-            });
-        }
-
-        // if (!find(graph, online.length, k, lo)) {
-        //     return -1;
-        // }
-
         int ans = -1;
         hi++;
 
@@ -59,7 +49,9 @@ class Solution {
             int node = (int)queue.peek()[0];
             long cost = queue.poll()[1];
 
-            if (node == n - 1 && costs[node] <= k) {
+            if (costs[node] < cost) continue;
+
+            if (node == n - 1) {
                 return true;
             }
 
