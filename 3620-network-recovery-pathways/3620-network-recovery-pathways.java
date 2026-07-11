@@ -1,79 +1,78 @@
 class Solution {
+
     public int findMaxPathScore(int[][] edges, boolean[] online, long k) {
-        return try_20260711(edges, online, k);
-    }
+        int n = online.length;
+        List<List<int[]>> g = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            g.add(new ArrayList<>());
+        }
 
-    public int try_20260711(int[][] edges, boolean[] online, long k) {
-        Map<Integer, List<int[]>> graph = new HashMap();
-        int lo = Integer.MAX_VALUE;
-        int hi = 0;
-
+        int l = Integer.MAX_VALUE;
+        int r = 0;
         for (int[] edge : edges) {
-            if (online[edge[0]] && online[edge[1]]) {
-                graph.computeIfAbsent(edge[0], key -> new ArrayList()).add(new int[] {edge[1], edge[2]});
-
-                lo = Math.min(lo, edge[2]);
-                hi = Math.max(hi, edge[2]);
+            int u = edge[0];
+            int v = edge[1];
+            int w = edge[2];
+            if (!online[u] || !online[v]) {
+                continue;
             }
+            g.get(u).add(new int[] { v, w });
+            l = Math.min(l, w);
+            r = Math.max(r, w);
         }
 
-        for (List<int[]> list : graph.values()) {
-            Collections.sort(list, (a, b) -> {
-                return a[1] - b[1];
-            });
-        }
-
-        if (!find(graph, online.length, k, lo)) {
+        if (!check(g, l, k, n)) {
             return -1;
         }
 
-        int ans = 0;
-
-        while (lo <= hi) {
-            int mid = lo + (hi - lo) / 2;
-
-            if (find(graph, online.length, k, mid)) {
-                ans = mid;
-                lo = mid + 1;
+        while (l <= r) {
+            int mid = (l + r) >> 1;
+            if (check(g, mid, k, n)) {
+                l = mid + 1;
             } else {
-                hi = mid - 1;
+                r = mid - 1;
             }
         }
-
-        return ans;
+        return r;
     }
 
-    private boolean find(Map<Integer, List<int[]>> graph, int n, long k, int min) {
-        long[] costs = new long[n];
+    private boolean check(List<List<int[]>> g, int mid, long k, int n) {
+        long[] dis = new long[n];
+        Arrays.fill(dis, Long.MAX_VALUE);
+        PriorityQueue<long[]> pq = new PriorityQueue<>((a, b) ->
+            Long.compare(a[0], b[0])
+        );
 
-        Arrays.fill(costs, Long.MAX_VALUE);
-        costs[0] = 0;
+        dis[0] = 0;
+        pq.offer(new long[] { 0, 0 });
 
-        Queue<Integer> queue = new PriorityQueue<>((a, b) -> {
-            return Long.compare(costs[a], costs[b]);
-        });
-        queue.add(0);
+        while (!pq.isEmpty()) {
+            long[] top = pq.poll();
+            long d = top[0];
+            int u = (int) top[1];
 
-        while (!queue.isEmpty()) {
-            int node = queue.poll();
-
-            if (node == n - 1 && costs[node] <= k) {
+            if (d > k) {
+                return false;
+            }
+            if (u == n - 1) {
                 return true;
             }
+            if (d > dis[u]) {
+                continue;
+            }
 
-            if (!graph.containsKey(node)) continue;
-
-            for (int[] next : graph.get(node)) {
-                int nextNode = next[0];
-                long nextCost = costs[node] + next[1];
-
-                if (costs[nextNode] > nextCost && k >= nextCost && next[1] >= min) {
-                    costs[nextNode] = nextCost;
-                    queue.add(nextNode);
+            for (int[] edge : g.get(u)) {
+                int v = edge[0];
+                int w = edge[1];
+                if (w < mid) {
+                    continue;
+                }
+                if (dis[v] > dis[u] + w) {
+                    dis[v] = dis[u] + w;
+                    pq.offer(new long[] { dis[v], v });
                 }
             }
         }
-
         return false;
     }
 }
