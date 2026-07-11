@@ -1,6 +1,48 @@
 class Solution {
     public int[] sumAndMultiply(String s, int[][] queries) {
-        return official(s, queries);
+        return try_20260711(s, queries);
+    }
+
+    public int[] try_20260711(String s, int[][] queries) {
+        int n = s.length();
+        int[] pSum = new int[n + 1];
+        long[] xSum = new long[n + 1];
+        int[] lengths = new int[n + 1];
+        int mod = (int)1e9 + 7;
+        long[] pow10 = new long[n + 1];
+        pow10[0] = 1;
+
+        for (int i = 1; i <= n; i++) {
+            pow10[i] = (pow10[i - 1] * 10) % mod;
+        }
+
+        for (int i = 0; i < n; i++) {
+            int digit = s.charAt(i) - '0';
+
+            pSum[i + 1] = (pSum[i] + digit) % mod;
+
+            if (digit > 0) {
+                xSum[i + 1] = (xSum[i] * 10 + digit) % mod;
+                lengths[i + 1] = lengths[i] + 1;
+            } else {
+                xSum[i + 1] = xSum[i];
+                lengths[i + 1] = lengths[i];
+            }
+        }
+
+        int[] ans = new int[queries.length];
+
+        for (int i = 0; i < queries.length; i++) {
+            int l = queries[i][0];
+            int r = queries[i][1];
+
+            int sum = (pSum[r + 1] - pSum[l] + mod) % mod;
+            long x = (xSum[r + 1] - ((xSum[l] * pow10[lengths[r + 1] - lengths[l]]) % mod) + mod) % mod;
+
+            ans[i] = (int)((sum * x) % mod);
+        }
+
+        return ans;
     }
 
     public int[] official(String s, int[][] queries) {
