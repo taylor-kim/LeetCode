@@ -1,9 +1,9 @@
 class Solution {
     public int countCompleteComponents(int n, int[][] edges) {
-        return mySol(n, edges);
+        return mySol_20260711(n, edges);
     }
 
-    public int mySol(int n, int[][] edges) {
+    public int mySol_20260711(int n, int[][] edges) {
         UnionFind uf = new UnionFind(n);
 
         for (int[] edge : edges) {
@@ -12,16 +12,10 @@ class Solution {
 
         int ans = 0;
 
-        Map<Integer, Integer> components = new HashMap();
+        // uf.print();
 
         for (int i = 0; i < n; i++) {
-            components.put(uf.find(i), components.getOrDefault(uf.find(i), 0) + 1);
-        }
-
-        for (int component : components.keySet()) {
-            int expectedEdgeCount = components.get(component) * (components.get(component) - 1) / 2;
-
-            if (uf.edges[component] == expectedEdgeCount) {
+            if (uf.find(i) == i && (uf.counts[i] - 1) * uf.counts[i] / 2 == uf.edges[i]) {
                 ans++;
             }
         }
@@ -32,13 +26,18 @@ class Solution {
     class UnionFind {
         int[] parents;
         int[] edges;
+        int[] counts;
+        int[] ranks;
 
         public UnionFind(int n) {
             parents = new int[n];
             edges = new int[n];
+            counts = new int[n];
+            ranks = new int[n];
 
             for (int i = 0; i < n; i++) {
                 parents[i] = i;
+                counts[i] = 1;
             }
         }
 
@@ -59,18 +58,28 @@ class Solution {
                 return;
             }
 
-            if (a > b) {
-                a += b;
-                b = a - b;
-                a = a - b;
-            }
+            if (ranks[a] > ranks[b]) {
+                parents[b] = a;
+                edges[a] += 1 + edges[b];
+                counts[a] += counts[b];
+            } else {
+                parents[a] = b;
+                edges[b] += 1 + edges[a];
+                counts[b] += counts[a];
 
-            parents[b] = a;
-            edges[a] += edges[b] + 1;
+                if (ranks[a] == ranks[b]) {
+                    ranks[b]++;
+                }
+            }
         }
 
         public void print() {
-            System.out.println(String.format("parents:%s, edges:%s", Arrays.toString(parents), Arrays.toString(edges)));
+            System.out.println("parents:%s, counts:%s, edges:%s, ranks:%s".formatted(
+                Arrays.toString(parents),
+                Arrays.toString(counts),
+                Arrays.toString(edges),
+                Arrays.toString(ranks)
+            ));
         }
     }
 }
