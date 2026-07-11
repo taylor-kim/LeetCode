@@ -5,13 +5,15 @@ class Solution {
 
     public int try_20260711(int[][] edges, boolean[] online, long k) {
         Map<Integer, List<int[]>> graph = new HashMap();
-        int max = 0;
+        int lo = Integer.MAX_VALUE;
+        int hi = 0;
 
         for (int[] edge : edges) {
             if (online[edge[0]] && online[edge[1]]) {
                 graph.computeIfAbsent(edge[0], key -> new ArrayList()).add(new int[] {edge[1], edge[2]});
 
-                max = Math.max(max, edge[2]);
+                lo = Math.min(lo, edge[2]);
+                hi = Math.max(hi, edge[2]);
             }
         }
 
@@ -21,20 +23,24 @@ class Solution {
             });
         }
 
-        int lo = 0;
-        int hi = max + 1;
+        if (!find(graph, online.length, k, lo)) {
+            return -1;
+        }
 
-        while (lo < hi) {
+        int ans = 0;
+
+        while (lo <= hi) {
             int mid = lo + (hi - lo) / 2;
 
             if (find(graph, online.length, k, mid)) {
+                ans = mid;
                 lo = mid + 1;
             } else {
-                hi = mid;
+                hi = mid - 1;
             }
         }
 
-        return lo - 1;
+        return ans;
     }
 
     private boolean find(Map<Integer, List<int[]>> graph, int n, long k, int min) {
