@@ -1,85 +1,55 @@
 class Solution {
+
     public int countCompleteComponents(int n, int[][] edges) {
-        return mySol_20260711(n, edges);
-    }
+        // Adjacency lists for each vertex
+        List<Integer>[] graph = new ArrayList[n];
 
-    public int mySol_20260711(int n, int[][] edges) {
-        UnionFind uf = new UnionFind(n);
+        // Initialize empty adjacency lists
+        for (int vertex = 0; vertex < n; vertex++) {
+            graph[vertex] = new ArrayList<>();
+        }
 
+        // Build adjacency lists from edges
         for (int[] edge : edges) {
-            uf.merge(edge[0], edge[1]);
+            graph[edge[0]].add(edge[1]);
+            graph[edge[1]].add(edge[0]);
         }
 
-        int ans = 0;
+        int completeCount = 0;
+        Set<Integer> visited = new HashSet<>();
 
-        // uf.print();
+        // Process each unvisited vertex
+        for (int vertex = 0; vertex < n; vertex++) {
+            if (visited.contains(vertex)) continue;
 
-        for (int i = 0; i < n; i++) {
-            if (uf.find(i) == i && (uf.counts[i] - 1) * uf.counts[i] / 2 == uf.edges[i]) {
-                ans++;
+            // arr[0] = vertices count, arr[1] = total edges count
+            int[] componentInfo = new int[2];
+            dfs(vertex, graph, visited, componentInfo);
+
+            // Check if component is complete - edges should be vertices * (vertices-1)
+            if (componentInfo[0] * (componentInfo[0] - 1) / 2 == componentInfo[1] / 2) {
+                completeCount++;
             }
         }
-
-        return ans;
+        return completeCount;
     }
 
-    class UnionFind {
-        int[] parents;
-        int[] edges;
-        int[] counts;
-        int[] ranks;
+    private void dfs(
+        int curr,
+        List<Integer>[] graph,
+        Set<Integer> visited,
+        int[] componentInfo
+    ) {
+        visited.add(curr);
+        componentInfo[0]++; // Increment vertex count
+        // componentInfo[1] += graph[curr].size(); // Add edges from current vertex
 
-        public UnionFind(int n) {
-            parents = new int[n];
-            edges = new int[n];
-            counts = new int[n];
-            ranks = new int[n];
-
-            for (int i = 0; i < n; i++) {
-                parents[i] = i;
-                counts[i] = 1;
+        // Explore unvisited neighbors
+        for (int next : graph[curr]) {
+            componentInfo[1]++;
+            if (!visited.contains(next)) {
+                dfs(next, graph, visited, componentInfo);
             }
-        }
-
-        public int find(int a) {
-            if (parents[a] != a) {
-                parents[a] = find(parents[a]);
-            }
-
-            return parents[a];
-        }
-
-        public void merge(int a, int b) {
-            a = find(a);
-            b = find(b);
-
-            if (a == b) {
-                edges[a]++;
-                return;
-            }
-
-            if (ranks[a] > ranks[b]) {
-                parents[b] = a;
-                edges[a] += 1 + edges[b];
-                counts[a] += counts[b];
-            } else {
-                parents[a] = b;
-                edges[b] += 1 + edges[a];
-                counts[b] += counts[a];
-
-                if (ranks[a] == ranks[b]) {
-                    ranks[b]++;
-                }
-            }
-        }
-
-        public void print() {
-            System.out.println("parents:%s, counts:%s, edges:%s, ranks:%s".formatted(
-                Arrays.toString(parents),
-                Arrays.toString(counts),
-                Arrays.toString(edges),
-                Arrays.toString(ranks)
-            ));
         }
     }
 }
