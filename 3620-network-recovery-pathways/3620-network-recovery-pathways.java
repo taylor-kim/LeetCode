@@ -43,16 +43,15 @@ class Solution {
         Arrays.fill(costs, Long.MAX_VALUE);
         costs[0] = 0;
 
-        Queue<long[]> queue = new PriorityQueue<>((a, b) -> {
-            return Long.compare(a[1], b[1]);
+        Queue<Integer> queue = new PriorityQueue<>((a, b) -> {
+            return Long.compare(costs[a], costs[b]);
         });
-        queue.add(new long[] {0, 0});
+        queue.add(0);
 
         while (!queue.isEmpty()) {
-            int node = (int)queue.peek()[0];
-            long cost = queue.poll()[1];
+            int node = queue.poll();
 
-            if (node == n - 1 && cost <= k) {
+            if (node == n - 1 && costs[node] <= k) {
                 return true;
             }
 
@@ -60,11 +59,11 @@ class Solution {
 
             for (int[] next : graph.get(node)) {
                 int nextNode = next[0];
-                long nextCost = cost + next[1];
+                long nextCost = costs[node] + next[1];
 
                 if (costs[nextNode] > nextCost && k >= nextCost && next[1] >= min) {
                     costs[nextNode] = nextCost;
-                    queue.add(new long[] {nextNode, nextCost});
+                    queue.add(nextNode);
                 }
             }
         }
