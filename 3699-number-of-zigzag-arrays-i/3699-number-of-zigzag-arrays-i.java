@@ -10,15 +10,15 @@ class Solution {
         int[] pSumDesc = new int[r + 3];
 
         for (int i = l; i <= r; i++) {
-            dpInc[i] = 1;
-            dpDesc[i] = 1;
+            // dpInc[i] = 1;
+            // dpDesc[i] = 1;
             pSumInc[i + 1] = i - l + 1;
             pSumDesc[i + 1] = i - l + 1;
         }
 
         int mod = (int)1e9 + 7;
 
-        for (int i = 1; i <= n; i++) {
+        for (int i = 1; i < n; i++) {
             for (int num = l; num <= r; num++) {
                 //current is inc
                 dpInc[num] = pSumDesc[num];
@@ -34,7 +34,8 @@ class Solution {
             }
         }
 
-        return (dpInc[r] + dpDesc[l]) % mod;
+        // return (dpInc[r] + dpDesc[l]) % mod;
+        return (pSumInc[r + 1] + pSumDesc[r + 1]) % mod;
     }
 
     public int mySol(int n, int l, int r) {
