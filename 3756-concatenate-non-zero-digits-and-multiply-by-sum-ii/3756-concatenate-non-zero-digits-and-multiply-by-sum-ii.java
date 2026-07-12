@@ -3,6 +3,32 @@ class Solution {
         return try_20260711(s, queries);
     }
 
+    /**
+    gemini : mod inverse 로 푸는 방법이 없다고 함
+     */
+    public int[] practice_inverse_of_mod(String s, int[][] queries) {
+        return null;
+    }
+
+    private long modInverse(long num, int mod) {
+        return qpow(num, mod - 2, mod);
+    }
+
+    private long qpow(long base, long power, int mod) {
+        long res = 1;
+        base = base % mod;
+
+        while (power > 0) {
+            if ((power & 1) == 1) {
+                res = (res * base) % mod;
+            }
+            power >>= 1;
+            base = (base * base) % mod;
+        }
+
+        return res;
+    }
+
     public int[] try_20260711(String s, int[][] queries) {
         int n = s.length();
         int[] pSum = new int[n + 1];
