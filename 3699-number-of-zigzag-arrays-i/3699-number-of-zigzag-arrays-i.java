@@ -1,6 +1,34 @@
 class Solution {
     public int zigZagArrays(int n, int l, int r) {
-        return after_hint_and_editorial(n, l, r);
+        return after_hint_and_editorial_further(n, l, r);
+    }
+
+    public int after_hint_and_editorial_further(int n, int l, int r) {
+        int[] dp = new int[r + 1];
+        int[] pSum = new int[r + 3];
+
+        for (int i = l; i <= r; i++) {
+            // dp[i] = 1;
+            pSum[i + 1] = i - l + 1;
+        }
+
+        int mod = (int)1e9 + 7;
+
+        for (int i = 1; i < n; i++) {
+            for (int num = l; num <= r; num++) {
+                if (i % 2 == 0) {
+                    dp[num] = pSum[num];
+                } else {
+                    dp[num] = (pSum[r + 1] - pSum[num + 1] + mod) % mod;
+                }
+            }
+
+            for (int num = l; num <= r; num++) {
+                pSum[num + 1] = (pSum[num] + dp[num]) % mod;
+            }
+        }
+
+        return (pSum[r + 1] + pSum[r + 1]) % mod;
     }
 
     public int after_hint_and_editorial(int n, int l, int r) {
