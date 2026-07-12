@@ -3,6 +3,49 @@ class Solution {
         return official_without_division(grid);
     }
 
+    public int[][] official_without_division2(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+
+        int[][] p = new int[n][m];
+        int mod = 12345;
+
+        int prodAll = 1;
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                prodAll = (prodAll * grid[i][j]) % mod;
+            }
+        }
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                p[i][j] = (prodAll * modInverse(grid[i][j], mod)) % mod;
+            }
+        }
+
+        return p;
+    }
+
+    private int modInverse(int a, int mod) {
+        return qpow(a, mod - 2, mod);
+    }
+
+    private int qpow(int a, int power, int mod) {
+        int res = 1;
+        a = a % mod;
+
+        while (power > 0) {
+            if ((power & 1) == 1) {
+                res = (res * a) % mod;
+            }
+            power >>= 1;
+            a = (a * a) % mod;
+        }
+
+        return res;
+    }
+
     public int[][] official_without_division(int[][] grid) {
         int n = grid.length;
         int m = grid[0].length;
