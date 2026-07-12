@@ -1,68 +1,33 @@
 class Solution {
     public int[] arrayRankTransform(int[] arr) {
-        return mySol2(arr);
+        return mySol_20260712(arr);
     }
 
-    public int[] mySol2(int[] arr) {
-        int min = Integer.MAX_VALUE;
-        int max = Integer.MIN_VALUE;
+    public int[] mySol_20260712(int[] arr) {
+        int n = arr.length;
+        Integer[][] sorted = new Integer[n][2];
 
-        for (int num : arr) {
-            min = Math.min(min, num);
-            max = Math.max(max, num);
+        for (int i = 0; i < n; i++) {
+            sorted[i][0] = arr[i];
+            sorted[i][1] = i;
         }
 
-        Map<Integer, List<Integer>> bucket = new TreeMap();
-
-        for (int i = 0; i < arr.length; i++) {
-            int num = arr[i];
-
-            bucket.computeIfAbsent(num - min, k -> new ArrayList()).add(i);
-        }
-
-        int[] ans = new int[arr.length];
-        
-        int rank = 1;
-        int bucketIndex = 0;
-
-        for (List<Integer> indices : bucket.values()) {
-            for (int originIndex : indices) {
-                ans[originIndex] = rank;
-            }
-            rank++;
-        }
-
-        return ans;
-    }
-
-    public int[] mySol(int[] arr) {
-        int[][] arr2 = new int[arr.length][2];
-
-        for (int i = 0; i < arr.length; i++) {
-            arr2[i][0] = i;
-            arr2[i][1] = arr[i];
-        }
-
-        Arrays.sort(arr2, (a, b) -> {
-            return a[1] - b[1];
+        Arrays.sort(sorted, (a, b) -> {
+            return a[0] - b[0];
         });
 
-        int[] ans = new int[arr.length];
+        int rank = 0;
+        int prev = Integer.MIN_VALUE;
 
-        Integer prev = null;
-        int rank = 1;
+        int[] ans = new int[n];
 
-        for (int i = 0; i < arr2.length; i++) {
-            int index = arr2[i][0];
-            int num = arr2[i][1];
-
-            if (prev != null && prev < num) {
-                rank++;
+        for (int i = 0; i < n; i++) {
+            if (prev == sorted[i][0]) {
+                ans[sorted[i][1]] = rank;
+            } else {
+                prev = sorted[i][0];
+                ans[sorted[i][1]] = ++rank;
             }
-
-            ans[index] = rank;
-
-            prev = num;
         }
 
         return ans;
