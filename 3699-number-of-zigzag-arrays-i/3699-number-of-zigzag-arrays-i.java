@@ -4,16 +4,16 @@ class Solution {
     }
 
     public int after_hint_and_editorial(int n, int l, int r) {
-        int[] dpInc = new int[r + 1];
-        int[] dpDesc = new int[r + 1];
-        int[] pSumInc = new int[r + 3];
-        int[] pSumDesc = new int[r + 3];
+        int[] dpBigger = new int[r + 1];
+        int[] dpSmaller = new int[r + 1];
+        int[] pSumBigger = new int[r + 3];
+        int[] pSumSmaller = new int[r + 3];
 
         for (int i = l; i <= r; i++) {
-            // dpInc[i] = 1;
-            // dpDesc[i] = 1;
-            pSumInc[i + 1] = i - l + 1;
-            pSumDesc[i + 1] = i - l + 1;
+            // dpBigger[i] = 1;
+            // dpSmaller[i] = 1;
+            pSumBigger[i + 1] = i - l + 1;
+            pSumSmaller[i + 1] = i - l + 1;
         }
 
         int mod = (int)1e9 + 7;
@@ -21,21 +21,21 @@ class Solution {
         for (int i = 1; i < n; i++) {
             for (int num = l; num <= r; num++) {
                 //current is inc
-                dpInc[num] = pSumDesc[num];
+                dpBigger[num] = pSumSmaller[num];
 
                 //current is desc
-                dpDesc[num] = (pSumInc[r + 1] - pSumInc[num + 1] + mod) % mod;
+                dpSmaller[num] = (pSumBigger[r + 1] - pSumBigger[num + 1] + mod) % mod;
             }
 
             for (int num = l; num <= r; num++) {
-                pSumDesc[num + 1] = (pSumDesc[num] + dpDesc[num]) % mod;
+                pSumSmaller[num + 1] = (pSumSmaller[num] + dpSmaller[num]) % mod;
 
-                pSumInc[num + 1] = (pSumInc[num] + dpInc[num]) % mod;
+                pSumBigger[num + 1] = (pSumBigger[num] + dpBigger[num]) % mod;
             }
         }
 
         // return (dpInc[r] + dpDesc[l]) % mod;
-        return (pSumInc[r + 1] + pSumDesc[r + 1]) % mod;
+        return (pSumBigger[r + 1] + pSumBigger[r + 1]) % mod;
     }
 
     public int mySol(int n, int l, int r) {
