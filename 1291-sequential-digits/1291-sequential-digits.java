@@ -5,6 +5,7 @@ class Solution {
 
     public List<Integer> try_bf(int low, int high) {
         Map<Integer, List<Integer>> map = new HashMap();
+        List<Integer> list2 = new ArrayList();
 
         for (int i = 1; i < 10; i++) {
             int num = i;
@@ -12,7 +13,8 @@ class Solution {
 
             while (num <= high) {
                 if (low <= num && num <= high) {
-                    map.computeIfAbsent(length, k -> new ArrayList()).add(num);
+                    // map.computeIfAbsent(length, k -> new ArrayList()).add(num);
+                    list2.add(num);
                 }
 
                 int digit = num % 10;
@@ -24,15 +26,19 @@ class Solution {
             }
         }
 
-        List<Integer> list = new ArrayList();
+        Collections.sort(list2);
 
-        for (int i = 1; i < 10; i++) {
-            if (map.containsKey(i)) {
-                list.addAll(map.get(i));
-            }
-        }
+        return list2;
 
-        return list;
+        // List<Integer> list = new ArrayList();
+
+        // for (int i = 1; i < 10; i++) {
+        //     if (map.containsKey(i)) {
+        //         list.addAll(map.get(i));
+        //     }
+        // }
+
+        // return list;
     }
 
     public List<Integer> mySol_hold(int low, int high) {
