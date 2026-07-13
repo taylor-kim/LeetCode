@@ -1,6 +1,26 @@
 class Solution {
     public List<Integer> sequentialDigits(int low, int high) {
-        return try_bf(low, high);
+        return practice_sw(low, high);
+    }
+
+    public List<Integer> practice_sw(int lo, int hi) {
+        String s = "123456789";
+        int minLength = String.valueOf(lo).length();
+        int maxLength = String.valueOf(hi).length();
+
+        List<Integer> list = new ArrayList();
+
+        for (int length = minLength; length <= maxLength; length++) {
+            for (int start = 0; start <= s.length() - length; start++) {
+                int num = Integer.parseInt(s.substring(start, start + length));
+
+                if (lo <= num && num <= hi) {
+                    list.add(num);
+                }
+            }
+        }
+
+        return list;
     }
 
     public List<Integer> try_bf(int low, int high) {
