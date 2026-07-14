@@ -1,49 +1,27 @@
 class Solution {
     public int findMinArrowShots(int[][] points) {
-        return others_simple(points);
-    }
-
-    public int others_simple(int[][] points) {
-        Arrays.sort(points, (a, b) -> Integer.compare(a[1], b[1]));
-
-        int ans = 1;
-
-        int shoot = points[0][1];
-
-        for (int i = 1; i < points.length; i++) {
-            if (points[i][0] <= shoot) continue;
-
-            shoot = points[i][1];
-
-            ans++;
+        if (points.length == 0) {
+            return 0;
         }
-
-        return ans;
-    }
-
-    public int mySol(int[][] points) {
-        int n = points.length;
-
-        if (n == 1) return 1;
-
-        Arrays.sort(points, (a, b) -> Integer.compare(a[0], b[0]));
-
-        int ans = 0;
-        int i = 0;
-
-        while (i < n) {
-            int[] p = points[i++];
-            int left = p[0];
-            int right = p[1];
-
-            while (i < n && right >= points[i][0]) {
-                right = Math.min(right, points[i][1]);
-                i++;
+        Arrays.sort(points, new Comparator<int[]>() {
+            public int compare(int[] point1, int[] point2) {
+                if (point1[1] > point2[1]) {
+                    return 1;
+                } else if (point1[1] < point2[1]) {
+                    return -1;
+                } else {
+                    return 0;
+                }
             }
-
-            ans++;
+        });
+        int pos = points[0][1];
+        int ans = 1;
+        for (int[] balloon: points) {
+            if (balloon[0] > pos) {
+                pos = balloon[1];
+                ++ans;
+            }
         }
-
         return ans;
     }
 }
