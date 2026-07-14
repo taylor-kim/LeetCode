@@ -19,7 +19,7 @@ class Solution {
             
             for (int j = 0; j <= max; j++) {
                 for (int k = 0; k <= max; k++) {
-                    // if (dp[j][k] == 0) continue;
+                    if (dp[j][k] == 0) continue;
 
                     int jj = gcd(j, num);
                     int kk = gcd(k, num);
