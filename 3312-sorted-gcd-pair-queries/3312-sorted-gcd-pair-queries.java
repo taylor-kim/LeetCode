@@ -17,9 +17,7 @@ class Solution {
             for (int multi = gcd * 2; multi <= max; multi += gcd) {
                 counter[gcd] += counter[multi];
             }
-        }
 
-        for (int gcd = 1; gcd <= max; gcd++) {
             counter[gcd] = (counter[gcd] * (counter[gcd] - 1)) / 2;
         }
 
