@@ -1,72 +1,91 @@
 class Solution {
+
     public int findMaxPathScore(int[][] edges, boolean[] online, long k) {
-        return try_20260711(edges, online, k);
-    }
+        int n = online.length;
+        List<int[]>[] g = new ArrayList[n];
+        int[] deg = new int[n];
+        for (int i = 0; i < n; i++) {
+            g[i] = new ArrayList<>();
+        }
 
-    public int try_20260711(int[][] edges, boolean[] online, long k) {
-        Map<Integer, List<int[]>> graph = new HashMap();
-        int lo = Integer.MAX_VALUE;
-        int hi = 0;
-
+        int l = Integer.MAX_VALUE,
+            r = 0;
         for (int[] edge : edges) {
-            if (online[edge[0]] && online[edge[1]]) {
-                graph.computeIfAbsent(edge[0], key -> new ArrayList()).add(new int[] {edge[1], edge[2]});
-
-                lo = Math.min(lo, edge[2]);
-                hi = Math.max(hi, edge[2]);
+            int u = edge[0],
+                v = edge[1],
+                w = edge[2];
+            if (!online[u] || !online[v]) {
+                continue;
             }
+            g[u].add(new int[] { v, w });
+            deg[v]++;
+            l = Math.min(l, w);
+            r = Math.max(r, w);
         }
 
-        int ans = -1;
-
-        while (lo <= hi) {
-            int mid = lo + (hi - lo) / 2;
-
-            if (find(graph, online.length, k, mid)) {
-                ans = mid;
-                lo = mid + 1;
-            } else {
-                hi = mid - 1;
+        // Delete unreachable nodes
+        Queue<Integer> q = new LinkedList<>();
+        for (int i = 1; i < n; i++) {
+            if (deg[i] == 0) {
+                q.offer(i);
             }
         }
-
-        return ans;
-    }
-
-    private boolean find(Map<Integer, List<int[]>> graph, int n, long k, int min) {
-        long[] costs = new long[n];
-
-        Arrays.fill(costs, Long.MAX_VALUE);
-        costs[0] = 0;
-
-        Queue<long[]> queue = new PriorityQueue<>((a, b) -> {
-            return Long.compare(a[1], b[1]);
-        });
-        queue.add(new long[] {0, 0});
-
-        while (!queue.isEmpty()) {
-            int node = (int)queue.peek()[0];
-            long cost = queue.poll()[1];
-
-            if (costs[node] < cost) continue;
-
-            if (node == n - 1) {
-                return true;
-            }
-
-            if (!graph.containsKey(node)) continue;
-
-            for (int[] next : graph.get(node)) {
-                int nextNode = next[0];
-                long nextCost = costs[node] + next[1];
-
-                if (costs[nextNode] > nextCost && k >= nextCost && next[1] >= min) {
-                    costs[nextNode] = nextCost;
-                    queue.add(new long[] {nextNode, nextCost});
+        while (!q.isEmpty()) {
+            int u = q.poll();
+            for (int[] edge : g[u]) {
+                int v = edge[0];
+                if (--deg[v] == 0 && v != 0) {
+                    q.offer(v);
                 }
             }
         }
 
+        if (!check(l, k, g, deg, n)) {
+            return -1;
+        }
+
+        while (l <= r) {
+            int mid = (l + r) >> 1;
+            if (check(mid, k, g, deg, n)) {
+                l = mid + 1;
+            } else {
+                r = mid - 1;
+            }
+        }
+        return r;
+    }
+
+    private boolean check(int mid, long k, List<int[]>[] g, int[] deg, int n) {
+        long[] dp = new long[n];
+        Arrays.fill(dp, Long.MAX_VALUE / 2);
+        int[] cdeg = deg.clone();
+        dp[0] = 0;
+
+        Queue<Integer> q = new LinkedList<>();
+        q.offer(0);
+
+        while (!q.isEmpty()) {
+            int u = q.poll();
+            if (u == n - 1) {
+                return dp[u] <= k;
+            }
+
+            for (int[] edge : g[u]) {
+                int v = edge[0],
+                    w = edge[1];
+                if (w >= mid) {
+                    dp[v] = Math.min(dp[v], dp[u] + w);
+                }
+                if (--cdeg[v] == 0) {
+                    q.offer(v);
+                }
+
+                if (cdeg[v] < 0) {
+                    // System.out.println("u(%d) => v(%d), deg:%d".formatted(u, v, cdeg[v]));
+                    throw new RuntimeException("u(%d) => v(%d), deg:%d".formatted(u, v, cdeg[v]));
+                }
+            }
+        }
         return false;
     }
 }
