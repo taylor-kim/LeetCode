@@ -6,7 +6,7 @@ class Solution {
     public String mySol(String s) {
         int n = s.length();
 
-        TreeMap<Character, Integer> map = new TreeMap();
+        Map<Character, Integer> map = new HashMap();
 
         for (int i = 0; i < n; i++) {
             map.put(s.charAt(i), i);
@@ -20,6 +20,7 @@ class Solution {
             char c = s.charAt(i);
 
             if (set.contains(c)) {
+                System.out.println(i);
                 continue;
             }
 
@@ -29,8 +30,6 @@ class Solution {
 
             set.add(c);
             stack.push(c);
-
-            if (stack.size() == map.size()) break;
         }
 
         // System.out.println(stack);
