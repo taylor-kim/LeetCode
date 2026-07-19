@@ -1,6 +1,6 @@
 class Solution {
     public boolean containsCycle(char[][] grid) {
-        return editorial(grid);
+        return try_uf(grid);
     }
 
     public boolean editorial(char[][] grid) {
@@ -40,9 +40,11 @@ class Solution {
             ufs.add(new UnionFind(m * n));
         }
 
+        UnionFind uf = new UnionFind(m * n);
+
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                UnionFind uf = ufs.get(grid[i][j] - 'a');
+                // UnionFind uf = ufs.get(grid[i][j] - 'a');
 
                 int current = i * n + j;
                 int parentOfTop = -1;
