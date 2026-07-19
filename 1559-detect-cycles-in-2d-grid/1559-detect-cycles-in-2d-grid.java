@@ -36,9 +36,9 @@ class Solution {
 
         List<UnionFind> ufs = new ArrayList();
 
-        for (int i = 0; i < 26; i++) {
-            ufs.add(new UnionFind(m * n));
-        }
+        // for (int i = 0; i < 26; i++) {
+        //     ufs.add(new UnionFind(m * n));
+        // }
 
         UnionFind uf = new UnionFind(m * n);
 
