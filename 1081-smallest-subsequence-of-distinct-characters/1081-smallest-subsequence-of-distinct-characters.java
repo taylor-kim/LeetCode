@@ -20,7 +20,6 @@ class Solution {
             char c = s.charAt(i);
 
             if (set.contains(c)) {
-                System.out.println(i);
                 continue;
             }
 
@@ -31,8 +30,6 @@ class Solution {
             set.add(c);
             stack.push(c);
         }
-
-        // System.out.println(stack);
 
         while (!stack.isEmpty()) {
             sb.append(stack.pop());
