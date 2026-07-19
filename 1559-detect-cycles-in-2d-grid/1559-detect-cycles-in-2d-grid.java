@@ -1,6 +1,6 @@
 class Solution {
     public boolean containsCycle(char[][] grid) {
-        return try_uf(grid);
+        return editorial(grid);
     }
 
     public boolean editorial(char[][] grid) {
