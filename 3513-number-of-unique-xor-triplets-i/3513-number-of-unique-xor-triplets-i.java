@@ -8,11 +8,7 @@ class Solution {
             return nums.length;
         }
 
-        int max = 0;
-
-        for (int num : nums) {
-            max = Math.max(max, num);
-        }
+        int max = nums.length;
 
         int mostSignificantBit = 0;
 
