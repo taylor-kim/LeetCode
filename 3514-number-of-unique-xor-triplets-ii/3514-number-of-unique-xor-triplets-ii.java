@@ -29,7 +29,7 @@ class Solution {
             }
         }
 
-        for (int i = 0; i <= xorMax; i++) {
+        for (int i = 0; i < xorMax; i++) {
             if (xorTwo[i]) {
                 for (int num : nums) {
                     xorThree[i ^ num] = true;
