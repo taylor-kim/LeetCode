@@ -25,7 +25,11 @@ class Solution {
             int left = searchBoundary(i, n, k + 1) + 1;
 
             // L ~ R 구간이 유효하고, 실제 AND 값이 k가 맞다면 개수 누적
-            if (left <= right && getRangeAnd(i, right) == k) {
+            // if (left <= right && getRangeAnd(i, right) == k) {
+            //     totalCount += (right - left + 1);
+            // }
+
+            if (left <= right) {
                 totalCount += (right - left + 1);
             }
         }
