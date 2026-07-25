@@ -19,7 +19,8 @@ class Solution {
             }
         }
 
-        int maxXor = (int)Math.pow(2, mostSignificantBit + 1) - 1;
+        // int maxXor = (int)Math.pow(2, mostSignificantBit + 1) - 1;
+        int maxXor = (1 << (mostSignificantBit + 1)) - 1;
 
         return maxXor + 1;
     }
