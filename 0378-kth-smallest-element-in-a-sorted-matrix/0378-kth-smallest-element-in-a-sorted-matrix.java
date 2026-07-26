@@ -15,16 +15,16 @@ class Solution {
     }
 
     public boolean check(int[][] matrix, int mid, int k, int n) {
-        int i = 0;
-        int j = n - 1;
+        int i = n - 1;
+        int j = 0;
         int count = 0;
 
-        while (i < n && j >= 0) {
+        while (i >= 0 && j < n) {
             if (matrix[i][j] <= mid) {
-                count += j + 1;
-                i++;
+                count += i + 1;
+                j++;
             } else {
-                j--;
+                i--;
             }
         }
 
