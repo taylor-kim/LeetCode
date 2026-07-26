@@ -1,24 +1,21 @@
 class Solution {
     public double angleClock(int hour, int minutes) {
-        return mySol(hour, minutes);
+        return practice_20260726(hour, minutes);
     }
 
-    public double mySol(int hour, int minutes) {
-        double hUnit = 30.0;
-        double mUnit = 6.0;
-
-        // 90
-        // 97.5
+    public double practice_20260726(int hour, int minutes) {
+        double hdPerUnit = 30;
+        double mdPerUnit = 6;
 
         hour %= 12;
 
-        double md = minutes * mUnit;
-        double rateOfMin = md / 360;
-        double hd = hour * hUnit + (hUnit * rateOfMin);
+        double md = minutes * mdPerUnit;
+        double hd = hour * hdPerUnit + ((double)minutes / 12.0d * mdPerUnit);
 
-        double min = Math.min(hd, md);
-        double max = Math.max(hd, md);
+        // System.out.println("hd:%f, md:%f".formatted(hd, md));
 
-        return Math.min(max - min, 360 + min - max);
+        double a = (hd - md + 360) % 360;
+
+        return Math.min(a, 360 - a);
     }
 }
