@@ -12,7 +12,9 @@ class Solution {
         double hdMovingPerMin = 5d / 60 * dPerM;
 
         double md = minutes * dPerM;
-        double hd = hour * dPerH + (minutes * hdMovingPerMin);
+        // double hd = hour * dPerH + (minutes * hdMovingPerMin);
+        double rateOfMd = md / 360;
+        double hd = hour * dPerH + (rateOfMd * dPerH);
 
         // System.out.println("hd:%f, md:%f".formatted(hd, md));
 
