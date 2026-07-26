@@ -4,13 +4,15 @@ class Solution {
     }
 
     public double practice_20260726(int hour, int minutes) {
-        double hdPerUnit = 30;
-        double mdPerUnit = 6;
+        double dPerH = 30;
+        double dPerM = 6;
 
         hour %= 12;
 
-        double md = minutes * mdPerUnit;
-        double hd = hour * hdPerUnit + ((double)minutes / 12.0d * mdPerUnit);
+        double hdMovingPerMin = 5d / 60 * dPerM;
+
+        double md = minutes * dPerM;
+        double hd = hour * dPerH + (minutes * hdMovingPerMin);
 
         // System.out.println("hd:%f, md:%f".formatted(hd, md));
 
