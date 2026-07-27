@@ -1,0 +1,1 @@
+<h2><a href="https://leetcode.cn/problems/license-key-formatting/?envType=problem-list-v2&envId=hTGx9BB7">482. undefined</a></h2><h3>undefined</h3><hr>undefined
