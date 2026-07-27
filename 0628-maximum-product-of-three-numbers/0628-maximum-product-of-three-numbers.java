@@ -1,6 +1,22 @@
 class Solution {
     public int maximumProduct(int[] nums) {
-        return mySol2(nums);
+        return others_n(nums);
+    }
+
+    public int others_n(int[] nums) {
+        int a = -1001, b = a, c = b;
+        int x = 1001, y = x;
+
+        for (int num : nums) {
+            c = Math.max(c, Math.min(b, num));
+            b = Math.max(b, Math.min(a, num));
+            a = Math.max(a, num);
+
+            y = Math.min(y, Math.max(x, num));
+            x = Math.min(x, num);
+        }
+
+        return Math.max(a * b * c, a * x * y);
     }
 
     public int mySol2(int[] nums) {
