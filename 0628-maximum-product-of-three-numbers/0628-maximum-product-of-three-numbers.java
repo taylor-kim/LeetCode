@@ -1,6 +1,47 @@
 class Solution {
     public int maximumProduct(int[] nums) {
-        return others_n(nums);
+        return others_partial_sort(nums);
+    }
+
+    public int others_partial_sort(int[] nums) {
+        int n = nums.length;
+
+        // find two minimums
+        for (int i = 0; i < 2; i++) {
+            int indexOfMin = i;
+            for (int j = i + 1; j < n; j++) {
+                if (nums[indexOfMin] > nums[j]) {
+                    indexOfMin = j;
+                }
+            }
+
+            swap(nums, indexOfMin, i);
+        }
+
+        // System.out.println(Arrays.toString(nums));
+
+        for (int i = n - 1; i >= n - 3; i--) {
+            int indexOfMax = i;
+            for (int j = 2; j < i; j++) {
+                if (nums[indexOfMax] < nums[j]) {
+                    indexOfMax = j;
+                }
+            }
+
+            swap(nums, indexOfMax, i);
+        }
+
+        // System.out.println(Arrays.toString(nums));
+
+        return Math.max(nums[n - 1] * nums[n - 2] * nums[n - 3], nums[n - 1] * nums[0] * nums[1]);
+    }
+
+    private void swap(int[] nums, int i, int j) {
+        if (i == j) return;
+
+        nums[i] += nums[j];
+        nums[j] = nums[i] - nums[j];
+        nums[i] = nums[i] - nums[j];
     }
 
     public int others_n(int[] nums) {
