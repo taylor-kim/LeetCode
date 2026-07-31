@@ -5,32 +5,21 @@ class Solution {
 
     public int mySol(String word) {
         int[] freq = new int[26];
-
-        int max = 0;
-
-        for (char c : word.toCharArray()) {
-            max = Math.max(max, ++freq[c - 'a']);
-        }
-
-        int[] bucket = new int[max + 1];
-
-        for (int f : freq) {
-            if (f > 0) {
-                bucket[f]++;
-            }
-        }
-
-        int index = max;
-        int countOfChar = 0;
-
         int ans = 0;
 
-        while (index > 0) {
-            while (bucket[index]-- > 0) {
-                ans += (countOfChar++ / 8 + 1) * index;
-            }
+        for (char c : word.toCharArray()) {
+            freq[c - 'a']++;
+        }
 
-            index--;
+        Arrays.sort(freq);
+
+        int count = 0;
+        int limit = 8;
+
+        for (int i = 25; i >= 0; i--) {
+            if (freq[i] == 0) break;
+
+            ans += (count++ / limit + 1) * freq[i];
         }
 
         return ans;
