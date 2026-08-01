@@ -5,7 +5,6 @@ class Solution {
 
     public boolean mySol(int[] nums) {
         int n = nums.length;
-        long[] scores = new long[2];
 
         return !play(nums, 0, n - 1, 0, 0, 0);
     }
