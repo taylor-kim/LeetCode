@@ -1,6 +1,29 @@
 class Solution {
     public int[] nextGreaterElement(int[] nums1, int[] nums2) {
-        return mySol(nums1, nums2);
+        return others(nums1, nums2);
+    }
+
+    public int[] others(int[] nums1, int[] nums2) {
+        Map<Integer, Integer> map = new HashMap();
+        Stack<Integer> stack = new Stack();
+
+        for (int num : nums2) {
+            while (!stack.isEmpty() && stack.peek() < num) {
+                map.put(stack.pop(), num);
+            }
+
+            stack.push(num);
+        }
+
+        int n = nums1.length;
+
+        int[] ans = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            ans[i] = map.getOrDefault(nums1[i], -1);
+        }
+
+        return ans;
     }
 
     public int[] mySol(int[] nums1, int[] nums2) {
