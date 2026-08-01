@@ -36,6 +36,13 @@ class Solution {
             }
         }
 
+        int mod = (int)1e9 + 7;
+        int[] pows = new int[n + 1];
+        pows[0] = 1;
+        for (int i = 1; i <= n; i++) {
+            pows[i] = (int)((1l * pows[i - 1] * 2) % mod);
+        }
+
         int[] ans = new int[queries.length];
 
         for (int i = 0; i < queries.length; i++) {
@@ -46,7 +53,10 @@ class Solution {
 
             int numberOfEdges = d[p] + d[q] - 2 * d[lca];
 
-            ans[i] = qpow(2, numberOfEdges - 1);
+            // ans[i] = qpow(2, numberOfEdges - 1);
+            if (numberOfEdges > 0) {
+                ans[i] = pows[numberOfEdges - 1];
+            }
         }
 
         return ans;
