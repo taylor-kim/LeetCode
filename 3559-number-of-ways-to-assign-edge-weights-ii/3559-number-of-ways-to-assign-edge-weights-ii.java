@@ -4,7 +4,7 @@ class Solution {
     }
 
     int m = 0;
-    Map<Integer, List<Integer>> tree;
+    List<Integer>[] tree;
     int[] d;
     int[][] f;
 
@@ -21,11 +21,15 @@ class Solution {
         d = new int[n + 1];
         f = new int[n + 1][m + 1];
 
-        tree = new HashMap();
+        tree = new List[n + 1];
+
+        for (int i = 0; i <= n; i++) {
+            tree[i] = new ArrayList();
+        }
 
         for (int[] edge : edges) {
-            tree.computeIfAbsent(edge[0], k -> new ArrayList()).add(edge[1]);
-            tree.computeIfAbsent(edge[1], k -> new ArrayList()).add(edge[0]);
+            tree[edge[0]].add(edge[1]);
+            tree[edge[1]].add(edge[0]);
         }
 
         dfs(1, 0);
@@ -65,7 +69,7 @@ class Solution {
     private void dfs(int node, int parent) {
         f[node][0] = parent;
 
-        for (int next : tree.getOrDefault(node, new ArrayList<>())) {
+        for (int next : tree[node]) {
             if (next == parent) continue;
 
             d[next] = d[node] + 1;
