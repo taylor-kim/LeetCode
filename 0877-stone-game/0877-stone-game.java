@@ -1,6 +1,24 @@
 class Solution {
     public boolean stoneGame(int[] piles) {
-        return mySol(piles);
+        return mySol2(piles);
+    }
+
+    public boolean mySol2(int[] piles) {
+        int n = piles.length;
+        int[] dp = piles.clone();
+
+        for (int diff = 1; diff < n; diff++) {
+            for (int left = n - diff - 1; left >= 0; left--) {
+                int right = left + diff;
+
+                dp[right] = Math.max(
+                    piles[left] - dp[right],
+                    piles[right] - dp[right - 1]
+                );
+            }
+        }
+
+        return dp[n - 1] > 0;
     }
 
     public boolean mySol(int[] piles) {
