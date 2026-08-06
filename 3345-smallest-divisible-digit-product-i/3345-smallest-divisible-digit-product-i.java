@@ -1,19 +1,27 @@
 class Solution {
     public int smallestNumber(int n, int t) {
-        return mySol(n, t);
+        return try_20260806(n, t);
     }
 
-    public int mySol(int n, int t) {
-        int prod = 1;
-        int num = n;
+    public int try_20260806(int n, int t) {
+        int ans = n;
 
-        while (num > 0) {
-            prod *= num % 10;
-            num /= 10;
+        while (product(ans) % t != 0) {
+            ans++;
         }
 
-        if (prod % t == 0) return n;
-        
-        return mySol(n + 1, t);
+        return ans;
+    }
+
+    private int product(int n) {
+        int p = 1;
+
+        while (n > 0) {
+            int d = n % 10;
+            n /= 10;
+            p *= d;
+        }
+
+        return p;
     }
 }
