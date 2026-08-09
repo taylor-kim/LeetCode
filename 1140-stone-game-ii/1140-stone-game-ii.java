@@ -10,19 +10,19 @@ class Solution {
             total += num;
         }
 
-        int alice = topdown(piles, 0, 1, new Integer[piles.length][piles.length + 1]);
+        int delta = topdown(piles, 0, 1, new Integer[piles.length][piles.length + 1]);
 
         // a + b = total
-        // a - b = alice
+        // a - b = delta
 
         // a = total - b
-        // a = alice + b
-        // total - b == alice + b
-        // total - alice = 2b
-        // b = (total - alice) / 2
-        // a = total - (total - alic) / 2
+        // a = delta + b
+        // total - b == delta + b
+        // total - delta = 2b
+        // b = (total - delta) / 2
+        // a = total - (total - delta) / 2
 
-        return total - (total - alice) / 2;
+        return total - (total - delta) / 2;
     }
 
     public int topdown(int[] piles, int index, int m, Integer[][] memo) {
