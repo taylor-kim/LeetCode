@@ -1,6 +1,6 @@
 class Solution {
     public int stoneGameII(int[] piles) {
-        return try_suffixSum_bottomup(piles);
+        return editorial_suffixSum_topdown(piles);
     }
 
     public int try_suffixSum_bottomup(int[] piles) {
@@ -57,7 +57,7 @@ class Solution {
 
         int othersMin = Integer.MAX_VALUE;
 
-        for (int x = 1; x <= 2 * m; x++) {
+        for (int x = 1; x <= 2 * m && index + x < suffixSum.length; x++) {
             int others = suffixSumTopdown(suffixSum, index + x, Math.max(x, m), memo);
 
             othersMin = Math.min(othersMin, others);
