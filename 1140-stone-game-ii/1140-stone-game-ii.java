@@ -1,6 +1,6 @@
 class Solution {
     public int stoneGameII(int[] piles) {
-        return editorial_suffixSum_topdown(piles);
+        return try_suffixSum_bottomup(piles);
     }
 
     public int try_suffixSum_bottomup(int[] piles) {
