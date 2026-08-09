@@ -5,10 +5,9 @@ class Solution {
 
     public int try_suffixSum_bottomup(int[] piles) {
         int n = piles.length;
-        int[] suffixSum = new int[n];
-        suffixSum[n - 1] = piles[n - 1];
+        int[] suffixSum = new int[n + 1];
 
-        for (int i = n - 2; i >= 0; i--) {
+        for (int i = n - 1; i >= 0; i--) {
             suffixSum[i] = piles[i] + suffixSum[i + 1];
         }
 
@@ -26,8 +25,8 @@ class Solution {
             for (int m = n; m >= 1; m--) {
                 int res = Integer.MAX_VALUE;
 
-                for (int x = 1; x <= 2 * m; x++) {
-                    res = Math.min(res, dp[Math.min(i + x, n)][Math.min(Math.max(x, m), n)]);
+                for (int x = 1; x <= 2 * m && i + x <= n; x++) {
+                    res = Math.min(res, dp[i + x][Math.max(x, m)]);
                 }
 
                 dp[i][m] = suffixSum[i] - res;
