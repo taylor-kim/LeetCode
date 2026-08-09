@@ -16,6 +16,8 @@ class Solution {
                 last[j--] = i;
             }
         }
+
+        // System.out.println(Arrays.toString(last));
         
         int[] result = new int[m];
         j = 0;
