@@ -13,12 +13,16 @@ class Solution {
 
         int[][] dp = new int[n + 1][n + 1];
 
+        // for (int i = 0; i < n; i++) {
+        //     for (int m = 1; m <= n; m++) {
+        //         if (i + 2 * m >= n) {
+        //             dp[i][m] = suffixSum[i];
+        //         }
+        //     }
+        // }
+
         for (int i = 0; i < n; i++) {
-            for (int m = 1; m <= n; m++) {
-                if (i + 2 * m >= n) {
-                    dp[i][m] = suffixSum[i];
-                }
-            }
+            dp[i][n - i] = suffixSum[i];
         }
 
         for (int i = n - 1; i >= 0; i--) {
