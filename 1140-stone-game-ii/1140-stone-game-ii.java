@@ -29,7 +29,11 @@ class Solution {
             for (int m = n; m >= 1; m--) {
                 int res = Integer.MAX_VALUE;
 
-                for (int x = 1; x <= 2 * m && i + x <= n; x++) {
+                // for (int x = 1; x <= 2 * m && i + x <= n; x++) {
+                //     res = Math.min(res, dp[i + x][Math.max(x, m)]);
+                // }
+
+                for (int x = Math.min(2 * m, n - i); x >= 1; x--) {
                     res = Math.min(res, dp[i + x][Math.max(x, m)]);
                 }
 
