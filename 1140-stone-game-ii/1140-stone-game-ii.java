@@ -16,7 +16,7 @@ class Solution {
     }
 
     private int suffixSumTopdown(int[] suffixSum, int index, int m, Integer[][] memo) {
-        if (index + 2 * m >= suffixSum.length) {
+        if (index + (2 * m) >= suffixSum.length) {
             return suffixSum[index];
         }
 
