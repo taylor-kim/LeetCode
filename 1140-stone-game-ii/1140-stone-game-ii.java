@@ -57,7 +57,7 @@ class Solution {
 
         int othersMin = Integer.MAX_VALUE;
 
-        for (int x = 1; x <= 2 * m && index + x < suffixSum.length; x++) {
+        for (int x = 1; x <= 2 * m; x++) {
             int others = suffixSumTopdown(suffixSum, index + x, Math.max(x, m), memo);
 
             othersMin = Math.min(othersMin, others);
