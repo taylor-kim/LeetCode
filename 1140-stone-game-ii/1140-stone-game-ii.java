@@ -1,6 +1,36 @@
 class Solution {
     public int stoneGameII(int[] piles) {
-        return mySol(piles);
+        return editorial_suffixSum_topdown(piles);
+    }
+
+    public int editorial_suffixSum_topdown(int[] piles) {
+        int n = piles.length;
+        int[] suffixSum = new int[n];
+        suffixSum[n - 1] = piles[n - 1];
+
+        for (int i = n - 2; i >= 0; i--) {
+            suffixSum[i] = piles[i] + suffixSum[i + 1];
+        }
+
+        return suffixSumTopdown(suffixSum, 0, 1, new Integer[n][n + 1]);
+    }
+
+    private int suffixSumTopdown(int[] suffixSum, int index, int m, Integer[][] memo) {
+        if (index + 2 * m >= suffixSum.length) {
+            return suffixSum[index];
+        }
+
+        if (memo[index][m] != null) return memo[index][m];
+
+        int othersMin = Integer.MAX_VALUE;
+
+        for (int x = 1; x <= 2 * m; x++) {
+            int others = suffixSumTopdown(suffixSum, index + x, Math.max(x, m), memo);
+
+            othersMin = Math.min(othersMin, others);
+        }
+
+        return memo[index][m] = suffixSum[index] - othersMin;
     }
 
     public int mySol(int[] piles) {
