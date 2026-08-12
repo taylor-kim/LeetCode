@@ -1,61 +1,24 @@
 class Solution {
     public int maxSubarrayLength(int[] nums, int k) {
-        return official_sw(nums, k);
-    }
-
-    public int official_sw(int[] nums, int k) {
-        Map<Integer, Integer> freq = new HashMap();
-
-        int left = 0;
-        int ans = 0;
-
-        for (int right = 0; right < nums.length; right++) {
-            int rv = nums[right];
-            freq.put(rv, freq.getOrDefault(rv, 0) + 1);
-
-            while (freq.get(rv) > k) {
-                int lv = nums[left++];
-                freq.put(lv, freq.get(lv) - 1);
-            }
-
-            ans = Math.max(ans, right - left + 1);
-        }
-
-        return ans;
+        return mySol(nums, k);
     }
 
     public int mySol(int[] nums, int k) {
         int ans = 0;
-        int max = 0;
-        Map<Integer, Integer> freq = new HashMap();
-        Map<Integer, List<Integer>> indices = new HashMap();
-
-        for (int i = 0; i < nums.length; i++) {
-            int num = nums[i];
-            indices.computeIfAbsent(num, key -> new ArrayList()).add(i);
-        }
-
+        Map<Integer, Integer> map = new HashMap();
         int left = 0;
-
+        
         for (int right = 0; right < nums.length; right++) {
-            int rv = nums[right];
-            int nextCount = freq.getOrDefault(rv, 0) + 1;
-            freq.put(rv, nextCount);
+            map.put(nums[right], map.getOrDefault(nums[right], 0) + 1);
 
-            max = Math.max(max, nextCount);
+            while (map.get(nums[right]) > k) {
+                map.put(nums[left], map.get(nums[left]) - 1);
 
-            if (max > k) {
-                int leftestIndex = indices.get(rv).get(0);
-
-                while (left <= leftestIndex) {
-                    int lv = nums[left];
-                    freq.put(lv, freq.get(lv) - 1);
-                    if (indices.get(lv).size() > 0) {
-                        indices.get(lv).remove(0);
-                    }
-                    left++;
+                if (map.get(nums[left]) == 0) {
+                    map.remove(nums[left]);
                 }
-                max--;
+
+                left++;
             }
 
             ans = Math.max(ans, right - left + 1);
