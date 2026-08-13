@@ -1,0 +1,1 @@
+<h2><a href="https://leetcode.cn/problems/longest-substring-of-one-repeating-character">2319. undefined</a></h2><h3>undefined</h3><hr>undefined
