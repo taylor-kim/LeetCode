@@ -8,6 +8,34 @@ class Solution {
         int left = 0;
         int breachCount = 0;
         Map<Integer, Integer> map = new HashMap();
+
+        for (int right = 0; right < n; right++) {
+            int r = nums[right];
+            map.put(r, map.getOrDefault(r, 0) + 1);
+
+            if (map.get(r) == k + 1) {
+                breachCount++;
+            }
+
+            if (breachCount > 0) {
+                int l = nums[left++];
+
+                map.put(l, map.get(l) - 1);
+
+                if (map.get(l) == k) {
+                    breachCount--;
+                }
+            }
+        }
+
+        return n - left;
+    }
+
+    public int try_editorial(int[] nums, int k) {
+        int n = nums.length;
+        int left = 0;
+        int breachCount = 0;
+        Map<Integer, Integer> map = new HashMap();
         int windowSize = 0;
 
         int ans = 0;
@@ -40,6 +68,8 @@ class Solution {
 
             ans = Math.max(ans, windowSize);
         }
+
+        // [1,3,4,2,7,9,2,10]
 
         return ans;
     }
