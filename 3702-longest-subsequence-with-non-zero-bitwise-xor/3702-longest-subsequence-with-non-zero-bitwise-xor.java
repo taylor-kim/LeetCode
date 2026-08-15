@@ -5,7 +5,6 @@ class Solution {
 
     public int mySol5(int[] nums) {
         int n = nums.length;
-        int ans = 0;
         int xor = 0;
 
         boolean hasValue = false;
@@ -14,7 +13,6 @@ class Solution {
             xor ^= nums[i];
 
             if (xor != 0) {
-                ans = i + 1;
                 hasValue = true;
             }
         }
@@ -23,7 +21,7 @@ class Solution {
             return n - 1;
         }
 
-        return ans;
+        return hasValue ? n : 0;
     }
 
     public int mySol4_fail(int[] nums) {
