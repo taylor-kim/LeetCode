@@ -1,6 +1,47 @@
 class Solution {
     public int maxSubarrayLength(int[] nums, int k) {
-        return mySol(nums, k);
+        return editorial(nums, k);
+    }
+
+    public int editorial(int[] nums, int k) {
+        int n = nums.length;
+        int left = 0;
+        int breachCount = 0;
+        Map<Integer, Integer> map = new HashMap();
+        int windowSize = 0;
+
+        int ans = 0;
+
+        for (int right = 0; right < n; right++) {
+            int r = nums[right];
+            map.put(r, map.getOrDefault(r, 0) + 1);
+
+            windowSize++;
+
+            if (map.get(r) == k + 1) {
+                breachCount++;
+            }
+
+            if (breachCount > 0) {
+                int l = nums[left++];
+
+                map.put(l, map.get(l) - 1);
+
+                windowSize--;
+
+                if (map.get(l) == k) {
+                    breachCount--;
+                }
+            }
+
+            // if (breachCount == 0) {
+            //     windowSize++;
+            // }
+
+            ans = Math.max(ans, windowSize);
+        }
+
+        return ans;
     }
 
     public int mySol(int[] nums, int k) {
