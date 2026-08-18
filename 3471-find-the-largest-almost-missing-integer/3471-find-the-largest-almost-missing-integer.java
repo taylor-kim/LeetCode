@@ -1,6 +1,6 @@
 class Solution {
     public int largestInteger(int[] nums, int k) {
-        return mySol_bf(nums, k);
+        return mySol2_fail_and_see_editorial(nums, k);
     }
 
     public int mySol_bf(int[] nums, int k) {
@@ -55,19 +55,25 @@ class Solution {
         return 0;
     }
 
-    public int mySol2_fail(int[] nums, int k) {
+    public int mySol2_fail_and_see_editorial(int[] nums, int k) {
         int n = nums.length;
         int ans = -1;
         int left = nums[0];
         int right = nums[n - 1];
 
         Map<Integer, Integer> map = new HashMap();
+        int max = -1;
 
         for (int i = 0; i < nums.length; i++) {
             map.put(nums[i], map.getOrDefault(nums[i], 0) + 1);
+            max = Math.max(max, nums[i]);
         }
 
-        int max = -1;
+        if (n == k) {
+            return max;
+        }
+
+        max = -1;
 
         for (int i = 0; i < nums.length; i++) {
             if (map.get(nums[i]) == 1) {
@@ -79,18 +85,12 @@ class Solution {
             return max;
         }
 
-        for (int i = 1; i < k; i++) {
-            if (left == nums[i]) {
-                left = -1;
-                break;
-            }
+        if (map.get(left) > 1) {
+            left = -1;
         }
 
-        for (int i = n - 2; i > n - k - 1; i--) {
-            if (right == nums[i]) {
-                right = -1;
-                break;
-            }
+        if (map.get(right) > 1) {
+            right = -1;
         }
 
         return Math.max(left, right);
