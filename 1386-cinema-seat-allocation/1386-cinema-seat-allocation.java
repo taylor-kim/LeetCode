@@ -1,6 +1,32 @@
 class Solution {
     public int maxNumberOfFamilies(int n, int[][] reservedSeats) {
-        return mySol(n, reservedSeats);
+        return editorial(n, reservedSeats);
+    }
+
+    public int editorial(int n, int[][] reserved) {
+        Map<Integer, Integer> map = new HashMap();
+
+        int left = 0b00001111;
+        int mid = 0b11000011;
+        int right = 0b11110000;
+
+        for (int[] r : reserved) {
+            if (r[1] == 1 || r[1] == 10) continue;
+
+            map.put(r[0], map.getOrDefault(r[0], 0) | (1 << (r[1] - 2)));
+        }
+
+        int ans = (n - map.size()) * 2;
+
+        for (int occufied : map.values()) {
+            if ((occufied | left) == left
+                || (occufied | mid) == mid
+                || (occufied | right) == right) {
+                    ans++;
+                }
+        }
+
+        return ans;
     }
 
     public int mySol(int n, int[][] reserved) {
