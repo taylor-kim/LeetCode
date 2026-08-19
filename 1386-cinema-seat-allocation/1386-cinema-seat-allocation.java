@@ -38,7 +38,6 @@ class Solution {
 
             if (possibles[0]) {
                 count++;
-                
             }
             if (possibles[2]) {
                 count++;
