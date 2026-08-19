@@ -6,9 +6,9 @@ class Solution {
     public int editorial(int n, int[][] reserved) {
         Map<Integer, Integer> map = new HashMap();
 
-        int left = 0b00001111;
+        int left = 0b11110000;
         int mid = 0b11000011;
-        int right = 0b11110000;
+        int right = 0b00001111;
 
         for (int[] r : reserved) {
             if (r[1] == 1 || r[1] == 10) continue;
