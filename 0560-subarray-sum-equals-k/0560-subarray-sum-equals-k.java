@@ -1,20 +1,15 @@
-class Solution {
+public class Solution {
     public int subarraySum(int[] nums, int k) {
-        return try_20240701(nums, k);
-    }
-
-    public int try_20240701(int[] nums, int k) {
-        int ans = 0;
-        int sum = 0;
-        Map<Integer, Integer> map = new HashMap();
-        map.put(0, 1);
-
-        for (int i = 0; i < nums.length; i++) {
-            sum += nums[i];
-            ans += map.getOrDefault(sum - k, 0);
-            map.put(sum, map.getOrDefault(sum, 0) + 1);
+        int count = 0;
+        for (int start = 0; start < nums.length; ++start) {
+            int sum = 0;
+            for (int end = start; end >= 0; --end) {
+                sum += nums[end];
+                if (sum == k) {
+                    count++;
+                }
+            }
         }
-
-        return ans;
+        return count;
     }
 }
