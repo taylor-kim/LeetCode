@@ -25,14 +25,11 @@ class Solution {
     public int mySol(TreeNode root) {
         if (root == null) return 0;
 
-        int value = root.val;
         int leftSum = mySol(root.left);
         int rightSum = mySol(root.right);
 
-        root.val = Math.abs(leftSum - rightSum);
+        ans += Math.abs(leftSum - rightSum);
 
-        ans += root.val;
-
-        return value + leftSum + rightSum;
+        return root.val + leftSum + rightSum;
     }
 }
