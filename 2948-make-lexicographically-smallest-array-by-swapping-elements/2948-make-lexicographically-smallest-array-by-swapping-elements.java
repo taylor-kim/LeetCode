@@ -11,7 +11,7 @@ class Solution {
         List<List<Integer>> groups = new ArrayList();
 
         int prev = sorted[0];
-        List<Integer> group = new ArrayList();
+        List<Integer> group = new LinkedList();
         group.add(prev);
         
         for (int i = 1; i < n; i++) {
