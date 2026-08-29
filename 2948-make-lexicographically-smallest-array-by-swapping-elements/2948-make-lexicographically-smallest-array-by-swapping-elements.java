@@ -1,6 +1,40 @@
 class Solution {
     public int[] lexicographicallySmallestArray(int[] nums, int limit) {
-        return mySol2_20260829(nums, limit);
+        return mySol2_20260829_improved(nums, limit);
+    }
+
+    public int[] mySol2_20260829_improved(int[] nums, int limit) {
+        int n = nums.length;
+        int[] sorted = nums.clone();
+        Arrays.sort(sorted);
+        
+        List<Queue<Integer>> groups = new ArrayList();
+        Map<Integer, Integer> numToGroupId = new HashMap();
+
+        int groupId = 0;
+        
+        numToGroupId.put(sorted[0], groupId);
+        groups.add(new LinkedList());
+        groups.get(groupId).add(sorted[0]);
+        
+        for (int i = 1; i < n; i++) {
+            if (sorted[i - 1] + limit < sorted[i]) {
+                groupId++;
+                groups.add(new LinkedList());
+            }
+
+            groups.get(groupId).add(sorted[i]);
+            numToGroupId.put(sorted[i], groupId);
+        }
+
+        int[] ans = new int[n];
+        int index = 0;
+
+        for (int num : nums) {
+            ans[index++] = groups.get(numToGroupId.get(num)).poll();
+        }
+
+        return ans;
     }
 
     public int[] mySol2_20260829(int[] nums, int limit) {
@@ -120,16 +154,6 @@ class Solution {
 
         return ans == num ? null : ans;
     }
-
-
-
-
-
-
-
-
-
-
 
     public int[] official_sort_and_bidir_mapping(int[] nums, int limit) {
         int n = nums.length;
