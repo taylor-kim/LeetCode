@@ -14,39 +14,38 @@ class Solution {
     }
 
     public int[] mySol(ListNode head) {
-        ListNode dummy = new ListNode(0, head);
-        
-        int firstIndex = 0;
-        int critical = -1;
-
-        int[] ans = {Integer.MAX_VALUE, -1};
+        int[] ans = new int[] {-1, -1};
 
         ListNode prev = head;
         ListNode node = head.next;
 
         int index = 1;
+        int critical = -1;
+        int left = -1;
 
         while (node.next != null) {
-            if ((prev.val < node.val && node.val > node.next.val) || (prev.val > node.val && node.val < node.next.val)) {
-                // System.out.println(String.format("critical!! value:%d, inde:%d", node.val, index));
-                if (firstIndex == 0) {
-                    firstIndex = index;
+            if (prev.val < node.val && node.val > node.next.val
+            || prev.val > node.val && node.val < node.next.val) {
+                if (critical != -1) {
+                    if (ans[0] == -1) {
+                        ans[0] = index - critical;
+                    } else {
+                        ans[0] = Math.min(ans[0], index - critical);
+                    }
                 } else {
-                    ans[0] = Math.min(ans[0], index - critical);
+                    left = index;
                 }
 
                 critical = index;
             }
 
-            index++;
             prev = node;
             node = node.next;
+            index++;
         }
 
-        ans[1] = critical - firstIndex;
-
-        if (ans[0] == Integer.MAX_VALUE || ans[1] == -1) {
-            return new int[] {-1, -1};
+        if (ans[0] != -1) {
+            ans[1] = critical - left;
         }
 
         return ans;
