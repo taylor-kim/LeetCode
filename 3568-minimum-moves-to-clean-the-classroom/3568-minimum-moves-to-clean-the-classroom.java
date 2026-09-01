@@ -63,7 +63,7 @@ class Solution {
                 return steps;
             }
 
-            // if (e == 0) continue;
+            if (e == 0) continue;
 
             for (int[] dir : dirs) {
                 int ny = y + dir[0];
@@ -74,7 +74,7 @@ class Solution {
                 char next = mat[ny].charAt(nx);
 
                 if (next == 'R') {
-                    if (e == 0 || bestEnergy[ny][nx][mask] >= energy) continue;
+                    if (bestEnergy[ny][nx][mask] >= energy) continue;
                     bestEnergy[ny][nx][mask] = energy;
                     pq.add(new int[] {ny, nx, energy, steps + 1, mask});
                 } else {
