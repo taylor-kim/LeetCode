@@ -1,6 +1,23 @@
 class Solution {
     public boolean uniformArray(int[] nums1) {
-        return mySol(nums1);
+        return mySol2(nums1);
+    }
+
+    public boolean mySol2(int[] nums) {
+        int n = nums.length;
+        int min = Integer.MAX_VALUE;
+        
+        for (int num : nums) min = Math.min(min, num);
+
+        for (int i = 0; i < n; i++) {
+            if (nums[i] == min) continue;
+
+            if (nums[i] % 2 == min % 2) continue;
+
+            if (min % 2 == 0) return false;
+        }
+
+        return true;
     }
 
     public boolean mySol(int[] nums1) {
