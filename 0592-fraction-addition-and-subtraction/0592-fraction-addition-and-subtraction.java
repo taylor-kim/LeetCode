@@ -1,64 +1,45 @@
 class Solution {
     public String fractionAddition(String expression) {
-        return mySol(expression);
-    }
-
-    public String mySol(String expression) {
-        int base = 1;
-
-        for (int i = 2; i <= 10; i++) {
-            base *= i;
-        }
-
-        if (expression.charAt(0) != '-') {
-            expression = "+" + expression;
-        }
-
-        List<String> fractions = new ArrayList();
-
-        for (String s : expression.split("\\+")) {
-            String[] ss = s.split("\\-");
-            for (int i = 0; i < ss.length; i++) {
-                // s - s
-                // i == 0 => s, i > 0 => -s
-                // -s -s
-                // i == 0 => continue, i > 0 => -s
-                if (i == 0 && ss[i].length() > 0) {
-                    fractions.add(ss[i]);
-                } else if (i > 0) {
-                    fractions.add("-" + ss[i]);
-                }
+        long x = 0, y = 1; // 分子，分母
+        int index = 0, n = expression.length();
+        while (index < n) {
+            // 读取分子
+            long x1 = 0, sign = 1;
+            if (expression.charAt(index) == '-' || expression.charAt(index) == '+') {
+                sign = expression.charAt(index) == '-' ? -1 : 1;
+                index++;
             }
-        }
+            while (index < n && Character.isDigit(expression.charAt(index))) {
+                x1 = x1 * 10 + expression.charAt(index) - '0';
+                index++;
+            }
+            x1 = sign * x1;
+            index++;
 
-        int a = 0;
-
-        for (String fraction : fractions) {
-            String[] f = fraction.split("/");
-
-            int numer = Integer.parseInt(f[0]);
-            int deno = Integer.parseInt(f[1]);
-
-            a += numer * (base / deno);
-        }
-
-        int[] ans = getIrreducible(a, base);
-
-        return ans[0] + "/" + ans[1];
-    }
-
-    private int[] getIrreducible(int a, int b) {
-        int factor = 2;
-
-        while (factor <= 10) {
-            while (a % factor == 0 && b % factor == 0) {
-                a /= factor;
-                b /= factor;
+            // 读取分母
+            long y1 = 0;
+            while (index < n && Character.isDigit(expression.charAt(index))) {
+                y1 = y1 * 10 + expression.charAt(index) - '0';
+                index++;
             }
 
-            factor++;
+            x = x * y1 + x1 * y;
+            y *= y1;
         }
+        if (x == 0) {
+            return "0/1";
+        }
+        long g = gcd(Math.abs(x), y); // 获取最大公约数
+        return Long.toString(x / g) + "/" + Long.toString(y / g);
+    }
 
-        return new int[] {a, b};
+    public long gcd(long a, long b) {
+        long remainder = a % b;
+        while (remainder != 0) {
+            a = b;
+            b = remainder;
+            remainder = a % b;
+        }
+        return b;
     }
 }
