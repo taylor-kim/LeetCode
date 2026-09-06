@@ -5,7 +5,33 @@ class Solution {
 
     public int mySol(String s, String t) {
         // return topdown(s, t, 0, 0, new Integer[s.length()][t.length()]);
-        return try_bottomup(s, t);
+        return try_bottomup_space_opt(s, t);
+    }
+
+    public int try_bottomup_space_opt(String s, String t) {
+        int m = s.length();
+        int n = t.length();
+        int[] dp = new int[n + 1];
+
+        dp[n] = 1;
+
+        for (int i = m - 1; i >= 0; i--) {
+            char c1 = s.charAt(i);
+            int nextJ = 1;
+            for (int j = n - 1; j >= 0; j--) {
+                char c2 = t.charAt(j);
+
+                int temp = dp[j];
+
+                if (c1 == c2) {
+                    dp[j] += nextJ;
+                }
+
+                nextJ = temp;
+            }
+        }
+
+        return dp[0];
     }
 
     public int try_bottomup(String s, String t) {
