@@ -21,6 +21,8 @@ class Solution {
                 if (i == node) continue;
                 count[i] = (count[i] + newNodeCount) % mod;
             }
+
+            // System.out.println(Arrays.toString(count));
         }
 
         return ans;
