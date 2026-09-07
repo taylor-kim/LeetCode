@@ -38,6 +38,6 @@ class Solution {
 
         // System.out.println(Arrays.toString(counter));
 
-        return (highest3 - 1) * 1000 + (others + 1);
+        return (highest3 - 1) * pos + (others + 1);
     }
 }
