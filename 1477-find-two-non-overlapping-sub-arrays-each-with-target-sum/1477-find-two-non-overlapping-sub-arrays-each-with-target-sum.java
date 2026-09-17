@@ -9,8 +9,7 @@ class Solution {
         pSum.put(0, -1);
         int sum = 0;
         int ans = n + 1;
-        int[] lengths = new int[n];
-        Arrays.fill(lengths, n + 1);
+        int prevMinLength = n + 1;
         
         for (int i = 0; i < n; i++) {
             sum += arr[i];
@@ -18,16 +17,14 @@ class Solution {
             if (pSum.containsKey(sum - target)) {
                 int j = pSum.get(sum - target);
                 int length = i - j;
+                prevMinLength = Math.min(prevMinLength, length);
 
-                ans = Math.min(ans, j == -1 ? n + 1 : lengths[j] + length);
-                lengths[i] = length;
+                ans = Math.min(ans, j == -1 ? n + 1 : arr[j] + length);
             }
 
-            lengths[i] = Math.min(lengths[i], lengths[Math.max(0, i - 1)]);
+            arr[i] = prevMinLength;
 
             pSum.put(sum, i);
-
-            // System.out.println(pSum);
         }
 
         return ans == n + 1 ? -1 : ans;
