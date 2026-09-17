@@ -17,15 +17,15 @@ class Solution {
                 sum -= arr[l++];
             }
 
+            dp[r + 1] = dp[r];
+
             if (sum == target) {
                 int length = r - l + 1;
 
-                dp[r + 1] = Math.min(dp[r], length);
-
                 ans = Math.min(ans, dp[l] + length);
-            }
 
-            dp[r + 1] = Math.min(dp[r], dp[r + 1]);
+                dp[r + 1] = Math.min(dp[r + 1], length);
+            }
         }
 
         return ans == n + 1 ? -1 : ans;
