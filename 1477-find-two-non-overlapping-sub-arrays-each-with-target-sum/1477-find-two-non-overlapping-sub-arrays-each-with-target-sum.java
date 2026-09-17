@@ -17,9 +17,10 @@ class Solution {
             if (pSum.containsKey(sum - target)) {
                 int j = pSum.get(sum - target);
                 int length = i - j;
-                prevMinLength = Math.min(prevMinLength, length);
 
-                ans = Math.min(ans, j == -1 ? n + 1 : arr[j] + length);
+                ans = Math.min(ans, j < 0 ? n + 1 : arr[j] + length);
+
+                prevMinLength = Math.min(prevMinLength, length);
             }
 
             arr[i] = prevMinLength;
