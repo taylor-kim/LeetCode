@@ -1,9 +1,39 @@
 class Solution {
     public int minSumOfLengths(int[] arr, int target) {
-        return mySol(arr, target);
+        return official_psum(arr, target);
     }
 
-    public int mySol(int[] arr, int target) {
+    public int official_psum(int[] arr, int target) {
+        int n = arr.length;
+        Map<Integer, Integer> pSum = new HashMap();
+        pSum.put(0, -1);
+        int sum = 0;
+        int ans = n + 1;
+        int[] lengths = new int[n];
+        Arrays.fill(lengths, n + 1);
+        
+        for (int i = 0; i < n; i++) {
+            sum += arr[i];
+
+            if (pSum.containsKey(sum - target)) {
+                int j = pSum.get(sum - target);
+                int length = i - j;
+
+                ans = Math.min(ans, j == -1 ? n + 1 : lengths[j] + length);
+                lengths[i] = length;
+            }
+
+            lengths[i] = Math.min(lengths[i], lengths[Math.max(0, i - 1)]);
+
+            pSum.put(sum, i);
+
+            // System.out.println(pSum);
+        }
+
+        return ans == n + 1 ? -1 : ans;
+    }
+
+    public int mySol_by_hint_and_gemini(int[] arr, int target) {
         List<int[]> ranges = new ArrayList();
 
         int left = 0;
