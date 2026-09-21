@@ -1,14 +1,14 @@
 class Solution {
     public long[] resultArray(int[] nums, int k) {
-        return mySol2(nums, k);
+        return mySol2_with_hint_and_gemini(nums, k);
     }
 
-    public long[] mySol2(int[] nums, int k) {
+    public long[] mySol2_with_hint_and_gemini(int[] nums, int k) {
         int n = nums.length;
         long[][] prefix = new long[n + 1][k];
         // prefix[0][0] = 1;
 
-        long[][] suffix = new long[n + 1][k];
+        // long[][] suffix = new long[n + 1][k];
         // suffix[n][0] = 1;
 
         for (int i = 0; i < n; i++) {
