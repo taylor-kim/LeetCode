@@ -5,37 +5,19 @@ class Solution {
 
     public long[] mySol2_with_hint_and_gemini(int[] nums, int k) {
         int n = nums.length;
-        long[][] prefix = new long[n + 1][k];
-        // prefix[0][0] = 1;
-
-        // long[][] suffix = new long[n + 1][k];
-        // suffix[n][0] = 1;
-
-        for (int i = 0; i < n; i++) {
-            int j = n - i - 1;
-            for (int x = 0; x < k; x++) {
-                prefix[i + 1][(int)(1l * x * nums[i] % k)] += prefix[i][x];
-                // suffix[j][x * nums[j] % k] += 1 + suffix[j + 1][x];
-            }
-            prefix[i + 1][nums[i] % k]++;
-        }
-
-        // for (long[] d : prefix) {
-        //     System.out.println(Arrays.toString(d) + ", ");
-        // }
-
-        // System.out.println("\n");
-
-        // for (long[] d : suffix) {
-        //     System.out.println(Arrays.toString(d) + ", ");
-        // }
-
+        long[] dp = new long[k];
         long[] ans = new long[k];
 
-        for (int i = 0; i <= n; i++) {
+        for (int i = 0; i < n; i++) {
+            long[] nextDp = new long[k];
             for (int x = 0; x < k; x++) {
-                ans[x] += prefix[i][x];
+                int index = (int)(1l * x * nums[i] % k);
+                nextDp[index] += dp[x];
+                ans[index] += dp[x];
             }
+            nextDp[nums[i] % k]++;
+            ans[nums[i] % k]++;
+            dp = nextDp;
         }
 
         return ans;
