@@ -41,7 +41,15 @@ class Solution {
         String l = dfs2(node.left, map, set);
         String r = dfs2(node.right, map, set);
 
-        String key = "%d:l%s:r%s".formatted(node.val, l, r);
+        // String key = "%d:l%s:r%s".formatted(node.val, l, r);
+
+        String key = new StringBuilder()
+                            .append(node.val)
+                            .append(":l")
+                            .append(l)
+                            .append(":r")
+                            .append(r)
+                            .toString();
 
         if (map.containsKey(key)) {
             set.add(map.get(key));
