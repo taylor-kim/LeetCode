@@ -20,31 +20,31 @@ class Solution {
 
     public List<TreeNode> mySol3(TreeNode root) {
         Map<String, TreeNode> map = new HashMap();
-        Set<String> keys = new HashSet();
+        Set<TreeNode> set = new HashSet();
 
-        dfs2(root, map, keys);
+        dfs2(root, map, set);
 
-        // System.out.println(keys);
+        // System.out.println(set);
 
-        List<TreeNode> ans = new ArrayList();
+        // List<TreeNode> ans = new ArrayList();
 
-        for (String key : keys) {
-            ans.add(map.get(key));
-        }
+        // // for (String key : keys) {
+        // //     ans.add(map.get(key));
+        // // }
 
-        return ans;
+        return new ArrayList(set);
     }
 
-    private String dfs2(TreeNode node, Map<String, TreeNode> map, Set<String> keys) {
+    private String dfs2(TreeNode node, Map<String, TreeNode> map, Set<TreeNode> set) {
         if (node == null) return "";
 
-        String l = dfs2(node.left, map, keys);
-        String r = dfs2(node.right, map, keys);
+        String l = dfs2(node.left, map, set);
+        String r = dfs2(node.right, map, set);
 
         String key = "%d:l%s:r%s".formatted(node.val, l, r);
 
         if (map.containsKey(key)) {
-            keys.add(key);
+            set.add(map.get(key));
         } else {
             map.put(key, node);
         }
