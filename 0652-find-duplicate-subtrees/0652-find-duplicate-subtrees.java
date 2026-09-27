@@ -43,13 +43,15 @@ class Solution {
 
         // String key = "%d:l%s:r%s".formatted(node.val, l, r);
 
-        String key = new StringBuilder()
-                            .append(node.val)
-                            .append(":l")
-                            .append(l)
-                            .append(":r")
-                            .append(r)
-                            .toString();
+        String key = node.val + ":l" + l + ":r" + r;
+
+        // String key = new StringBuilder()
+        //                     .append(node.val)
+        //                     .append(":l")
+        //                     .append(l)
+        //                     .append(":r")
+        //                     .append(r)
+        //                     .toString();
 
         if (map.containsKey(key)) {
             set.add(map.get(key));
