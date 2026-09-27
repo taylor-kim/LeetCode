@@ -1,6 +1,38 @@
 class Solution {
     public String reverseParentheses(String s) {
-        return bf_20260927(s);
+        return practice_wormhole(s);
+    }
+
+    public String practice_wormhole(String s) {
+        int n = s.length();
+        int[] pair = new int[n];
+        Stack<Integer> stack = new Stack();
+
+        for (int i = 0; i < n; i++) {
+            char c = s.charAt(i);
+
+            if (c == '(') {
+                stack.push(i);
+            } else if (c == ')') {
+                int j = stack.pop();
+                pair[i] = j;
+                pair[j] = i;
+            }
+        }
+
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0, dir = 1; i < n; i += dir) {
+            char c = s.charAt(i);
+            if (c == '(' || c == ')') {
+                i = pair[i];
+                dir = -dir;
+            } else {
+                sb.append(c);
+            }
+        }
+
+        return sb.toString();
     }
 
     public String bf_20260927(String s) {
