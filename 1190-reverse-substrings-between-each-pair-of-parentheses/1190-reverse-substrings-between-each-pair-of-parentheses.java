@@ -1,6 +1,116 @@
 class Solution {
     public String reverseParentheses(String s) {
-        return official_wormhole_teleportation(s);
+        return bf_20260927(s);
+    }
+
+    public String bf_20260927(String s) {
+        int n = s.length();
+
+        int open = 0;
+        Stack<Integer> stack = new Stack();
+        StringBuilder ans = new StringBuilder();
+
+        for (int i = 0; i < n; i++) {
+            char c = s.charAt(i);
+
+            if (c == '(') {
+                stack.push(ans.length());
+            } else if (c == ')') {
+                reverse(ans, stack.pop(), ans.length() - 1);
+            } else {
+                ans.append(c);
+            }
+        }
+
+        return ans.toString();
+    }
+
+    public String try_20260927_fail(String s) {
+        int n = s.length();
+
+        int level = 0;
+        int count = 0;
+        Stack<Data> stack = new Stack();
+        stack.push(new Data(level, 0));
+        Queue<Data> queue = new LinkedList();
+        StringBuilder ans = new StringBuilder();
+
+        for (int i = 0; i < n; i++) {
+            char c = s.charAt(i);
+
+            if (c == '(') {
+                stack.push(new Data(++level, i + 1));
+                ans.append(c);
+            } else if (c == ')') {
+                level--;
+                Data d = stack.pop();
+                d.end = i - 1;
+                queue.add(d);
+                ans.append(c);
+            } else {
+                stack.peek().sb.append(c);
+                count++;
+                ans.append("_");
+            }
+        }
+
+        if (s.charAt(n - 1) != ')') {
+            stack.peek().end = n - 1;
+        }
+
+        while (!stack.isEmpty()) {
+            queue.add(stack.pop());
+        }
+
+        while (!queue.isEmpty()) {
+            Data d = queue.poll();
+
+            String part = d.getResult();
+
+            if (part.length() == 0) continue;
+
+            int start = d.start;
+            int end = d.end;
+            int index = 0;
+
+            println("start:%d, end:%d".formatted(start, end));
+
+            for (int i = start; i <= end; i++) {
+                if (ans.charAt(i) != '_') continue;
+
+                println("wtf, i:%d".formatted(i));
+
+                ans.setCharAt(i, part.charAt(index++));
+
+                println(ans.toString());
+            }
+        }
+
+        return ans.toString().replaceAll("\\(|\\)", "");
+    }
+
+    private void println(Object o) {
+        // System.out.println(o);
+    }
+
+    class Data {
+        StringBuilder sb = new StringBuilder();
+        int level = 0;
+        int start = 0;
+        int end = 0;
+
+        public Data(int level, int start) {
+            this.level = level;
+            this.start = start;
+        }
+
+        public String getResult() {
+            if (level % 2 == 1) {
+                return sb.reverse().toString();
+            }
+
+            return sb.toString();
+        }
     }
 
     public String official_wormhole_teleportation(String s) {
