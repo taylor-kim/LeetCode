@@ -4,18 +4,18 @@ class Solution {
     }
 
     public int mySol(String s) {
-        int ret = 0;
-        int p = 0;
+        int ans = 0;
+        int open = 0;
 
-        for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) == '(') {
-                p++;
-                ret = Math.max(ret, p);
-            } else if (s.charAt(i) == ')') {
-                p--;
+        for (char c : s.toCharArray()) {
+            if (c == '(') {
+                open++;
+                ans = Math.max(ans, open);
+            } else if (c == ')') {
+                open--;
             }
         }
 
-        return ret;
+        return ans;
     }
 }
