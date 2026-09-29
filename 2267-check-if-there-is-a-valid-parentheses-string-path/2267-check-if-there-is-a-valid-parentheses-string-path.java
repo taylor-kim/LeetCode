@@ -27,7 +27,7 @@ class Solution {
         int m = grid.length;
         int n = grid[0].length;
 
-        return topdown(grid, 0, 0, 0, new Boolean[m][n][2 * (m + n) + 1]);
+        return topdown(grid, 0, 0, 0, new Boolean[m][n][m + n]);
     }
 
     public boolean topdown(char[][] grid, int i, int j, int open, Boolean[][][] memo) {
@@ -39,10 +39,12 @@ class Solution {
 
         open += grid[i][j] == '(' ? 1 : -1;
 
-        if (memo[i][j][open + buffer] != null) return memo[i][j][open + buffer];
+        if (open < 0) return false;
+
+        if (memo[i][j][open] != null) return memo[i][j][open];
 
         if (i == m - 1 && j == n - 1) return open == 0;
 
-        return memo[i][j][open + buffer] = topdown(grid, i + 1, j, open, memo) || topdown(grid, i, j + 1, open, memo);
+        return memo[i][j][open] = topdown(grid, i + 1, j, open, memo) || topdown(grid, i, j + 1, open, memo);
     }
 }
