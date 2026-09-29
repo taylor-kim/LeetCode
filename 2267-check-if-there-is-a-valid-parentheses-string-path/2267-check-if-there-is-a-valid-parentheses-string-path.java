@@ -1,9 +1,9 @@
 class Solution {
     public boolean hasValidPath(char[][] grid) {
-        return mySol_mle(grid);
+        return mySol(grid);
     }
 
-    public boolean mySol2(char[][] grid) {
+    public boolean mySol2_fail(char[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
         int[][][] dp = new int[m + 1][n + 1][2];
@@ -23,7 +23,7 @@ class Solution {
         return dp[m][n][0] == 0 || dp[m][n][1] == 0;
     }
 
-    public boolean mySol_mle(char[][] grid) {
+    public boolean mySol(char[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
 
