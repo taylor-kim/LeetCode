@@ -10,22 +10,14 @@ class Solution {
         int[] ans = new int[n];
 
         for (int i = 0; i < n; i++) {
-            if (seq.charAt(i) == '(') {
-                if (openA <= openB) {
-                    openA++;
-                    ans[i] = 0;
-                } else {
-                    openB++;
-                    ans[i] = 1;
-                }
+            int sign = seq.charAt(i) == '(' ? 1 : -1;
+
+            if (sign * openA <= sign * openB) {
+                openA += sign;
+                ans[i] = 0;
             } else {
-                if (openA >= openB) {
-                    openA--;
-                    ans[i] = 0;
-                } else {
-                    openB--;
-                    ans[i] = 1;
-                }
+                openB += sign;
+                ans[i] = 1;
             }
         }
 
