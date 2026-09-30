@@ -1,6 +1,24 @@
 class Solution {
     public int[] maxDepthAfterSplit(String seq) {
-        return mySol(seq);
+        return editorial(seq);
+    }
+
+    public int[] editorial(String seq) {
+        int n = seq.length();
+        int delta = 0;
+        int[] ans = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            if (seq.charAt(i) == '(') {
+                ans[i] = delta % 2;
+                delta++;
+            } else {
+                delta--;
+                ans[i] = delta % 2;
+            }
+        }
+
+        return ans;
     }
 
     public int[] mySol(String seq) {
