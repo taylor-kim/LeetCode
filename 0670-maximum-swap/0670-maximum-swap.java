@@ -2,15 +2,22 @@ class Solution {
     public int maximumSwap(int num) {
         char[] charArray = String.valueOf(num).toCharArray();
         int n = charArray.length;
-        int maxNum = num;
-        for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
-                swap(charArray, i, j);
-                maxNum = Math.max(maxNum, Integer.parseInt(new String(charArray)));
-                swap(charArray, i, j);
+        int maxIdx = n - 1;
+        int idx1 = -1, idx2 = -1;
+        for (int i = n - 2; i >= 0; i--) {
+            if (charArray[i] > charArray[maxIdx]) {
+                maxIdx = i;
+            } else if (charArray[i] < charArray[maxIdx]) {
+                idx1 = i;
+                idx2 = maxIdx;
             }
         }
-        return maxNum;
+        if (idx1 >= 0) {
+            swap(charArray, idx1, idx2);
+            return Integer.parseInt(new String(charArray));
+        } else {
+            return num;
+        }
     }
 
     public void swap(char[] charArray, int i, int j) {
