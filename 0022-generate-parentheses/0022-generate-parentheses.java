@@ -6,12 +6,12 @@ class Solution {
     public List<String> mySol(int n) {
         List<String> list = new ArrayList();
 
-        backtrack(n, 0, 0, new StringBuilder(), list);
+        topdown(list, n, 0, 0, new StringBuilder());
 
         return list;
     }
 
-    private void backtrack(int n, int open, int close, StringBuilder sb, List<String> list) {
+    private void topdown(List<String> list, int n, int open, int close, StringBuilder sb) {
         if (open < close || open > n || close > n) return;
 
         if (open == n && close == n) {
@@ -19,9 +19,12 @@ class Solution {
             return;
         }
 
-        backtrack(n, open + 1, close, sb.append("("), list);
+        sb.append("(");
+        topdown(list, n, open + 1, close, sb);
         sb.setLength(sb.length() - 1);
-        backtrack(n, open, close + 1, sb.append(")"), list);
+
+        sb.append(")");
+        topdown(list, n, open, close + 1, sb);
         sb.setLength(sb.length() - 1);
     }
 }
