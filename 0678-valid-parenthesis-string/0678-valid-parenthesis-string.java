@@ -1,96 +1,41 @@
 class Solution {
     public boolean checkValidString(String s) {
-        return officialTwoPointer(s);
+        return mySol(s);
     }
 
-    public boolean officialTwoPointer(String s) {
-        int open = 0;
-        int close = 0;
-        int n = s.length() - 1;
-
-        for (int i = 0; i <= n; i++) {
-            char c = s.charAt(i);
-
-            if (c == '(' || c == '*') {
-                open++;
-            } else {
-                open--;
-            }
-
-            char c2 = s.charAt(n - i);
-
-            if (c2 == ')' || c2 == '*') {
-                close++;
-            } else {
-                close--;
-            }
-
-            if (open < 0 || close < 0) return false;
-        }
-
-        return true;
-    }
-
-    public boolean officialTwoStack(String s) {
-        Stack<Integer> open = new Stack();
-        Stack<Integer> star = new Stack();
+    public boolean mySol(String s) {
+        Stack<Integer> jokers = new Stack();
+        Stack<Integer> opens = new Stack();
 
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
 
             if (c == '(') {
-                open.push(i);
-            } else if (c == '*') {
-                star.push(i);
+                opens.push(i);
+            } else if (c == ')') {
+                if (!opens.isEmpty()) {
+                    opens.pop();
+                } else if (!jokers.isEmpty()) {
+                    jokers.pop();
+                } else {
+                    return false;
+                }
             } else {
-                if (!open.isEmpty()) open.pop();
-                else if (!star.isEmpty()) star.pop();
-                else return false;
+                jokers.push(i);
             }
         }
 
-        while (!open.isEmpty() && !star.isEmpty()) {
-            if (open.pop() > star.pop()) return false;
-        }
+        // System.out.println("opens:%s, jokers:%s".formatted(opens, jokers));
 
-        return open.isEmpty();
-    }
-
-    public boolean mySol(String s) {
-        Stack<Integer> stack = new Stack();
-        Stack<Integer> stack2 = new Stack();
-
-        int star = 0;
-        int close = 0;
-
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-
-            if (!stack.isEmpty() && c == ')') {
-                stack.pop();
-                continue;
+        while (!opens.isEmpty() && !jokers.isEmpty()) {
+            if (opens.peek() > jokers.peek()) {
+                return false;
+            } else {
+                opens.pop();
+                jokers.pop();
             }
-
-            if (!stack2.isEmpty() && c == ')') {
-                stack2.pop();
-                continue;
-            }
-
-            if (c == '*') stack2.push(i);
-            else if (c == '(') stack.push(i);
-            else close++;
-
-            if (stack.size() + stack2.size() < close) return false;
         }
 
-        if (close > 0) return false;
-
-        if (stack.size() > stack2.size()) return false;
-
-        while (!stack.isEmpty()) {
-            if (stack.pop() > stack2.pop()) return false;
-        }
-
-        return true;
+        return opens.isEmpty();
     }
 }
