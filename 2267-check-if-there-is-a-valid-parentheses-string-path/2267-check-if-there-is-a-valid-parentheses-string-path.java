@@ -24,6 +24,7 @@ class Solution {
                     if (!dp[i + 1][j][open + delta] && !dp[i][j + 1][open + delta]) continue;
 
                     dp[i][j][open] = true;
+                    break;
                 }
             }
         }
