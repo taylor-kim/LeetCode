@@ -28,11 +28,8 @@ class Solution {
         // System.out.println("opens:%s, jokers:%s".formatted(opens, jokers));
 
         while (!opens.isEmpty() && !jokers.isEmpty()) {
-            if (opens.peek() > jokers.peek()) {
+            if (opens.pop() > jokers.pop()) {
                 return false;
-            } else {
-                opens.pop();
-                jokers.pop();
             }
         }
 
