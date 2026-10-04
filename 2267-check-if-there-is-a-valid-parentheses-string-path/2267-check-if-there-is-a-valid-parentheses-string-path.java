@@ -1,6 +1,6 @@
 class Solution {
     public boolean hasValidPath(char[][] grid) {
-        return editorial_with_my_bottomup(grid);
+        return try_bottomup(grid);
     }
 
     public boolean editorial_with_my_bottomup(char[][] grid) {
@@ -17,7 +17,7 @@ class Solution {
         for (int i = m - 1; i >= 0; i--) {
             for (int j = n - 1; j >= 0; j--) {
                 int delta = grid[i][j] == '(' ? 1 : -1;
-                
+
                 for (int open = 0; open < m + n; open++) {                    
                     if (open + delta < 0) continue;
 
