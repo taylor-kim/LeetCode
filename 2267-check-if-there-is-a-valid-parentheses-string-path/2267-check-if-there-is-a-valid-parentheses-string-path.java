@@ -26,32 +26,23 @@ class Solution {
     public boolean try_bottomup(char[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
-        boolean[][][] dp = new boolean[m][n][m + n];
+        boolean[][][] dp = new boolean[m + 1][n + 1][m + n];
 
         if (grid[0][0] != '(' || grid[m - 1][n - 1] != ')' || (m + n - 1) % 2 != 0) return false;
 
-        dp[m - 1][n - 1][0] = true;
+        dp[m][n][0] = true;
+        dp[m - 1][n][0] = true;
+        dp[m][n - 1][0] = true;
 
         for (int open = 0; open < m + n; open++) {
             for (int i = m - 1; i >= 0; i--) {
                 for (int j = n - 1; j >= 0; j--) {
                     // if (i == m - 1 && j == n - 1) continue;
+                    int delta = grid[i][j] == '(' ? 1 : -1;
+                    
+                    if (open + delta < 0) continue;
 
-                    if (i + 1 < m ) {
-                        int delta = grid[i + 1][j] == '(' ? 1 : -1;
-                        int next = open + delta;
-                        if (next >= 0 && next < m + n) {
-                            dp[i][j][open] = dp[i + 1][j][next];
-                        }
-                    }
-
-                    if (j + 1 < n) {
-                        int delta = grid[i][j + 1] == '(' ? 1 : -1;
-                        int next = open + delta;
-                        if (next >= 0 && next < m + n) {
-                            dp[i][j][open] |= dp[i][j + 1][next];
-                        }
-                    }
+                    dp[i][j][open] = dp[i + 1][j][open + delta] || dp[i][j + 1][open + delta];
                 }
             }
         }
