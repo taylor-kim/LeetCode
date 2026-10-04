@@ -1,6 +1,6 @@
 class Solution {
     public boolean hasValidPath(char[][] grid) {
-        return mySol2(grid);
+        return try_bottomup(grid);
     }
 
     public boolean mySol2_fail(char[][] grid) {
@@ -26,18 +26,17 @@ class Solution {
     public boolean try_bottomup(char[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
-        boolean[][][] dp = new boolean[m + 1][n + 1][m + n];
+        boolean[][][] dp = new boolean[m + 1][n + 1][m + n + 1];
 
-        if (grid[0][0] != '(' || grid[m - 1][n - 1] != ')' || (m + n - 1) % 2 != 0) return false;
+        // if (grid[0][0] != '(' || grid[m - 1][n - 1] != ')' || (m + n - 1) % 2 != 0) return false;
 
-        dp[m][n][0] = true;
+        // dp[m][n][0] = true;
         dp[m - 1][n][0] = true;
         dp[m][n - 1][0] = true;
 
-        for (int open = 0; open < m + n; open++) {
-            for (int i = m - 1; i >= 0; i--) {
-                for (int j = n - 1; j >= 0; j--) {
-                    // if (i == m - 1 && j == n - 1) continue;
+        for (int i = m - 1; i >= 0; i--) {
+            for (int j = n - 1; j >= 0; j--) {
+                for (int open = 0; open < m + n; open++) {
                     int delta = grid[i][j] == '(' ? 1 : -1;
                     
                     if (open + delta < 0) continue;
