@@ -21,9 +21,13 @@ class Solution {
                     
                     if (open + delta < 0) continue;
 
-                    if (!dp[i + 1][j][open + delta] && !dp[i][j + 1][open + delta]) continue;
+                    // if (!dp[i + 1][j][open + delta] && !dp[i][j + 1][open + delta]) continue;
 
-                    dp[i][j][open] = true;
+                    // dp[i][j][open] = true;
+
+                    if (dp[i + 1][j][open + delta] || dp[i][j + 1][open + delta]) {
+                        dp[i][j][open] = true;
+                    }
                 }
             }
         }
