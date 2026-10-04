@@ -1,6 +1,6 @@
 class Solution {
     public boolean hasValidPath(char[][] grid) {
-        return mySol(grid);
+        return mySol2(grid);
     }
 
     public boolean mySol2_fail(char[][] grid) {
@@ -21,6 +21,63 @@ class Solution {
         }
 
         return dp[m][n][0] == 0 || dp[m][n][1] == 0;
+    }
+
+    public boolean try_bottomup(char[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        boolean[][][] dp = new boolean[m][n][m + n];
+
+        if (grid[0][0] != '(' || grid[m - 1][n - 1] != ')' || (m + n - 1) % 2 != 0) return false;
+
+        dp[m - 1][n - 1][0] = true;
+        dp[m - 1][n - 1][1] = true;
+
+        for (int open = 0; open < m + n; open++) {
+            for (int i = m - 1; i >= 0; i--) {
+                for (int j = n - 1; j >= 0; j--) {
+                    if (i == m - 1 && j == n - 1) continue;
+
+                    int delta = grid[i][j] == '(' ? 1 : -1;
+                    int next = open + delta;
+
+                    if (i + 1 < m && next >= 0 && next < m + n) {
+                        dp[i][j][open] = dp[i + 1][j][next];
+                    }
+
+                    if (j + 1 < n && next >= 0 && next < m + n) {
+                        dp[i][j][open] |= dp[i][j + 1][next];
+                    }
+                }
+            }
+        }
+
+        return dp[0][0][0];
+    }
+
+    public boolean mySol2(char[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+
+        return topdown2(grid, 0, 0, 0, new Boolean[m][n][m + n]);
+    }
+
+    public boolean topdown2(char[][] grid, int i, int j, int open, Boolean[][][] memo) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int buffer = m + n + 1;
+
+        if (i < 0 || i >= m || j < 0 || j >= n || open < 0) return false;
+
+        int delta = grid[i][j] == '(' ? 1 : -1;
+
+        if (open + delta < 0) return false;
+
+        if (i == m - 1 && j == n - 1) return open + delta == 0;
+
+        if (memo[i][j][open] != null) return memo[i][j][open];
+
+        return memo[i][j][open] = topdown2(grid, i + 1, j, open + delta, memo) || topdown2(grid, i, j + 1, open + delta, memo);
     }
 
     public boolean mySol(char[][] grid) {
