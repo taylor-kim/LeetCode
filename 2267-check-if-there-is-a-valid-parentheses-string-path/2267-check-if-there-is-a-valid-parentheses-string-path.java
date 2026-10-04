@@ -31,22 +31,26 @@ class Solution {
         if (grid[0][0] != '(' || grid[m - 1][n - 1] != ')' || (m + n - 1) % 2 != 0) return false;
 
         dp[m - 1][n - 1][0] = true;
-        dp[m - 1][n - 1][1] = true;
 
         for (int open = 0; open < m + n; open++) {
             for (int i = m - 1; i >= 0; i--) {
                 for (int j = n - 1; j >= 0; j--) {
-                    if (i == m - 1 && j == n - 1) continue;
+                    // if (i == m - 1 && j == n - 1) continue;
 
-                    int delta = grid[i][j] == '(' ? 1 : -1;
-                    int next = open + delta;
-
-                    if (i + 1 < m && next >= 0 && next < m + n) {
-                        dp[i][j][open] = dp[i + 1][j][next];
+                    if (i + 1 < m ) {
+                        int delta = grid[i + 1][j] == '(' ? 1 : -1;
+                        int next = open + delta;
+                        if (next >= 0 && next < m + n) {
+                            dp[i][j][open] = dp[i + 1][j][next];
+                        }
                     }
 
-                    if (j + 1 < n && next >= 0 && next < m + n) {
-                        dp[i][j][open] |= dp[i][j + 1][next];
+                    if (j + 1 < n) {
+                        int delta = grid[i][j + 1] == '(' ? 1 : -1;
+                        int next = open + delta;
+                        if (next >= 0 && next < m + n) {
+                            dp[i][j][open] |= dp[i][j + 1][next];
+                        }
                     }
                 }
             }
@@ -67,13 +71,15 @@ class Solution {
         int n = grid[0].length;
         int buffer = m + n + 1;
 
+        if ((i == m - 1 && j >= n) || (i >= m && j == n - 1)) {
+            return open == 0;
+        }
+
         if (i < 0 || i >= m || j < 0 || j >= n || open < 0) return false;
 
         int delta = grid[i][j] == '(' ? 1 : -1;
 
         if (open + delta < 0) return false;
-
-        if (i == m - 1 && j == n - 1) return open + delta == 0;
 
         if (memo[i][j][open] != null) return memo[i][j][open];
 
