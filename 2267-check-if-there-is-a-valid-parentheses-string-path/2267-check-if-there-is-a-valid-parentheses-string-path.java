@@ -28,7 +28,7 @@ class Solution {
         int n = grid[0].length;
         boolean[][][] dp = new boolean[m + 1][n + 1][m + n + 1];
 
-        // if (grid[0][0] != '(' || grid[m - 1][n - 1] != ')' || (m + n - 1) % 2 != 0) return false;
+        if (grid[0][0] != '(' || grid[m - 1][n - 1] != ')' || (m + n - 1) % 2 != 0) return false;
 
         // dp[m][n][0] = true;
         dp[m - 1][n][0] = true;
