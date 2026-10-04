@@ -1,6 +1,51 @@
 class Solution {
     public int longestValidParentheses(String s) {
-        return official_dp(s);
+        return test(s);
+    }
+
+    public int test(String s) {
+        int n = s.length();
+        int ans = 0;
+        int open = 0;
+        int left = 0;
+        int right = 0;
+
+        for (right = 0; right < n; right++) {
+            open += s.charAt(right) == '(' ? 1 : -1;
+
+            // while (open < 0) {
+            //     open += s.charAt(left++) == '(' ? -1 : 1;
+            // }
+            if (open < 0) {
+                left = right + 1;
+                open = 0;
+                continue;
+            }
+
+            if (open == 0) {
+                ans = Math.max(ans, right - left + 1);
+            }
+        }
+
+        open = 0;
+
+        for (left = n - 1, right = n - 1; left >= 0; left--) {
+            open += s.charAt(left) == '(' ? -1 : 1;
+
+            while (open < 0) {
+                open += s.charAt(right--) == '(' ? 1 : -1;
+            }
+
+            if (open == 0) {
+                ans = Math.max(ans, right - left + 1);
+            }
+        }
+
+        return ans;
+    }
+
+    public int official_stack(String s) {
+        return -1;
     }
 
     public int official_dp(String s) {
