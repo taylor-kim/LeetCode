@@ -1,6 +1,6 @@
 class Solution {
     public boolean hasValidPath(char[][] grid) {
-        return try_bottomup(grid);
+        return editorial_with_my_bottomup(grid);
     }
 
     public boolean editorial_with_my_bottomup(char[][] grid) {
@@ -24,7 +24,6 @@ class Solution {
                     if (!dp[i + 1][j][open + delta] && !dp[i][j + 1][open + delta]) continue;
 
                     dp[i][j][open] = true;
-                    break;
                 }
             }
         }
