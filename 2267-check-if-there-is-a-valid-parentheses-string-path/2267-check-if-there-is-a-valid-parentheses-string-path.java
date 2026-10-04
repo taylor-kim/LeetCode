@@ -80,28 +80,28 @@ class Solution {
         return memo[i][j][open] = topdown2(grid, i + 1, j, open + delta, memo) || topdown2(grid, i, j + 1, open + delta, memo);
     }
 
-    public boolean mySol(char[][] grid) {
-        int m = grid.length;
-        int n = grid[0].length;
+    // public boolean mySol(char[][] grid) {
+    //     int m = grid.length;
+    //     int n = grid[0].length;
 
-        return topdown(grid, 0, 0, 0, new Boolean[m][n][m + n]);
-    }
+    //     return topdown(grid, 0, 0, 0, new Boolean[m][n][m + n]);
+    // }
 
-    public boolean topdown(char[][] grid, int i, int j, int open, Boolean[][][] memo) {
-        int m = grid.length;
-        int n = grid[0].length;
-        int buffer = m + n + 1;
+    // public boolean topdown(char[][] grid, int i, int j, int open, Boolean[][][] memo) {
+    //     int m = grid.length;
+    //     int n = grid[0].length;
+    //     int buffer = m + n + 1;
 
-        if (i < 0 || i >= m || j < 0 || j >= n || open < 0) return false;
+    //     if (i < 0 || i >= m || j < 0 || j >= n || open < 0) return false;
 
-        open += grid[i][j] == '(' ? 1 : -1;
+    //     open += grid[i][j] == '(' ? 1 : -1;
 
-        if (open < 0) return false;
+    //     if (open < 0) return false;
 
-        if (memo[i][j][open] != null) return memo[i][j][open];
+    //     if (memo[i][j][open] != null) return memo[i][j][open];
 
-        if (i == m - 1 && j == n - 1) return open == 0;
+    //     if (i == m - 1 && j == n - 1) return open == 0;
 
-        return memo[i][j][open] = topdown(grid, i + 1, j, open, memo) || topdown(grid, i, j + 1, open, memo);
-    }
+    //     return memo[i][j][open] = topdown(grid, i + 1, j, open, memo) || topdown(grid, i, j + 1, open, memo);
+    // }
 }
