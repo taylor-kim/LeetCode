@@ -1,6 +1,23 @@
 class Solution {
     public boolean checkValidString(String s) {
-        return mySol(s);
+        return official_two_pointers(s);
+    }
+
+    public boolean official_two_pointers(String s) {
+        int n = s.length();
+        int open = 0;
+        int close = 0;
+
+        for (int i = 0; i < n; i++) {
+            open += s.charAt(i) == ')' ? -1 : 1;
+
+            int j = n - i - 1;
+            close += s.charAt(j) == '(' ? -1 : 1;
+
+            if (open < 0 || close < 0) return false;
+        }
+
+        return true;
     }
 
     public boolean mySol(String s) {
