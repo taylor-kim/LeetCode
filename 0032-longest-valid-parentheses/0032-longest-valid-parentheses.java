@@ -13,9 +13,6 @@ class Solution {
         for (right = 0; right < n; right++) {
             open += s.charAt(right) == '(' ? 1 : -1;
 
-            // while (open < 0) {
-            //     open += s.charAt(left++) == '(' ? -1 : 1;
-            // }
             if (open < 0) {
                 left = right + 1;
                 open = 0;
@@ -32,8 +29,10 @@ class Solution {
         for (left = n - 1, right = n - 1; left >= 0; left--) {
             open += s.charAt(left) == '(' ? -1 : 1;
 
-            while (open < 0) {
-                open += s.charAt(right--) == '(' ? 1 : -1;
+            if (open < 0) {
+                right = left - 1;
+                open = 0;
+                continue;
             }
 
             if (open == 0) {
