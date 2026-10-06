@@ -25,13 +25,6 @@ class Solution {
         return ans + Math.abs(open);
     }
 
-
-
-
-
-
-
-
     public int official_nostack(String s) {
         int open = 0;
         int unmatched = 0;
