@@ -1,7 +1,36 @@
 class Solution {
     public int minAddToMakeValid(String s) {
-        return official_nostack(s);
+        return try_20261006(s);
     }
+
+    public int try_20261006(String s) {
+        int open = 0;
+        int close = 0;
+
+        int ans = 0;
+
+        for (char c : s.toCharArray()) {
+            if (c == '(') {
+                open++;
+            } else {
+                open--;
+            }
+
+            if (open < 0) {
+                ans++;
+                open = 0;
+            }
+        }
+
+        return ans + Math.abs(open);
+    }
+
+
+
+
+
+
+
 
     public int official_nostack(String s) {
         int open = 0;
