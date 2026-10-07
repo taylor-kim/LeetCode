@@ -1,6 +1,25 @@
 class Solution {
     public int scoreOfParentheses(String s) {
-        return stackWithGemini(s);
+        return bestSol(s);
+    }
+
+    public int bestSol(String s) {
+        int n = s.length();
+        int ans = 0;
+        int open = 1;
+
+        for (int i = 1; i < n; i++) {
+            if (s.charAt(i) == '(') {
+                open++;
+            } else {
+                open--;
+                if (s.charAt(i - 1) == '(') {
+                    ans += 1 << open;
+                }
+            }
+        }
+
+        return ans;
     }
 
     public int stackWithGemini(String s) {
