@@ -1,6 +1,28 @@
 class Solution {
     public int scoreOfParentheses(String s) {
-        return topdown(s);
+        return stackWithGemini(s);
+    }
+
+    public int stackWithGemini(String s) {
+        int n = s.length();
+
+        Stack<Integer> stack = new Stack();
+        stack.push(0);
+
+        for (int i = 0; i < n; i++) {
+            char c = s.charAt(i);
+
+            if (c == '(') {
+                stack.push(0);
+            } else {
+                int score = stack.pop();
+                int prev = stack.pop();
+
+                stack.push(prev + Math.max(score * 2, 1));
+            }
+        }
+
+        return stack.pop();
     }
 
     public int topdown(String s) {
@@ -23,7 +45,7 @@ class Solution {
     }
 
     public int topdown(String s, int lo, int hi, int[] pair) {
-        if (lo > hi) return 0;
+        if (lo >= hi) return 0;
 
         if (s.charAt(lo + 1) == ')') {
             return 1 + topdown(s, lo + 2, hi, pair);
