@@ -3,7 +3,7 @@ class Solution {
         return mySol(s);
     }
 
-    public String mySol(String s) {
+    public String editorial(String s) {
         int n = s.length();
         int open = 0;
         StringBuilder ans = new StringBuilder();
@@ -19,6 +19,27 @@ class Solution {
 
             if (c == '(') {
                 open++;
+            }
+        }
+
+        return ans.toString();
+    }
+
+    public String mySol(String s) {
+        int n = s.length();
+        int open = 0;
+        StringBuilder ans = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
+
+        for (char c : s.toCharArray()) {
+            open += c == '(' ? 1 : -1;
+            sb.append(c);
+
+            if (open == 0) {
+                sb.deleteCharAt(0);
+                sb.setLength(sb.length() - 1);
+                ans.append(sb.toString());
+                sb.setLength(0);
             }
         }
 
