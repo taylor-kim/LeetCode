@@ -28,7 +28,7 @@ class Solution {
             int mod = Math.min(adj, counter);
             adj -= mod;
 
-            map.put(high, map.get(high) - mod);
+            map.put(high, counter - mod);
 
             if (map.get(high) == 0) {
                 map.remove(high);
