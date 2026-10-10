@@ -6,12 +6,16 @@ class Solution {
     public long mySol(int[] nums1, int[] nums2, int k1, int k2) {
         int n = nums1.length;
         int[] diff = new int[n];
+        long sum = 0;
 
         for (int i = 0; i < n; i++) {
             diff[i] = Math.abs(nums1[i] - nums2[i]);
+            sum += diff[i];
         }
 
         int adj = k1 + k2;
+
+        if (sum <= adj) return 0;
 
         TreeMap<Integer, Integer> map = new TreeMap();
 
@@ -39,7 +43,7 @@ class Solution {
             map.put(lower, map.getOrDefault(lower, 0) + mod);
         }
 
-        // println(map);
+        println(map);
 
         long ans = 0;
 
@@ -57,7 +61,7 @@ class Solution {
         return ans;
     }
 
-    // private void println(Object o) {
-    //     System.out.println(o);
-    // }
+    private void println(Object o) {
+        System.out.println(o);
+    }
 }
