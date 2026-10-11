@@ -1,6 +1,57 @@
 class Solution {
     public long minSumSquareDiff(int[] nums1, int[] nums2, int k1, int k2) {
-        return editorialGreedy(nums1, nums2, k1, k2);
+        return editorialBS(nums1, nums2, k1, k2);
+    }
+
+    public long editorialBS(int[] nums1, int[] nums2, int k1, int k2) {
+        int n = nums1.length;
+        long k = k1 + k2;
+        int maxDiff = 0;
+        int[] diff = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            diff[i] = Math.abs(nums1[i] - nums2[i]);
+            maxDiff = Math.max(maxDiff, diff[i]);
+        }
+
+        int lo = 0;
+        int hi = maxDiff;
+        int found = 0;
+
+        while (lo <= hi) {
+            int mid = lo + (hi - lo) / 2;
+            long sum = 0;
+            for (int d : diff) {
+                sum += d > mid ? d - mid : 0;
+            }
+
+            if (sum <= k) {
+                hi = mid - 1;
+                found = mid;
+            } else {
+                lo = mid + 1;
+            }
+        }
+
+        for (int d : diff) {
+            if (d  > found) {
+                k -= d - found;
+            }
+        }
+
+        Arrays.sort(diff);
+        long ans = 0;
+        for (int i = n - 1; i >= 0; i--) {
+            long d = Math.min(diff[i], found);
+            if (k > 0 && d > 0) {
+                k--;
+                d--;
+            }
+
+            ans += d * d;
+        }
+
+        return ans;
     }
 
     public long editorialGreedy(int[] nums1, int[] nums2, int k1, int k2) {
