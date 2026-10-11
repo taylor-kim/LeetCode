@@ -15,10 +15,9 @@ class Solution {
         }
 
         int lo = 0;
-        int hi = maxDiff;
-        int found = 0;
+        int hi = maxDiff + 1;
 
-        while (lo <= hi) {
+        while (lo < hi) {
             int mid = lo + (hi - lo) / 2;
             long sum = 0;
             for (int d : diff) {
@@ -26,23 +25,22 @@ class Solution {
             }
 
             if (sum <= k) {
-                hi = mid - 1;
-                found = mid;
+                hi = mid;
             } else {
                 lo = mid + 1;
             }
         }
 
         for (int d : diff) {
-            if (d  > found) {
-                k -= d - found;
+            if (d  > lo) {
+                k -= d - lo;
             }
         }
 
         Arrays.sort(diff);
         long ans = 0;
         for (int i = n - 1; i >= 0; i--) {
-            long d = Math.min(diff[i], found);
+            long d = Math.min(diff[i], lo);
             if (k > 0 && d > 0) {
                 k--;
                 d--;
