@@ -14,17 +14,17 @@ class Solution {
         int r = sum % 9;
 
         for (int i = 0; i < nines; i++) {
-            ans.append(9);
+            ans.append('9');
         }
 
         if (r > 0) {
-            ans.append(r);
+            ans.append((char)('0' + r));
         }
 
         int zeros = num - ans.length();
 
         for (int i = 0; i < zeros; i++) {
-            ans.append(0);
+            ans.append('0');
         }
 
         return ans.toString();
