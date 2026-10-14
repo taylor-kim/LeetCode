@@ -1,6 +1,33 @@
 class Solution {
     public String maxSumOfSquares(int num, int sum) {
-        return improved_with_editorial(num, sum);
+        return editorial(num, sum);
+    }
+
+    public String editorial(int num, int sum) {
+        if (sum > 9 * num) {
+            return "";
+        }
+
+        StringBuilder ans = new StringBuilder();
+
+        int nines = sum / 9;
+        int r = sum % 9;
+
+        for (int i = 0; i < nines; i++) {
+            ans.append(9);
+        }
+
+        if (r > 0) {
+            ans.append(r);
+        }
+
+        int zeros = num - ans.length();
+
+        for (int i = 0; i < zeros; i++) {
+            ans.append(0);
+        }
+
+        return ans.toString();
     }
 
     public String improved_with_editorial(int num, int sum) {
