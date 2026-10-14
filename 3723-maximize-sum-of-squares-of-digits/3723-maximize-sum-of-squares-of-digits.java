@@ -1,6 +1,24 @@
 class Solution {
     public String maxSumOfSquares(int num, int sum) {
-        return mySol2(num, sum);
+        return improved_with_editorial(num, sum);
+    }
+
+    public String improved_with_editorial(int num, int sum) {
+        if (sum > 9 * num) {
+            return "";
+        }
+
+        StringBuilder ans = new StringBuilder();
+
+        while (ans.length() < num) {
+            int d = Math.min(9, sum);
+
+            ans.append(d);
+
+            sum -= d;
+        }
+
+        return ans.toString();
     }
 
     public String mySol2(int num, int sum) {
