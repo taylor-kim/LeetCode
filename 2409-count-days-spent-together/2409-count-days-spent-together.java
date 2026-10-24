@@ -9,8 +9,6 @@ class Solution {
         String from = arriveAlice.compareTo(arriveBob) < 0 ?  arriveBob : arriveAlice;
         String to = leaveAlice.compareTo(leaveBob) < 0 ? leaveAlice : leaveBob;
 
-        System.out.println("%s, %s".formatted(from, to));
-
         int monthFrom = Integer.parseInt(from.substring(0, 2));
         int monthTo = Integer.parseInt(to.substring(0, 2));
 
