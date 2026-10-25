@@ -1,6 +1,41 @@
 class Solution {
     public int closedIsland(int[][] grid) {
-        return mySol(grid);
+        return editorial(grid);
+    }
+
+    public int editorial(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        boolean[][] visit = new boolean[m][n];
+
+        int ans = 0;
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 0 && !visit[i][j] && dfs2(grid, i, j, visit)) {
+                    ans++;
+                }
+            }
+        }
+
+        return ans;
+    }
+
+    private boolean dfs2(int[][] grid, int y, int x, boolean[][] visit) {
+        if (y < 0 || y >= grid.length || x < 0 || x >= grid[0].length) return false;
+
+        if (grid[y][x] == 1 || visit[y][x]) return true;
+
+        visit[y][x] = true;
+
+        boolean ans = true;
+
+        ans = dfs2(grid, y + 1, x, visit);
+        ans &= dfs2(grid, y - 1, x, visit);
+        ans &= dfs2(grid, y, x + 1, visit);
+        ans &= dfs2(grid, y, x - 1, visit);
+
+        return ans;
     }
 
     public int mySol(int[][] grid) {
