@@ -39,7 +39,7 @@ class Solution {
         int n = grid[0].length;
         int[][][] dp = new int[m][n][2];
         int mod = (int)1e9 + 7;
-        dp[0][0][0] = 1;
+        dp[0][0][1] = 1;
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
