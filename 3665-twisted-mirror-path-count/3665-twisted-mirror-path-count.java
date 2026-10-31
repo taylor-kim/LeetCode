@@ -1,6 +1,6 @@
 class Solution {
     public int uniquePaths(int[][] grid) {
-        return try_bottomup_space_opt(grid);
+        return try_bottomup(grid);
     }
 
     public int try_bottomup_space_opt(int[][] grid) {
@@ -8,23 +8,24 @@ class Solution {
         int n = grid[0].length;
         int[][] dp = new int[n][2];
         int mod = (int)1e9 + 7;
-        dp[0][0] = 1;
+        // dp[0][0] = 1;
+        dp[0][1] = 1;
 
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (i > 0) {
                     if (grid[i - 1][j] == 0) {
-                        dp[j][0] = (dp[j][0] + dp[j][1]) % mod;
+                        dp[j][1] = (dp[j][0] + dp[j][1]) % mod;
                     } else {
-                        dp[j][0] = dp[j][1];
+                        dp[j][1] = dp[j][0];
                     }
                 }
 
                 if (j > 0) {
                     if (grid[i][j - 1] == 0) {
-                        dp[j][1] = (dp[j - 1][0] + dp[j - 1][1]) % mod;
+                        dp[j][0] = (dp[j - 1][0] + dp[j - 1][1]) % mod;
                     } else {
-                        dp[j][1] = dp[j - 1][0];
+                        dp[j][0] = dp[j - 1][1];
                     }
                 }
             }
