@@ -1,9 +1,9 @@
 class Solution {
     public int uniquePaths(int[][] grid) {
-        return mySol(grid);
+        return mySol_hint_by_gemini(grid);
     }
 
-    public int mySol(int[][] grid) {
+    public int mySol_hint_by_gemini(int[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
 
