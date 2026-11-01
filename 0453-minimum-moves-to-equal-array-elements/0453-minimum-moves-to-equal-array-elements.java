@@ -1,8 +1,19 @@
 class Solution {
     public int minMoves(int[] nums) {
-        return discussion(nums);
+        return editorial(nums);
     }
-    
+
+    public int editorial(int[] nums) {
+        int min = Arrays.stream(nums).min().getAsInt();
+
+        int ans = 0;
+
+        for (int num : nums) {
+            ans += num - min;
+        }
+
+        return ans;
+    }
 
     public int discussion(int[] nums) {
         TreeMap<Integer, Integer> map = new TreeMap();
