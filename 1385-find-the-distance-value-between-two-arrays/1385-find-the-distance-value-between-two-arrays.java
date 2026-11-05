@@ -1,6 +1,26 @@
 class Solution {
     public int findTheDistanceValue(int[] arr1, int[] arr2, int d) {
-        return mySol(arr1, arr2, d);
+        return editorial(arr1, arr2, d);
+    }
+
+    public int editorial(int[] arr1, int[] arr2, int d) {
+        Arrays.sort(arr2);
+
+        int ans = 0;
+
+        for (int i = 0; i < arr1.length; i++) {
+            int target = arr1[i];
+
+            int index = leftmost(arr2, target);
+
+            if (index < arr2.length && arr2[index] - target <= d) continue;
+
+            if (index - 1 >= 0 && target - arr2[index - 1] <= d) continue;
+
+            ans++;
+        }
+
+        return ans;
     }
 
     public int mySol(int[] arr1, int[] arr2, int d) {
