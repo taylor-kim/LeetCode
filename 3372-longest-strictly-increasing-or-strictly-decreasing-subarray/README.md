@@ -1,0 +1,1 @@
+<h2><a href="https://leetcode.cn/problems/longest-strictly-increasing-or-strictly-decreasing-subarray/?envType=daily-question&envId=2026-11-12">3372. undefined</a></h2><h3>undefined</h3><hr>undefined
