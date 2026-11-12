@@ -18,12 +18,11 @@ class Solution {
                 dec++;
                 inc = 1;
             } else {
-                inc = 1;
-                dec = 1;
+                inc = dec = 1;
             }
 
-            incMax = Math.max(incMax, inc);
-            decMax = Math.max(decMax, dec);
+            incMax = Math.max(inc, incMax);
+            decMax = Math.max(dec, decMax);
         }
 
         return Math.max(incMax, decMax);
