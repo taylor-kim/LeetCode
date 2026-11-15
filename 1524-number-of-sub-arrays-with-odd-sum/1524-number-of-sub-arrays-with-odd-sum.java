@@ -1,6 +1,27 @@
 class Solution {
     public int numOfSubarrays(int[] arr) {
-        return tryAgain_20250303_prefixSum(arr);
+        return tryAgain_20250303_dp(arr);
+    }
+
+    public int try_20261115(int[] arr) {
+        int n = arr.length;
+        int mod = (int)1e9 + 7;
+        int[] odd = new int[n + 1];
+        int[] even = new int[n + 1];
+
+        for (int i = 0; i < n; i++) {
+            int num = arr[i];
+
+            if (num % 2 == 0) {
+                even[i + 1] = (even[i] + even[i]) % mod;
+                odd[i + 1] = (odd[i] + odd[i]) % mod;
+            } else {
+                odd[i + 1] = (even[i] + even[i] + 1) % mod;
+                even[i + 1] = even[i];
+            }
+        }
+
+        return odd[n];
     }
 
     public int tryAgain_20250303_prefixSum(int[] arr) {
