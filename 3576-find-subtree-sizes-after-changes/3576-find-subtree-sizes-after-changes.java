@@ -1,6 +1,52 @@
 class Solution {
     public int[] findSubtreeSizes(int[] parent, String s) {
-        return mySol(parent, s);
+        return mySol2(parent, s);
+    }
+
+    public int[] mySol2(int[] parent, String s) {
+        int n = parent.length;
+
+        Map<Integer, List<Integer>> graph = new HashMap();
+
+        for (int i = 0; i < n; i++) {
+            if (parent[i] < 0) continue;
+
+            graph.computeIfAbsent(parent[i], k -> new ArrayList()).add(i);
+        }
+
+        int[] nearest = new int[26];
+
+        Arrays.fill(nearest, -1);
+
+        int[] ans = new int[n];
+
+        topdown2(graph, 0, s, nearest, parent, ans);
+
+        return ans;
+    }
+
+    private void topdown2(Map<Integer, List<Integer>> graph, int node, String s, int[] nearest, int[] parent, int[] ans) {
+        int c = s.charAt(node) - 'a';
+
+        if (nearest[c] >= 0) {
+            parent[node] = nearest[c];
+        }
+
+        int old = nearest[c];
+
+        nearest[c] = node;
+
+        for (int next : graph.getOrDefault(node, new ArrayList<>())) {
+            topdown2(graph, next, s, nearest, parent, ans);
+        }
+
+        nearest[c] = old;
+
+        ans[node] += 1;
+
+        if (parent[node] >= 0) {
+            ans[parent[node]] += ans[node];
+        }
     }
 
     public int[] mySol(int[] parent, String s) {
