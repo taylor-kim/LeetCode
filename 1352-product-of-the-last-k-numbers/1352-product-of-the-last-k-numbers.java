@@ -7,14 +7,14 @@ class ProductOfNumbers {
     }
     
     public void add(int num) {
-        // while (num * prod < 0) {
-        //     int[] left = list.peekFirst();
-        //     prod /= left[0];
+        while (num * prod < 0) {
+            int[] left = list.peekFirst();
+            prod /= left[0];
 
-        //     if (--left[1] == 0) {
-        //         list.removeFirst();
-        //     }
-        // }
+            if (--left[1] == 0) {
+                list.removeFirst();
+            }
+        }
         prod *= num;
 
         if (list.isEmpty() || list.peekLast()[0] != num) {
