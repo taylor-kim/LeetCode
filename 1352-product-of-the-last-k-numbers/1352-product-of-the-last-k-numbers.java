@@ -1,28 +1,42 @@
 class ProductOfNumbers {
-    private LinkedList<Integer> list = new LinkedList();
+    int prod = 1;
+    Deque<int[]> list = new LinkedList();
 
     public ProductOfNumbers() {
-        list.add(1);
+        
     }
     
     public void add(int num) {
-        if (num == 0) {
-            list.clear();
-            list.add(1);
+        while (num * prod < 0) {
+            int[] left = list.peekFirst();
+            prod /= left[0];
+
+            if (--left[1] == 0) {
+                list.removeFirst();
+            }
+        }
+        prod *= num;
+
+        if (list.isEmpty() || list.peekLast()[0] != num) {
+            list.add(new int[] {num, 1});
         } else {
-            list.add(list.get(list.size() - 1) * num);
+            list.peekLast()[1]++;
         }
     }
     
     public int getProduct(int k) {
-        if (k > list.size() - 1) {
-            return 0;
+        int ret = 1;
+
+        Iterator<int[]> descIt = list.descendingIterator();
+
+        while (k > 0 && ret > 0 && descIt.hasNext()) {
+            int[] data = descIt.next();
+            int count = Math.min(k, data[1]);
+            k -= count;
+            ret *= Math.pow(data[0], count);
         }
 
-        int start = list.size() - k;
-
-        // return list.get(list.size() - 1) / list.get(Math.max(start - 1, 0));
-        return list.get(list.size() - 1) / list.get(start - 1);
+        return ret;
     }
 }
 
