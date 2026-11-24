@@ -5,7 +5,7 @@ class Solution {
 
     public int mySol(int[] nums) {
         int n = nums.length;
-        int ans = 0;
+        int ans = 1;
 
         for (int i = 0; i < n; i++) {
             int p = nums[i];
